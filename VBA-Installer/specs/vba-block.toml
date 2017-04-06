@@ -1,0 +1,13 @@
+[package]
+name = "Installer Specs"
+version = "1.0.0"
+author = ["Tim Hall <tim.hall.engr@gmail.com>"]
+
+workspace = "../"
+publish = false
+
+[src]
+Specs = "Specs.bas"
+
+[dev-dependencies]
+tdd = { version = "2.0.0-beta", features = ["workbook"] }

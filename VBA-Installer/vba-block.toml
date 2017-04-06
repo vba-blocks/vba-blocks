@@ -1,0 +1,7 @@
+[package]
+name = "installer"
+version = "0.0.0"
+author = ["Tim Hall <tim.hall.engr@gmail.com>"]
+
+[src]
+Installer = "Installer.bas"
