@@ -5,3 +5,6 @@ author = ["Tim Hall <tim.hall.engr@gmail.com>"]
 
 [src]
 Installer = "Installer.bas"
+
+# TODO Move to dependency
+FileSystem = "src/FileSystem.bas"

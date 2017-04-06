@@ -8,6 +8,7 @@ publish = false
 
 [src]
 Specs = "Specs.bas"
+InstallerFixture = "InstallerFixture.cls"
 
 [dev-dependencies]
 tdd = { version = "2.0.0-beta", features = ["workbook"] }
