@@ -8,17 +8,45 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 Private WithEvents pSuite As SpecSuite
+Attribute pSuite.VB_VarHelpID = -1
 
-Public Property Get ModulePath() As String
-    ModulePath = ThisWorkbook.Path & Application.PathSeparator & "SpecModule.bas"
+Public Property Get Project() As VBProject
+    Set Project = ThisWorkbook.VBProject
+End Property
+
+Public Property Get ImportName() As String
+    ImportName = "SpecModule"
+End Property
+
+Public Property Get ImportPath() As String
+    ImportPath = GetFullPath(Me.ImportName & ".bas")
+End Property
+
+Public Property Get ExportPath() As String
+    ExportPath = GetFullPath("SpecModule-export.bas")
 End Property
 
 Public Sub ListenTo(Suite As SpecSuite)
     Set pSuite = Suite
 End Sub
 
-Private Sub pSuite_AfterEach()
-    If Installer.HasComponent(ThisWorkbook.VBProject, "SpecModule") Then
-        Installer.Remove ThisWorkbook.VBProject, "SpecModule"
+Public Function GetFullPath(ComponentPath As String) As String
+    GetFullPath = ThisWorkbook.Path & Application.PathSeparator & ComponentPath
+End Function
+
+Public Function HasComponent(ComponentName As String) As Boolean
+    Dim Component As VBComponent
+    
+    On Error Resume Next
+    Set Component = Project.VBComponents(ComponentName)
+    On Error GoTo 0
+    
+    If Not Component Is Nothing Then
+        HasComponent = True
     End If
+End Function
+
+Private Sub pSuite_AfterEach()
+    Installer.Remove Me.Project, "SpecModule"
+    FileSystem.DeleteFile Me.ExportPath
 End Sub

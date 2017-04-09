@@ -10,11 +10,13 @@ Attribute VB_Name = "Installer"
 ' 10101 - VBA Project is locked
 ' 10102 - Component file not found
 ' 10103 - Existing component found
-' 10104 - Failed to import component
-' 10105 - Existing component file found
-' 10106 - No matching component
+' 10104 - Existing component file found
+' 10105 - No matching component
+' 10106 - Failed to import component
 ' 10107 - Failed to export module
 ' 10108 - Failed to remove module
+' 10109 - Failed to add reference
+' 10110 - Failed to remove reference
 '
 ' @module Installer
 ' @author tim.hall.engr@gmail.com
@@ -29,20 +31,15 @@ Attribute VB_Name = "Installer"
 ' Public Methods
 ' ============================================= '
 
+''
+' @method Import
+' @param {VBProject} Project
+' @param {String} ComponentName
+' @param {String} FullPath
+' @param {Boolean} [Overwrite = False]
+''
 Public Sub Import(Project As VBProject, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
-    If Not VbaIsTrusted(Project) Then
-        Err.Raise 10100, "Installer.Import", _
-            "VBA Project access is disabled. To enable:" & vbNewLine & _
-            vbNewLine & _
-            "File > Options > Trust Center > Trust Center Settings" & vbNewLine & _
-            "Macro Settings > Developer Macro Settings" & vbNewLine & _
-            "Enable ""Trust access to the VBA project object model"""
-    End If
-    
-    If Not VbaIsUnlocked(Project) Then
-        Err.Raise 10101, "Installer.Import", _
-            "VBA Project is locked. To import in this project, unlock VBA and try again."
-    End If
+    Precheck Project
     
     If Not FileSystem.FileExists(FullPath) Then
         Err.Raise 10102, "Installer.Import", _
@@ -52,7 +49,7 @@ Public Sub Import(Project As VBProject, ComponentName As String, FullPath As Str
     Dim ExistingComponent As VBComponent
     Set ExistingComponent = GetComponent(Project, ComponentName)
     
-    If Not (ExistingComponent Is Nothing) Then
+    If Not ExistingComponent Is Nothing Then
         If Not Overwrite Then
             Err.Raise 10103, "Installer.Import", _
                 "Existing component found. A module with the name """ & ModuleName & """ is already part of the project. " & _
@@ -69,27 +66,22 @@ Public Sub Import(Project As VBProject, ComponentName As String, FullPath As Str
     
 ErrorHandling:
 
-    Err.Raise 10104, "Installer.Import", _
+    Err.Raise 10106, "Installer.Import", _
         "Failed to import module. " & Err.Number & ": " & Err.Description
 End Sub
 
+''
+' @method Export
+' @param {VBProject} Project
+' @param {String} ComponentName
+' @param {String} FullPath
+' @param {Boolean} [Overwrite = False]
+''
 Public Sub Export(Project As VBProject, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
-    If Not VbaIsTrusted(Project) Then
-        Err.Raise 10100, "Installer.Export", _
-            "VBA Project access is disabled. To enable:" & vbNewLine & _
-            vbNewLine & _
-            "File > Options > Trust Center > Trust Center Settings" & vbNewLine & _
-            "Macro Settings > Developer Macro Settings" & vbNewLine & _
-            "Enable ""Trust access to the VBA project object model"""
-    End If
-    
-    If Not VbaIsUnlocked(Project) Then
-        Err.Raise 10101, "Installer.Export", _
-            "VBA Project is locked. To import in this project, unlock VBA and try again."
-    End If
+    Precheck Project
     
     If Not Overwrite And FileSystem.FileExists(FullPath) Then
-        Err.Raise 10105, "Installer.Export", _
+        Err.Raise 10104, "Installer.Export", _
             "Existing component file found. A file was found at path: """ & FullPath & """. " & _
             "Use `Installer.Export(Project, ComponentName, FullPath, Overwrite:=True)` to overwrite an existing file."""
     End If
@@ -98,7 +90,7 @@ Public Sub Export(Project As VBProject, ComponentName As String, FullPath As Str
     Set Component = GetComponent(Project, ComponentName)
     
     If Component Is Nothing Then
-        Error.Raise 10106, "Installer.Export", _
+        Err.Raise 10105, "Installer.Export", _
             "No matching component. No component named """ & ComponentName & """ was found in the project."
     End If
     
@@ -113,27 +105,19 @@ ErrorHandling:
         "Failed to export module. " & Err.Number & ": " & Err.Description
 End Sub
 
+''
+' @method Remove
+' @param {VBProject} Project
+' @param {String} ComponentName
+''
 Public Sub Remove(Project As VBProject, ComponentName As String)
-    If Not VbaIsTrusted(Project) Then
-        Err.Raise 10100, "Installer.Remove", _
-            "VBA Project access is disabled. To enable:" & vbNewLine & _
-            vbNewLine & _
-            "File > Options > Trust Center > Trust Center Settings" & vbNewLine & _
-            "Macro Settings > Developer Macro Settings" & vbNewLine & _
-            "Enable ""Trust access to the VBA project object model"""
-    End If
-    
-    If Not VbaIsUnlocked(Project) Then
-        Err.Raise 10101, "Installer.Remove", _
-            "VBA Project is locked. To import in this project, unlock VBA and try again."
-    End If
+    Precheck Project
     
     Dim Component As VBComponent
     Set Component = GetComponent(Project, ComponentName)
-    
+
     If Component Is Nothing Then
-        Error.Raise 10106, "Installer.Remove", _
-            "No matching component. No component named """ & ComponentName & """ was found in the project."
+        Exit Sub
     End If
     
     On Error GoTo ErrorHandling
@@ -143,15 +127,62 @@ Public Sub Remove(Project As VBProject, ComponentName As String)
     
 ErrorHandling:
 
-    Error.Raise 10108, "Installer.Remove", _
+    Err.Raise 10108, "Installer.Remove", _
         "Failed to remove module. " & Err.Number & ": " & Err.Description
 End Sub
 
-Public Function HasComponent(Project As VBProject, ComponentName As String) As Boolean
-    If Not (GetComponent(Project, ComponentName) Is Nothing) Then
-        HasComponent = True
+''
+' @method AddRefererence
+' @param {VBProject} Project
+' @param {String} Guid
+' @param {Long} MajorVersion
+' @param {Long} MinorVersion
+''
+Public Sub AddReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long)
+    Precheck Project
+
+    If Not GetReference(Project, Guid, MajorVersion, MinorVersion) Is Nothing Then
+        Exit Sub
     End If
-End Function
+    
+    On Error GoTo ErrorHandling
+    
+    Project.References.AddFromGuid Reference, MajorVersion, MinorVersion
+    Exit Sub
+    
+ErrorHandling:
+
+    Err.Raise 10109, "Installer.AddReference", _
+        "Failed to add reference. " & Err.Number & ": " & Err.Description
+End Sub
+
+''
+' @method RemoveReference
+' @param {VBProject} Project
+' @param {String} Guid
+' @param {Long} MajorVersion
+' @param {Long} MinorVersion
+''
+Public Sub RemoveReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long)
+    Precheck Project
+
+    Dim ExistingReference As Reference
+    Set ExistingReference = GetReference(Project, Guid, MajorVersion, MinorVersion)
+    
+    If ExistingReference Is Nothing Then
+        Exit Sub
+    End If
+    
+    On Error GoTo ErrorHandling
+    
+    Project.References.Remove ExistingReference
+    Exit Sub
+    
+ErrorHandling:
+
+    Err.Raise 10110, "Installer.RemoveReference", _
+        "Failed to remove reference. " & Err.Number & ": " & Err.Description
+End Sub
 
 ' ============================================= '
 ' Private Methods
@@ -160,9 +191,34 @@ End Function
 Private Function GetComponent(Project As VBProject, ComponentName As String) As VBComponent
     On Error Resume Next
     Set GetComponent = Project.VBComponents(ComponentName)
-    
+
     On Error GoTo 0
 End Function
+
+Private Function GetReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long) As Reference
+    Dim Ref As Reference
+    For Each Ref In Project.References
+        If Ref.Guid = Guid And Ref.Major = MajorVersion And Ref.Minor = MinorVersion Then
+            Set GetReference = Ref
+        End If
+    Next Ref
+End Function
+
+Private Sub Precheck(Project As VBProject)
+    If Not VbaIsTrusted(Project) Then
+        Err.Raise 10100, "Installer.Export", _
+            "VBA Project access is disabled. To enable:" & vbNewLine & _
+            vbNewLine & _
+            "File > Options > Trust Center > Trust Center Settings" & vbNewLine & _
+            "Macro Settings > Developer Macro Settings" & vbNewLine & _
+            "Enable ""Trust access to the VBA project object model"""
+    End If
+    
+    If Not VbaIsUnlocked(Project) Then
+        Err.Raise 10101, "Installer.Export", _
+            "VBA Project is locked. To import in this project, unlock VBA and try again."
+    End If
+End Sub
 
 Private Function VbaIsUnlocked(Project As VBProject) As Boolean
     If Project.Protection = vbext_ProjectProtection.vbext_pp_none Then

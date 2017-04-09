@@ -18,11 +18,23 @@ Attribute VB_Name = "FileSystem"
 ' Public Methods
 ' ============================================= '
 
+''
+' @method FileExists
+' @param {String} FilePath
+' @returns {Boolean}
+''
 Public Function FileExists(FilePath As String) As Boolean
     ' TODO Handle Mac truncation (without MacScript)
-    On Error Resume Next
-
-    If VBA.Len(VBA.Dir(FilePath)) <> 0 Then
-        FileExists = True
-    End If
+    FileExists = VBA.Dir(FilePath) <> ""
 End Function
+
+''
+' @method DeleteFile
+' @param {String} FilePath
+''
+Public Sub DeleteFile(FilePath As String)
+    If FileExists(FilePath) Then
+        VBA.SetAttr FilePath, vbNormal
+        VBA.Kill FilePath
+    End If
+End Sub
