@@ -24,7 +24,7 @@ Rebuild project using `cfg(test)` and run test script.
 
 ```toml
 [scripts]
-test = "vba Specs.All"
+test = "Specs.All"
 ```
 
 ## Version/Publish

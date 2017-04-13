@@ -1,2 +1,5 @@
 # Ignore temporary Excel files
 */~$*
+
+# Ignore compiled CLI
+cli/target/

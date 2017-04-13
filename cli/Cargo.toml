@@ -1,0 +1,7 @@
+[package]
+name = "vba-blocks"
+version = "0.0.0"
+authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
+
+[dependencies]
+clap = { version = "2", features = ["yaml"] }

@@ -1,0 +1,10 @@
+name: vba-blocks
+version: "0.0.0"
+author: Tim Hall <tim.hall.engr@gmail.com>
+subcommands:
+  - install:
+      about: Install dependencies
+  - import:
+      about: Import src
+  - export:
+      about: Export src
