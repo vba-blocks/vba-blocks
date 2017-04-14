@@ -1,12 +1,10 @@
 # CLI
 
-## Initial Design
-
 ### Add
 
 Add the given block to the project. Recalculate dependency tree, update `vba-block.lock`, and download dependencies, as-needed.
 
-```sh
+```
 Usage:
   vba-blocks add <block> [options]
 
@@ -22,7 +20,7 @@ Arguments:
 
 Remove one or more packages from the project. Recalculate dependency tree and update `vba-block.lock`.
 
-```sh
+```
 Usage:
   vba-blocks remove <block>...
 
@@ -34,7 +32,7 @@ Arguments:
 
 Update given block or all blocks. Recalculate dependency tree, update `vba-block.lock`, and download dependencies, as-needed.
 
-```sh
+```
 Usage:
   vba-blocks update [<block>]
 
@@ -44,7 +42,7 @@ Arguments:
 
 ### Build
 
-```sh
+```
 Usage:
   vba-blocks build [options]
 
@@ -57,7 +55,7 @@ Options:
 
 ### Test
 
-```sh
+```
 Usage:
   vba-blocks test [options] [<filters>...]
 
@@ -91,7 +89,7 @@ End Function
 
 Create a new vba-blocks project at the given path.
 
-```sh
+```
 Usage:
   vba-blocks new [options] <path>
 
@@ -103,7 +101,7 @@ Options:
 
 Create a new vba-blocks project in the current directory.
 
-```sh
+```
 Usage:
   vba-blocks init [options]
 
@@ -115,7 +113,7 @@ Options:
 
 Set the package's version and (when git's present) commit and tag with version.
 
-```sh
+```
 Usage:
   vba-blocks version [<version> | major | minor | patch | prerelease]
 ```
@@ -124,7 +122,7 @@ Usage:
 
 Upload a package to vba-blocks.
 
-```sh
+```
 Usage:
   vba-blocks publish [options]
 
@@ -132,7 +130,79 @@ Options:
   --dry-run   Perform all checks without uploading
 ```
 
-## Implementation 
+### List
+
+List currently installed dependencies (and sub-dependencies).
+
+```
+Usage:
+  vba-blocks list
+```
+
+### Search
+
+Search vba-blocks.com registry
+
+```
+Usage:
+  vba-blocks search <query>...
+```
+
+## vba-block.lock
+
+By definition, only a single version of a dependency can be loaded for a VBA project.
+This forces the dependency tree to be simplified to a flat list.
+
+```toml
+# vba-block.toml
+[package]
+name = "my-package"
+version = "1.0.0"
+
+[dependencies]
+a = "1.2.3"
+b = { path: "../b" }
+c = { git: "https://github.com/author/repo" }
+```
+
+```toml
+# vba-block.lock
+[root]
+name = "my-package"
+version = "1.0.0"
+dependencies = [
+  "a 1.2.3 (registry+https://github.com/vba-blocks/registry)",
+  "b 4.5.6",
+  "c 7.8.9 (git+https://github.com/author/repo)",
+]
+
+[[package]]
+name = "a"
+version = "1.2.3"
+source = "registry+https://github.com/vba-blocks/registry"
+dependencies = [
+  "d 0.0.0 (registry+https://github.com/vba-blocks/registry)",
+]
+
+[[package]]
+name = "b"
+version = "4.5.6"
+
+[[package]]
+name = "c"
+version = "7.8.9"
+source = "git+https://github.com/author/repo#sha"
+
+[[package]]
+name = "d"
+version = "0.0.0"
+source = "registry+https://github.com/vba-blocks/registry"
+
+[metadata]
+"checksum a 1.2.3 (registry+https://github.com/vba-blocks/registry)" = "..."
+"checksum c 7.8.9 (git+https://github.com/author/repo)" = "<none>"
+"checksum d 0.0.0 (registry+https://github.com/vba-blocks/registry)" = "..."
+```
 
 Rust-based CLI using:
 
