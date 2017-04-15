@@ -85,18 +85,6 @@ Public Function RunSpecs(Manifest As Dictionary, Options As Dictionary) As Strin
 End Function
 ```
 
-### New
-
-Create a new vba-blocks project at the given path.
-
-```
-Usage:
-  vba-blocks new [options] <path>
-
-Options:
-  --name NAME   Set the package name, defaults to the value of <path>
-```
-
 ### Init
 
 Create a new vba-blocks project in the current directory.

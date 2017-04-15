@@ -1,10 +1,82 @@
-name: vba-blocks
+name: "vba-blocks"
 version: "0.0.0"
-author: Tim Hall <tim.hall.engr@gmail.com>
+author: "Tim Hall <tim.hall.engr@gmail.com>"
 subcommands:
-  - install:
-      about: Install dependencies
-  - import:
-      about: Import src
-  - export:
-      about: Export src
+    - add:
+        about: "Add a block"
+        args:
+            - block:
+                required: true
+                index: 1
+                help: "block-name, block-name@1.2.3, block-name@tag"
+            - git:
+                long: "git"
+                takes_value: true
+                value_name: "URL"
+                help: "Add block from url, using <git remote url>[#<branch/commit/tag>]"
+            - path:
+                long: "path"
+                takes_value: true
+                value_name: "PATH"
+                help: "Add block from given path (relative to vba-block.toml)"
+    - remove:
+        about: "Remove a block"
+        args:
+            - block:
+                required: true
+                help: "Block name to remove"
+    - update:
+        about: "Update block or all blocks"
+        args:
+            - block:
+                help: "(optional) block name to update"
+    - build:
+        about: "Build project from dependencies and src"
+        args:
+            - release:
+                long: "release"
+                help: "Build for release"
+            - features:
+                long: "features"
+                takes_value: true
+                value_name: "FEATURES"
+                multiple: true
+                help: "Space-separated list of features to build"
+            - all-features:
+                long: "all-features"
+                help: "Build all available features"
+            - no-default-features:
+                long: "no-default-features"
+                help: "Do not build the `default` feature"
+    - test:
+        about: "Run project tests"
+        args:
+            - filters:
+                multiple: true
+                help: "Test filters"
+    - init:
+        about: "Create a new vba-blocks project in the current directory"
+        args:
+            - name:
+                long: "name"
+                takes_value: true
+                value_name: "NAME"
+                help: "Set the package name"
+    - version:
+        about: "Update the package's version"
+        args:
+            - version:
+                help: "<version> | major | minor | patch | prerelease"
+    - publish:
+        about: "Publish a package to vba-blocks"
+        args:
+            - dry-run:
+                long: "dry-run"
+                help: "Perform all checks without uploading"
+    - list:
+        about: "List current installed dependencies (and sub-dependencies)"
+    - search:
+        about: "Search vba-blocks.com registry"
+        args:
+            - query:
+                required: true
