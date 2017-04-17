@@ -2,8 +2,8 @@
 extern crate clap;
 use clap::App;
 
-mod fns;
-use fns::{
+mod ops;
+use ops::{
   add,
   update,
   remove,

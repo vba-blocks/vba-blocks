@@ -1,25 +1,5 @@
 use std::process::{Command, exit};
 
-pub fn add(block: &str, git: Option<&str>, path: Option<&str>) {
-  let git_value = git.unwrap_or("(no git)");
-  let path_value = path.unwrap_or("(no path)");
-
-  println!("add {} {} {}", block, git_value, path_value);
-} 
-
-pub fn update(blocks: Option<Vec<&str>>) {
-  let blocks_value = match blocks {
-    Some(blocks) => blocks.join(" "),
-    None => "(all blocks)".to_string(),
-  };
-
-  println!("update {}", blocks_value);
-}
-
-pub fn remove(blocks: Vec<&str>) {
-  println!("remove {}", blocks.join(" "));
-}
-
 pub struct BuildOptions<'a> {
   pub release: bool,
   pub features: Option<Vec<&'a str>>,
@@ -49,41 +29,6 @@ pub fn build(options: BuildOptions) {
   }
 
   println!("Done.");
-}
-
-pub fn test(filters: Vec<&str>) {
-  let filter_value = match filters.len() {
-    0 => "(no filters)".to_string(),
-    _ => filters.join(" "),
-  };
-
-  println!("test, filters: {}", filter_value);
-}
-
-pub fn init(name: Option<&str>) {
-  let name_value = name.unwrap_or("(no name)");
-
-  println!("init, name: {}", name_value);
-}
-
-pub fn version(version: &str) {
-  println!("version {}", version);
-}
-
-pub struct PublishOptions {
-  pub dry_run: bool,
-}
-
-pub fn publish(options: PublishOptions) {
-  println!("publish, dry-run: {}", options.dry_run);
-}
-
-pub fn list() {
-  println!("list");
-}
-
-pub fn search(query: &str) {
-  println!("search {}", query);
 }
 
 fn run(name: &str, args: &Vec<&str>) -> Result<String, String> {
