@@ -20,16 +20,18 @@ subcommands:
                 value_name: "PATH"
                 help: "Add block from given path (relative to vba-block.toml)"
     - remove:
-        about: "Remove a block"
+        about: "Remove block(s)"
         args:
-            - block:
+            - blocks:
                 required: true
-                help: "Block name to remove"
+                multiple: true
+                help: "Block name(s) to remove"
     - update:
-        about: "Update block or all blocks"
+        about: "Update block(s) or all blocks"
         args:
-            - block:
-                help: "(optional) block name to update"
+            - blocks:
+                multiple: true
+                help: "(optional) block name(s) to update"
     - build:
         about: "Build project from dependencies and src"
         args:

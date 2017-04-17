@@ -6,7 +6,7 @@ use clap::App;
 
 struct BuildOptions<'a> {
   release: bool,
-  features: Vec<&'a str>,
+  features: Option<Vec<&'a str>>,
   all_features: bool,
   no_default_features: bool,
 }
@@ -27,18 +27,22 @@ fn main() {
 
     add(block, git, path);
   } else if let Some(matches) = matches.subcommand_matches("remove") {
-    let block = matches.value_of("block")
-      .expect("<block> is required for `vba-blocks remove <block>`");
+    let blocks = matches.values_of("blocks")
+      .expect("<blocks> is required for `vba-blocks remove <blocks>`")
+      .collect();
 
-    remove(block);
+    remove(blocks);
   } else if let Some(matches) = matches.subcommand_matches("update") {
-    let block = matches.value_of("block");
+    let blocks = match matches.values_of("blocks") {
+      Some(blocks) => Some(blocks.collect()),
+      None => None,
+    };
 
-    update(block);
+    update(blocks);
   } else if let Some(matches) = matches.subcommand_matches("build") {
     let features = match matches.values_of("features") {
-      Some(features) => features.collect(),
-      None => vec![],
+      Some(features) => Some(features.collect()),
+      None => None,
     };
 
     let options = BuildOptions {
@@ -88,28 +92,33 @@ fn add(block: &str, git: Option<&str>, path: Option<&str>) {
   println!("add {} {} {}", block, git_value, path_value);
 }
 
-fn remove(block: &str) {
-  println!("remove {}", block);
+fn remove(blocks: Vec<&str>) {
+  println!("remove {}", blocks.join(" "));
 }
 
-fn update(block: Option<&str>) {
-  let block_value = block.unwrap_or("(no block)");
+fn update(blocks: Option<Vec<&str>>) {
+  let blocks_value = match blocks {
+    Some(blocks) => blocks.join(" "),
+    None => "(all blocks)".to_string(),
+  };
 
-  println!("update {}", block_value);
+  println!("update {}", blocks_value);
 }
 
 fn build(options: BuildOptions) {
+  let features = options.features.unwrap_or(vec![]);
+
   println!("Build, release: {}, features: {}, all-features: {}, no-default-features: {}",
     options.release,
-    match options.features.len() {
+    match features.len() {
       0 => "(no features)".to_string(),
-      _ => options.features.join(" "),
+      _ => features.join(" "),
     },
     options.all_features,
     options.no_default_features
   );
 
-  match run("build", &options.features) {
+  match run("build", &features) {
     Ok(stdout) => println!("{}", stdout),
     Err(stderr) => {
       println!("ERROR: {}", stderr);
