@@ -3,3 +3,6 @@
 
 # Ignore compiled CLI
 cli/target/
+
+# OS
+.DS_Store
