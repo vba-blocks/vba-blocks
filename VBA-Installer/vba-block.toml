@@ -1,10 +1,10 @@
 [package]
 name = "installer"
 version = "0.0.0"
-author = ["Tim Hall <tim.hall.engr@gmail.com>"]
+authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 
 [src]
-Installer = "Installer.bas"
+Installer = "src/Installer.bas"
 
-# TODO Move to dependency
-FileSystem = "src/FileSystem.bas"
+[dependencies]
+filesystem = { path = "../VBA-FileSystem" }

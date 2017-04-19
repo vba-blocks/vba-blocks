@@ -1,0 +1,14 @@
+[package]
+name = "vba-blocks"
+version = "0.0.0"
+authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
+
+[[targets]]
+type = "xlam"
+path = "targets/xlam"
+
+[[targets]]
+type = "ppam"
+path = "targets/ppam"
+
+# TODO Word, Access, and Outlook
