@@ -19,4 +19,6 @@ Building add-in:
 
 1. Build CLI (see above)
 2. `cd addin`
-3. `..\cli\target\debug\vba-blocks build`
+3. Windows: `..\cli\target\debug\vba-blocks build`
+4. Mac: `../cli/target/debug/vba-blocks build`
+ß
