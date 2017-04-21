@@ -14,4 +14,8 @@ path = "targets/xlam"
 type = "ppam"
 path = "targets/ppam"
 
-# TODO Word, Access, and Outlook
+[[targets]]
+type = "dotm"
+path = "targets/dotm"
+
+# TODO Access and Outlook
