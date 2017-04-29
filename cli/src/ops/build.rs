@@ -1,4 +1,7 @@
 use std::process::{Command, exit};
+use std::fs::{copy, rename};
+
+use archive;
 
 pub struct BuildOptions<'a> {
   pub release: bool,
@@ -19,6 +22,15 @@ pub fn build(options: BuildOptions) {
     options.all_features,
     options.no_default_features
   );
+
+  archive::zip("fixtures\\original", "fixtures\\testing.zip")
+    .expect("Failed to zip directory");
+
+  copy("fixtures\\testing.zip", "fixtures\\testing-xlsm.zip")
+    .expect("Failed to copy zip");
+
+  rename("fixtures\\testing-xlsm.zip", "fixtures\\testing.xlsm")
+    .expect("Failed to rename to xlsm");
 
   match run("build", &features) {
     Ok(stdout) => println!("{}", stdout),

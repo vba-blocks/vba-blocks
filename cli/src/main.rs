@@ -2,7 +2,10 @@
 extern crate clap;
 use clap::App;
 
+extern crate archive;
+
 mod ops;
+
 use ops::{
   add,
   update,

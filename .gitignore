@@ -1,3 +1,7 @@
+# TEMP Ignore test fixtures
+cli/fixtures/*
+!cli/fixtures/original
+
 # Ignore temporary Excel files
 */~$*
 
