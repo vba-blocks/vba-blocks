@@ -1,3 +1,3 @@
 pub fn remove(blocks: Vec<&str>) {
-  println!("remove {}", blocks.join(" "));
+    println!("remove {}", blocks.join(" "));
 }
