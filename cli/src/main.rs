@@ -1,11 +1,14 @@
 #[macro_use]
 extern crate clap;
-use clap::App;
-
+#[macro_use]
+extern crate serde_derive;
+extern crate toml;
 extern crate archive;
 
+mod manifest;
 mod ops;
 
+use clap::App;
 use ops::{add, update, remove, build, test, init, version, publish, list, search, BuildOptions,
           PublishOptions};
 

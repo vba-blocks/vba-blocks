@@ -1,7 +1,8 @@
 use std::process::{Command, exit};
-use std::fs::{copy, rename};
+use std::path::{Path};
 
 use archive;
+use manifest;
 
 pub struct BuildOptions<'a> {
     pub release: bool,
@@ -22,14 +23,10 @@ pub fn build(options: BuildOptions) {
              options.all_features,
              options.no_default_features);
 
-    archive::zip("fixtures\\original", "fixtures\\testing.zip").expect("Failed to zip directory");
+    create_binary("fixtures\\original", "fixtures\\testing.xlsm").expect("Failed to create binary");
 
-    copy("fixtures\\testing.zip", "fixtures\\testing-xlsm.zip").expect("Failed to copy zip");
-
-    rename("fixtures\\testing-xlsm.zip", "fixtures\\testing.xlsm")
-        .expect("Failed to rename to xlsm");
-
-    archive::unzip("fixtures\\testing.zip", "fixtures\\testing").expect("Failed to unzip");
+    let manifest = manifest::load("fixtures\\vba-block.toml").expect("Failed to load manifest");
+    println!("name: {}, version: {}, authors: {}", manifest.package.name, manifest.package.version, manifest.package.authors.join(" "));
 
     match run("build", &features) {
         Ok(stdout) => println!("{}", stdout),
@@ -40,6 +37,13 @@ pub fn build(options: BuildOptions) {
     }
 
     println!("Done.");
+}
+
+fn create_binary<P: AsRef<Path>>(dir: P, out_file: P) -> Result<(), archive::ArchiveError> {
+    let dir = dir.as_ref();
+    let out_file = out_file.as_ref();
+
+    archive::zip(dir, out_file)
 }
 
 fn run(name: &str, args: &Vec<&str>) -> Result<String, String> {

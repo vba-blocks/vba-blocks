@@ -40,7 +40,7 @@ pub fn zip<P: AsRef<Path>>(dir: P, out_file: P) -> Result<(), ArchiveError> {
     } else {
         if let (Some(out_file), Some(dir)) = (out_file.to_str(), dir.to_str()) {
             let child = Command::new("zip")
-                .args(&["-r", out_file, dir])
+                .args(&["-r", "-X", out_file, dir])
                 .spawn()?;
 
             let output = child

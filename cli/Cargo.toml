@@ -5,4 +5,7 @@ authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 
 [dependencies]
 clap = { version = "2", features = ["yaml"] }
+serde = { version = "1" }
+serde_derive = { version = "1" }
+toml = { version = "0.4" }
 archive = { path = "archive-rs/" }
