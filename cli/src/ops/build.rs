@@ -1,5 +1,6 @@
 use std::process::{Command, exit};
 use std::path::{Path};
+use std::{fs};
 
 use archive;
 use manifest;
@@ -23,7 +24,8 @@ pub fn build(options: BuildOptions) {
              options.all_features,
              options.no_default_features);
 
-    create_binary("fixtures\\original", "fixtures\\testing.xlsm").expect("Failed to create binary");
+    fs::create_dir_all("fixtures\\build\\").expect("Failed to create build directory");
+    create_binary("fixtures\\targets\\xlsm", "fixtures\\build\\testing.xlsm").expect("Failed to create binary");
 
     let manifest = manifest::load("fixtures\\vba-block.toml").expect("Failed to load manifest");
     println!("name: {}, version: {}, authors: {}", manifest.package.name, manifest.package.version, manifest.package.authors.join(" "));

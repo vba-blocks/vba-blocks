@@ -1,0 +1,12 @@
+[package]
+name = "testing"
+version = "0.1.0"
+authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
+
+[src]
+a = "src/a.bas"
+b = "src/b.cls"
+
+[[targets]]
+type = "xlsm"
+path = "targets/xlsm"
