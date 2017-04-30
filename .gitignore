@@ -7,6 +7,7 @@ cli/fixtures/*
 
 # Ignore compiled CLI
 cli/target/
+*.bk
 
 # OS
 .DS_Store

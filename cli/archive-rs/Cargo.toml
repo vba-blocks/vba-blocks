@@ -4,5 +4,5 @@ version = "0.1.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 
 [dependencies]
-zip = "0.2.3"
-walkdir = "1"
+# zip = "0.2.3"
+# walkdir = "1"
