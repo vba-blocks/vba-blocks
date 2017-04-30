@@ -27,7 +27,9 @@ pub fn build(options: BuildOptions) {
     copy("fixtures\\testing.zip", "fixtures\\testing-xlsm.zip").expect("Failed to copy zip");
 
     rename("fixtures\\testing-xlsm.zip", "fixtures\\testing.xlsm")
-    .expect("Failed to rename to xlsm");
+        .expect("Failed to rename to xlsm");
+
+    archive::unzip("fixtures\\testing.zip", "fixtures\\testing").expect("Failed to unzip");
 
     match run("build", &features) {
         Ok(stdout) => println!("{}", stdout),

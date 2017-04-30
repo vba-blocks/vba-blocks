@@ -1,31 +1,28 @@
 use std::path::{Path, StripPrefixError, /*MAIN_SEPARATOR*/};
 use std::{fs, io, error, fmt};
 use std::process::{Command, Stdio};
-// use std::fs::File;
+use std::fs::File;
 // use std::io::prelude::*;
 
 // extern crate walkdir;
 // use walkdir::WalkDir;
 
-// extern crate zip;
+extern crate zip;
 // use zip::write::FileOptions;
 
-pub fn zip<P: AsRef<Path>>(dir: P, outfile: P) -> Result<(), ArchiveError> {
+pub fn zip<P: AsRef<Path>>(dir: P, out_file: P) -> Result<(), ArchiveError> {
     let dir = dir.as_ref();
-    let outfile = outfile.as_ref();
+    let out_file = out_file.as_ref();
 
-    let dir_path = dir.to_string_lossy();
-    let outfile_path = outfile.to_string_lossy();
-
-    if outfile.exists() {
-        fs::remove_file(outfile)?;
+    if out_file.exists() {
+        fs::remove_file(out_file)?;
     }
     
     if cfg!(target_os = "windows") {
         let command = format!(
             "& {{ Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::CreateFromDirectory('{}', '{}'); }}",
-            dir_path,
-            outfile_path
+            dir.to_string_lossy(),
+            out_file.to_string_lossy()
         );
 
         let child = Command::new("powershell")
@@ -90,15 +87,60 @@ pub fn zip<P: AsRef<Path>>(dir: P, outfile: P) -> Result<(), ArchiveError> {
     // Ok(())
 }
 
-pub fn unzip() {
+pub fn unzip<P: AsRef<Path>>(zip_file: P, out_dir: P) -> Result<(), ArchiveError> {
     // TODO powershell -command & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::ExtractToDirectory('foo.zip', 'bar'); }
-    println!("TODO unzip");
+    let out_dir = out_dir.as_ref();
+    let file = File::open(zip_file.as_ref())?;
+    let mut unzipped = zip::ZipArchive::new(file)?;
+
+    for i in 0..unzipped.len() {
+        let mut file = unzipped.by_index(i)?;
+        let out_path = out_dir.join(sanitize_filename(file.name()));
+
+        if out_path.ends_with("/") {
+            create_directory(&out_path)?;
+        } else {
+            create_directory(out_path.parent().unwrap_or(&out_dir.join(Path::new(""))))?;
+            create_file(&mut file, &out_path)?;
+        }
+    } 
+
+    Ok(())
+}
+
+fn create_file(file: &mut zip::read::ZipFile, out_path: &Path) -> Result<(), io::Error> {
+    let mut out_file = File::create(&out_path)?;
+    io::copy(file, &mut out_file)?;
+    Ok(())
+}
+
+fn create_directory(path: &Path) -> Result<(), io::Error> {
+    fs::create_dir_all(path)?;
+    Ok(())
+}
+
+fn sanitize_filename(filename: &str) -> std::path::PathBuf {
+    let no_null_filename = match filename.find('\0') {
+        Some(index) => &filename[0..index],
+        None => filename,
+    };
+
+    std::path::Path::new(no_null_filename)
+        .components()
+        .filter(|component| match *component {
+            std::path::Component::Normal(..) => true,
+            _ => false
+        })
+        .fold(std::path::PathBuf::new(), |mut path, ref cur| {
+            path.push(cur.as_os_str());
+            path
+        })
 }
 
 #[derive(Debug)]
 pub enum ArchiveError {
     Io(io::Error),
-    // Zip(zip::result::ZipError),
+    Zip(zip::result::ZipError),
     StripPrefix(StripPrefixError),
     Powershell(String),
 }
@@ -107,7 +149,7 @@ impl fmt::Display for ArchiveError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             ArchiveError::Io(ref err) => write!(f, "IO error: {}", err),
-            // ArchiveError::Zip(ref err) => write!(f, "Zip error: {}", err),
+            ArchiveError::Zip(ref err) => write!(f, "Zip error: {}", err),
             ArchiveError::StripPrefix(ref err) => write!(f, "Strip prefix error: {}", err),
             ArchiveError::Powershell(ref err) => write!(f, "Powershell error: {}", err),
         }
@@ -118,7 +160,7 @@ impl error::Error for ArchiveError {
     fn description(&self) -> &str {
         match *self {
             ArchiveError::Io(ref err) => err.description(),
-            // ArchiveError::Zip(ref err) => err.description(),
+            ArchiveError::Zip(ref err) => err.description(),
             ArchiveError::StripPrefix(ref err) => err.description(),
             ArchiveError::Powershell(ref err) => err.as_str(),
         }
@@ -127,7 +169,7 @@ impl error::Error for ArchiveError {
     fn cause(&self) -> Option<&error::Error> {
         match *self {
             ArchiveError::Io(ref err) => Some(err),
-            // ArchiveError::Zip(ref err) => Some(err),
+            ArchiveError::Zip(ref err) => Some(err),
             ArchiveError::StripPrefix(ref err) => Some(err),
             ArchiveError::Powershell(_) => None,
         }
@@ -140,11 +182,11 @@ impl From<io::Error> for ArchiveError {
     }
 }
 
-// impl From<zip::result::ZipError> for ArchiveError {
-//     fn from(err: zip::result::ZipError) -> ArchiveError {
-//         ArchiveError::Zip(err)
-//     }
-// }
+impl From<zip::result::ZipError> for ArchiveError {
+    fn from(err: zip::result::ZipError) -> ArchiveError {
+        ArchiveError::Zip(err)
+    }
+}
 
 impl From<StripPrefixError> for ArchiveError {
     fn from(err: StripPrefixError) -> ArchiveError {
