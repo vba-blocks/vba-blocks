@@ -35,10 +35,21 @@ pub fn zip<P: AsRef<Path>>(dir: P, out_file: P) -> Result<(), ArchiveError> {
             .wait_with_output()?;
 
         if !output.status.success() {
-            return Err(ArchiveError::Powershell(String::from_utf8(output.stderr).unwrap()))
+            return Err(ArchiveError::Command(String::from_utf8(output.stderr).unwrap()));
         }
     } else {
-        // TODO Mac
+        if let (Some(out_file), Some(dir)) = (out_file.to_str(), dir.to_str()) {
+            let child = Command::new("zip")
+                .args(&["-r", out_file, dir])
+                .spawn()?;
+
+            let output = child
+                .wait_with_output()?;
+
+            if !output.status.success() {
+                return Err(ArchiveError::Command(String::from_utf8(output.stderr).unwrap()));
+            }
+        }
     }
 
     Ok(())
@@ -88,7 +99,6 @@ pub fn zip<P: AsRef<Path>>(dir: P, out_file: P) -> Result<(), ArchiveError> {
 }
 
 pub fn unzip<P: AsRef<Path>>(zip_file: P, out_dir: P) -> Result<(), ArchiveError> {
-    // TODO powershell -command & { Add-Type -A 'System.IO.Compression.FileSystem'; [IO.Compression.ZipFile]::ExtractToDirectory('foo.zip', 'bar'); }
     let out_dir = out_dir.as_ref();
     let file = File::open(zip_file.as_ref())?;
     let mut unzipped = zip::ZipArchive::new(file)?;
@@ -142,7 +152,7 @@ pub enum ArchiveError {
     Io(io::Error),
     Zip(zip::result::ZipError),
     StripPrefix(StripPrefixError),
-    Powershell(String),
+    Command(String),
 }
 
 impl fmt::Display for ArchiveError {
@@ -151,7 +161,7 @@ impl fmt::Display for ArchiveError {
             ArchiveError::Io(ref err) => write!(f, "IO error: {}", err),
             ArchiveError::Zip(ref err) => write!(f, "Zip error: {}", err),
             ArchiveError::StripPrefix(ref err) => write!(f, "Strip prefix error: {}", err),
-            ArchiveError::Powershell(ref err) => write!(f, "Powershell error: {}", err),
+            ArchiveError::Command(ref err) => write!(f, "Command error: {}", err),
         }
     }
 }
@@ -162,7 +172,7 @@ impl error::Error for ArchiveError {
             ArchiveError::Io(ref err) => err.description(),
             ArchiveError::Zip(ref err) => err.description(),
             ArchiveError::StripPrefix(ref err) => err.description(),
-            ArchiveError::Powershell(ref err) => err.as_str(),
+            ArchiveError::Command(ref err) => err.as_str(),
         }
     }
 
@@ -171,7 +181,7 @@ impl error::Error for ArchiveError {
             ArchiveError::Io(ref err) => Some(err),
             ArchiveError::Zip(ref err) => Some(err),
             ArchiveError::StripPrefix(ref err) => Some(err),
-            ArchiveError::Powershell(_) => None,
+            ArchiveError::Command(_) => None,
         }
     }
 }
