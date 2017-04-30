@@ -9,3 +9,7 @@ serde = { version = "1" }
 serde_derive = { version = "1" }
 toml = { version = "0.4" }
 archive = { path = "archive-rs/" }
+
+[dev-dependencies]
+vbablockstest = { path = "tests/vbablockstest" }
+hamcrest = "0.1"
