@@ -3,6 +3,8 @@ extern crate clap;
 #[macro_use]
 extern crate serde_derive;
 extern crate toml;
+#[macro_use]
+extern crate error_chain;
 extern crate archive;
 
 mod manifest;
@@ -12,7 +14,14 @@ use clap::App;
 use ops::{add, update, remove, build, test, init, version, publish, list, search, BuildOptions,
           PublishOptions};
 
-fn main() {
+mod errors {
+    error_chain! { }
+}
+use errors::*;
+
+quick_main!(run);
+
+fn run() -> Result<()> {
     let yaml = load_yaml!("cli.yml");
     let matches = App::from_yaml(yaml).get_matches();
 
@@ -82,4 +91,6 @@ fn main() {
 
         search(query);
     }
+
+    Ok(())
 }
