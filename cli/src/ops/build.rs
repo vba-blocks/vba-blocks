@@ -32,7 +32,7 @@ pub fn build(options: BuildOptions) -> Result<()> {
     let manifest = load_manifest("vba-block.toml")
         .chain_err(|| "Failed to load manifest")?;
 
-    build_targets(cwd, manifest).expect("Failed to build targets");
+    build_targets(cwd, manifest)?;
 
     // TEMP
     match run("build", &features) {
@@ -81,7 +81,7 @@ fn run(name: &str, args: &Vec<&str>) -> Result<String> {
     script_dir.push("scripts");
     let script_dir = script_dir
         .to_str()
-        .expect("Failed to find script directory");
+        .ok_or("Failed to find script directory")?;
 
     let output = if cfg!(target_os = "windows") {
         let command = format!("cscript {}\\run.vbs {} {}",
@@ -92,7 +92,7 @@ fn run(name: &str, args: &Vec<&str>) -> Result<String> {
         Command::new("cmd")
             .args(&["/C", &command])
             .output()
-            .expect("Failed to execute script")
+            .chain_err(|| "Failed to execute script")?
     } else {
         let command = format!("osascript {}/run.scpt {} {}",
                               script_dir,
@@ -102,7 +102,7 @@ fn run(name: &str, args: &Vec<&str>) -> Result<String> {
         Command::new("sh")
             .args(&["-c", &command])
             .output()
-            .expect("Failed to execute script")
+            .chain_err(|| "Failed to execute script")?
     };
 
     if output.stderr.len() > 0 {
