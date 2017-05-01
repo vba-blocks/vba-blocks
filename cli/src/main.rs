@@ -15,7 +15,7 @@ use ops::{add, update, remove, build, test, init, version, publish, list, search
           PublishOptions};
 
 mod errors {
-    error_chain! { }
+    error_chain!{}
 }
 use errors::*;
 

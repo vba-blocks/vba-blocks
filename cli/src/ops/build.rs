@@ -1,6 +1,6 @@
-use std::process::{Command};
+use std::process::Command;
 use std::path::{Path, MAIN_SEPARATOR};
-use std::{fs};
+use std::fs;
 use std::env;
 
 use archive;
@@ -55,7 +55,10 @@ fn build_targets<P: AsRef<Path>>(cwd: P, manifest: Manifest) -> Result<()> {
     if let Some(targets) = manifest.targets {
         for target in targets {
             let name = target.name.unwrap_or(manifest.package.name.clone());
-            let path = cwd.as_ref().join(target.path.replace("/", MAIN_SEPARATOR.to_string().as_str()));
+            let path = cwd.as_ref()
+                .join(target
+                          .path
+                          .replace("/", MAIN_SEPARATOR.to_string().as_str()));
             let file = build_dir.join(format!("{}.{}", name, target.extension));
 
             archive::zip(path, file)
@@ -66,7 +69,7 @@ fn build_targets<P: AsRef<Path>>(cwd: P, manifest: Manifest) -> Result<()> {
     Ok(())
 }
 
-fn run(name: &str, args: &Vec<&str>) -> Result<String> {    
+fn run(name: &str, args: &Vec<&str>) -> Result<String> {
     let mut script_dir = env::current_exe()
         .chain_err(|| "Failed to find script directory")?;
 
@@ -76,17 +79,25 @@ fn run(name: &str, args: &Vec<&str>) -> Result<String> {
     script_dir.pop(); // debug/
     script_dir.pop(); // target/
     script_dir.push("scripts");
-    let script_dir = script_dir.to_str().expect("Failed to find script directory");
+    let script_dir = script_dir
+        .to_str()
+        .expect("Failed to find script directory");
 
     let output = if cfg!(target_os = "windows") {
-        let command = format!("cscript {}\\run.vbs {} {}", script_dir, name, args.join(" "));
+        let command = format!("cscript {}\\run.vbs {} {}",
+                              script_dir,
+                              name,
+                              args.join(" "));
         println!("Command: {}", command);
         Command::new("cmd")
             .args(&["/C", &command])
             .output()
             .expect("Failed to execute script")
     } else {
-        let command = format!("osascript {}/run.scpt {} {}", script_dir, name, args.join(" "));
+        let command = format!("osascript {}/run.scpt {} {}",
+                              script_dir,
+                              name,
+                              args.join(" "));
         println!("Command: {}", command);
         Command::new("sh")
             .args(&["-c", &command])
