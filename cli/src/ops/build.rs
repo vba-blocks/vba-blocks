@@ -1,9 +1,10 @@
 use std::process::{Command, exit};
-use std::path::{Path};
+use std::path::{Path, MAIN_SEPARATOR};
 use std::{fs};
+use std::env;
 
 use archive;
-use manifest;
+use manifest::{load as load_manifest, Manifest};
 
 pub struct BuildOptions<'a> {
     pub release: bool,
@@ -15,7 +16,7 @@ pub struct BuildOptions<'a> {
 pub fn build(options: BuildOptions) {
     let features = options.features.unwrap_or(vec![]);
 
-    println!("Build, release: {}, features: {}, all-features: {}, no-default-features: {}",
+    println!("Build -- release: {}, features: {}, all-features: {}, no-default-features: {}\n",
              options.release,
              match features.len() {
                  0 => "(no features)".to_string(),
@@ -24,12 +25,14 @@ pub fn build(options: BuildOptions) {
              options.all_features,
              options.no_default_features);
 
-    fs::create_dir_all("fixtures\\build\\").expect("Failed to create build directory");
-    create_binary("fixtures\\targets\\xlsm", "fixtures\\build\\testing.xlsm").expect("Failed to create binary");
+    let cwd = env::current_dir()
+        .expect("Failed to find current directory")
+        .join("fixtures");
+    let manifest = load_manifest("fixtures\\vba-block.toml").expect("Failed to load manifest");
+    
+    build_targets(cwd, manifest).expect("Failed to build targets");
 
-    let manifest = manifest::load("fixtures\\vba-block.toml").expect("Failed to load manifest");
-    println!("name: {}, version: {}, authors: {}", manifest.package.name, manifest.package.version, manifest.package.authors.join(" "));
-
+    // TEMP
     match run("build", &features) {
         Ok(stdout) => println!("{}", stdout),
         Err(stderr) => {
@@ -41,22 +44,43 @@ pub fn build(options: BuildOptions) {
     println!("Done.");
 }
 
-fn create_binary<P: AsRef<Path>>(dir: P, out_file: P) -> Result<(), archive::ArchiveError> {
-    let dir = dir.as_ref();
-    let out_file = out_file.as_ref();
+fn build_targets<P: AsRef<Path>>(cwd: P, manifest: Manifest) -> Result<(), archive::ArchiveError> {
+    let build_dir = cwd.as_ref().join("build");
+    fs::create_dir_all(build_dir.clone())?;
 
-    archive::zip(dir, out_file)
+    if let Some(targets) = manifest.targets {
+        for target in targets {
+            let name = target.name.unwrap_or(manifest.package.name.clone());
+            let path = cwd.as_ref().join(target.path.replace("/", MAIN_SEPARATOR.to_string().as_str()));
+            let file = build_dir.join(format!("{}.{}", name, target.extension));
+
+            archive::zip(path, file)?;
+        }
+    }
+
+    Ok(())
 }
 
-fn run(name: &str, args: &Vec<&str>) -> Result<String, String> {
+fn run(name: &str, args: &Vec<&str>) -> Result<String, String> {    
+    let mut script_dir = env::current_exe().expect("Failed to find script directory");
+
+    // TODO Check for development vs installed
+
+    script_dir.pop(); // vba-blocks.exe
+    script_dir.pop(); // debug/
+    script_dir.pop(); // target/
+    script_dir.push("scripts");
+    let script_dir = script_dir.to_str().expect("Failed to find script directory");
+
     let output = if cfg!(target_os = "windows") {
-        let command = format!("cscript scripts/run.vbs {} {}", name, args.join(" "));
+        let command = format!("cscript {}\\run.vbs {} {}", script_dir, name, args.join(" "));
+        println!("Command: {}", command);
         Command::new("cmd")
             .args(&["/C", &command])
             .output()
             .expect("Failed to execute script")
     } else {
-        let command = format!("osascript scripts/run.scpt {} {}", name, args.join(" "));
+        let command = format!("osascript {}/run.scpt {} {}", script_dir, name, args.join(" "));
         Command::new("sh")
             .args(&["-c", &command])
             .output()
