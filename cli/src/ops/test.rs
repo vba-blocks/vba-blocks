@@ -1,8 +1,12 @@
-pub fn test(filters: Vec<&str>) {
+use errors::*;
+
+pub fn test(filters: Vec<&str>) -> Result<()> {
     let filter_value = match filters.len() {
         0 => "(no filters)".to_string(),
         _ => filters.join(" "),
     };
 
     println!("test, filters: {}", filter_value);
+
+    Ok(())
 }

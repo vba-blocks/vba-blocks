@@ -1,10 +1,12 @@
-use std::process::{Command, exit};
+use std::process::{Command};
 use std::path::{Path, MAIN_SEPARATOR};
 use std::{fs};
 use std::env;
 
 use archive;
 use manifest::{load as load_manifest, Manifest};
+
+use errors::*;
 
 pub struct BuildOptions<'a> {
     pub release: bool,
@@ -13,7 +15,7 @@ pub struct BuildOptions<'a> {
     pub no_default_features: bool,
 }
 
-pub fn build(options: BuildOptions) {
+pub fn build(options: BuildOptions) -> Result<()> {
     let features = options.features.unwrap_or(vec![]);
 
     println!("Build -- release: {}, features: {}, all-features: {}, no-default-features: {}\n",
@@ -26,9 +28,10 @@ pub fn build(options: BuildOptions) {
              options.no_default_features);
 
     let cwd = env::current_dir()
-        .expect("Failed to find current directory")
+        .chain_err(|| "Failed to find current directory")?
         .join("fixtures");
-    let manifest = load_manifest("fixtures\\vba-block.toml").expect("Failed to load manifest");
+    let manifest = load_manifest("fixtures\\vba-block.toml")
+        .chain_err(|| "Failed to load manifest")?;
     
     build_targets(cwd, manifest).expect("Failed to build targets");
 
@@ -37,16 +40,18 @@ pub fn build(options: BuildOptions) {
         Ok(stdout) => println!("{}", stdout),
         Err(stderr) => {
             println!("ERROR: {}", stderr);
-            exit(1);
+            return Err(stderr);
         }
     }
 
     println!("Done.");
+    Ok(())
 }
 
-fn build_targets<P: AsRef<Path>>(cwd: P, manifest: Manifest) -> Result<(), archive::ArchiveError> {
+fn build_targets<P: AsRef<Path>>(cwd: P, manifest: Manifest) -> Result<()> {
     let build_dir = cwd.as_ref().join("build");
-    fs::create_dir_all(build_dir.clone())?;
+    fs::create_dir_all(build_dir.clone())
+        .chain_err(|| "Failed to create build folder")?;
 
     if let Some(targets) = manifest.targets {
         for target in targets {
@@ -54,15 +59,17 @@ fn build_targets<P: AsRef<Path>>(cwd: P, manifest: Manifest) -> Result<(), archi
             let path = cwd.as_ref().join(target.path.replace("/", MAIN_SEPARATOR.to_string().as_str()));
             let file = build_dir.join(format!("{}.{}", name, target.extension));
 
-            archive::zip(path, file)?;
+            archive::zip(path, file)
+                .chain_err(|| "Failed to create target")?;
         }
     }
 
     Ok(())
 }
 
-fn run(name: &str, args: &Vec<&str>) -> Result<String, String> {    
-    let mut script_dir = env::current_exe().expect("Failed to find script directory");
+fn run(name: &str, args: &Vec<&str>) -> Result<String> {    
+    let mut script_dir = env::current_exe()
+        .chain_err(|| "Failed to find script directory")?;
 
     // TODO Check for development vs installed
 
@@ -81,6 +88,7 @@ fn run(name: &str, args: &Vec<&str>) -> Result<String, String> {
             .expect("Failed to execute script")
     } else {
         let command = format!("osascript {}/run.scpt {} {}", script_dir, name, args.join(" "));
+        println!("Command: {}", command);
         Command::new("sh")
             .args(&["-c", &command])
             .output()
@@ -88,7 +96,7 @@ fn run(name: &str, args: &Vec<&str>) -> Result<String, String> {
     };
 
     if output.stderr.len() > 0 {
-        Err(String::from_utf8(output.stderr).unwrap())
+        bail!(String::from_utf8(output.stderr).unwrap());
     } else {
         Ok(String::from_utf8(output.stdout).unwrap())
     }
