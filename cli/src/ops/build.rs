@@ -31,7 +31,7 @@ pub fn build(options: BuildOptions) -> Result<()> {
         .chain_err(|| "Failed to find current directory")?;
     let manifest = load_manifest("vba-block.toml")
         .chain_err(|| "Failed to load manifest")?;
-    
+
     build_targets(cwd, manifest).expect("Failed to build targets");
 
     // TEMP

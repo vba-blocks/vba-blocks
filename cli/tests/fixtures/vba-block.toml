@@ -5,7 +5,7 @@ authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 
 [src]
 a = "src/a.bas"
-b = "src/b.cls"
+b = { path = "src/b.cls", optional = true }
 
 [[targets]]
 type = "xlsm"

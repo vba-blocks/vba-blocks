@@ -1,5 +1,6 @@
 use std::path::{Path};
 use std::fs::File;
+use std::collections::HashMap;
 use std::io::prelude::*;
 use toml;
 
@@ -8,7 +9,10 @@ use errors::*;
 #[derive(Deserialize)]
 pub struct Manifest {
     pub package: Package,
-    pub targets: Option<Vec<Target>>
+    pub targets: Option<Vec<Target>>,
+
+    // TODO "path" -> { path = "path" } conversion
+    pub src: Option<HashMap<String, toml::Value>>,
 }
 
 #[derive(Deserialize)]
