@@ -28,9 +28,8 @@ pub fn build(options: BuildOptions) -> Result<()> {
              options.no_default_features);
 
     let cwd = env::current_dir()
-        .chain_err(|| "Failed to find current directory")?
-        .join("fixtures");
-    let manifest = load_manifest("fixtures\\vba-block.toml")
+        .chain_err(|| "Failed to find current directory")?;
+    let manifest = load_manifest("vba-block.toml")
         .chain_err(|| "Failed to load manifest")?;
     
     build_targets(cwd, manifest).expect("Failed to build targets");
