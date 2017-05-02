@@ -1,5 +1,6 @@
-# Ignore built fixtures
-cli/fixtures/build
+# Ignore built files
+cli/tests/fixtures/build
+addin/build
 
 # Ignore temporary Excel files
 */~$*
