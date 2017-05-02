@@ -4,7 +4,7 @@ use std::fs;
 use std::env;
 
 use archive;
-use manifest::{load as load_manifest, Manifest};
+use manifest::{Manifest};
 
 use errors::*;
 
@@ -29,9 +29,10 @@ pub fn build(options: BuildOptions) -> Result<()> {
 
     let cwd = env::current_dir()
         .chain_err(|| "Failed to find current directory")?;
-    let manifest = load_manifest("vba-block.toml")
+    let manifest = Manifest::load("vba-block.toml")
         .chain_err(|| "Failed to load manifest")?;
 
+    println!("{}", manifest.to_json()?);
     build_targets(cwd, manifest)?;
 
     // TEMP
@@ -52,18 +53,15 @@ fn build_targets<P: AsRef<Path>>(cwd: P, manifest: Manifest) -> Result<()> {
     fs::create_dir_all(build_dir.clone())
         .chain_err(|| "Failed to create build folder")?;
 
-    if let Some(targets) = manifest.targets {
-        for target in targets {
-            let name = target.name.unwrap_or(manifest.package.name.clone());
-            let path = cwd.as_ref()
-                .join(target
-                          .path
-                          .replace("/", MAIN_SEPARATOR.to_string().as_str()));
-            let file = build_dir.join(format!("{}.{}", name, target.extension));
+    for target in manifest.targets {
+        let path = cwd.as_ref()
+            .join(target
+                        .path
+                        .replace("/", MAIN_SEPARATOR.to_string().as_str()));
+        let file = build_dir.join(format!("{}.{}", target.name, target.extension));
 
-            archive::zip(path, file)
-                .chain_err(|| "Failed to create target")?;
-        }
+        archive::zip(path, file)
+            .chain_err(|| "Failed to create target")?;
     }
 
     Ok(())

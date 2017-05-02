@@ -8,6 +8,7 @@ clap = { version = "2", features = ["yaml"] }
 serde = "1"
 serde_derive = "1"
 toml = "0.4"
+serde_json = "1"
 error-chain = "0.10"
 archive = { path = "archive-rs/" }
 
