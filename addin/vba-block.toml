@@ -7,15 +7,19 @@ authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 installer = { path = "VBA-Installer" }
 
 [[targets]]
-type = "xlam"
-path = "targets/xlam"
+type = "xlsm"
+path = "targets/xlsm"
 
-[[targets]]
-type = "ppam"
-path = "targets/ppam"
+# [[targets]]
+# type = "xlam"
+# path = "targets/xlam"
 
-[[targets]]
-type = "dotm"
-path = "targets/dotm"
+# [[targets]]
+# type = "ppam"
+# path = "targets/ppam"
+
+# [[targets]]
+# type = "dotm"
+# path = "targets/dotm"
 
 # TODO Access and Outlook
