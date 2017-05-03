@@ -1,5 +1,5 @@
-use std::path::{Path, StripPrefixError, /*MAIN_SEPARATOR*/};
-use std::{fs, io, error, fmt};
+use std::path::{Path, /*MAIN_SEPARATOR*/};
+use std::{fs, io};
 use std::process::{Command, Stdio};
 use std::fs::File;
 // use std::io::prelude::*;
@@ -10,12 +10,19 @@ use std::fs::File;
 extern crate zip;
 // use zip::write::FileOptions;
 
-pub fn zip<P: AsRef<Path>>(dir: P, out_file: P) -> Result<(), ArchiveError> {
+#[macro_use] extern crate error_chain;
+mod errors {
+    error_chain! {}
+}
+use errors::*;
+pub use errors::{Result, Error, ErrorKind};
+
+pub fn zip<P: AsRef<Path>>(dir: P, out_file: P) -> Result<()> {
     let dir = dir.as_ref();
     let out_file = out_file.as_ref();
 
     if out_file.exists() {
-        fs::remove_file(out_file)?;
+        fs::remove_file(out_file).chain_err(|| "Failed to remove file")?;
     }
     
     if cfg!(target_os = "windows") {
@@ -29,25 +36,25 @@ pub fn zip<P: AsRef<Path>>(dir: P, out_file: P) -> Result<(), ArchiveError> {
             .args(&["-command", &command])
             .stdout(Stdio::piped())
             .stderr(Stdio::piped())
-            .spawn()?;
+            .spawn().chain_err(|| "Failed to spawn powershell")?;
             
         let output = child
-            .wait_with_output()?;
+            .wait_with_output().chain_err(|| "Powershell didn't complete")?;
 
         if !output.status.success() {
-            return Err(ArchiveError::Command(String::from_utf8(output.stderr).unwrap()));
+            bail!(String::from_utf8(output.stderr).unwrap());
         }
     } else {
         if let (Some(out_file), Some(dir)) = (out_file.to_str(), dir.to_str()) {
             let child = Command::new("zip")
                 .args(&["-r", "-X", out_file, dir])
-                .spawn()?;
+                .spawn().chain_err(|| "Failed to spawn zip")?;
 
             let output = child
-                .wait_with_output()?;
+                .wait_with_output().chain_err(|| "zip didn't complete")?;
 
             if !output.status.success() {
-                return Err(ArchiveError::Command(String::from_utf8(output.stderr).unwrap()));
+                bail!(String::from_utf8(output.stderr).unwrap());
             }
         }
     }
@@ -98,13 +105,13 @@ pub fn zip<P: AsRef<Path>>(dir: P, out_file: P) -> Result<(), ArchiveError> {
     // Ok(())
 }
 
-pub fn unzip<P: AsRef<Path>>(zip_file: P, out_dir: P) -> Result<(), ArchiveError> {
+pub fn unzip<P: AsRef<Path>>(zip_file: P, out_dir: P) -> Result<()> {
     let out_dir = out_dir.as_ref();
-    let file = File::open(zip_file.as_ref())?;
-    let mut unzipped = zip::ZipArchive::new(file)?;
+    let file = File::open(zip_file.as_ref()).chain_err(|| "Failed to open zip file")?;
+    let mut unzipped = zip::ZipArchive::new(file).chain_err(|| "Failed to unzip file")?;
 
     for i in 0..unzipped.len() {
-        let mut file = unzipped.by_index(i)?;
+        let mut file = unzipped.by_index(i).chain_err(|| "File not found for index")?;
         let out_path = out_dir.join(sanitize_filename(file.name()));
 
         if out_path.ends_with("/") {
@@ -118,14 +125,14 @@ pub fn unzip<P: AsRef<Path>>(zip_file: P, out_dir: P) -> Result<(), ArchiveError
     Ok(())
 }
 
-fn create_file(file: &mut zip::read::ZipFile, out_path: &Path) -> Result<(), io::Error> {
-    let mut out_file = File::create(&out_path)?;
-    io::copy(file, &mut out_file)?;
+fn create_file(file: &mut zip::read::ZipFile, out_path: &Path) -> Result<()> {
+    let mut out_file = File::create(&out_path).chain_err(|| "Failed to create file")?;
+    io::copy(file, &mut out_file).chain_err(|| "Failed to copy to file")?;
     Ok(())
 }
 
-fn create_directory(path: &Path) -> Result<(), io::Error> {
-    fs::create_dir_all(path)?;
+fn create_directory(path: &Path) -> Result<()> {
+    fs::create_dir_all(path).chain_err(|| "Failed to create directory")?;
     Ok(())
 }
 
@@ -145,61 +152,4 @@ fn sanitize_filename(filename: &str) -> std::path::PathBuf {
             path.push(cur.as_os_str());
             path
         })
-}
-
-#[derive(Debug)]
-pub enum ArchiveError {
-    Io(io::Error),
-    Zip(zip::result::ZipError),
-    StripPrefix(StripPrefixError),
-    Command(String),
-}
-
-impl fmt::Display for ArchiveError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            ArchiveError::Io(ref err) => write!(f, "IO error: {}", err),
-            ArchiveError::Zip(ref err) => write!(f, "Zip error: {}", err),
-            ArchiveError::StripPrefix(ref err) => write!(f, "Strip prefix error: {}", err),
-            ArchiveError::Command(ref err) => write!(f, "Command error: {}", err),
-        }
-    }
-}
-
-impl error::Error for ArchiveError {
-    fn description(&self) -> &str {
-        match *self {
-            ArchiveError::Io(ref err) => err.description(),
-            ArchiveError::Zip(ref err) => err.description(),
-            ArchiveError::StripPrefix(ref err) => err.description(),
-            ArchiveError::Command(ref err) => err.as_str(),
-        }
-    }
-
-    fn cause(&self) -> Option<&error::Error> {
-        match *self {
-            ArchiveError::Io(ref err) => Some(err),
-            ArchiveError::Zip(ref err) => Some(err),
-            ArchiveError::StripPrefix(ref err) => Some(err),
-            ArchiveError::Command(_) => None,
-        }
-    }
-}
-
-impl From<io::Error> for ArchiveError {
-    fn from(err: io::Error) -> ArchiveError {
-        ArchiveError::Io(err)
-    }
-}
-
-impl From<zip::result::ZipError> for ArchiveError {
-    fn from(err: zip::result::ZipError) -> ArchiveError {
-        ArchiveError::Zip(err)
-    }
-}
-
-impl From<StripPrefixError> for ArchiveError {
-    fn from(err: StripPrefixError) -> ArchiveError {
-        ArchiveError::StripPrefix(err)
-    }
 }
