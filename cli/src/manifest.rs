@@ -13,12 +13,12 @@ use errors::*;
 
 #[derive(Serialize, Debug)]
 pub struct Manifest {
-    pub build: PathBuf,
     pub metadata: Metadata,
     pub src: Vec<Src>,
     pub dependencies: Vec<Dependency>,
     pub dev_dependencies: Vec<Dependency>,
     pub targets: Vec<Target>,
+    pub build: PathBuf,
 }
 
 #[derive(Serialize, Debug)]
