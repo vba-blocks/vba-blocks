@@ -3,12 +3,12 @@ use std::fs::File;
 use std::collections::HashMap;
 use std::io::prelude::*;
 use toml;
-use serde::{Serializer};
+use serde::Serializer;
 use serde_json;
-use std::result::{Result as StdResult};
+use std::result::Result as StdResult;
 use semver::Version;
 
-use errors::*; 
+use errors::*;
 
 #[derive(Serialize, Debug)]
 pub struct Manifest {
@@ -66,41 +66,45 @@ impl Manifest {
             match value {
                 toml::Value::String(path) => {
                     src.push(Src {
-                        name,
-                        path,
-                        optional: false,
-                    });
-                },
+                                 name,
+                                 path,
+                                 optional: false,
+                             });
+                }
                 toml::Value::Table(table) => {
                     src.push(Src {
-                        name,
-                        path: value_to_string(table.get("path").ok_or("path is required for src")?)?,
-                        optional: table.get("optional")
-                                       .unwrap_or(&toml::Value::Boolean(false))
-                                       .as_bool()
-                                       .ok_or("Failed to convert value to boolean")?,
-                    });
-                },
+                                 name,
+                                 path: value_to_string(table
+                                                           .get("path")
+                                                           .ok_or("path is required for src")?)?,
+                                 optional: table
+                                     .get("optional")
+                                     .unwrap_or(&toml::Value::Boolean(false))
+                                     .as_bool()
+                                     .ok_or("Failed to convert value to boolean")?,
+                             });
+                }
                 _ => bail!("Incompatible type for src"),
             }
         }
 
         let dependencies = vec![];
         let dev_dependencies = vec![];
-        
+
         let mut targets = vec![];
         for target in raw.targets.unwrap_or(vec![]) {
             targets.push(Target {
-                name: target.name.unwrap_or(package_name.clone()),
-                path: target.path,
-                extension: target.extension,
-            });
+                             name: target.name.unwrap_or(package_name.clone()),
+                             path: target.path,
+                             extension: target.extension,
+                         });
         }
 
         let parsed = Manifest {
             metadata: Metadata {
                 name: package_name,
-                version: Version::parse(raw.package.version.as_str()).chain_err(|| "Invalid package version")?,
+                version: Version::parse(raw.package.version.as_str())
+                    .chain_err(|| "Invalid package version")?,
                 authors: raw.package.authors,
             },
             src,
@@ -127,7 +131,7 @@ struct RawManifest {
     package: RawPackage,
     src: Option<HashMap<String, toml::Value>>,
     dependencies: Option<HashMap<String, toml::Value>>,
-    
+
     #[serde(rename = "dev-dependencies")]
     dev_dependencies: Option<HashMap<String, toml::Value>>,
     targets: Option<Vec<RawTarget>>,
@@ -137,7 +141,7 @@ struct RawManifest {
 struct RawPackage {
     name: String,
     version: String, // TODO semver::Version
-    authors: Vec<String>
+    authors: Vec<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -151,7 +155,10 @@ struct RawTarget {
 }
 
 fn value_to_string(value: &toml::Value) -> Result<String> {
-    Ok(value.as_str().ok_or("Failed to convert value to string")?.to_string())
+    Ok(value
+           .as_str()
+           .ok_or("Failed to convert value to string")?
+           .to_string())
 }
 
 fn version_to_str<S>(version: &Version, serializer: S) -> StdResult<S::Ok, S::Error>

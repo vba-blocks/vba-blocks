@@ -4,7 +4,7 @@ use std::fs;
 use std::env;
 
 use archive;
-use manifest::{Manifest};
+use manifest::Manifest;
 
 use errors::*;
 
@@ -56,8 +56,8 @@ fn build_targets<P: AsRef<Path>>(cwd: P, manifest: Manifest) -> Result<()> {
     for target in manifest.targets {
         let path = cwd.as_ref()
             .join(target
-                        .path
-                        .replace("/", MAIN_SEPARATOR.to_string().as_str()));
+                      .path
+                      .replace("/", MAIN_SEPARATOR.to_string().as_str()));
         let file = build_dir.join(format!("{}.{}", target.name, target.extension));
 
         archive::zip(path, file)
