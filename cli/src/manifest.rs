@@ -72,16 +72,17 @@ impl Manifest {
                              });
                 }
                 toml::Value::Table(table) => {
+                    let path = table.get("path").ok_or("path is required for src")?;
+                    let optional = table
+                        .get("optional")
+                        .unwrap_or(&toml::Value::Boolean(false));
+
                     src.push(Src {
                                  name,
-                                 path: value_to_string(table
-                                                           .get("path")
-                                                           .ok_or("path is required for src")?)?,
-                                 optional: table
-                                     .get("optional")
-                                     .unwrap_or(&toml::Value::Boolean(false))
+                                 path: value_to_string(path)?,
+                                 optional: optional
                                      .as_bool()
-                                     .ok_or("Failed to convert value to boolean")?,
+                                     .ok_or("Failed to convert optional to boolean")?,
                              });
                 }
                 _ => bail!("Incompatible type for src"),
