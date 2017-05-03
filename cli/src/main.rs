@@ -10,6 +10,7 @@ extern crate error_chain;
 extern crate semver;
 extern crate archive;
 
+mod config;
 mod manifest;
 mod ops;
 

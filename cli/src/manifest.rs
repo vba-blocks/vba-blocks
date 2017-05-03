@@ -1,8 +1,7 @@
-use std::path::{Path, PathBuf, MAIN_SEPARATOR};
+use std::path::{Path, PathBuf};
 use std::fs::File;
 use std::collections::HashMap;
 use std::io::prelude::*;
-use std::env;
 use toml;
 use serde::Serializer;
 use serde_json;
@@ -10,6 +9,7 @@ use std::result::Result as StdResult;
 use semver::Version;
 
 use errors::*;
+use config::Config;
 
 #[derive(Serialize, Debug)]
 pub struct Manifest {
@@ -18,7 +18,6 @@ pub struct Manifest {
     pub dependencies: Vec<Dependency>,
     pub dev_dependencies: Vec<Dependency>,
     pub targets: Vec<Target>,
-    pub build: PathBuf,
 }
 
 #[derive(Serialize, Debug)]
@@ -64,16 +63,15 @@ impl Manifest {
         let raw: RawManifest = toml::from_str(contents.as_str())
             .chain_err(|| "Failed to parse manifest")?;
 
-        let cwd = env::current_dir()
-            .chain_err(|| "Failed to load current directory")?;
-        let build_dir = cwd.join("build");
+        let config = Config::load()
+            .chain_err(|| "Failed to load config")?;
         let package_name = raw.package.name;
 
         let mut src = vec![];
         for (name, value) in raw.src.unwrap_or(HashMap::new()) {
             match value {
                 toml::Value::String(path) => {
-                    let fullpath = cwd.join(normalize_path(&path));
+                    let fullpath = config.relative_to_cwd(&path);
                     src.push(Src {
                                  name,
                                  path,
@@ -89,7 +87,7 @@ impl Manifest {
                         .unwrap_or(&toml::Value::Boolean(false))
                         .as_bool()
                         .ok_or("Failed to convert optional to boolean")?;
-                    let fullpath = cwd.join(normalize_path(&path));
+                    let fullpath = config.relative_to_cwd(&path);
 
                     src.push(Src {
                                  name,
@@ -109,8 +107,8 @@ impl Manifest {
         for target in raw.targets.unwrap_or(vec![]) {
             let name = target.name.unwrap_or(package_name.clone());
             let path = target.path;
-            let fullpath = cwd.join(normalize_path(&path));
-            let file = build_dir.join(format!("{}.{}", name, target.extension));
+            let fullpath = config.relative_to_cwd(&path);
+            let file = config.relative_to_build(&format!("{}.{}", name, target.extension));
 
             targets.push(Target {
                              name,
@@ -122,7 +120,6 @@ impl Manifest {
         }
 
         let parsed = Manifest {
-            build: build_dir,
             metadata: Metadata {
                 name: package_name,
                 version: Version::parse(raw.package.version.as_str())
@@ -138,6 +135,13 @@ impl Manifest {
     }
 
     pub fn to_json(&self) -> Result<String> {
+        let json = serde_json::to_string(&self)
+            .chain_err(|| "Failed to convert manifest to JSON")?;
+
+        Ok(json)
+    }
+
+    pub fn to_json_pretty(&self) -> Result<String> {
         let json = serde_json::to_string_pretty(&self)
             .chain_err(|| "Failed to convert manifest to JSON")?;
 
@@ -187,8 +191,4 @@ fn version_to_str<S>(version: &Version, serializer: S) -> StdResult<S::Ok, S::Er
     where S: Serializer
 {
     serializer.serialize_str(version.to_string().as_str())
-}
-
-fn normalize_path(path: &String) -> String {
-    path.replace("/", MAIN_SEPARATOR.to_string().as_str())
 }
