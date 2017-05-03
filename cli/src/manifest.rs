@@ -1,7 +1,8 @@
-use std::path::Path;
+use std::path::{Path, PathBuf, MAIN_SEPARATOR};
 use std::fs::File;
 use std::collections::HashMap;
 use std::io::prelude::*;
+use std::env;
 use toml;
 use serde::Serializer;
 use serde_json;
@@ -12,6 +13,7 @@ use errors::*;
 
 #[derive(Serialize, Debug)]
 pub struct Manifest {
+    pub build: PathBuf,
     pub metadata: Metadata,
     pub src: Vec<Src>,
     pub dependencies: Vec<Dependency>,
@@ -32,6 +34,7 @@ pub struct Src {
     pub name: String,
     pub path: String,
     pub optional: bool,
+    pub fullpath: PathBuf,
 }
 
 #[derive(Serialize, Debug)]
@@ -47,6 +50,8 @@ pub struct Target {
     pub name: String,
     pub path: String,
     pub extension: String,
+    pub fullpath: PathBuf,
+    pub file: PathBuf,
 }
 
 impl Manifest {
@@ -59,30 +64,38 @@ impl Manifest {
         let raw: RawManifest = toml::from_str(contents.as_str())
             .chain_err(|| "Failed to parse manifest")?;
 
+        let cwd = env::current_dir()
+            .chain_err(|| "Failed to load current directory")?;
+        let build_dir = cwd.join("build");
         let package_name = raw.package.name;
 
         let mut src = vec![];
         for (name, value) in raw.src.unwrap_or(HashMap::new()) {
             match value {
                 toml::Value::String(path) => {
+                    let fullpath = cwd.join(normalize_path(&path));
                     src.push(Src {
                                  name,
                                  path,
                                  optional: false,
+                                 fullpath,
                              });
                 }
                 toml::Value::Table(table) => {
-                    let path = table.get("path").ok_or("path is required for src")?;
+                    let path =
+                        value_to_string(table.get("path").ok_or("path is required for src")?)?;
                     let optional = table
                         .get("optional")
-                        .unwrap_or(&toml::Value::Boolean(false));
+                        .unwrap_or(&toml::Value::Boolean(false))
+                        .as_bool()
+                        .ok_or("Failed to convert optional to boolean")?;
+                    let fullpath = cwd.join(normalize_path(&path));
 
                     src.push(Src {
                                  name,
-                                 path: value_to_string(path)?,
-                                 optional: optional
-                                     .as_bool()
-                                     .ok_or("Failed to convert optional to boolean")?,
+                                 path,
+                                 optional,
+                                 fullpath,
                              });
                 }
                 _ => bail!("Incompatible type for src"),
@@ -94,14 +107,22 @@ impl Manifest {
 
         let mut targets = vec![];
         for target in raw.targets.unwrap_or(vec![]) {
+            let name = target.name.unwrap_or(package_name.clone());
+            let path = target.path;
+            let fullpath = cwd.join(normalize_path(&path));
+            let file = build_dir.join(format!("{}.{}", name, target.extension));
+
             targets.push(Target {
-                             name: target.name.unwrap_or(package_name.clone()),
-                             path: target.path,
+                             name,
+                             path,
                              extension: target.extension,
+                             fullpath,
+                             file,
                          });
         }
 
         let parsed = Manifest {
+            build: build_dir,
             metadata: Metadata {
                 name: package_name,
                 version: Version::parse(raw.package.version.as_str())
@@ -141,7 +162,7 @@ struct RawManifest {
 #[derive(Deserialize, Debug)]
 struct RawPackage {
     name: String,
-    version: String, // TODO semver::Version
+    version: String,
     authors: Vec<String>,
 }
 
@@ -166,4 +187,8 @@ fn version_to_str<S>(version: &Version, serializer: S) -> StdResult<S::Ok, S::Er
     where S: Serializer
 {
     serializer.serialize_str(version.to_string().as_str())
+}
+
+fn normalize_path(path: &String) -> String {
+    path.replace("/", MAIN_SEPARATOR.to_string().as_str())
 }

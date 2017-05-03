@@ -1,5 +1,4 @@
 use std::process::Command;
-use std::path::{Path, MAIN_SEPARATOR};
 use std::fs;
 use std::env;
 
@@ -27,13 +26,11 @@ pub fn build(options: BuildOptions) -> Result<()> {
              options.all_features,
              options.no_default_features);
 
-    let cwd = env::current_dir()
-        .chain_err(|| "Failed to find current directory")?;
     let manifest = Manifest::load("vba-block.toml")
         .chain_err(|| "Failed to load manifest")?;
 
     println!("{}", manifest.to_json()?);
-    build_targets(cwd, manifest)?;
+    build_targets(manifest)?;
 
     // TEMP
     match run("build", &features) {
@@ -48,19 +45,12 @@ pub fn build(options: BuildOptions) -> Result<()> {
     Ok(())
 }
 
-fn build_targets<P: AsRef<Path>>(cwd: P, manifest: Manifest) -> Result<()> {
-    let build_dir = cwd.as_ref().join("build");
-    fs::create_dir_all(build_dir.clone())
+fn build_targets(manifest: Manifest) -> Result<()> {
+    fs::create_dir_all(manifest.build)
         .chain_err(|| "Failed to create build folder")?;
 
     for target in manifest.targets {
-        let path = cwd.as_ref()
-            .join(target
-                      .path
-                      .replace("/", MAIN_SEPARATOR.to_string().as_str()));
-        let file = build_dir.join(format!("{}.{}", target.name, target.extension));
-
-        archive::zip(path, file)
+        archive::zip(target.fullpath, target.file)
             .chain_err(|| "Failed to create target")?;
     }
 
