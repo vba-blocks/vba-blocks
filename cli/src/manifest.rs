@@ -3,7 +3,10 @@ use std::fs::File;
 use std::collections::HashMap;
 use std::io::prelude::*;
 use toml;
+use serde::{Serializer};
 use serde_json;
+use std::result::{Result as StdResult};
+use semver::Version;
 
 use errors::*; 
 
@@ -19,7 +22,8 @@ pub struct Manifest {
 #[derive(Serialize, Debug)]
 pub struct Metadata {
     pub name: String,
-    pub version: String, // TODO semver::Version
+    #[serde(serialize_with = "version_to_str")]
+    pub version: Version,
     pub authors: Vec<String>,
 }
 
@@ -33,7 +37,8 @@ pub struct Src {
 #[derive(Serialize, Debug)]
 pub struct Dependency {
     pub name: String,
-    pub version: String, // TODO semver::Version
+    #[serde(serialize_with = "version_to_str")]
+    pub version: Version,
     pub optional: bool,
 }
 
@@ -95,7 +100,7 @@ impl Manifest {
         let parsed = Manifest {
             metadata: Metadata {
                 name: package_name,
-                version: raw.package.version,
+                version: Version::parse(raw.package.version.as_str()).chain_err(|| "Invalid package version")?,
                 authors: raw.package.authors,
             },
             src,
@@ -147,4 +152,10 @@ struct RawTarget {
 
 fn value_to_string(value: &toml::Value) -> Result<String> {
     Ok(value.as_str().ok_or("Failed to convert value to string")?.to_string())
+}
+
+fn version_to_str<S>(version: &Version, serializer: S) -> StdResult<S::Ok, S::Error>
+    where S: Serializer
+{
+    serializer.serialize_str(version.to_string().as_str())
 }
