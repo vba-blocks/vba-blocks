@@ -1,13 +1,14 @@
+node_modules
+
 # Ignore built files
 cli/tests/fixtures/build
 addin/build
 
+# Ignore compiled CLI
+cli/build
+
 # Ignore temporary Excel files
 */~$*
-
-# Ignore compiled CLI
-cli/target/
-*.bk
 
 # OS
 .DS_Store
