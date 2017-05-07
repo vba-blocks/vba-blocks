@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
 const toml = require('toml');
+const { eachObject, isString } = require('./utils');
 
 class Manifest {
   constructor(values) {
@@ -75,17 +76,3 @@ class Manifest {
 }
 
 module.exports = Manifest;
-
-function eachObject(obj, fn) {
-  if (!obj) {
-    return;
-  }
-
-  Object.keys(obj).forEach(key => {
-    fn(obj[key], key, obj);
-  });
-}
-
-function isString(val) {
-  return typeof val === 'string';
-}
