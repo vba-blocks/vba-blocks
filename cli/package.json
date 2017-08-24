@@ -21,6 +21,7 @@
   "dependencies": {
     "archiver": "^2.0.0",
     "commander": "^2.9.0",
+    "dugite": "^1.39.0",
     "fs-extra": "^4.0.1",
     "tar": "^4.0.1",
     "toml": "^2.3.2"
