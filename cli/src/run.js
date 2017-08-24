@@ -1,13 +1,13 @@
 const Config = require('./config');
 
 const extensions = {
-  excel: ['xlsx', 'xlsm', 'xlam'],
+  excel: ['xlsx', 'xlsm', 'xlam']
 };
 const addins = {
-  excel: 'vba-blocks.xlam',
+  excel: 'vba-blocks.xlam'
 };
 
-module.exports = function run(command, target, args) {
+module.exports = async function run(command, target, args) {
   let application;
   for (let key in extensions) {
     if (extensions[key].includes(target.type)) {
@@ -17,13 +17,16 @@ module.exports = function run(command, target, args) {
   }
 
   if (!application) {
-    return Promise.reject(new Error(`Unsupported target type: ${target.type}`));
+    throw new Error(`Unsupported target type: ${target.type}`);
   }
 
-  return Config.load().then(config => {
-    const addin = config.relativeToAddins(addins[application]);
-    target = config.relativeToBuild(`${target.name}.${target.type}`);
+  const config = await Config.load();
+  const addin = config.relativeToAddins(addins[application]);
+  target = config.relativeToBuild(`${target.name}.${target.type}`);
 
-    console.log(`run(${application}, ${addin}, ${command}, ${JSON.stringify(target)}, ${JSON.stringify(args)})`);
-  });
+  console.log(
+    `run(${application}, ${addin}, ${command}, ${JSON.stringify(
+      target
+    )}, ${JSON.stringify(args)})`
+  );
 };

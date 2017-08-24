@@ -7,10 +7,15 @@ const build = require('../src/build');
 
 program.version(pkg.version);
 
-program.command('build')
+program
+  .command('build')
   .description('Build project from src and dependencies')
   .option('--release', 'Build for release')
-  .option('--features <features>', 'Space-separated list of features to build', list)
+  .option(
+    '--features <features>',
+    'Space-separated list of features to build',
+    list
+  )
   .option('--all-features', 'Build all available features')
   .option('--no-default-features', 'Do not build the `default` feature')
   .action((...args) => {
@@ -18,17 +23,17 @@ program.command('build')
       release = false,
       features = [],
       allFeatures = false,
-      defaultFeatures = true,
+      defaultFeatures = true
     } = last(args);
 
     build({
       release,
       features,
       allFeatures,
-      defaultFeatures,
+      defaultFeatures
     }).catch(err => {
       console.error(err);
-      process.exit(1)
+      process.exit(1);
     });
   });
 

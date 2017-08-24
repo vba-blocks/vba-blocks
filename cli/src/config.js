@@ -1,4 +1,4 @@
-const path = require('path');
+const { join } = require('path');
 
 class Config {
   constructor(values) {
@@ -9,42 +9,35 @@ class Config {
   }
 
   relativeToCwd(file) {
-    return path.join(this.cwd, file);
+    return join(this.cwd, file);
   }
 
   relativeToBuild(file) {
-    return path.join(this.build, file);
+    return join(this.build, file);
   }
 
   relativeToScripts(file) {
-    return path.join(this.scripts, file);
+    return join(this.scripts, file);
   }
 
   relativeToAddins(file) {
-    return path.join(this.addins, file);
+    return join(this.addins, file);
   }
 
-  static load() {
-    return new Promise((resolve, reject) => {
-      let config;
-      try {
-        const cwd = process.cwd();
-        const build = path.join(cwd, 'build');
-        const scripts = path.join(__dirname, '../scripts');
-        const addins = path.join(__dirname, '../../addin/build');
-        
-        config = new Config({
-          cwd,
-          build,
-          scripts,
-          addins,
-        });
-      } catch(err) {
-        return reject(err);
-      }
+  static async load() {
+    const cwd = process.cwd();
+    const build = join(cwd, 'build');
+    const scripts = join(__dirname, '../scripts');
+    const addins = join(__dirname, '../../addin/build');
 
-      resolve(config);
+    const config = new Config({
+      cwd,
+      build,
+      scripts,
+      addins
     });
+
+    return config;
   }
 }
 

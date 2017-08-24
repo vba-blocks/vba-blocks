@@ -1,77 +1,63 @@
-const fs = require('fs');
-const path = require('path');
+const { exists, read } = require('fs-extra');
+const { join } = require('path');
 const assert = require('assert');
 const toml = require('toml');
-const { eachObject, isString } = require('./utils');
+const { mapObject, isString } = require('./utils');
 
 class Manifest {
   constructor(values) {
     assert(values, 'No values were supplied for the manifest');
-    assert(values.package, '[package] is a required field, with name, version, and authors specified');
-    assert(values.package.name, '[package] name is a required field');
-    assert(values.package.version, '[package] version is a required field');
-    assert(values.package.authors, '[package] authors is a required field');
+
+    const { package: pkg, src = {}, dependencies = {}, targets = [] } = values;
+
+    assert(
+      pkg,
+      '[package] is a required field, with name, version, and authors specified'
+    );
+    assert(pkg.name, '[package] name is a required field');
+    assert(pkg.version, '[package] version is a required field');
+    assert(pkg.authors, '[package] authors is a required field');
 
     this.metadata = {
-      name: values.package.name,
-      version: values.package.version,
-      authors: values.package.authors,
+      name: pkg.name,
+      version: pkg.version,
+      authors: pkg.authors
     };
 
-    this.src = [];
-    eachObject(values.src, (details, name) => {
-      if (isString(details)) {
-        details = { path: details };
-      }
+    this.src = mapObject(src, (details, name) => {
+      if (isString(details)) details = { path: details };
 
-      const src = Object.assign(details, {
-        name,
-      });
-      this.src.push(src);
+      const src = Object.assign(details, { name });
+      return src;
     });
 
-    this.dependencies = [];
-    eachObject(values.dependencies, (details, name) => {
-      if (isString(details)) {
-        details = { version: details };
-      }
-      
-      const dependency = Object.assign(details, {
-        name,
-      });
-      this.dependencies.push(dependency);
+    this.dependencies = mapObject(dependencies, (details, name) => {
+      if (isString(details)) details = { version: details };
+
+      const dependency = Object.assign(details, { name });
+      return dependency;
     });
 
-    this.targets = (values.targets || []).map(target => {
+    this.targets = targets.map(target => {
       if (!target.name) {
-        target.name = values.package.name;
+        target.name = pkg.name;
       }
 
       return target;
     });
   }
 
-  static load(dir) {
-    return new Promise((resolve, reject) => {
-      const file = path.join(dir, 'vba-block.toml');
-      if (!fs.existsSync(file)) {
-        return reject(new Error(`vba-blocks.toml not found in "${dir}"`));
-      }
+  static async load(dir) {
+    const file = join(dir, 'vba-block.toml');
+    if (!await exists(file)) {
+      throw new Error(`vba-blocks.toml not found in "${dir}"`);
+    }
 
-      fs.readFile(file, 'utf8', (err, data) => {
-        if (err) return reject(err);
+    const data = read(file);
+    const parsed = toml.parse(data);
+    const manifest = new Manifest(parsed);
 
-        let manifest;
-        try {
-          const parsed = toml.parse(data);
-          manifest = new Manifest(parsed);
-        } catch(err) {
-          return reject(err);
-        }
-
-        resolve(manifest);
-      });
-    });
+    return manifest;
   }
 }
 

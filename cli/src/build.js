@@ -1,43 +1,46 @@
-const fs = require('fs');
+const { exists, ensureDir } = require('fs-extra');
 const Config = require('./config');
 const Manifest = require('./manifest');
-const zip = require('./zip');
 const run = require('./run');
+const { zip, plural } = require('./utils');
 
-module.exports = function build(options) {
+module.exports = async function build(options) {
   console.log('1. Loading vba-blocks.toml and config');
-  return Promise.all([
+  const [config, manifest] = await Promise.all([
     Config.load(),
-    Manifest.load(process.cwd()),
-  ])
-    .then(([config, manifest]) => {
-      console.log('2. Resolving dependencies');
+    Manifest.load(process.cwd())
+  ]);
 
-      // TODO Determine files to install
-      const files = [];
+  console.log('2. Resolving dependencies');
+  // TODO Determine files to install
+  const files = [];
 
-      console.log(`3. Building ${manifest.targets.length} target${manifest.targets.length === 1 ? '' : 's'}`);
+  console.log(
+    `3. Building ${manifest.targets.length} ${plural(
+      manifest.targets.length,
+      'target',
+      'targets'
+    )}`
+  );
 
-      if (!fs.existsSync(config.build)) {
-        fs.mkdirSync(config.build);
-      }
+  await ensureDir(config.build);
 
-      // Conservatively build targets in series
-      // to avoid potential contention issues in add-ins
-      return series(manifest.targets, target => {
-        return createTarget(config, target)
-          .then(() => buildTarget(target, files));
-      });
-    })
-    .then(() => console.log('Done!'));
+  // Conservatively build targets sequentially
+  // to avoid potential contention issues in add-ins
+  for (const target in manifest.targets) {
+    await createTarget(config, target);
+    await buildTarget(target, files);
+  }
+
+  console.log('Done!');
 };
 
-function createTarget(config, target) {
+async function createTarget(config, target) {
   const dir = config.relativeToCwd(target.path);
   const file = config.relativeToBuild(`${target.name}.${target.type}`);
 
-  if (fs.existsSync(file)) {
-    return Promise.resolve();
+  if (await exists(file)) {
+    return;
   }
 
   return zip(dir, file);
@@ -45,10 +48,4 @@ function createTarget(config, target) {
 
 function buildTarget(target, files) {
   return run('build', target, [JSON.stringify(files)]);
-}
-
-function series(values, fn) {
-  return values.reduce((chain, value, i) => {
-    return chain.then(() => fn(value, i, values));
-  }, Promise.resolve());
 }
