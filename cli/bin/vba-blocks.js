@@ -3,7 +3,7 @@
 const program = require('commander');
 const pkg = require('../package.json');
 
-const build = require('../src/build');
+const build = require('../lib/build');
 
 program.version(pkg.version);
 
