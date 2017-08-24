@@ -12,6 +12,16 @@ class Config {
     this.resolve = values.resolve;
   }
 
+  packagePath(manifest) {
+    const { name, version } = manifest.metadata;
+    return this.relativeToCache(`packages/${name}/v${version}.tar.gz`);
+  }
+
+  sourcePath(manifest) {
+    const { name, version } = manifest.metadata;
+    return this.relativeToCache(`sources/${name}/v${version}`);
+  }
+
   relativeToCwd(file) {
     return join(this.cwd, file);
   }
