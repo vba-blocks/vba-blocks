@@ -1,11 +1,11 @@
-const https = require('https');
-const { dirname } = require('path');
-const { createWriteStream, ensureDir } = require('fs-extra');
+import * as https from 'https';
+import { dirname } from 'path';
+import { createWriteStream, ensureDir } from 'fs-extra';
 
-module.exports = async function download(url, dest) {
+export default async function download(url: string, dest: string) {
   await ensureDir(dirname(dest));
 
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     https
       .get(url, response => {
         try {
@@ -13,7 +13,10 @@ module.exports = async function download(url, dest) {
           if (code >= 400) {
             reject(new Error(`${code} ${response.statusMessage}`));
           } else if (code >= 300) {
-            download(response.headers.location, dest).then(resolve, reject);
+            const location = response.headers.location;
+            const redirect = Array.isArray(location) ? location[0] : location;
+
+            download(redirect, dest).then(resolve, reject);
           } else {
             response
               .pipe(createWriteStream(dest))
@@ -26,4 +29,4 @@ module.exports = async function download(url, dest) {
       })
       .on('error', reject);
   });
-};
+}

@@ -1,0 +1,26 @@
+{
+  "name": "vba-blocks",
+  "private": true,
+  "version": "0.0.0",
+  "repository": "https://github.com/vba-blocks/vba-blocks.git",
+  "author": "Tim Hall <tim.hall.engr@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "lerna run build",
+    "precommit": "lint-staged",
+    "format": "prettier --single-quote --write \"{cli}/{src,tests}/**/*.{js,json}\""
+  },
+  "workspaces": ["cli"],
+  "lint-staged": {
+    "{cli}/{src,tests}/**/*.{js,json}": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lerna": "^2.1.0",
+    "lint-staged": "^4.0.4",
+    "prettier": "^1.5.3"
+  }
+}

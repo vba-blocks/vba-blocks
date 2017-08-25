@@ -1,14 +1,15 @@
-const { exists, ensureDir } = require('fs-extra');
-const Config = require('./config');
-const Manifest = require('./manifest');
-const run = require('./run');
-const { zip, plural } = require('./utils');
+import { relative } from 'path';
+import { exists, ensureDir } from 'fs-extra';
+import { Config, loadConfig } from './config';
+import { Manifest, Target, loadManifest } from './manifest';
+import run from './run';
+import { zip, plural } from './utils';
 
-module.exports = async function build(options) {
+export default async function build(options) {
   console.log('1. Loading vba-blocks.toml and config');
   const [config, manifest] = await Promise.all([
-    Config.load(),
-    Manifest.load(process.cwd())
+    loadConfig(),
+    loadManifest(process.cwd())
   ]);
 
   console.log('2. Resolving dependencies');
@@ -27,17 +28,17 @@ module.exports = async function build(options) {
 
   // Conservatively build targets sequentially
   // to avoid potential contention issues in add-ins
-  for (const target in manifest.targets) {
+  for (const target of manifest.targets) {
     await createTarget(config, target);
     await buildTarget(target, files);
   }
 
   console.log('Done!');
-};
+}
 
-async function createTarget(config, target) {
-  const dir = config.relativeToCwd(target.path);
-  const file = config.relativeToBuild(`${target.name}.${target.type}`);
+async function createTarget(config: Config, target: Target) {
+  const dir = relative(config.cwd, target.path);
+  const file = relative(config.build, `${target.name}.${target.type}`);
 
   if (await exists(file)) {
     return;
@@ -46,6 +47,6 @@ async function createTarget(config, target) {
   return zip(dir, file);
 }
 
-function buildTarget(target, files) {
+async function buildTarget(target: Target, files: any[]) {
   return run('build', target, [JSON.stringify(files)]);
 }

@@ -1,5 +1,5 @@
 {
-  "name": "vba-blocks",
+  "name": "vba-blocks-cli",
   "private": true,
   "version": "0.0.0",
   "description": "vba-blocks CLI",
@@ -13,9 +13,9 @@
   "bugs": {
     "url": "https://github.com/vba-blocks/vba-blocks/issues"
   },
-  "bin": "bin/vba-blocks",
+  "bin": { "vba-blocks": "bin/vba-blocks.js" },
   "scripts": {
-    "format": "prettier --single-quote --write \"{bin,lib,test}/**/*.{js,json}\"",
+    "build": "tsc",
     "pkg": "pkg --targets node6-win-x86,node6-win-x64,node6-macos-x64 --out-dir build ."
   },
   "dependencies": {
@@ -23,11 +23,13 @@
     "commander": "^2.9.0",
     "dugite": "^1.39.0",
     "fs-extra": "^4.0.1",
+    "rollup-plugin-json": "^2.3.0",
     "tar": "^4.0.1",
     "toml": "^2.3.2"
   },
   "devDependencies": {
+    "@types/node": "^8.0.25",
     "pkg": "^4.2.4",
-    "prettier": "^1.5.3"
+    "typescript": "^2.4.2"
   }
 }
