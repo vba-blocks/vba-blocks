@@ -1,4 +1,4 @@
-import { exists, read } from 'fs-extra';
+import { exists, readFile } from 'fs-extra';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as toml from 'toml';
@@ -54,14 +54,16 @@ export { Source, Feature, Dependency, Reference, Target };
  * path = "targets/xlam"
  * ```
  */
+export interface Metadata {
+  name: string;
+  version: string;
+  authors: string[];
+  publish: boolean;
+  default_features: string[];
+}
+
 export interface Manifest {
-  metadata: {
-    name: string;
-    version: string;
-    authors: string[];
-    publish: boolean;
-    default_features: string[];
-  };
+  metadata: Metadata;
   src: Source[];
   features: Feature[];
   dependencies: Dependency[];
@@ -69,29 +71,36 @@ export interface Manifest {
   targets: Target[];
 }
 
-export function parseManifest(raw: Buffer): Manifest {
-  const parsed = toml.parse(raw.toString());
+const EXAMPLE = `Example vba-block.toml:
 
-  const pkg = parsed.package;
+[package]
+name = "my-package"
+version = "0.0.0"
+authors = ["Name <email> (url)"]`;
+
+export function parseManifest(value: any): Manifest {
   assert.ok(
-    pkg,
-    '[package] is a required field, with name, version, and authors specified'
+    value && value.package,
+    `[package] is a required field, with name, version, and authors specified. ${EXAMPLE}`
   );
-  assert.ok(pkg.name, '[package] name is a required field');
-  assert.ok(pkg.version, '[package] version is a required field');
-  assert.ok(pkg.authors, '[package] authors is a required field');
 
-  const src = parseSrc(parsed.src);
-  const { features, default_features } = parseFeatures(parsed.features);
-  const dependencies = parseDependencies(parsed.dependencies);
-  const references = parseReferences(parsed.references);
-  const targets = parseTargets(parsed.targets || [], pkg.name);
+  const { name, version, authors, publish = false } = value.package;
+
+  assert.ok(name, `[package] name is a required field. ${EXAMPLE}`);
+  assert.ok(version, `[package] version is a required field. ${EXAMPLE}`);
+  assert.ok(authors, `[package] authors is a required field. ${EXAMPLE}`);
+
+  const src = parseSrc(value.src || {});
+  const { features, default_features } = parseFeatures(value.features || {});
+  const dependencies = parseDependencies(value.dependencies || {});
+  const references = parseReferences(value.references || {});
+  const targets = parseTargets(value.targets || [], name);
 
   const metadata = {
-    name: pkg.name,
-    version: pkg.version,
-    authors: pkg.authors,
-    publish: pkg.publish,
+    name,
+    version,
+    authors,
+    publish,
     default_features
   };
 
@@ -104,8 +113,9 @@ export async function loadManifest(dir: string) {
     throw new Error(`vba-blocks.toml not found in "${dir}"`);
   }
 
-  const raw = await read(file);
-  const manifest = parseManifest(raw);
+  const raw = await readFile(file);
+  const parsed = toml.parse(raw.toString());
+  const manifest = parseManifest(parsed);
 
   return manifest;
 }

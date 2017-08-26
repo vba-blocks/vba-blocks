@@ -1,0 +1,314 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`load valid references 1`] = `
+Object {
+  "dependencies": Array [],
+  "features": Array [],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "default_features": Array [],
+    "name": "package-name",
+    "publish": false,
+    "version": "1.0.0",
+  },
+  "references": Array [
+    Object {
+      "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
+      "name": "a",
+      "optional": true,
+      "version": "1.0",
+    },
+  ],
+  "src": Array [],
+  "targets": Array [],
+}
+`;
+
+exports[`loads and parses manifest 1`] = `
+Object {
+  "dependencies": Array [
+    Object {
+      "default_features": true,
+      "features": Array [],
+      "name": "dictionary",
+      "version": "1.4.1",
+    },
+    Object {
+      "default_features": false,
+      "features": Array [
+        "dictionary-scripting",
+      ],
+      "git": "https://github.com/VBA-tools/VBA-Web",
+      "name": "web",
+      "tag": "v4.1.3",
+    },
+  ],
+  "features": Array [
+    Object {
+      "dependencies": Array [],
+      "name": "a",
+      "references": Array [],
+      "src": Array [
+        "b",
+      ],
+    },
+    Object {
+      "dependencies": Array [
+        "dictionary",
+      ],
+      "name": "b",
+      "references": Array [],
+      "src": Array [],
+    },
+    Object {
+      "dependencies": Array [],
+      "name": "c",
+      "references": Array [
+        "scripting",
+      ],
+      "src": Array [],
+    },
+  ],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall <tim.hall.engr@gmail.com>",
+    ],
+    "default_features": Array [
+      "a",
+      "b",
+    ],
+    "name": "testing",
+    "publish": true,
+    "version": "0.1.0",
+  },
+  "references": Array [
+    Object {
+      "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
+      "name": "Scripting",
+      "optional": true,
+      "version": "1.0",
+    },
+  ],
+  "src": Array [
+    Object {
+      "name": "a",
+      "optional": false,
+      "path": "src/a.bas",
+    },
+    Object {
+      "name": "b",
+      "optional": true,
+      "path": "src/b.cls",
+    },
+  ],
+  "targets": Array [
+    Object {
+      "name": "testing",
+      "path": "targets/xlsm",
+      "type": "xlsm",
+    },
+  ],
+}
+`;
+
+exports[`loads valid dependencies 1`] = `
+Object {
+  "dependencies": Array [
+    Object {
+      "default_features": true,
+      "features": Array [],
+      "name": "a",
+      "version": "^1.0.0",
+    },
+    Object {
+      "default_features": false,
+      "features": Array [
+        "a",
+        "b",
+      ],
+      "name": "b",
+      "version": "^2.0.0",
+    },
+    Object {
+      "default_features": true,
+      "features": Array [],
+      "name": "c",
+      "path": "packages/c",
+    },
+    Object {
+      "branch": "master",
+      "default_features": true,
+      "features": Array [],
+      "git": "https://github.com/VBA-tools/VBA-Web",
+      "name": "d",
+    },
+    Object {
+      "branch": "next",
+      "default_features": true,
+      "features": Array [],
+      "git": "https://github.com/VBA-tools/VBA-Web",
+      "name": "e",
+    },
+    Object {
+      "default_features": true,
+      "features": Array [],
+      "git": "https://github.com/VBA-tools/VBA-Web",
+      "name": "f",
+      "tag": "v1.0.0",
+    },
+    Object {
+      "default_features": true,
+      "features": Array [],
+      "git": "https://github.com/VBA-tools/VBA-Web",
+      "name": "g",
+      "rev": "a1b2c3d4",
+    },
+  ],
+  "features": Array [],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "default_features": Array [],
+    "name": "package-name",
+    "publish": false,
+    "version": "1.0.0",
+  },
+  "references": Array [],
+  "src": Array [],
+  "targets": Array [],
+}
+`;
+
+exports[`loads valid features 1`] = `
+Object {
+  "dependencies": Array [],
+  "features": Array [
+    Object {
+      "dependencies": Array [],
+      "name": "a",
+      "references": Array [],
+      "src": Array [
+        "A",
+      ],
+    },
+    Object {
+      "dependencies": Array [
+        "B",
+      ],
+      "name": "b",
+      "references": Array [],
+      "src": Array [],
+    },
+    Object {
+      "dependencies": Array [],
+      "name": "c",
+      "references": Array [
+        "C",
+      ],
+      "src": Array [],
+    },
+  ],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "default_features": Array [
+      "a",
+      "b",
+    ],
+    "name": "package-name",
+    "publish": false,
+    "version": "1.0.0",
+  },
+  "references": Array [],
+  "src": Array [],
+  "targets": Array [],
+}
+`;
+
+exports[`loads valid package metadata 1`] = `
+Object {
+  "dependencies": Array [],
+  "features": Array [],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "default_features": Array [],
+    "name": "package-name",
+    "publish": false,
+    "version": "1.0.0",
+  },
+  "references": Array [],
+  "src": Array [],
+  "targets": Array [],
+}
+`;
+
+exports[`loads valid sources 1`] = `
+Object {
+  "dependencies": Array [],
+  "features": Array [],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "default_features": Array [],
+    "name": "package-name",
+    "publish": false,
+    "version": "1.0.0",
+  },
+  "references": Array [],
+  "src": Array [
+    Object {
+      "name": "A",
+      "optional": false,
+      "path": "src/a.bas",
+    },
+    Object {
+      "name": "B",
+      "optional": false,
+      "path": "src/b.cls",
+    },
+    Object {
+      "name": "C",
+      "optional": true,
+      "path": "src/c.frm",
+    },
+  ],
+  "targets": Array [],
+}
+`;
+
+exports[`loads valid targets 1`] = `
+Object {
+  "dependencies": Array [],
+  "features": Array [],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "default_features": Array [],
+    "name": "package-name",
+    "publish": false,
+    "version": "1.0.0",
+  },
+  "references": Array [],
+  "src": Array [],
+  "targets": Array [
+    Object {
+      "name": "package-name",
+      "path": "targets/xlsm",
+      "type": "xlsm",
+    },
+    Object {
+      "name": "addin",
+      "path": "targets/xlam",
+      "type": "xlam",
+    },
+  ],
+}
+`;

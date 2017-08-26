@@ -18,6 +18,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "test": "jest",
     "pkg": "pkg --targets node6-win-x86,node6-win-x64,node6-macos-x64 --out-dir build ."
   },
   "dependencies": {
@@ -32,8 +33,18 @@
     "toml": "^2.3.2"
   },
   "devDependencies": {
+    "@types/jest": "^20.0.8",
     "@types/node": "^8.0.25",
+    "jest": "^20.0.4",
     "pkg": "^4.2.4",
+    "ts-jest": "^20.0.10",
     "typescript": "^2.4.2"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/tests/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": ["ts", "tsx", "js", "json", "jsx"]
   }
 }

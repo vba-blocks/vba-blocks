@@ -14,6 +14,13 @@ export interface Reference {
   optional?: boolean;
 }
 
+const EXAMPLE = `Example vba-block.toml:
+
+[references.Scripting]
+version = "1.0"
+guid = "{420B2830-E718-11CF-893D-00A0C9054228}"
+optional = true`;
+
 export function parseReferences(value: any): Reference[] {
   return Object.entries(value).map(([name, value]) =>
     parseReference(name, value)
@@ -25,11 +32,11 @@ export function parseReference(name: string, value: any): Reference {
 
   assert.ok(
     isVersion(version),
-    `Reference "${name}" has an invalid version "${version}". "version" is required and should look like 'version = "#.#"'.`
+    `Reference "${name}" has an invalid version "${version}". ${EXAMPLE}.`
   );
   assert.ok(
     isGuid(guid),
-    `Reference "${name}" has an invalid guid "${guid}". "guid" is required and should look like 'guid = "{########-####-####-####-############}"'`
+    `Reference "${name}" has an invalid guid "${guid}". ${EXAMPLE}'`
   );
 
   return { name, version, guid, optional };
