@@ -12,7 +12,7 @@ export interface DependencyInfo {
   default_features: boolean;
 }
 
-export interface ManifestInfo {
+export interface PackageInfo {
   name: string;
   vers: string;
   deps: DependencyInfo[];
@@ -22,9 +22,9 @@ export interface ManifestInfo {
 }
 
 export async function getVersions(config: Config, name: string) {
-  return new Promise<ManifestInfo[]>((resolve, reject) => {
+  return new Promise<PackageInfo[]>((resolve, reject) => {
     const path = getPath(config, name);
-    const versions: ManifestInfo[] = [];
+    const versions: PackageInfo[] = [];
 
     const reader = readline.createInterface({
       input: createReadStream(path)
@@ -36,13 +36,15 @@ export async function getVersions(config: Config, name: string) {
 }
 
 export async function updateRegistry(config: Config) {
-  if (!await exists(config.registry.local)) {
-    const dir = dirname(config.registry.local);
+  const { local, remote } = config.registry;
+
+  if (!await exists(local)) {
+    const dir = dirname(local);
     await ensureDir(dir);
-    await clone(config.registry.remote, basename(config.registry.local), dir);
+    await clone(remote, basename(local), dir);
   }
 
-  await pull(config.registry.local);
+  await pull(local);
 }
 
 export function getPath(config: Config, name: string) {

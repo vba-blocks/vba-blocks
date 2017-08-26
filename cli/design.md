@@ -192,10 +192,33 @@ source = "registry+https://github.com/vba-blocks/registry"
 "checksum d 0.0.0 (registry+https://github.com/vba-blocks/registry)" = "..."
 ```
 
-Rust-based CLI using:
+# Dependency Resolution
 
-- [clap](https://github.com/kbknapp/clap-rs)
-- [semver](https://github.com/steveklabnik/semver)
-- [git2](https://github.com/alexcrichton/git2-rs)
-- [curl](https://github.com/alexcrichton/curl-rust)
-- applescript/vbscript for interacting with Office
+Fresh build (no lockfile)
+
+1. Load manifest
+2. Update registry
+3. Resolve dependencies
+4. Write lockfile
+
+With valid lockfile
+
+1. Load manifest
+2. Load lockfile
+3. Compare to lockfile -> valid!
+
+With invalid lockfile
+
+1. Load manifest
+2. Load lockfile
+3. Compare to lockfile -> invalid.
+4. Resolve dependencies
+5. Write lockfile
+
+# Build
+
+1. Resolve dependencies
+2. Download dependencies (from lockfile)
+3. Create target binaries
+4. Install src
+5. Install dependencies (from lockfile)

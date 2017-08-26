@@ -13,7 +13,9 @@
   "bugs": {
     "url": "https://github.com/vba-blocks/vba-blocks/issues"
   },
-  "bin": { "vba-blocks": "bin/vba-blocks.js" },
+  "bin": {
+    "vba-blocks": "bin/vba-blocks.js"
+  },
   "scripts": {
     "build": "tsc",
     "pkg": "pkg --targets node6-win-x86,node6-win-x64,node6-macos-x64 --out-dir build ."
@@ -23,6 +25,8 @@
     "commander": "^2.9.0",
     "dugite": "^1.39.0",
     "fs-extra": "^4.0.1",
+    "global": "^4.3.2",
+    "rollup": "^0.48.2",
     "rollup-plugin-json": "^2.3.0",
     "tar": "^4.0.1",
     "toml": "^2.3.2"

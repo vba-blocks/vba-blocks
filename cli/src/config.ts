@@ -1,19 +1,68 @@
 import { join } from 'path';
 import { homedir } from 'os';
+import { PackageInfo } from './packages';
+
+/**
+ * Keep track of absolute paths to various resources and package resolution
+ * 
+ * Currently hardcoded, but I imagine a .rc or .config.js approach in the future
+ */
 
 export interface Config {
+  /**
+   * cwd for processing
+   */
   cwd: string;
+
+  /**
+   * absolute path to build directory
+   * (build contains binary output of build process)
+   */
   build: string;
+
+  /**
+   * absolute path to scripts directory
+   * (contains applescript and vbs)
+   */
   scripts: string;
+
+  /**
+   * absolute path to addins directory
+   */
   addins: string;
+
+  /**
+   * absolute path to cache directory
+   * (default is .vba-blocks in home directory)
+   */
   cache: string;
+
+  /**
+   * absolute path to local registry
+   * and url for git remote
+   */
   registry: { local: string; remote: string };
-  resolveRemotePackage: (name: string, version: string) => string;
-  resolveLocalPackage: (name: string, version: string) => string;
-  resolveSource: (name: string, version: string) => string;
+
+  /**
+   * resolve package from remote source
+   * (default is packages.vba-blocks.com/...)
+   */
+  resolveRemotePackage: (pkg: PackageInfo) => string;
+
+  /**
+   * resolve package locally
+   * (default is in {cache}/packages/...)
+   */
+  resolveLocalPackage: (pkg: PackageInfo) => string;
+
+  /**
+   * resolve expanded package ("source")
+   * (default is in {cache}/sources/...)
+   */
+  resolveSource: (pkg: PackageInfo) => string;
 }
 
-export function loadConfig() {
+export async function loadConfig() {
   const cwd = process.cwd();
   const build = join(cwd, 'build');
   const scripts = join(__dirname, '../scripts');
@@ -24,12 +73,12 @@ export function loadConfig() {
     remote: 'https://github.com/vba-blocks/registry.git'
   };
 
-  const resolveRemotePackage = (name, version) =>
-    `https://packages.vba-blocks.com/${name}/v${version}.tar.gz`;
-  const resolveLocalPackage = (name, version) =>
-    join(cache, `packages/${name}/v${version}.tar.gz`);
-  const resolveSource = (name, version) =>
-    join(cache, `sources/${name}/v${version}`);
+  const resolveRemotePackage = pkg =>
+    `https://packages.vba-blocks.com/${pkg.name}/v${pkg.version}.tar.gz`;
+  const resolveLocalPackage = pkg =>
+    join(cache, `packages/${pkg.name}/v${pkg.version}.tar.gz`);
+  const resolveSource = pkg =>
+    join(cache, `sources/${pkg.name}/v${pkg.version}`);
 
   const config: Config = {
     cwd,

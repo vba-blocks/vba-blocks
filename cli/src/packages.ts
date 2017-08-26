@@ -9,9 +9,8 @@ export interface PackageInfo {
 }
 
 export async function fetchPackage(config: Config, pkg: PackageInfo) {
-  const { name, version } = pkg;
-  const url = config.resolveRemotePackage(name, version);
-  const dest = config.resolveLocalPackage(name, version);
+  const url = config.resolveRemotePackage(pkg);
+  const dest = config.resolveLocalPackage(pkg);
 
   if (!await exists(dest)) {
     await download(url, dest);
@@ -19,9 +18,8 @@ export async function fetchPackage(config: Config, pkg: PackageInfo) {
 }
 
 export async function extractPackage(config: Config, pkg: PackageInfo) {
-  const { name, version } = pkg;
-  const file = config.resolveLocalPackage(name, version);
-  const dest = config.resolveSource(name, version);
+  const file = config.resolveLocalPackage(pkg);
+  const dest = config.resolveSource(pkg);
 
   await ensureDir(dest);
   await tar.extract({ file, cwd: dest });

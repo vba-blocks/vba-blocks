@@ -2,27 +2,26 @@ import { exists, read } from 'fs-extra';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as toml from 'toml';
-import { mapObject, isString } from './utils';
+import { Source, parseSource } from './source';
+import { Feature, parseFeature } from './feature';
+import { Dependency, parseDependency } from './dependency';
+import { Target, parseTarget } from './target';
+import { Reference, parseReference } from './reference';
+import { mapObject, isString } from '../utils';
 
-export type TargetType = 'xlsx' | 'xlsm' | 'xlam';
-
-export interface Source {}
-export interface Dependency {}
-export interface Target {
-  name: string;
-  type: TargetType;
-  path: string;
-}
+export { Source, Dependency, Target };
 
 export interface Manifest {
-  metadata: {
+  pkg: {
     name: string;
     version: string;
     authors: string[];
   };
-  sources: Source[];
+  src: Source[];
+  features: Feature[];
   dependencies: Dependency[];
   targets: Target[];
+  references: Reference[];
 }
 
 export function parseManifest(raw: Buffer): Manifest {
@@ -36,35 +35,26 @@ export function parseManifest(raw: Buffer): Manifest {
   assert.ok(parsed.package.version, '[package] version is a required field');
   assert.ok(parsed.package.authors, '[package] authors is a required field');
 
-  const metadata = {
+  const pkg = {
     name: parsed.package.name,
     version: parsed.package.version,
     authors: parsed.package.authors
   };
 
-  const sources = mapObject(parsed.src, (details, name) => {
-    if (isString(details)) details = { path: details };
+  const src = mapObject(parsed.src, (value, name) => parseSource(name, value));
+  const dependencies = mapObject(parsed.dependencies, (value, name) =>
+    parseDependency(name, value)
+  );
+  const targets = (parsed.targets || [])
+    .map(target => parseTarget(target, pkg.name));
+  const features = mapObject(parsed.features, (value, name) =>
+    parseFeature(name, value)
+  );
+  const references = mapObject(parsed.references, (value, name) =>
+    parseReference(name, value)
+  );
 
-    const src = Object.assign(details, { name });
-    return src;
-  });
-
-  const dependencies = mapObject(parsed.dependencies, (details, name) => {
-    if (isString(details)) details = { version: details };
-
-    const dependency = Object.assign(details, { name });
-    return dependency;
-  });
-
-  const targets = (parsed.targets || []).map(target => {
-    if (!target.name) {
-      target.name = parsed.package.name;
-    }
-
-    return target;
-  });
-
-  return { metadata, sources, dependencies, targets };
+  return { pkg, src, features, dependencies, targets, references };
 }
 
 export async function loadManifest(dir: string) {
