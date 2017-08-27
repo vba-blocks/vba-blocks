@@ -9,12 +9,12 @@ export interface Feature {
 
 const EXAMPLE = `Example vba-block.toml:
 
-[features]
-default = ["a", "b"]
+  [features]
+  default = ["a", "b"]
 
-a = { src = ["A"] }
-b = { dependencies = ["B"] }
-c = { references = ["C"] }`;
+  a = { src = ["A"] }
+  b = { dependencies = ["B"] }
+  c = { references = ["C"] }`;
 
 export function parseFeatures(
   value: any

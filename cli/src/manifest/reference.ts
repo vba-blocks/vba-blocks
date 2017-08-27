@@ -16,10 +16,10 @@ export interface Reference {
 
 const EXAMPLE = `Example vba-block.toml:
 
-[references.Scripting]
-version = "1.0"
-guid = "{420B2830-E718-11CF-893D-00A0C9054228}"
-optional = true`;
+  [references.Scripting]
+  version = "1.0"
+  guid = "{420B2830-E718-11CF-893D-00A0C9054228}"
+  optional = true`;
 
 export function parseReferences(value: any): Reference[] {
   return Object.entries(value).map(([name, value]) =>

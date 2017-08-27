@@ -2,6 +2,7 @@ import { exists, readFile } from 'fs-extra';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as toml from 'toml';
+import { Version } from '../version';
 import { Source, parseSrc } from './source';
 import { Feature, parseFeatures } from './feature';
 import { Dependency, parseDependencies } from './dependency';
@@ -56,7 +57,7 @@ export { Source, Feature, Dependency, Reference, Target };
  */
 export interface Metadata {
   name: string;
-  version: string;
+  version: Version;
   authors: string[];
   publish: boolean;
   default_features: string[];
@@ -73,10 +74,10 @@ export interface Manifest {
 
 const EXAMPLE = `Example vba-block.toml:
 
-[package]
-name = "my-package"
-version = "0.0.0"
-authors = ["Name <email> (url)"]`;
+  [package]
+  name = "my-package"
+  version = "0.0.0"
+  authors = ["Name <email> (url)"]`;
 
 export function parseManifest(value: any): Manifest {
   assert.ok(

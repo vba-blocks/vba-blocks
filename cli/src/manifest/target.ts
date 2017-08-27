@@ -11,17 +11,17 @@ export interface Target {
 
 const EXAMPLE = `Example vba-block.toml:
 
-[[targets]]
-type = "xlsm"
-path = "targets/xlsm"
+  [[targets]]
+  type = "xlsm"
+  path = "targets/xlsm"
 
-[[targets]]
-name = "addin"
-type = "xlam"
-path = "targets/xlam"`;
+  [[targets]]
+  name = "addin"
+  type = "xlam"
+  path = "targets/xlam"`;
 
 export function parseTargets(values: any[], pkgName: string): Target[] {
-  assert.ok(Array.isArray(values), `[[targets]] must be an array. ${EXAMPLE}`);
+  assert.ok(Array.isArray(values), `targets must be an array. ${EXAMPLE}`);
 
   return values.map(value => parseTarget(value, pkgName));
 }

@@ -18,8 +18,9 @@ export default async function download(url: string, dest: string) {
 
             download(redirect, dest).then(resolve, reject);
           } else {
+            const file = createWriteStream(dest);
             response
-              .pipe(createWriteStream(dest))
+              .pipe(file)
               .on('finish', () => resolve())
               .on('error', reject);
           }

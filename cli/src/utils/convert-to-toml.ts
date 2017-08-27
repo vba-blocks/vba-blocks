@@ -24,6 +24,7 @@ export default function convertToToml(value, level = 0): string {
         }
       }
     } else if (level === 1) {
+      // For next level, use key = value appraoch
       for (const [key, item] of Object.entries(value)) {
         if (Array.isArray(item)) {
           converted += `${key} = [\n`;

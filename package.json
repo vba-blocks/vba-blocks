@@ -8,11 +8,11 @@
   "scripts": {
     "build": "lerna run build",
     "precommit": "lint-staged",
-    "format": "prettier --single-quote --write \"{cli}/{src,tests}/**/*.{js,json}\""
+    "format": "prettier --single-quote --write \"{cli}/{src,tests}/**/*.{ts,js,json}\""
   },
   "workspaces": ["cli"],
   "lint-staged": {
-    "{cli}/{src,tests}/**/*.{js,json}": [
+    "{cli}/{src,tests}/**/*.{ts,js,json}": [
       "prettier --single-quote --write",
       "git add"
     ]

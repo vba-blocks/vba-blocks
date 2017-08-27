@@ -18,19 +18,19 @@ export interface Dependency {
 
 const EXAMPLE = `Example vba-block.toml:
 
-[dependencies]
-a = "^1.0.0"
-b = { version = "^0.1.0", optional = true }
-c = { path = "packages/c" }
-d = { git = "https://github.com/author/d" }
-e = { git = "https://github.com/author/e", branch = "next" }
-f = { git = "https://github.com/author/f", tag = "v1.0.0" }
-g = { git = "https://github.com/author/g", rev = "a1b2c3d4" }
+  [dependencies]
+  a = "^1.0.0"
+  b = { version = "^0.1.0", optional = true }
+  c = { path = "packages/c" }
+  d = { git = "https://github.com/author/d" }
+  e = { git = "https://github.com/author/e", branch = "next" }
+  f = { git = "https://github.com/author/f", tag = "v1.0.0" }
+  g = { git = "https://github.com/author/g", rev = "a1b2c3d4" }
 
-[dependencies.h]
-version = "^2.0.0"
-default-features = false
-features ["a", "b"]`;
+  [dependencies.h]
+  version = "^2.0.0"
+  default-features = false
+  features ["a", "b"]`;
 
 export function parseDependencies(value: any): Dependency[] {
   return Object.entries(value).map(([name, value]) =>
