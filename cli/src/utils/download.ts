@@ -2,7 +2,10 @@ import * as https from 'https';
 import { dirname } from 'path';
 import { createWriteStream, ensureDir } from 'fs-extra';
 
-export default async function download(url: string, dest: string) {
+export default async function download(
+  url: string,
+  dest: string
+): Promise<void> {
   await ensureDir(dirname(dest));
 
   return new Promise<void>((resolve, reject) => {

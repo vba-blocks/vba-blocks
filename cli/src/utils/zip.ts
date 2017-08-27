@@ -1,7 +1,7 @@
 import { createWriteStream } from 'fs-extra';
 import archiver from 'archiver';
 
-export default async function zip(dir: string, file: string) {
+export default async function zip(dir: string, file: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     const output = createWriteStream(file);
     const archive = archiver('zip');

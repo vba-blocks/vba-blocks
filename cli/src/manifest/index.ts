@@ -108,7 +108,7 @@ export function parseManifest(value: any): Manifest {
   return { metadata, src, features, dependencies, references, targets };
 }
 
-export async function loadManifest(dir: string) {
+export async function loadManifest(dir: string): Promise<Manifest> {
   const file = join(dir, 'vba-block.toml');
   if (!await exists(file)) {
     throw new Error(`vba-blocks.toml not found in "${dir}"`);

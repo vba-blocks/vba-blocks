@@ -8,7 +8,10 @@ export interface PackageInfo {
   version: string;
 }
 
-export async function fetchPackage(config: Config, pkg: PackageInfo) {
+export async function fetchPackage(
+  config: Config,
+  pkg: PackageInfo
+): Promise<void> {
   const url = config.resolveRemotePackage(pkg);
   const dest = config.resolveLocalPackage(pkg);
 
@@ -17,7 +20,10 @@ export async function fetchPackage(config: Config, pkg: PackageInfo) {
   }
 }
 
-export async function extractPackage(config: Config, pkg: PackageInfo) {
+export async function extractPackage(
+  config: Config,
+  pkg: PackageInfo
+): Promise<void> {
   const file = config.resolveLocalPackage(pkg);
   const dest = config.resolveSource(pkg);
 

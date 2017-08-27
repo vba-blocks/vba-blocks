@@ -28,7 +28,10 @@ export async function loadLockfile(config: Config): Promise<Lockfile | null> {
   return lockfile;
 }
 
-export async function writeLockfile(config: Config, lockfile: Lockfile) {
+export async function writeLockfile(
+  config: Config,
+  lockfile: Lockfile
+): Promise<void> {
   const file = join(config.cwd, 'vba-block.lock');
   const converted = convertToToml(lockfile);
   await writeFile(file, converted);

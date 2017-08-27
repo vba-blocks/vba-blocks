@@ -1,7 +1,10 @@
 import { createHash } from 'crypto';
 import { createReadStream } from 'fs-extra';
 
-export default async function checksum(file: string, algorithm = 'sha1') {
+export default async function checksum(
+  file: string,
+  algorithm = 'sha1'
+): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     const hash = createHash(algorithm);
     createReadStream(file)

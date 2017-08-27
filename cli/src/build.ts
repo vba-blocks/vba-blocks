@@ -2,18 +2,18 @@ import { relative } from 'path';
 import { exists, ensureDir } from 'fs-extra';
 import { Config, loadConfig } from './config';
 import { Manifest, Target, loadManifest } from './manifest';
+import resolve from './resolve';
 import run from './run';
 import { zip, plural } from './utils';
 
 export default async function build(options) {
   console.log('1. Loading vba-blocks.toml and config');
-  const [config, manifest] = await Promise.all([
-    loadConfig(),
-    loadManifest(process.cwd())
-  ]);
+  const config = await loadConfig();
+  const manifest = await loadManifest(config.cwd);
 
   console.log('2. Resolving dependencies');
-  // TODO Determine files to install
+  // TODO
+  const graph = await resolve(config, manifest);
   const files = [];
 
   console.log(

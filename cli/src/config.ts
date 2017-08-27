@@ -5,7 +5,7 @@ import { PackageInfo } from './packages';
 /**
  * Keep track of absolute paths to various resources and package resolution
  * 
- * Currently hardcoded, but I imagine a .rc or .config.js approach in the future
+ * Currently hardcoded, but I imagine an .rc or .config.js approach in the future
  */
 
 export interface Config {
@@ -62,7 +62,7 @@ export interface Config {
   resolveSource: (pkg: PackageInfo) => string;
 }
 
-export async function loadConfig() {
+export async function loadConfig(): Promise<Config> {
   const cwd = process.cwd();
   const build = join(cwd, 'build');
   const scripts = join(__dirname, '../scripts');

@@ -21,7 +21,10 @@ export interface PackageInfo {
   yanked?: boolean;
 }
 
-export async function getVersions(config: Config, name: string) {
+export async function getVersions(
+  config: Config,
+  name: string
+): Promise<PackageInfo[]> {
   return new Promise<PackageInfo[]>((resolve, reject) => {
     const path = getPath(config, name);
     const versions: PackageInfo[] = [];
@@ -35,7 +38,7 @@ export async function getVersions(config: Config, name: string) {
   });
 }
 
-export async function updateRegistry(config: Config) {
+export async function updateRegistry(config: Config): Promise<void> {
   const { local, remote } = config.registry;
 
   if (!await exists(local)) {
@@ -47,7 +50,7 @@ export async function updateRegistry(config: Config) {
   await pull(local);
 }
 
-export function getPath(config: Config, name: string) {
+export function getPath(config: Config, name: string): string {
   let parts;
   if (name.length === 1) {
     parts = [1, name];
