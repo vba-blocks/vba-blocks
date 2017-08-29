@@ -9,6 +9,9 @@ addin/build
 cli/lib
 cli/build
 
+# Ignore compiled packages
+packages/*/lib
+
 # Ignore temporary Excel files
 */~$*
 

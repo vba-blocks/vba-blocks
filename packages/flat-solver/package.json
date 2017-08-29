@@ -11,7 +11,8 @@
     "build": "tsc --outDir lib"
   },
   "dependencies": {
-    "logic-solver": "^2.0.1"
+    "logic-solver": "^2.0.1",
+    "semver": "^5.4.1"
   },
   "devDependencies": {
     "typescript": "^2.4.2"

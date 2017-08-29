@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`resolves simple dependency tree 1`] = `
+Map {
+  "a" => Object {
+    "name": "a",
+    "needs": Array [
+      "^1.0.0",
+    ],
+    "required": true,
+    "versions": Array [
+      Object {
+        "dependencies": Array [
+          Object {
+            "name": "d",
+            "version": "^2.0.0",
+          },
+        ],
+        "id": "a@1.2.0",
+        "name": "a",
+        "version": "1.2.0",
+      },
+      Object {
+        "dependencies": Array [
+          Object {
+            "name": "d",
+            "version": "^1.2.0",
+          },
+        ],
+        "id": "a@1.1.0",
+        "name": "a",
+        "version": "1.1.0",
+      },
+      Object {
+        "dependencies": Array [
+          Object {
+            "name": "d",
+            "version": "^1.0.0",
+          },
+        ],
+        "id": "a@1.0.0",
+        "name": "a",
+        "version": "1.0.0",
+      },
+    ],
+  },
+  "d" => Object {
+    "name": "d",
+    "needs": Array [
+      "^1.0.0",
+      "^1.2.0",
+      "^2.0.0",
+    ],
+    "required": false,
+    "versions": Array [
+      Object {
+        "dependencies": Array [
+          Object {
+            "name": "f",
+            "version": "2.0.0",
+          },
+        ],
+        "id": "d@2.0.0",
+        "name": "d",
+        "version": "2.0.0",
+      },
+      Object {
+        "dependencies": Array [
+          Object {
+            "name": "f",
+            "version": "1.0.0",
+          },
+        ],
+        "id": "d@1.2.0",
+        "name": "d",
+        "version": "1.2.0",
+      },
+      Object {
+        "dependencies": Array [
+          Object {
+            "name": "f",
+            "version": "1.0.0",
+          },
+        ],
+        "id": "d@1.1.0",
+        "name": "d",
+        "version": "1.1.0",
+      },
+      Object {
+        "dependencies": Array [
+          Object {
+            "name": "f",
+            "version": "1.0.0",
+          },
+        ],
+        "id": "d@1.0.0",
+        "name": "d",
+        "version": "1.0.0",
+      },
+    ],
+  },
+  "f" => Object {
+    "name": "f",
+    "needs": Array [
+      "1.0.0",
+      "2.0.0",
+    ],
+    "required": false,
+    "versions": Array [
+      Object {
+        "dependencies": Array [
+          Object {
+            "name": "g",
+            "version": "^1",
+          },
+        ],
+        "id": "f@2.0.0",
+        "name": "f",
+        "version": "2.0.0",
+      },
+      Object {
+        "dependencies": Array [
+          Object {
+            "name": "g",
+            "version": "^1",
+          },
+        ],
+        "id": "f@1.0.0",
+        "name": "f",
+        "version": "1.0.0",
+      },
+    ],
+  },
+  "g" => Object {
+    "name": "g",
+    "needs": Array [
+      "^1",
+    ],
+    "required": false,
+    "versions": Array [
+      Object {
+        "dependencies": Array [],
+        "id": "g@1.0.0",
+        "name": "g",
+        "version": "1.0.0",
+      },
+    ],
+  },
+}
+`;
