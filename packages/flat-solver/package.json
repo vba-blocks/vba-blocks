@@ -1,0 +1,19 @@
+{
+  "name": "flat-solver",
+  "private": true,
+  "version": "0.0.0",
+  "repository": "https://github.com/vba-blocks/vba-blocks.git",
+  "author": "Tim Hall <tim.hall.engr@gmail.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc --outDir lib"
+  },
+  "dependencies": {
+    "logic-solver": "^2.0.1"
+  },
+  "devDependencies": {
+    "typescript": "^2.4.2"
+  }
+}
