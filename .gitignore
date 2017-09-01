@@ -1,19 +1,16 @@
-node_modules
-*.log
-
-# Ignore built files
-cli/tests/fixtures/build
-addin/build
-
-# Ignore compiled CLI
-cli/lib
-cli/build
-
 # Ignore compiled packages
-packages/*/lib
+packages/cli/lib
+packages/cli/build
+packages/cli/tests/fixtures/build
+
+packages/flat-solver/lib
+
+addin/build
 
 # Ignore temporary Excel files
 */~$*
 
-# OS
+# OS and other
 .DS_Store
+node_modules
+*.log
