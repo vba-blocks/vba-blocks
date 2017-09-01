@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "max-safe-integer": "https://github.com/sindresorhus/max-safe-integer.git",
-    "yarn": "yarnpkg/yarn"
-  }
-}

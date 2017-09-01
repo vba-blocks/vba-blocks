@@ -1,7 +1,0 @@
-{
-  "name": "",
-  "version": "",
-  "scripts": {
-    "install": "node-gyp rebuild"
-  }
-}

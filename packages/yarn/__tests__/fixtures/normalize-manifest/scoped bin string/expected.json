@@ -1,7 +1,0 @@
-{
-  "name": "@scope/foo",
-  "version": "",
-  "bin": {
-    "foo": "bar"
-  }
-}

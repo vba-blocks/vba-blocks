@@ -1,8 +1,0 @@
-{
-  "name": "my-project",
-  "private": true,
-  "dependencies": {},
-  "workspaces": [
-    "packages/*"
-  ]
-}

@@ -1,7 +1,0 @@
-{
-    "dependencies": {
-        "some-pkg": "file:./some-pkg/",
-        "some-other-pkg": "link:./some-other-pkg",
-        "some-missing-pkg": "link:./some-missing-pkg"
-    }
-}

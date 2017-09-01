@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "foo": "file:foo",
-    "bar": "file:bar",
-    "alice": "file:alice"
-  }
-}

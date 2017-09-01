@@ -1,7 +1,0 @@
-{
-  "name": "root-b",
-  "version": "1.0.0",
-  "dependencies": {
-    "root-a": "file:../root-a"
-  }
-}

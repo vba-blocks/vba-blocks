@@ -1,7 +1,0 @@
-{
-  "name": "workspace-2",
-  "version": "1.0.0",
-  "dependencies": {
-    "right-pad": "1.0.1"
-  }
-}

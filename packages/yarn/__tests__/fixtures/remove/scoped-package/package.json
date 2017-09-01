@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@dengorbachev/bar": "^1.0.0",
-    "@dengorbachev/foo": "^1.0.0"
-  }
-}

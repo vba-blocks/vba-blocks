@@ -1,5 +1,0 @@
-{
-  "optionalDependencies": {
-    "dep-optional": "file:dep-optional"
-  }
-}

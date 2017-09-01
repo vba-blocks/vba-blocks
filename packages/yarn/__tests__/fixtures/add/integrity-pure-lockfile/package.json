@@ -1,6 +1,0 @@
-{
-  "private": true,
-  "dependencies": {
-    "package-a": "file:./package-a"
-  }
-}

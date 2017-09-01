@@ -1,8 +1,0 @@
-{
-  "devDependencies": {
-    "foobar": "1.0.0"
-  },
-  "dependencies": {
-    "foobar": "2.0.0"
-  }
-}

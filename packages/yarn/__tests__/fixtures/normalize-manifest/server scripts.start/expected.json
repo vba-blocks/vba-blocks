@@ -1,7 +1,0 @@
-{
-  "name": "",
-  "version": "",
-  "scripts": {
-    "start": "node server.js"
-  }
-}

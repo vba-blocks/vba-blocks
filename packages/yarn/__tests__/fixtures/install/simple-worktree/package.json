@@ -1,7 +1,0 @@
-{
-  "private": true,
-  "license": "MIT",
-  "workspaces": [
-    "packages/**/*"
-  ]
-}

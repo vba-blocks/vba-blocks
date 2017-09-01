@@ -1,7 +1,0 @@
-{
-  "name": "a",
-  "version": "1.0.0",
-  "dependencies": {
-    "test-lifecycle-script": "^1.0.1"
-  }
-}

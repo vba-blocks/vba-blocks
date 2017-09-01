@@ -1,8 +1,0 @@
-{
-  "devDependencies": {
-    "foobar": "*"
-  },
-  "dependencies": {
-    "foobar": "*"
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "name": "exclude-mandatory-files-from-ignored-directories",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT"
-}
