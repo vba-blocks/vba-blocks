@@ -1,0 +1,13 @@
+{
+  "name": "lifecycle-scripts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "prepublish": "echo running the prepublish hook",
+    "prepublishOnly": "echo running the prepublishOnly hook",
+    "prepare": "echo running the prepare hook",
+    "prepack": "echo running the prepack hook",
+    "postpack": "echo running the postpack hook"
+  }
+}
