@@ -1,0 +1,23 @@
+[ignore]
+<PROJECT_ROOT>/coverage/.*
+<PROJECT_ROOT>/dist/.*
+<PROJECT_ROOT>/lib-legacy/.*
+<PROJECT_ROOT>/lib/.*
+<PROJECT_ROOT>/node_modules/babel.*
+<PROJECT_ROOT>/node_modules/y18n/test/.*
+<PROJECT_ROOT>/updates/.*
+
+[include]
+
+[libs]
+
+[lints]
+untyped-type-import=warn
+
+[options]
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+unsafe.enable_getters_and_setters=true
+include_warnings=true
+
+[version]
+^0.52.0
