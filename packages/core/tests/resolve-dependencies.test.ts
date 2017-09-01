@@ -1,4 +1,4 @@
-import { resolveDependencies } from '../src/resolve-dependencies';
+import { resolveDependencies } from '../src/flat-solver/resolve-dependencies';
 import resolver from './helpers/resolver';
 
 test('resolves simple dependency tree', async () => {

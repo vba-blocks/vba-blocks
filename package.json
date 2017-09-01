@@ -6,8 +6,8 @@
   "author": "Tim Hall <tim.hall.engr@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "lerna run build",
-    "check": "tslint -c tslint.json \"**/*.ts\"",
+    "check":
+      "tslint -c tslint.json -p packages/core && tslint -c tslint.json -p packages/cli",
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "precommit": "lint-staged",
     "test": "jest --config ./"

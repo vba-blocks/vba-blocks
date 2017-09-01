@@ -1,5 +1,5 @@
 {
-  "name": "vba-blocks-cli",
+  "name": "@vba-blocks/cli",
   "private": true,
   "version": "0.0.0",
   "description": "vba-blocks CLI",
@@ -17,13 +17,8 @@
       "pkg --targets node8-win-x86,node8-win-x64,node8-macos-x64 --out-dir build ."
   },
   "dependencies": {
-    "archiver": "^2.0.0",
     "commander": "^2.9.0",
-    "dugite": "^1.39.0",
-    "flat-solver": "^0.0.0",
-    "fs-extra": "^4.0.1",
-    "tar": "^4.0.1",
-    "toml": "^2.3.2"
+    "@vba-blocks/core": "^0.0.0"
   },
   "devDependencies": {
     "pkg": "^4.2.4",

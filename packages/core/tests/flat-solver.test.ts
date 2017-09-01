@@ -1,4 +1,4 @@
-import { solve } from '../src/index';
+import { solve } from '../src/flat-solver';
 import resolver from './helpers/resolver';
 
 test('solves simple tree', async () => {
