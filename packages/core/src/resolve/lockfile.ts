@@ -2,37 +2,26 @@ import { join } from 'path';
 import { exists, readFile, writeFile } from 'fs-extra';
 import * as toml from 'toml';
 import { Config } from '../config';
-import { Version } from '../version';
 import { convertToToml } from '../utils';
+import { DependencyGraph } from './dependency-graph';
 
-export interface PackageReference {
-  name: string;
-  version?: Version;
-  source?: string;
-  dependencies?: string[];
-}
-
-export interface Lockfile {
-  root: PackageReference;
-  packages: PackageReference[];
-  metadata: any;
-}
-
-export async function loadLockfile(config: Config): Promise<Lockfile | null> {
+export async function readLockfile(
+  config: Config
+): Promise<DependencyGraph | null> {
   const file = join(config.cwd, 'vba-block.lock');
   if (!await exists(file)) return null;
 
   const raw = await readFile(file);
-  const lockfile = toml.parse(raw);
+  const graph = toml.parse(raw);
 
-  return lockfile;
+  return graph;
 }
 
 export async function writeLockfile(
   config: Config,
-  lockfile: Lockfile
+  graph: DependencyGraph
 ): Promise<void> {
   const file = join(config.cwd, 'vba-block.lock');
-  const converted = convertToToml(lockfile);
-  await writeFile(file, converted);
+  const converted = convertToToml(graph);
+  return writeFile(file, converted);
 }

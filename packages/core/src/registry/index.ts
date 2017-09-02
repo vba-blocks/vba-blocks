@@ -1,39 +1,47 @@
 import { join, dirname, basename } from 'path';
 import * as readline from 'readline';
 import { createReadStream, ensureDir, exists } from 'fs-extra';
-import { clone, pull } from './utils/git';
-import { Config } from './config';
+import { clone, pull } from '../utils/git';
+import { Config } from '../config';
+import { Version, Dependency } from '../manifest';
 
-export interface DependencyInfo {
+export interface Registration {
   name: string;
-  req: string;
-  features: string[];
-  optional: boolean;
-  default_features: boolean;
-}
-
-export interface PackageInfo {
-  name: string;
-  vers: string;
-  deps: DependencyInfo[];
-  cksum: string;
+  version: Version;
+  dependencies: Dependency[];
   features: { [name: string]: string[] };
+  checksum?: string;
   yanked?: boolean;
 }
 
-export async function getVersions(
+export async function getRegistered(
   config: Config,
   name: string
-): Promise<PackageInfo[]> {
-  return new Promise<PackageInfo[]>((resolve, reject) => {
+): Promise<Registration[]> {
+  return new Promise<Registration[]>((resolve, reject) => {
     const path = getPath(config, name);
-    const versions: PackageInfo[] = [];
+    const registrations: Registration[] = [];
 
     const reader = readline.createInterface({
       input: createReadStream(path)
     });
-    reader.on('line', line => versions.push(JSON.parse(line)));
-    reader.on('close', () => resolve(versions));
+    reader.on('line', line => {
+      const { name, vers, deps, cksum, features, yanked } = JSON.parse(line);
+      const dependencies = deps.map(dependency => {
+        const { name, req, features, optional, default_features } = dependency;
+        return { name, range: req, features, optional, default_features };
+      });
+
+      registrations.push({
+        name,
+        version: vers,
+        dependencies,
+        features,
+        checksum: cksum,
+        yanked
+      });
+    });
+    reader.on('close', () => resolve(registrations));
     reader.on('error', reject);
   });
 }

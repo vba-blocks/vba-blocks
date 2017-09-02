@@ -1,18 +1,18 @@
 import * as assert from 'assert';
 import { isString } from '../utils';
 
-const VERSION_REGEX = /^(\d+)\.(\d+)$/;
-const GUID_REGEX = /\{.{8}-.{4}-.{4}-.{4}-.{12}\}/;
-
-const isVersion = (value: any) => VERSION_REGEX.test(value);
-const isGuid = (value: any) => GUID_REGEX.test(value);
-
 export interface Reference {
   name: string;
   version: string;
   guid: string;
   optional?: boolean;
 }
+
+const VERSION_REGEX = /^(\d+)\.(\d+)$/;
+const GUID_REGEX = /\{.{8}-.{4}-.{4}-.{4}-.{12}\}/;
+
+const isVersion = (value: any) => VERSION_REGEX.test(value);
+const isGuid = (value: any) => GUID_REGEX.test(value);
 
 const EXAMPLE = `Example vba-block.toml:
 

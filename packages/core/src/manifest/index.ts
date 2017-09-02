@@ -2,14 +2,14 @@ import { exists, readFile } from 'fs-extra';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as toml from 'toml';
-import { Version } from '../version';
+import { Version } from './version';
 import { Source, parseSrc } from './source';
 import { Feature, parseFeatures } from './feature';
 import { Dependency, parseDependencies } from './dependency';
 import { Reference, parseReferences } from './reference';
 import { Target, parseTargets } from './target';
 
-export { Source, Feature, Dependency, Reference, Target };
+export { Version, Source, Feature, Dependency, Reference, Target };
 
 /**
  * @example

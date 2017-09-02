@@ -1,10 +1,11 @@
-import { Version } from '../version';
+import { Version } from './version';
 import { has, isString } from '../utils';
 
 export interface Dependency {
   name: string;
   default_features: boolean;
   features: string[];
+  optional?: boolean;
 
   version?: Version;
 
