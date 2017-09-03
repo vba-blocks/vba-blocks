@@ -1,7 +1,7 @@
-import * as semver from 'semver';
+import { satisfies } from 'semver';
 import { Config } from '../config';
 import { Manifest, Dependency } from '../manifest';
-import { Registration } from '../registry';
+import { Registration } from '../manager';
 import { DependencyGraph } from './dependency-graph';
 import Resolver from './resolver';
 
@@ -14,7 +14,7 @@ export default async function solve(
 
   const graph = [];
   const errors = [];
-  for (const resolution of resolver) {
+  for (const [name, resolution] of resolver) {
     const matching = getMatching(resolution);
 
     if (!matching) {
@@ -52,6 +52,6 @@ export function getMatching(resolution): Registration | undefined {
   const range = resolution.range.join(' || ');
   const registered = resolution.registered.slice().reverse();
   return registered.find(registration =>
-    semver.satisfies(registration.version, range)
+    satisfies(registration.version, range)
   );
 }

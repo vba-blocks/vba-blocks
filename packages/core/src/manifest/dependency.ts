@@ -1,19 +1,27 @@
 import { Version } from './version';
 import { has, isString } from '../utils';
 
-export interface Dependency {
+export type Dependency = RegistryDependency | PathDependency | GitDependency;
+
+export interface BaseDependency {
   name: string;
   default_features: boolean;
   features: string[];
   optional?: boolean;
+}
 
-  version?: Version;
+export interface RegistryDependency extends BaseDependency {
+  version: Version;
+}
 
-  path?: string;
+export interface PathDependency extends BaseDependency {
+  path: string;
+}
 
-  git?: string;
-  tag?: string;
+export interface GitDependency extends BaseDependency {
+  git: string;
   branch?: string;
+  tag?: string;
   rev?: string;
 }
 
@@ -45,7 +53,18 @@ export function parseDependency(
 ): Dependency {
   if (isString(value)) value = { version: value };
 
-  const { version, path, git, tag, branch = 'master', rev } = value;
+  const {
+    features = [],
+    'default-features': default_features = true,
+    optional = false,
+    version,
+    path,
+    git,
+    tag,
+    branch = 'master',
+    rev
+  } = value;
+
   if (!version && !path && !git) {
     throw new Error(
       `Invalid dependency "${name}", no version, path, or git specified. ${EXAMPLE}`
@@ -61,10 +80,26 @@ export function parseDependency(
     else dependency = { git, branch };
   }
 
-  const default_features = has(value, 'default-features')
-    ? value['default-features']
-    : true;
-  const features = value.features || [];
+  return Object.assign(
+    { name, features, default_features, optional },
+    dependency
+  );
+}
 
-  return Object.assign({ name, features, default_features }, dependency);
+export function isRegistryDependency(
+  dependency: Dependency
+): dependency is RegistryDependency {
+  return has(dependency, 'version');
+}
+
+export function isPathDependency(
+  dependency: Dependency
+): dependency is PathDependency {
+  return has(dependency, 'path');
+}
+
+export function isGitDependency(
+  dependency: Dependency
+): dependency is GitDependency {
+  return has(dependency, 'git');
 }

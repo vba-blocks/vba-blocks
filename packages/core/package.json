@@ -15,7 +15,7 @@
   "jsnext:main": "lib/index.es.js",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc && rollup -c"
+    "build": "rollup -c"
   },
   "dependencies": {
     "archiver": "^2.0.0",
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "rollup": "^0.49.2",
-    "rollup-plugin-typescript": "^0.8.1",
+    "rollup-plugin-typescript2": "^0.5.2",
     "typescript": "^2.5.2"
   }
 }

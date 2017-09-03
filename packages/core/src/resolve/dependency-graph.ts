@@ -1,3 +1,3 @@
-import { Registration } from '../registry';
+import { Registration } from '../manager';
 
 export type DependencyGraph = Registration[];

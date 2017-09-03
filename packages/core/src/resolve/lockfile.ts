@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { exists, readFile, writeFile } from 'fs-extra';
-import * as toml from 'toml';
+import { parse as parseToml } from 'toml';
 import { Config } from '../config';
 import { convertToToml } from '../utils';
 import { DependencyGraph } from './dependency-graph';
@@ -12,7 +12,7 @@ export async function readLockfile(
   if (!await exists(file)) return null;
 
   const raw = await readFile(file);
-  const graph = toml.parse(raw);
+  const graph = parseToml(raw);
 
   return graph;
 }

@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { homedir } from 'os';
-import { PackageInfo } from './packages';
+import { Registration } from './manager';
 
 /**
  * Keep track of absolute paths to various resources and package resolution
@@ -47,19 +47,19 @@ export interface Config {
    * resolve package from remote source
    * (default is packages.vba-blocks.com/...)
    */
-  resolveRemotePackage: (pkg: PackageInfo) => string;
+  resolveRemotePackage: (registration: Registration) => string;
 
   /**
    * resolve package locally
    * (default is in {cache}/packages/...)
    */
-  resolveLocalPackage: (pkg: PackageInfo) => string;
+  resolveLocalPackage: (registration: Registration) => string;
 
   /**
    * resolve expanded package ("source")
    * (default is in {cache}/sources/...)
    */
-  resolveSource: (pkg: PackageInfo) => string;
+  resolveSource: (registration: Registration) => string;
 }
 
 export async function loadConfig(): Promise<Config> {
@@ -73,12 +73,15 @@ export async function loadConfig(): Promise<Config> {
     remote: 'https://github.com/vba-blocks/registry.git'
   };
 
-  const resolveRemotePackage = pkg =>
-    `https://packages.vba-blocks.com/${pkg.name}/v${pkg.version}.tar.gz`;
-  const resolveLocalPackage = pkg =>
-    join(cache, `packages/${pkg.name}/v${pkg.version}.tar.gz`);
-  const resolveSource = pkg =>
-    join(cache, `sources/${pkg.name}/v${pkg.version}`);
+  const resolveRemotePackage = registration =>
+    `https://packages.vba-blocks.com/${registration.name}/v${registration.version}.tar.gz`;
+  const resolveLocalPackage = registration =>
+    join(
+      cache,
+      `packages/${registration.name}/v${registration.version}.tar.gz`
+    );
+  const resolveSource = registration =>
+    join(cache, `sources/${registration.name}/v${registration.version}`);
 
   const config: Config = {
     cwd,

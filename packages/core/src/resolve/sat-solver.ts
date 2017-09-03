@@ -1,10 +1,17 @@
-import * as semver from 'semver';
+import { satisfies } from 'semver';
+import { Solver, exactlyOne, atMostOne, implies, or } from 'logic-solver';
+
 import { Config } from '../config';
 import { Manifest, Dependency } from '../manifest';
-import { Registration } from '../registry';
+import {
+  isRegistryDependency,
+  isPathDependency,
+  isGitDependency
+} from '../manifest/dependency';
+import { Registration, getRegistrationId } from '../manager';
 import { DependencyGraph } from './dependency-graph';
-import Resolver from './resolver';
-import * as Logic from 'logic-solver';
+import Resolver, { Resolution, ResolutionGraph } from './resolver';
+import { unique } from '../utils';
 
 export default async function solve(
   config: Config,
@@ -12,34 +19,35 @@ export default async function solve(
   resolver: Resolver
 ): Promise<DependencyGraph> {
   await resolveDependencies(manifest.dependencies, resolver);
+  await optimizeResolved(resolver.graph);
 
-  const solver = new Logic.Solver();
+  const solver = new Solver();
   const required = manifest.dependencies.map(dependency => dependency.name);
 
-  for (const resolved of resolver) {
-    const { name, registered } = resolved;
+  for (const [name, resolved] of resolver) {
+    const { registered } = resolved;
     const isRequired = required.includes(name);
-    const ids = registered.map(
-      registration => `${name}@${registration.version}`
-    );
+    const ids = registered.map(getRegistrationId);
 
     if (isRequired) {
-      solver.require(Logic.exactlyOne(...ids));
+      solver.require(exactlyOne(...ids));
     } else {
-      solver.require(Logic.atMostOne(...ids));
+      solver.require(atMostOne(...ids));
     }
   }
 
   const reversed = [...resolver].reverse();
-  for (const resolved of reversed) {
-    const { name, registered } = resolved;
+  for (const [name, resolved] of reversed) {
+    const { registered } = resolved;
 
     for (const registration of registered) {
-      const id = `${name}@${registration.version}`;
+      const id = getRegistrationId(registration);
 
       for (const dependency of registration.dependencies) {
-        const matching = getMatching(dependency, resolver);
-        solver.require(Logic.implies(id, Logic.or(...matching)));
+        const resolved = resolver.graph.get(dependency.name);
+        const matching = getMatching(dependency, resolved);
+
+        solver.require(implies(id, or(...matching)));
       }
     }
   }
@@ -51,11 +59,7 @@ export default async function solve(
   }
 
   const ids = solution.getTrueVars();
-  const graph = ids.map(id => {
-    const [name, version] = id.split('@');
-    const { registered } = resolver.graph.get(name);
-    return registered.find(registration => registration.version === version);
-  });
+  const graph = ids.map(id => resolver.getRegistration(id));
 
   return graph;
 }
@@ -78,13 +82,29 @@ export async function resolveDependencies(
   }
 }
 
-function getMatching(dependency: Dependency, resolver: Resolver): string[] {
-  const { name, version } = dependency;
-  const { registered } = resolver.graph.get(name);
+export async function optimizeResolved(graph: ResolutionGraph): Promise<void> {
+  for (const [name, resolution] of graph) {
+    const { registered } = resolution;
+    const range = unique(resolution.range).join(' || ');
 
-  const matching = registered
-    .filter(registration => semver.satisfies(version, registration.version))
-    .map(registration => `${name}@${registration.version}`);
+    resolution.registered = registered
+      .filter(registration => satisfies(registration.version, range))
+      .reverse();
+  }
+}
 
-  return matching;
+function getMatching(dependency: Dependency, resolved: Resolution): string[] {
+  const { registered } = resolved;
+
+  if (isRegistryDependency(dependency)) {
+    const { version } = dependency;
+
+    return registered
+      .filter(registration => satisfies(registration.version, version))
+      .map(getRegistrationId);
+  } else if (isPathDependency(dependency)) {
+    return [];
+  } else {
+    return [];
+  }
 }

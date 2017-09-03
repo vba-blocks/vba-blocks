@@ -1,8 +1,25 @@
-import ts from 'rollup-plugin-typescript';
+import ts from 'rollup-plugin-typescript2';
 import typescript from 'typescript';
 
 export default {
   input: 'src/index.ts',
+  external: [
+    // Native
+    'crypto',
+    'https',
+    'path',
+    'readline',
+
+    // Dependencies
+    'archiver',
+    'commander',
+    'dugite',
+    'fs-extra',
+    'logic-solver',
+    'semver',
+    'tar',
+    'toml'
+  ],
   output: [
     {
       format: 'es',
@@ -15,5 +32,10 @@ export default {
       sourcemap: true
     }
   ],
-  plugins: [ts({ typescript })]
+  plugins: [
+    ts({
+      cacheRoot: '.typescript-cache',
+      typescript
+    })
+  ]
 };

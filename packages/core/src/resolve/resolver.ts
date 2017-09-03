@@ -1,6 +1,11 @@
 import { Config } from '../config';
 import { Version, Dependency } from '../manifest';
-import { Registration, getRegistered } from '../registry';
+import {
+  isRegistryDependency,
+  isPathDependency,
+  isGitDependency
+} from '../manifest/dependency';
+import { Registration, registry, path, git } from '../manager';
 
 export interface Resolution {
   name: string;
@@ -19,14 +24,21 @@ export default class Resolver {
   }
 
   async get(dependency: Dependency): Promise<Resolution> {
-    const { name, version } = dependency;
+    const { name } = dependency;
 
     if (this.loading.has(name)) await this.loading.get(name);
-
     let resolution = this.graph.get(name);
 
     if (!resolution) {
-      const loading = getRegistered(this.config, name);
+      let loading;
+      if (isRegistryDependency(dependency)) {
+        loading = registry.resolve(this.config, dependency);
+      } else if (isPathDependency(dependency)) {
+        loading = path.resolve(this.config, dependency);
+      } else {
+        loading = git.resolve(this.config, dependency);
+      }
+
       this.loading.set(name, loading);
 
       const registered = await loading;
@@ -40,12 +52,27 @@ export default class Resolver {
       this.graph.set(name, resolution);
     }
 
-    resolution.range.push(version);
+    let rangeInfo;
+    if (isRegistryDependency(dependency)) {
+      rangeInfo = dependency.version;
+    } else if (isPathDependency(dependency)) {
+      rangeInfo = dependency.path;
+    } else {
+      const { git, branch, tag, rev } = dependency;
+      rangeInfo = { git, branch, tag, rev };
+    }
+    resolution.range.push(rangeInfo);
 
     return resolution;
   }
 
+  getRegistration(id: string) {
+    const [name, version] = id.split('@');
+    const { registered } = this.graph.get(name);
+    return registered.find(registration => registration.version === version);
+  }
+
   [Symbol.iterator]() {
-    return this.graph.values();
+    return this.graph.entries();
   }
 }

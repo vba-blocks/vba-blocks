@@ -3,6 +3,6 @@
   "prettier.singleQuote": true,
   "search.exclude": {
     "**/node_modules": true,
-    "cli/lib": true
+    "packages/*/lib": true
   }
 }
