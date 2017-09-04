@@ -1,11 +1,7 @@
 import { Config } from '../config';
 import { Version, Dependency } from '../manifest';
-import {
-  isRegistryDependency,
-  isPathDependency,
-  isGitDependency
-} from '../manifest/dependency';
-import { Registration, registry, path, git } from '../manager';
+import { isRegistryDependency } from '../manifest/dependency';
+import Manager, { Registration } from '../manager';
 
 export interface Resolution {
   name: string;
@@ -16,11 +12,17 @@ export type ResolutionGraph = Map<string, Resolution>;
 
 export default class Resolver {
   config: Config;
+  manager: Manager;
   graph: ResolutionGraph;
   loading: Map<string, Promise<Registration[]>>;
 
   constructor(config: Config) {
+    this.manager = new Manager(config);
     this.graph = new Map();
+  }
+
+  async update() {
+    await this.manager.update();
   }
 
   async get(dependency: Dependency): Promise<Resolution> {
@@ -30,15 +32,7 @@ export default class Resolver {
     let resolution = this.graph.get(name);
 
     if (!resolution) {
-      let loading;
-      if (isRegistryDependency(dependency)) {
-        loading = registry.resolve(this.config, dependency);
-      } else if (isPathDependency(dependency)) {
-        loading = path.resolve(this.config, dependency);
-      } else {
-        loading = git.resolve(this.config, dependency);
-      }
-
+      const loading = this.manager.resolve(dependency);
       this.loading.set(name, loading);
 
       const registered = await loading;
@@ -52,16 +46,9 @@ export default class Resolver {
       this.graph.set(name, resolution);
     }
 
-    let rangeInfo;
     if (isRegistryDependency(dependency)) {
-      rangeInfo = dependency.version;
-    } else if (isPathDependency(dependency)) {
-      rangeInfo = dependency.path;
-    } else {
-      const { git, branch, tag, rev } = dependency;
-      rangeInfo = { git, branch, tag, rev };
+      resolution.range.push(dependency.version);
     }
-    resolution.range.push(rangeInfo);
 
     return resolution;
   }

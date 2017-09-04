@@ -5,6 +5,8 @@ export interface Registration {
   version: Version;
   dependencies: Dependency[];
   features: { [name: string]: string[] };
+
+  source: string;
   checksum?: string;
 }
 

@@ -3,7 +3,6 @@ packages/cli/lib
 packages/cli/build
 packages/cli/tests/fixtures/build
 
-packages/flat-solver/lib
 packages/core/lib
 
 packages/addin/build

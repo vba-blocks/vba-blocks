@@ -1,12 +1,10 @@
-import { Manager } from './manager';
+import { Config } from '../config';
 import { Registration } from './registration';
 import { GitDependency } from '../manifest/dependency';
 
-const git: Manager = {
-  async prepare(config) {},
-  async resolve(config, dependency: GitDependency): Promise<Registration[]> {
-    return [];
-  },
-  async fetch(config, registration) {}
-};
-export default git;
+export async function resolve(
+  config: Config,
+  dependency: GitDependency
+): Promise<Registration[]> {
+  return [];
+}

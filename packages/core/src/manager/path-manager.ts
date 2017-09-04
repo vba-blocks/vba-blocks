@@ -1,12 +1,10 @@
-import { Manager } from './manager';
+import { Config } from '../config';
 import { Registration } from './registration';
 import { PathDependency } from '../manifest/dependency';
 
-const path: Manager = {
-  async prepare(config) {},
-  async resolve(config, dependency: PathDependency): Promise<Registration[]> {
-    return [];
-  },
-  async fetch(config, registration) {}
-};
-export default path;
+export async function resolve(
+  config: Config,
+  dependency: PathDependency
+): Promise<Registration[]> {
+  return [];
+}

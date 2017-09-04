@@ -10,6 +10,7 @@ export default async function resolve(
   manifest: Manifest
 ): Promise<DependencyGraph> {
   const resolver = new Resolver(config);
+  await resolver.update();
 
   // 1. "Seed" with lockfile
   // 2. Attempt Latest Solver
