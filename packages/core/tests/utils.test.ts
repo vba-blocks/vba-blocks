@@ -3,29 +3,32 @@ import { convertToToml } from '../src/utils';
 test('convertToToml', () => {
   expect(
     convertToToml({
+      root: {
+        name: 'project',
+        dependencies: ['a 1.2.3']
+      },
+      project: [],
       package: [
         {
           name: 'a',
           version: '1.2.3',
-          source: 'registry+...',
-          checksum: '...',
-          dependencies: ['d 0.0.0 (registry+...)']
+          source: 'registry+...#...',
+          dependencies: ['d 0.0.0']
         },
         {
           name: 'b',
-          version: '4.5.6'
+          version: '4.5.6',
+          source: 'path+...'
         },
         {
           name: 'c',
           version: '7.8.9',
-          source: 'git+...',
-          checksum: '<none>'
+          source: 'git+...#rev'
         },
         {
           name: 'd',
           version: '0.0.0',
-          source: 'registry+...',
-          checksum: '...'
+          source: 'registry+...#...'
         }
       ]
     })

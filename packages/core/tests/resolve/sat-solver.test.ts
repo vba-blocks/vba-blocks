@@ -1,7 +1,7 @@
-import solve from '../src/resolve/sat-solver';
-import { loadConfig } from '../src/config';
-import { RegistryDependency } from '../src/manifest/dependency';
-import MockResolver from './helpers/resolver';
+import solve from '../../src/resolve/sat-solver';
+import { loadConfig } from '../../src/config';
+import { RegistryDependency } from '../../src/manifest/dependency';
+import MockResolver from '../helpers/resolver';
 
 test('solves simple tree', async () => {
   const config = await loadConfig();
