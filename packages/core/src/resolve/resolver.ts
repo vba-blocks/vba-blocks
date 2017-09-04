@@ -54,7 +54,7 @@ export default class Resolver {
   }
 
   getRegistration(id: string) {
-    const [name, version] = id.split('@');
+    const [name, version] = id.split('@', 2);
     const { registered } = this.graph.get(name);
     return registered.find(registration => registration.version === version);
   }

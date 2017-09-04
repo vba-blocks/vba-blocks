@@ -8,3 +8,10 @@ export async function resolve(
 ): Promise<Registration[]> {
   return [];
 }
+
+export async function fetch(
+  config: Config,
+  registration: Registration
+): Promise<string> {
+  return '';
+}

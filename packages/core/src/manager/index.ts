@@ -1,10 +1,6 @@
 import { Config } from '../config';
 import { Dependency } from '../manifest';
-import {
-  isRegistryDependency,
-  isPathDependency,
-  isGitDependency
-} from '../manifest/dependency';
+import { isRegistryDependency, isGitDependency } from '../manifest/dependency';
 import { Registration } from './registration';
 import * as registry from './registry-manager';
 import * as path from './path-manager';
@@ -27,14 +23,22 @@ export default class Manager {
   async resolve(dependency: Dependency): Promise<Registration[]> {
     if (isRegistryDependency(dependency)) {
       return registry.resolve(this.config, dependency);
-    } else if (isPathDependency(dependency)) {
-      return path.resolve(this.config, dependency);
-    } else {
+    } else if (isGitDependency(dependency)) {
       return git.resolve(this.config, dependency);
+    } else {
+      return path.resolve(this.config, dependency);
     }
   }
 
-  async fetch(registration: Registration) {
-    // TODO Encode enough info into registration to determine registry, path, or git
+  async fetch(registration: Registration): Promise<string> {
+    const [type, _] = registration.source.split('+', 2);
+
+    if (type === 'registry') {
+      return registry.fetch(this.config, registration);
+    } else if (type === 'git') {
+      return git.fetch(this.config, registration);
+    } else {
+      return path.fetch(this.config, registration);
+    }
   }
 }

@@ -83,6 +83,8 @@ export async function fetch(config: Config, registration: Registration) {
 
   await ensureDir(src);
   await extract({ file, cwd: src });
+
+  return src;
 }
 
 export function getPath(config: Config, name: string): string {
