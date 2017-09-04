@@ -7,6 +7,5 @@ export {
   Target,
   Manifest
 } from './manifest';
-export { Config } from './config';
-
+export { Config, loadConfig } from './config';
 export { default as resolve } from './resolve';

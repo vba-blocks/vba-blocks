@@ -1,3 +1,4 @@
+import commonjs from 'rollup-plugin-commonjs';
 import ts from 'rollup-plugin-typescript2';
 import typescript from 'typescript';
 
@@ -7,6 +8,7 @@ export default {
     // Native
     'crypto',
     'https',
+    'os',
     'path',
     'readline',
 
@@ -17,6 +19,7 @@ export default {
     'fs-extra',
     'logic-solver',
     'semver',
+    'string-template/compile',
     'tar',
     'toml'
   ],
@@ -33,6 +36,7 @@ export default {
     }
   ],
   plugins: [
+    commonjs(),
     ts({
       cacheRoot: '.typescript-cache',
       typescript

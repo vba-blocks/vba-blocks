@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { homedir } from 'os';
+import compile from 'string-template/compile';
 import { Registration } from './manager';
 
 /**
@@ -63,6 +64,13 @@ export interface Config {
 }
 
 export async function loadConfig(): Promise<Config> {
+  const options = {
+    registry: {
+      remote: 'https://github.com/vba-blocks/registry',
+      packages: 'https://packages.vba-blocks.com/{name}/v{version}.tar.gz'
+    }
+  };
+
   const cwd = process.cwd();
   const build = join(cwd, 'build');
   const scripts = join(__dirname, '../scripts');
@@ -70,11 +78,10 @@ export async function loadConfig(): Promise<Config> {
   const cache = join(homedir(), '.vba-blocks');
   const registry = {
     local: join(cache, 'registry'),
-    remote: 'https://github.com/vba-blocks/registry.git'
+    remote: options.registry.remote
   };
 
-  const resolveRemotePackage = registration =>
-    `https://packages.vba-blocks.com/${registration.name}/v${registration.version}.tar.gz`;
+  const resolveRemotePackage = compile(options.registry.packages, true);
   const resolveLocalPackage = registration =>
     join(
       cache,

@@ -55,7 +55,8 @@ export async function resolve(
         version: vers,
         dependencies,
         features,
-        checksum: cksum
+        checksum: cksum,
+        source: `registry+${config.registry.remote}`
       });
     });
     reader.on('close', () => resolve(registrations));
