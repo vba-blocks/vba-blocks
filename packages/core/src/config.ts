@@ -1,6 +1,5 @@
 import { join } from 'path';
 import { homedir } from 'os';
-import compile from 'string-template/compile';
 import { Registration } from './manager';
 
 /**
@@ -65,30 +64,37 @@ export interface Config {
 
 export async function loadConfig(): Promise<Config> {
   const options = {
-    registry: {
-      remote: 'https://github.com/vba-blocks/registry',
-      packages: 'https://packages.vba-blocks.com/{name}/v{version}.tar.gz'
-    }
+    registry: 'https://github.com/vba-blocks/registry',
+    packages: 'https://packages.vba-blocks.com'
   };
 
   const cwd = process.cwd();
   const build = join(cwd, 'build');
   const scripts = join(__dirname, '../scripts');
   const addins = join(__dirname, '../../addin/build');
+
   const cache = join(homedir(), '.vba-blocks');
   const registry = {
     local: join(cache, 'registry'),
-    remote: options.registry.remote
+    remote: options.registry
   };
+  const packages = join(cache, 'packages');
+  const sources = join(cache, 'sources');
 
-  const resolveRemotePackage = compile(options.registry.packages, true);
-  const resolveLocalPackage = registration =>
+  const resolveRemotePackage = registration =>
     join(
-      cache,
-      `packages/${registration.name}/v${registration.version}.tar.gz`
+      options.packages,
+      registration.name,
+      `v${registration.version}.tar.gz`
     );
+  const resolveLocalPackage = registration =>
+    join(packages, registration.name, `v${registration.version}.tar.gz`);
   const resolveSource = registration =>
-    join(cache, `sources/${registration.name}/v${registration.version}`);
+    join(
+      sources,
+      registration.name,
+      `v${registration.version}`.replace(/\./g, '-')
+    );
 
   const config: Config = {
     cwd,

@@ -1,12 +1,16 @@
+import { promisify } from 'util';
 import { join, dirname, basename } from 'path';
 import { createInterface as readline } from 'readline';
-import { createReadStream, ensureDir, exists } from 'fs-extra';
+import { createReadStream, ensureDir, exists, move } from 'fs-extra';
 import { extract } from 'tar';
+import * as tmp from 'tmp';
 import { download, checksum as getChecksum } from '../utils';
 import { clone, pull } from '../utils/git';
 import { Config } from '../config';
 import { RegistryDependency } from '../manifest/dependency';
 import { Registration } from './registration';
+
+const tmpFile = promisify(tmp.file);
 
 export async function update(config: Config) {
   const { local, remote } = config.registry;
@@ -55,8 +59,7 @@ export async function resolve(
         version: vers,
         dependencies,
         features,
-        checksum: cksum,
-        source: `registry+${config.registry.remote}`
+        source: `registry+https://github.com/vba-blocks/registry#${cksum}`
       });
     });
     reader.on('close', () => resolve(registrations));
@@ -68,15 +71,20 @@ export async function fetch(config: Config, registration: Registration) {
   const url = config.resolveRemotePackage(registration);
   const file = config.resolveLocalPackage(registration);
 
-  if (!await exists(file)) {
-    await download(url, file);
+  const [_, checksum] = registration.source.split('#', 2);
 
-    if (registration.checksum && registration.checksum !== '<none>') {
-      const checksum = await getChecksum(file);
-      if (checksum !== registration.checksum) {
-        // TODO error and continue / delete downloaded
-      }
+  if (!await exists(file)) {
+    const unverifiedFile = await tmpFile();
+    await download(url, unverifiedFile);
+
+    const comparison = await getChecksum(unverifiedFile);
+    if (comparison !== checksum) {
+      throw new Error(
+        `Invalid checksum for ${registration.name}@${registration.version}`
+      );
     }
+
+    await move(unverifiedFile, file);
   }
 
   const src = config.resolveSource(registration);

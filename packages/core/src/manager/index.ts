@@ -31,7 +31,7 @@ export default class Manager {
   }
 
   async fetch(registration: Registration): Promise<string> {
-    const [type, _] = registration.source.split('+', 2);
+    const [type] = registration.source.split('+', 1);
 
     if (type === 'registry') {
       return registry.fetch(this.config, registration);

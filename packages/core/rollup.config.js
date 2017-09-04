@@ -19,8 +19,8 @@ export default {
     'fs-extra',
     'logic-solver',
     'semver',
-    'string-template/compile',
     'tar',
+    'tmp',
     'toml'
   ],
   output: [

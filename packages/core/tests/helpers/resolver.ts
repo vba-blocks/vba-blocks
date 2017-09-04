@@ -12,8 +12,7 @@ const a_1: Registration = {
   name: 'a',
   version: '1.0.0',
   features: {},
-  source: '<registry>',
-  checksum: '<none>',
+  source: 'registry#<none>',
   dependencies: [a_1_dependency]
 };
 
@@ -23,8 +22,7 @@ const registry = {
       name: 'a',
       version: '0.1.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: []
     },
     a_1,
@@ -32,16 +30,14 @@ const registry = {
       name: 'a',
       version: '1.1.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: [{ name: 'd', version: '^1.2.0' }]
     },
     {
       name: 'a',
       version: '1.2.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: [{ name: 'd', version: '^2.0.0' }]
     }
   ],
@@ -52,32 +48,28 @@ const registry = {
       name: 'd',
       version: '1.0.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: [{ name: 'f', version: '1.0.0' }]
     },
     {
       name: 'd',
       version: '1.1.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: [{ name: 'f', version: '1.0.0' }]
     },
     {
       name: 'd',
       version: '1.2.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: [{ name: 'f', version: '1.0.0' }]
     },
     {
       name: 'd',
       version: '2.0.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: [{ name: 'f', version: '2.0.0' }]
     }
   ],
@@ -87,16 +79,14 @@ const registry = {
       name: 'f',
       version: '1.0.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: [{ name: 'g', version: '^1' }]
     },
     {
       name: 'f',
       version: '2.0.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: [{ name: 'g', version: '^1' }]
     }
   ],
@@ -105,16 +95,14 @@ const registry = {
       name: 'g',
       version: '1.0.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: []
     },
     {
       name: 'g',
       version: '2.0.0',
       features: {},
-      source: '<registry>',
-      checksum: '<none>',
+      source: 'registry#<none>',
       dependencies: []
     }
   ]
