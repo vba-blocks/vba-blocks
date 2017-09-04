@@ -3,38 +3,50 @@
 exports[`solves simple tree 1`] = `
 Array [
   Object {
+    "checksum": "<none>",
     "dependencies": Array [
       Object {
         "name": "d",
         "version": "^2.0.0",
       },
     ],
+    "features": Object {},
     "name": "a",
+    "source": "<registry>",
     "version": "1.2.0",
   },
   Object {
+    "checksum": "<none>",
     "dependencies": Array [
       Object {
         "name": "f",
         "version": "2.0.0",
       },
     ],
+    "features": Object {},
     "name": "d",
+    "source": "<registry>",
     "version": "2.0.0",
   },
   Object {
+    "checksum": "<none>",
     "dependencies": Array [
       Object {
         "name": "g",
         "version": "^1",
       },
     ],
+    "features": Object {},
     "name": "f",
+    "source": "<registry>",
     "version": "2.0.0",
   },
   Object {
+    "checksum": "<none>",
     "dependencies": Array [],
+    "features": Object {},
     "name": "g",
+    "source": "<registry>",
     "version": "1.0.0",
   },
 ]

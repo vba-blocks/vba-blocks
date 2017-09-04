@@ -1,22 +1,47 @@
 import { RegistryDependency } from '../../src/manifest/dependency';
 import Resolver, { Resolution } from '../../src/resolve/resolver';
+import { Registration } from '../../src/manager';
+
+const a_1_dependency: RegistryDependency = {
+  name: 'd',
+  version: '^1.0.0',
+  features: [],
+  default_features: true
+};
+const a_1: Registration = {
+  name: 'a',
+  version: '1.0.0',
+  features: {},
+  source: '<registry>',
+  checksum: '<none>',
+  dependencies: [a_1_dependency]
+};
 
 const registry = {
   a: [
-    { name: 'a', version: '0.1.0', dependencies: [] },
     {
       name: 'a',
-      version: '1.0.0',
-      dependencies: [{ name: 'd', version: '^1.0.0' }]
+      version: '0.1.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
+      dependencies: []
     },
+    a_1,
     {
       name: 'a',
       version: '1.1.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
       dependencies: [{ name: 'd', version: '^1.2.0' }]
     },
     {
       name: 'a',
       version: '1.2.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
       dependencies: [{ name: 'd', version: '^2.0.0' }]
     }
   ],
@@ -26,21 +51,33 @@ const registry = {
     {
       name: 'd',
       version: '1.0.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
       dependencies: [{ name: 'f', version: '1.0.0' }]
     },
     {
       name: 'd',
       version: '1.1.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
       dependencies: [{ name: 'f', version: '1.0.0' }]
     },
     {
       name: 'd',
       version: '1.2.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
       dependencies: [{ name: 'f', version: '1.0.0' }]
     },
     {
       name: 'd',
       version: '2.0.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
       dependencies: [{ name: 'f', version: '2.0.0' }]
     }
   ],
@@ -49,17 +86,37 @@ const registry = {
     {
       name: 'f',
       version: '1.0.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
       dependencies: [{ name: 'g', version: '^1' }]
     },
     {
       name: 'f',
       version: '2.0.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
       dependencies: [{ name: 'g', version: '^1' }]
     }
   ],
   g: [
-    { name: 'g', version: '1.0.0', dependencies: [] },
-    { name: 'g', version: '2.0.0', dependencies: [] }
+    {
+      name: 'g',
+      version: '1.0.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
+      dependencies: []
+    },
+    {
+      name: 'g',
+      version: '2.0.0',
+      features: {},
+      source: '<registry>',
+      checksum: '<none>',
+      dependencies: []
+    }
   ]
 };
 
