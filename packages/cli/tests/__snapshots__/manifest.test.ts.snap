@@ -13,6 +13,7 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
+  "name": "package-name",
   "references": Array [
     Object {
       "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
@@ -23,6 +24,7 @@ Object {
   ],
   "src": Array [],
   "targets": Array [],
+  "version": "1.0.0",
 }
 `;
 
@@ -85,6 +87,7 @@ Object {
     "publish": true,
     "version": "0.1.0",
   },
+  "name": "testing",
   "references": Array [
     Object {
       "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
@@ -112,6 +115,7 @@ Object {
       "type": "xlsm",
     },
   ],
+  "version": "0.1.0",
 }
 `;
 
@@ -185,9 +189,11 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
+  "name": "package-name",
   "references": Array [],
   "src": Array [],
   "targets": Array [],
+  "version": "1.0.0",
 }
 `;
 
@@ -232,9 +238,11 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
+  "name": "package-name",
   "references": Array [],
   "src": Array [],
   "targets": Array [],
+  "version": "1.0.0",
 }
 `;
 
@@ -251,9 +259,11 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
+  "name": "package-name",
   "references": Array [],
   "src": Array [],
   "targets": Array [],
+  "version": "1.0.0",
 }
 `;
 
@@ -270,6 +280,7 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
+  "name": "package-name",
   "references": Array [],
   "src": Array [
     Object {
@@ -289,6 +300,7 @@ Object {
     },
   ],
   "targets": Array [],
+  "version": "1.0.0",
 }
 `;
 
@@ -305,6 +317,7 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
+  "name": "package-name",
   "references": Array [],
   "src": Array [],
   "targets": Array [
@@ -319,5 +332,6 @@ Object {
       "type": "xlam",
     },
   ],
+  "version": "1.0.0",
 }
 `;

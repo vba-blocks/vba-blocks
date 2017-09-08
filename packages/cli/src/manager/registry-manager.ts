@@ -7,8 +7,13 @@ import * as tmp from 'tmp';
 import { download, checksum as getChecksum } from '../utils';
 import { clone, pull } from '../utils/git';
 import { Config } from '../config';
+import { Feature } from '../manifest';
 import { RegistryDependency } from '../manifest/dependency';
-import { Registration } from './registration';
+import {
+  Registration,
+  getRegistrationId,
+  getRegistrationSource
+} from './registration';
 
 const tmpFile = promisify(tmp.file);
 
@@ -38,29 +43,11 @@ export async function resolve(
     const reader = readline({ input });
 
     reader.on('line', line => {
-      const { name, vers, deps, cksum, features, yanked } = JSON.parse(line);
-      if (yanked) return;
+      const value = JSON.parse(line);
+      if (value.yanked) return;
 
-      const dependencies: RegistryDependency[] = deps.map(dep => {
-        const { name, req, features, optional, default_features } = dep;
-        const dependency: RegistryDependency = {
-          name,
-          version: req,
-          features,
-          optional,
-          default_features
-        };
-
-        return dependency;
-      });
-
-      registrations.push({
-        name,
-        version: vers,
-        dependencies,
-        features,
-        source: `registry+https://github.com/vba-blocks/registry#${cksum}`
-      });
+      const registration = parseRegistration(value);
+      registrations.push(registration);
     });
     reader.on('close', () => resolve(registrations));
     reader.on('error', reject);
@@ -79,9 +66,7 @@ export async function fetch(config: Config, registration: Registration) {
 
     const comparison = await getChecksum(unverifiedFile);
     if (comparison !== checksum) {
-      throw new Error(
-        `Invalid checksum for ${registration.name}@${registration.version}`
-      );
+      throw new Error(`Invalid checksum for ${registration.id}`);
     }
 
     await move(unverifiedFile, file);
@@ -93,6 +78,41 @@ export async function fetch(config: Config, registration: Registration) {
   await extract({ file, cwd: src });
 
   return src;
+}
+
+export function parseRegistration(value: any): Registration {
+  const { name, vers: version, cksum: checksum } = value;
+
+  const dependencies: RegistryDependency[] = value.deps.map(dep => {
+    const { name, req, features, optional, default_features } = dep;
+    const dependency: RegistryDependency = {
+      name,
+      version: req,
+      features,
+      optional,
+      default_features
+    };
+
+    return dependency;
+  });
+
+  const features: Feature[] = [];
+  for (const [name, dependencies] of Object.entries(value.features)) {
+    features.push({ name, dependencies, src: [], references: [] });
+  }
+
+  return {
+    id: getRegistrationId(name, version),
+    source: getRegistrationSource(
+      'registry',
+      'https://github.com/vba-blocks/registry',
+      checksum
+    ),
+    name,
+    version,
+    dependencies,
+    features
+  };
 }
 
 export function getPath(config: Config, name: string): string {

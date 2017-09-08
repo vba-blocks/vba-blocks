@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { homedir } from 'os';
-import { Registration } from './manager';
+import { Snapshot } from './manifest';
 
 /**
  * Keep track of absolute paths to various resources and package resolution
@@ -47,19 +47,19 @@ export interface Config {
    * resolve package from remote source
    * (default is packages.vba-blocks.com/...)
    */
-  resolveRemotePackage: (registration: Registration) => string;
+  resolveRemotePackage: (snapshot: Snapshot) => string;
 
   /**
    * resolve package locally
    * (default is in {cache}/packages/...)
    */
-  resolveLocalPackage: (registration: Registration) => string;
+  resolveLocalPackage: (snapshot: Snapshot) => string;
 
   /**
    * resolve expanded package ("source")
    * (default is in {cache}/sources/...)
    */
-  resolveSource: (registration: Registration) => string;
+  resolveSource: (snapshot: Snapshot) => string;
 }
 
 export async function loadConfig(): Promise<Config> {
@@ -81,20 +81,12 @@ export async function loadConfig(): Promise<Config> {
   const packages = join(cache, 'packages');
   const sources = join(cache, 'sources');
 
-  const resolveRemotePackage = registration =>
-    join(
-      options.packages,
-      registration.name,
-      `v${registration.version}.tar.gz`
-    );
-  const resolveLocalPackage = registration =>
-    join(packages, registration.name, `v${registration.version}.tar.gz`);
-  const resolveSource = registration =>
-    join(
-      sources,
-      registration.name,
-      `v${registration.version}`.replace(/\./g, '-')
-    );
+  const resolveRemotePackage = snapshot =>
+    join(options.packages, snapshot.name, `v${snapshot.version}.tar.gz`);
+  const resolveLocalPackage = snapshot =>
+    join(packages, snapshot.name, `v${snapshot.version}.tar.gz`);
+  const resolveSource = snapshot =>
+    join(sources, snapshot.name, `v${snapshot.version}`.replace(/\./g, '-'));
 
   const config: Config = {
     cwd,

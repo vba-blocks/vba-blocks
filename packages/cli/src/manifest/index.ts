@@ -55,19 +55,24 @@ export { Version, Source, Feature, Dependency, Reference, Target };
  * path = "targets/xlam"
  * ```
  */
-export interface Metadata {
+
+export interface Snapshot {
   name: string;
   version: Version;
+  features: Feature[];
+  dependencies: Dependency[];
+}
+
+export interface Metadata {
   authors: string[];
   publish: boolean;
   default_features: string[];
+  [name: string]: any;
 }
 
-export interface Manifest {
+export interface Manifest extends Snapshot {
   metadata: Metadata;
   src: Source[];
-  features: Feature[];
-  dependencies: Dependency[];
   references: Reference[];
   targets: Target[];
 }
@@ -97,15 +102,21 @@ export function parseManifest(value: any): Manifest {
   const references = parseReferences(value.references || {});
   const targets = parseTargets(value.targets || [], name);
 
-  const metadata = {
-    name,
-    version,
-    authors,
+  const metadata = Object.assign({}, value.package, {
     publish,
     default_features
-  };
+  });
 
-  return { metadata, src, features, dependencies, references, targets };
+  return {
+    name,
+    version,
+    metadata,
+    src,
+    features,
+    dependencies,
+    references,
+    targets
+  };
 }
 
 export async function loadManifest(dir: string): Promise<Manifest> {

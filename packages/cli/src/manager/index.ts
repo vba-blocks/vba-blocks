@@ -7,7 +7,7 @@ import * as path from './path-manager';
 import * as git from './git-manager';
 
 export { Registration, registry, path, git };
-export { getRegistrationId } from './registration';
+export { getRegistrationId, getRegistrationSource } from './registration';
 
 export default class Manager {
   config: Config;

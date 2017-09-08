@@ -1,28 +1,47 @@
-import { Manifest, Version, Dependency } from '../manifest';
+import { Snapshot } from '../manifest';
+import { isString } from '../utils';
 
-export interface Registration {
-  name: string;
-  version: Version;
-  dependencies: Dependency[];
-  features: { [name: string]: string[] };
+export interface Registration extends Snapshot {
+  id: string;
   source: string;
 }
 
-export function fromManifest(manifest: Manifest, source: string): Registration {
-  const features = {};
-  for (const feature of manifest.features) {
-    features[feature.name] = feature.dependencies;
-  }
+export function fromSnapshot(snapshot: Snapshot, source: string): Registration {
+  const { name, version, dependencies, features } = snapshot;
 
   return {
-    name: manifest.metadata.name,
-    version: manifest.metadata.version,
-    dependencies: manifest.dependencies,
-    features,
-    source
+    id: getRegistrationId(snapshot),
+    source,
+    name,
+    version,
+    dependencies,
+    features
   };
 }
 
-export function getRegistrationId(registration: Registration): string {
-  return `${registration.name}@${registration.version}`;
+export function getRegistrationId(name: Snapshot): string;
+export function getRegistrationId(name: string, version: string): string;
+export function getRegistrationId(
+  name: string | Snapshot,
+  version?: string
+): string {
+  if (!isString(name)) {
+    version = name.version;
+    name = name.name;
+  }
+
+  return `${name}@${version}`;
+}
+
+export function getRegistrationSource(
+  type: string,
+  value: string,
+  details?: string
+): string {
+  let source = `${type}+${value}`;
+  if (details) {
+    source += `#${details}`;
+  }
+
+  return source;
 }

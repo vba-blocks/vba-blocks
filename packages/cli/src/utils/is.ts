@@ -16,6 +16,6 @@ export function isBoolean(value: any): value is boolean {
   return typeof value === 'boolean';
 }
 
-export function isObject(value: any): boolean {
+export function isObject(value: any): value is object {
   return value != null && typeof value === 'object';
 }
