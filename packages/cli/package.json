@@ -1,24 +1,31 @@
 {
-  "name": "@vba-blocks/cli",
+  "name": "vba-blocks",
   "private": true,
   "version": "0.0.0",
-  "description": "vba-blocks CLI",
+  "description": "vba-blocks",
   "author": "Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)",
   "homepage": "https://github.com/vba-blocks/vba-blocks#readme",
   "license": "MIT",
   "repository": "https://github.com/vba-blocks/vba-blocks.git",
   "bugs": { "url": "https://github.com/vba-blocks/vba-blocks/issues" },
-  "bin": {
-    "vba-blocks": "bin/vba-blocks.js"
-  },
+  "bin": "bin/vba-blocks",
+  "main": "lib/index",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "pkg":
       "pkg --targets node8-win-x86,node8-win-x64,node8-macos-x64 --out-dir build ."
   },
   "dependencies": {
+    "archiver": "^2.0.0",
     "commander": "^2.9.0",
-    "@vba-blocks/core": "^0.0.0"
+    "dugite": "^1.39.0",
+    "fs-extra": "^4.0.1",
+    "logic-solver": "^2.0.1",
+    "semver": "^5.4.1",
+    "tar": "^4.0.1",
+    "tmp": "^0.0.33",
+    "toml": "^2.3.2"
   },
   "devDependencies": {
     "pkg": "^4.2.4",

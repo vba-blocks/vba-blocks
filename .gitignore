@@ -3,8 +3,6 @@ packages/cli/lib
 packages/cli/build
 packages/cli/tests/fixtures/build
 
-packages/core/lib
-
 packages/addin/build
 
 # Ignore temporary Excel files
@@ -14,4 +12,3 @@ packages/addin/build
 .DS_Store
 node_modules
 *.log
-.typescript-cache
