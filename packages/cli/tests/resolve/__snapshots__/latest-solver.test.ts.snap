@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`solves simple tree 1`] = `
+Array [
+  Object {
+    "dependencies": Array [
+      Object {
+        "name": "d",
+        "version": "^2.0.0",
+      },
+    ],
+    "features": Object {},
+    "name": "a",
+    "source": "registry#<none>",
+    "version": "1.2.0",
+  },
+  Object {
+    "dependencies": Array [
+      Object {
+        "name": "f",
+        "version": "2.0.0",
+      },
+    ],
+    "features": Object {},
+    "name": "d",
+    "source": "registry#<none>",
+    "version": "2.0.0",
+  },
+  Object {
+    "dependencies": Array [
+      Object {
+        "name": "g",
+        "version": "^1",
+      },
+    ],
+    "features": Object {},
+    "name": "f",
+    "source": "registry#<none>",
+    "version": "2.0.0",
+  },
+  Object {
+    "dependencies": Array [],
+    "features": Object {},
+    "name": "g",
+    "source": "registry#<none>",
+    "version": "1.0.0",
+  },
+]
+`;
