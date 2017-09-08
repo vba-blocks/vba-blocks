@@ -8,7 +8,7 @@ import {
   isPathDependency,
   isGitDependency
 } from '../manifest/dependency';
-import { Registration, getRegistrationId } from '../sources';
+import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution, ResolutionGraph } from './resolver';
 import { unique } from '../utils';
@@ -19,15 +19,17 @@ export default async function solve(
   resolver: Resolver
 ): Promise<DependencyGraph> {
   await resolveDependencies(manifest.dependencies, resolver);
-  await optimizeResolved(resolver.graph);
+  const required = await optimizeResolved(
+    resolver.graph,
+    manifest.dependencies
+  );
 
   const solver = new Solver();
-  const required = manifest.dependencies.map(dependency => dependency.name);
 
   for (const [name, resolved] of resolver) {
     const { registered } = resolved;
     const isRequired = required.includes(name);
-    const ids = registered.map(getRegistrationId);
+    const ids = registered.map(registration => registration.id);
 
     if (isRequired) {
       solver.require(exactlyOne(...ids));
@@ -41,13 +43,11 @@ export default async function solve(
     const { registered } = resolved;
 
     for (const registration of registered) {
-      const id = getRegistrationId(registration);
-
       for (const dependency of registration.dependencies) {
         const resolved = resolver.graph.get(dependency.name);
         const matching = getMatching(dependency, resolved);
 
-        solver.require(implies(id, or(...matching)));
+        solver.require(implies(registration.id, or(...matching)));
       }
     }
   }
@@ -82,15 +82,31 @@ export async function resolveDependencies(
   }
 }
 
-export async function optimizeResolved(graph: ResolutionGraph): Promise<void> {
+export async function optimizeResolved(
+  graph: ResolutionGraph,
+  dependencies: Dependency[]
+): Promise<string[]> {
+  const required = [];
+  const topLevel = {};
+  for (const dependency of dependencies) {
+    const { name } = dependency;
+    required.push(name);
+
+    if (isRegistryDependency(dependency)) {
+      topLevel[name] = dependency.version;
+    }
+  }
+
   for (const [name, resolution] of graph) {
     const { registered } = resolution;
-    const range = unique(resolution.range).join(' || ');
+    const range = topLevel[name] || unique(resolution.range).join(' || ');
 
     resolution.registered = registered
       .filter(registration => satisfies(registration.version, range))
       .reverse();
   }
+
+  return required;
 }
 
 function getMatching(dependency: Dependency, resolved: Resolution): string[] {
@@ -101,7 +117,7 @@ function getMatching(dependency: Dependency, resolved: Resolution): string[] {
 
     return registered
       .filter(registration => satisfies(registration.version, version))
-      .map(getRegistrationId);
+      .map(registration => registration.id);
   } else if (isPathDependency(dependency)) {
     return [];
   } else {

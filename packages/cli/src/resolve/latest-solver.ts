@@ -4,6 +4,7 @@ import { Manifest, Dependency } from '../manifest';
 import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver from './resolver';
+import { unique } from '../utils';
 
 export default async function solve(
   config: Config,
@@ -49,8 +50,9 @@ export async function resolveDependencies(
 }
 
 export function getMatching(resolution): Registration | undefined {
-  const range = resolution.range.join(' || ');
+  const range = unique(resolution.range).join(' ');
   const registered = resolution.registered.slice().reverse();
+
   return registered.find(registration =>
     satisfies(registration.version, range)
   );
