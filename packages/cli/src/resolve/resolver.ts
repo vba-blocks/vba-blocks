@@ -1,7 +1,7 @@
 import { Config } from '../config';
 import { Version, Dependency } from '../manifest';
 import { isRegistryDependency } from '../manifest/dependency';
-import Manager, { Registration } from '../manager';
+import Manager, { Registration } from '../sources';
 
 export interface Resolution {
   name: string;

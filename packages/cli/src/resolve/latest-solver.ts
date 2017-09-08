@@ -1,7 +1,7 @@
 import { satisfies } from 'semver';
 import { Config } from '../config';
 import { Manifest, Dependency } from '../manifest';
-import { Registration } from '../manager';
+import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver from './resolver';
 

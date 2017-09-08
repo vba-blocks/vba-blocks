@@ -2,14 +2,14 @@ import { Config } from '../config';
 import { Dependency } from '../manifest';
 import { isRegistryDependency, isGitDependency } from '../manifest/dependency';
 import { Registration } from './registration';
-import * as registry from './registry-manager';
-import * as path from './path-manager';
-import * as git from './git-manager';
+import * as registry from './registry-source';
+import * as path from './path-source';
+import * as git from './git-source';
 
 export { Registration, registry, path, git };
 export { getRegistrationId, getRegistrationSource } from './registration';
 
-export default class Manager {
+export default class SourceManager {
   config: Config;
 
   constructor(config: Config) {

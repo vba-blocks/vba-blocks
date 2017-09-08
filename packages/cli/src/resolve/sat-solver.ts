@@ -8,7 +8,7 @@ import {
   isPathDependency,
   isGitDependency
 } from '../manifest/dependency';
-import { Registration, getRegistrationId } from '../manager';
+import { Registration, getRegistrationId } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution, ResolutionGraph } from './resolver';
 import { unique } from '../utils';
