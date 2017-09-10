@@ -1,7 +1,6 @@
 import { promisify } from 'util';
 import { join, dirname, basename } from 'path';
-import { createInterface as readline } from 'readline';
-import { createReadStream, ensureDir, exists, move } from 'fs-extra';
+import { createReadStream, ensureDir, exists, move, readFile } from 'fs-extra';
 import { extract } from 'tar';
 import * as tmp from 'tmp';
 import { download, checksum as getChecksum } from '../utils';
@@ -34,24 +33,20 @@ export async function resolve(
   dependency: RegistryDependency
 ): Promise<Registration[]> {
   const { name } = dependency;
+  const path = getPath(config, name);
 
-  return new Promise<Registration[]>((resolve, reject) => {
-    const path = getPath(config, name);
-    const registrations: Registration[] = [];
+  if (!await exists(path)) {
+    throw new Error(`"${name}" was not found in the registry`);
+  }
 
-    const input = createReadStream(path);
-    const reader = readline({ input });
+  const data = await readFile(path);
+  const registrations: Registration[] = data
+    .split(/\r?\n/)
+    .map(line => JSON.parse(line))
+    .filter(value => value && !value.yanked)
+    .map(parseRegistration);
 
-    reader.on('line', line => {
-      const value = JSON.parse(line);
-      if (value.yanked) return;
-
-      const registration = parseRegistration(value);
-      registrations.push(registration);
-    });
-    reader.on('close', () => resolve(registrations));
-    reader.on('error', reject);
-  });
+  return registrations;
 }
 
 export async function fetch(config: Config, registration: Registration) {
@@ -118,11 +113,11 @@ export function parseRegistration(value: any): Registration {
 export function getPath(config: Config, name: string): string {
   let parts;
   if (name.length === 1) {
-    parts = [1, name];
+    parts = ['1', name];
   } else if (name.length === 2) {
-    parts = [2, name];
+    parts = ['2', name];
   } else if (name.length === 3) {
-    parts = [3, name.substring(0, 1)];
+    parts = ['3', name.substring(0, 1)];
   } else {
     parts = [name.substring(0, 2), name.substring(2, 4)];
   }

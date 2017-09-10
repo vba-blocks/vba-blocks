@@ -29,9 +29,9 @@ export const needsSat = createManifest({
 export const unresolvable = createManifest({
   name: 'unresolvable-manifest',
   dependencies: toDependencies({
-    a: '^1.0.0',
-    b: '',
-    c: ''
+    a: '^1',
+    b: '^1.1.0',
+    c: '0.1.0'
   })
 });
 

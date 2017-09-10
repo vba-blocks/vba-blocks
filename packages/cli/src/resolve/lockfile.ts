@@ -2,26 +2,42 @@ import { join } from 'path';
 import { exists, readFile, writeFile } from 'fs-extra';
 import { parse as parseToml } from 'toml';
 import { Config } from '../config';
+import { Manifest } from '../manifest';
 import { convertToToml } from '../utils';
 import { DependencyGraph } from './dependency-graph';
 
-export async function readLockfile(
-  config: Config
-): Promise<DependencyGraph | null> {
+export interface Lockfile {
+  manifest: {};
+  graph: DependencyGraph;
+}
+
+export async function readLockfile(config: Config): Promise<Lockfile | null> {
   const file = join(config.cwd, 'vba-block.lock');
   if (!await exists(file)) return null;
 
-  const raw = await readFile(file);
-  const graph = parseToml(raw);
+  const toml = await readFile(file);
+  const lockfile = fromToml(toml);
 
-  return graph;
+  return lockfile;
 }
 
 export async function writeLockfile(
   config: Config,
-  graph: DependencyGraph
+  lockfile: Lockfile
 ): Promise<void> {
   const file = join(config.cwd, 'vba-block.lock');
-  const converted = convertToToml(graph);
-  return writeFile(file, converted);
+  const toml = toToml(lockfile);
+
+  return writeFile(file, toml);
+}
+
+export function toToml(lockfile: Lockfile): string {
+  return convertToToml({ root: {}, package: [] });
+}
+
+export function fromToml(toml: string): Lockfile {
+  const parsed = parseToml(toml);
+
+  // TODO
+  return { manifest: {}, graph: [] };
 }

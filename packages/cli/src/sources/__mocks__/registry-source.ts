@@ -1,25 +1,5 @@
-import { RegistryDependency } from '../../src/manifest/dependency';
-import Resolver, { Resolution } from '../../src/resolve/resolver';
-import { Registration } from '../../src/sources';
-
 const features = [];
 const source = 'registry+<url>#<none>';
-
-const a_1_dependency: RegistryDependency = {
-  name: 'd',
-  version: '^1.0.0',
-  features: [],
-  default_features: true
-};
-const a_1: Registration = {
-  id: 'a@1.0.0',
-  source,
-  name: 'a',
-  version: '1.0.0',
-  features,
-  dependencies: [a_1_dependency]
-};
-
 const registry = {
   a: [
     {
@@ -30,7 +10,21 @@ const registry = {
       source,
       dependencies: []
     },
-    a_1,
+    {
+      id: 'a@1.0.0',
+      source,
+      name: 'a',
+      version: '1.0.0',
+      features,
+      dependencies: [
+        {
+          name: 'd',
+          version: '^1.0.0',
+          features: [],
+          default_features: true
+        }
+      ]
+    },
     {
       id: 'a@1.1.0',
       name: 'a',
@@ -157,23 +151,11 @@ const registry = {
   ]
 };
 
-export default class MockResolver extends Resolver {
-  async get(dependency: RegistryDependency): Promise<Resolution> {
-    const { name } = dependency;
-    let resolution = this.graph.get(name);
+export async function update() {}
 
-    if (!resolution) {
-      const registered = registry[name];
-      resolution = {
-        name,
-        range: [],
-        registered
-      };
-
-      this.graph.set(name, resolution);
-    }
-
-    resolution.range.push(dependency.version);
-    return resolution;
-  }
+export async function resolve(config, dependency) {
+  const { name } = dependency;
+  return registry[name];
 }
+
+export async function fetch(config, registration) {}
