@@ -1,6 +1,6 @@
 import solve from '../../src/resolve/sat-solver';
 import { loadConfig } from '../../src/config';
-import Resolver from '../helpers/resolver';
+import Resolver from '../../src/resolve/resolver';
 import * as manifest from '../fixtures/manifest';
 
 jest.mock('../../src/sources/registry-source');
