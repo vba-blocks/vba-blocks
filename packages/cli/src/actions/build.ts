@@ -42,15 +42,19 @@ export default async function build(
   // 4. Create build graph
   const buildGraph = await createBuildGraph(manifest, resolved);
 
-  // 5. Build targets
+  // 5. Create targets
   await parallel(manifest.targets, async target => {
     if (!await targetExists(config, target)) {
       await createTarget(config, target);
     }
-    await buildTarget(config, target, buildGraph);
   });
 
-  // 6. Write lockfile
+  // 6. Build targets (sequentially to avoid contention issues)
+  for (const target of manifest.targets) {
+    await buildTarget(config, target, buildGraph);
+  }
+
+  // 7. Write lockfile
   await writeLockfile(config, { manifest, resolved });
 }
 
