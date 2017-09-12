@@ -1,54 +1,62 @@
-// TODO
-//
-// import { relative } from 'path';
-// import { exists, ensureDir } from 'fs-extra';
-// import { Config, loadConfig } from './config';
-// import { Manifest, Target, loadManifest } from './manifest';
-// import resolve from './resolve';
-// import run from './run';
-// import { zip, plural } from './utils';
+import { Config } from '../config';
+import { Manifest, loadManifest } from '../manifest';
+import resolve, { DependencyGraph } from '../resolve';
+import SourceManager from '../sources';
+import {
+  BuildGraph,
+  targetExists,
+  createTarget,
+  buildTarget
+} from '../targets';
+import { writeLockfile } from '../lockfile';
+import { parallel } from '../utils';
 
-// export default async function build(options) {
-//   console.log('1. Loading vba-blocks.toml and config');
-//   const config = await loadConfig();
-//   const manifest = await loadManifest(config.cwd);
+export interface BuildOptions {
+  release?: boolean;
+  features?: string[];
+  default_features?: boolean;
+  all_features?: boolean;
+}
 
-//   console.log('2. Resolving dependencies');
-//   // TODO
-//   const graph = await resolve(config, manifest);
-//   const files = [];
+export default async function build(
+  config: Config,
+  options: BuildOptions = {}
+) {
+  const {
+    release = false,
+    features = [],
+    default_features = true,
+    all_features = false
+  } = options;
 
-//   console.log(
-//     `3. Building ${manifest.targets.length} ${plural(
-//       manifest.targets.length,
-//       'target',
-//       'targets'
-//     )}`
-//   );
+  // 1. Load manifest
+  const manifest = await loadManifest(config.cwd);
 
-//   await ensureDir(config.build);
+  // 2. Resolve dependencies
+  const resolved = await resolve(config, manifest);
 
-//   // Conservatively build targets sequentially
-//   // to avoid potential contention issues in add-ins
-//   for (const target of manifest.targets) {
-//     await createTarget(config, target);
-//     await buildTarget(target, files);
-//   }
+  // 3. Fetch and prepare dependencies
+  const manager = new SourceManager(config);
+  await parallel(resolved, registration => manager.fetch(registration));
 
-//   console.log('Done!');
-// }
+  // 4. Create build graph
+  const buildGraph = await createBuildGraph(manifest, resolved);
 
-// async function createTarget(config: Config, target: Target) {
-//   const dir = relative(config.cwd, target.path);
-//   const file = relative(config.build, `${target.name}.${target.type}`);
+  // 5. Build targets
+  await parallel(manifest.targets, async target => {
+    if (!await targetExists(config, target)) {
+      await createTarget(config, target);
+    }
+    await buildTarget(config, target, buildGraph);
+  });
 
-//   if (await exists(file)) {
-//     return;
-//   }
+  // 6. Write lockfile
+  await writeLockfile(config, { manifest, resolved });
+}
 
-//   return zip(dir, file);
-// }
-
-// async function buildTarget(target: Target, files: any[]) {
-//   return run('build', target, [JSON.stringify(files)]);
-// }
+export async function createBuildGraph(
+  manifest: Manifest,
+  resolved: DependencyGraph
+): Promise<BuildGraph> {
+  return { src: [], references: [] };
+}

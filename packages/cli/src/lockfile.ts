@@ -1,18 +1,18 @@
 import { join } from 'path';
 import { exists, readFile, writeFile } from 'fs-extra';
 import { parse as parseToml } from 'toml';
-import { Config } from '../config';
-import { Manifest } from '../manifest';
-import { convertToToml } from '../utils';
-import { DependencyGraph } from './dependency-graph';
+import { Config } from './config';
+import { Manifest } from './manifest';
+import { convertToToml } from './utils';
+import { DependencyGraph } from './resolve';
 
 export interface Lockfile {
   manifest: {};
-  graph: DependencyGraph;
+  resolved: DependencyGraph;
 }
 
 export async function readLockfile(config: Config): Promise<Lockfile | null> {
-  const file = join(config.cwd, 'vba-block.lock');
+  const file = getLockfilePath(config);
   if (!await exists(file)) return null;
 
   const toml = await readFile(file);
@@ -25,10 +25,15 @@ export async function writeLockfile(
   config: Config,
   lockfile: Lockfile
 ): Promise<void> {
-  const file = join(config.cwd, 'vba-block.lock');
+  const file = getLockfilePath(config);
   const toml = toToml(lockfile);
 
   return writeFile(file, toml);
+}
+
+export function isLockfileValid(lockfile: Lockfile, manifest: Manifest) {
+  // TODO
+  return false;
 }
 
 export function toToml(lockfile: Lockfile): string {
@@ -39,5 +44,9 @@ export function fromToml(toml: string): Lockfile {
   const parsed = parseToml(toml);
 
   // TODO
-  return { manifest: {}, graph: [] };
+  return { manifest: {}, resolved: [] };
+}
+
+export function getLockfilePath(config: Config): string {
+  return join(config.cwd, 'vba-block.lock');
 }
