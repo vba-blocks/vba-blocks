@@ -3,6 +3,7 @@
     "allowSyntheticDefaultImports": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "noImplicitAny": true,
     "target": "es2017"
   }
 }

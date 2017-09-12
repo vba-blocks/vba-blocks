@@ -1,4 +1,4 @@
-import { exists, readFile } from 'fs-extra';
+import { pathExists, readFile } from 'fs-extra';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as toml from 'toml';
@@ -121,7 +121,7 @@ export function parseManifest(value: any): Manifest {
 
 export async function loadManifest(dir: string): Promise<Manifest> {
   const file = join(dir, 'vba-block.toml');
-  if (!await exists(file)) {
+  if (!await pathExists(file)) {
     throw new Error(`vba-blocks.toml not found in "${dir}"`);
   }
 

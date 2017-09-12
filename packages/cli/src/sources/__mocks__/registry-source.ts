@@ -1,6 +1,11 @@
-const features = [];
+import { Config } from '../../config';
+import { Feature } from '../../manifest';
+import { RegistryDependency } from '../../manifest/dependency';
+import { Registration } from '../';
+
+const features: Feature[] = [];
 const source = 'registry+<url>#<none>';
-const registry = {
+const registry: { [name: string]: Registration[] } = {
   a: [
     {
       id: 'a@0.1.0',
@@ -31,7 +36,9 @@ const registry = {
       version: '1.1.0',
       features,
       source,
-      dependencies: [{ name: 'd', version: '^1.2.0' }]
+      dependencies: [
+        { name: 'd', version: '^1.2.0', features: [], default_features: true }
+      ]
     },
     {
       id: 'a@1.2.0',
@@ -39,7 +46,9 @@ const registry = {
       version: '1.2.0',
       features,
       source,
-      dependencies: [{ name: 'd', version: '^2' }]
+      dependencies: [
+        { name: 'd', version: '^2', features: [], default_features: true }
+      ]
     }
   ],
   b: [
@@ -49,7 +58,9 @@ const registry = {
       version: '1.0.0',
       features,
       source,
-      dependencies: [{ name: 'c', version: '^0.1.0' }]
+      dependencies: [
+        { name: 'c', version: '^0.1.0', features: [], default_features: true }
+      ]
     },
     {
       id: 'b@1.1.0',
@@ -57,7 +68,9 @@ const registry = {
       version: '1.1.0',
       features,
       source,
-      dependencies: [{ name: 'c', version: '^0.1.5' }]
+      dependencies: [
+        { name: 'c', version: '^0.1.5', features: [], default_features: true }
+      ]
     }
   ],
   c: [
@@ -85,7 +98,9 @@ const registry = {
       version: '1.0.0',
       features,
       source,
-      dependencies: [{ name: 'f', version: '^1' }]
+      dependencies: [
+        { name: 'f', version: '^1', features: [], default_features: true }
+      ]
     },
     {
       id: 'd@1.1.0',
@@ -93,7 +108,9 @@ const registry = {
       version: '1.1.0',
       features,
       source,
-      dependencies: [{ name: 'f', version: '^1' }]
+      dependencies: [
+        { name: 'f', version: '^1', features: [], default_features: true }
+      ]
     },
     {
       id: 'd@1.2.0',
@@ -101,7 +118,9 @@ const registry = {
       version: '1.2.0',
       features,
       source,
-      dependencies: [{ name: 'f', version: '^1' }]
+      dependencies: [
+        { name: 'f', version: '^1', features: [], default_features: true }
+      ]
     },
     {
       id: 'd@2.0.0',
@@ -109,7 +128,9 @@ const registry = {
       version: '2.0.0',
       features,
       source,
-      dependencies: [{ name: 'f', version: '^2' }]
+      dependencies: [
+        { name: 'f', version: '^2', features: [], default_features: true }
+      ]
     }
   ],
   e: [],
@@ -120,7 +141,9 @@ const registry = {
       version: '1.0.0',
       features,
       source,
-      dependencies: [{ name: 'g', version: '^1' }]
+      dependencies: [
+        { name: 'g', version: '^1', features: [], default_features: true }
+      ]
     },
     {
       id: 'f@2.0.0',
@@ -128,7 +151,9 @@ const registry = {
       version: '2.0.0',
       features,
       source,
-      dependencies: [{ name: 'g', version: '^1' }]
+      dependencies: [
+        { name: 'g', version: '^1', features: [], default_features: true }
+      ]
     }
   ],
   g: [
@@ -153,9 +178,9 @@ const registry = {
 
 export async function update() {}
 
-export async function resolve(config, dependency) {
+export async function resolve(config: Config, dependency: RegistryDependency) {
   const { name } = dependency;
   return registry[name];
 }
 
-export async function fetch(config, registration) {}
+export async function fetch(config: Config, registration: Registration) {}

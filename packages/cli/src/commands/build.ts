@@ -1,6 +1,11 @@
 import { optionList, last } from '../utils';
+import { Config, loadConfig } from '../config';
+import { BuildOptions } from '../actions/build';
 
-export async function build(program) {
+export type Commander = any;
+export type Build = (config: Config, options: BuildOptions) => Promise<void>;
+
+export async function build(program: Commander) {
   program
     .command('build')
     .description('Build project from src and dependencies')
@@ -12,22 +17,28 @@ export async function build(program) {
     )
     .option('--all-features', 'Build all available features')
     .option('--no-default-features', 'Do not build the `default` feature')
-    .action((...args) => {
+    .action(async (...args: any[]) => {
       const {
         release = false,
         features = [],
         allFeatures = false,
         defaultFeatures = true
+      }: {
+        release: boolean;
+        features: string[];
+        allFeatures: boolean;
+        defaultFeatures: boolean;
       } = last(args);
 
-      const build = require('../actions/build');
+      const build: Build = require('../actions/build').default;
+      const config = await loadConfig();
 
-      build({
+      build(config, {
         release,
         features,
         allFeatures,
         defaultFeatures
-      }).catch(err => {
+      }).catch((err: Error) => {
         console.error(err);
         process.exit(1);
       });

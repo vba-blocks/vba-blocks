@@ -5,6 +5,6 @@
     "outDir": "lib",
     "rootDir": "src"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "lib"]
+  "include": ["src/**/*.ts", "typings/**/*.d.ts"],
+  "exclude": ["node_modules", "lib", "src/**/__mocks__/*"]
 }

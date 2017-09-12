@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { exists, readFile, writeFile } from 'fs-extra';
+import { pathExists, readFile, writeFile } from 'fs-extra';
 import { parse as parseToml } from 'toml';
 import { Config } from './config';
 import { Manifest } from './manifest';
@@ -13,9 +13,9 @@ export interface Lockfile {
 
 export async function readLockfile(config: Config): Promise<Lockfile | null> {
   const file = getLockfilePath(config);
-  if (!await exists(file)) return null;
+  if (!await pathExists(file)) return null;
 
-  const toml = await readFile(file);
+  const toml = await readFile(file, 'utf8');
   const lockfile = fromToml(toml);
 
   return lockfile;

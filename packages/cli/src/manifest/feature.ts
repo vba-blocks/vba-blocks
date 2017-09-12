@@ -19,8 +19,8 @@ const EXAMPLE = `Example vba-block.toml:
 export function parseFeatures(
   value: any
 ): { features: Feature[]; default_features: string[] } {
-  let default_features = [];
-  let features = [];
+  let default_features: string[] = [];
+  let features: Feature[] = [];
 
   Object.entries(value).forEach(([name, value]) => {
     if (name === 'default') default_features = value;
@@ -31,7 +31,11 @@ export function parseFeatures(
 }
 
 export function parseFeature(name: string, value: any): Feature {
-  const { src = [], dependencies = [], references = [] } = value;
+  const {
+    src = [],
+    dependencies = [],
+    references = []
+  }: { src?: string[]; dependencies?: string[]; references?: string[] } = value;
 
   assert.ok(
     Array.isArray(src),

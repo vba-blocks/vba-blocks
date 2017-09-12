@@ -1,7 +1,7 @@
 import { Config } from '../config';
-import { Manifest, loadManifest } from '../manifest';
+import { Manifest, Target, loadManifest } from '../manifest';
 import resolve, { DependencyGraph } from '../resolve';
-import SourceManager from '../sources';
+import SourceManager, { Registration } from '../sources';
 import {
   BuildGraph,
   targetExists,
@@ -14,8 +14,8 @@ import { parallel } from '../utils';
 export interface BuildOptions {
   release?: boolean;
   features?: string[];
-  default_features?: boolean;
-  all_features?: boolean;
+  defaultFeatures?: boolean;
+  allFeatures?: boolean;
 }
 
 export default async function build(
@@ -25,8 +25,8 @@ export default async function build(
   const {
     release = false,
     features = [],
-    default_features = true,
-    all_features = false
+    defaultFeatures = true,
+    allFeatures = false
   } = options;
 
   // 1. Load manifest
@@ -37,13 +37,15 @@ export default async function build(
 
   // 3. Fetch and prepare dependencies
   const manager = new SourceManager(config);
-  await parallel(resolved, registration => manager.fetch(registration));
+  await parallel(resolved, (registration: Registration) =>
+    manager.fetch(registration)
+  );
 
   // 4. Create build graph
   const buildGraph = await createBuildGraph(manifest, resolved);
 
   // 5. Create targets
-  await parallel(manifest.targets, async target => {
+  await parallel(manifest.targets, async (target: Target) => {
     if (!await targetExists(config, target)) {
       await createTarget(config, target);
     }

@@ -1,6 +1,12 @@
 import { promisify } from 'util';
 import { join, dirname, basename } from 'path';
-import { createReadStream, ensureDir, exists, move, readFile } from 'fs-extra';
+import {
+  createReadStream,
+  ensureDir,
+  pathExists,
+  move,
+  readFile
+} from 'fs-extra';
 import { extract } from 'tar';
 import * as tmp from 'tmp';
 import { download, checksum as getChecksum } from '../utils';
@@ -14,12 +20,18 @@ import {
   getRegistrationSource
 } from './registration';
 
-const tmpFile = promisify(tmp.file);
+const tmpFile: () => Promise<string> = () =>
+  new Promise((resolve, reject) => {
+    tmp.file((err: any, path: string) => {
+      if (err) return reject(err);
+      resolve(path);
+    });
+  });
 
 export async function update(config: Config) {
   const { local, remote } = config.registry;
 
-  if (!await exists(local)) {
+  if (!await pathExists(local)) {
     const dir = dirname(local);
     await ensureDir(dir);
     await clone(remote, basename(local), dir);
@@ -35,15 +47,15 @@ export async function resolve(
   const { name } = dependency;
   const path = getPath(config, name);
 
-  if (!await exists(path)) {
+  if (!await pathExists(path)) {
     throw new Error(`"${name}" was not found in the registry`);
   }
 
-  const data = await readFile(path);
+  const data = await readFile(path, 'utf8');
   const registrations: Registration[] = data
     .split(/\r?\n/)
-    .map(line => JSON.parse(line))
-    .filter(value => value && !value.yanked)
+    .map((line: string) => JSON.parse(line))
+    .filter((value: any) => value && !value.yanked)
     .map(parseRegistration);
 
   return registrations;
@@ -55,7 +67,7 @@ export async function fetch(config: Config, registration: Registration) {
 
   const [_, checksum] = registration.source.split('#', 2);
 
-  if (!await exists(file)) {
+  if (!await pathExists(file)) {
     const unverifiedFile = await tmpFile();
     await download(url, unverifiedFile);
 
@@ -78,7 +90,7 @@ export async function fetch(config: Config, registration: Registration) {
 export function parseRegistration(value: any): Registration {
   const { name, vers: version, cksum: checksum } = value;
 
-  const dependencies: RegistryDependency[] = value.deps.map(dep => {
+  const dependencies: RegistryDependency[] = value.deps.map((dep: any) => {
     const { name, req, features, optional, default_features } = dep;
     const dependency: RegistryDependency = {
       name,

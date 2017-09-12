@@ -3,6 +3,6 @@ module.exports = {
   projects: ['packages/*'],
   testRegex: '\\.(test|spec)\\.(ts|js)$',
   transform: {
-    '.(ts|tsx)': '<rootDir>/node_modules/ts-jest/preprocessor.js'
+    '^.+\\.tsx?$': '<rootDir>/node_modules/ts-jest/preprocessor.js'
   }
 };

@@ -58,7 +58,7 @@ export default async function solve(
     throw new Error('Failed to resolve dependency graph for given manifest');
   }
 
-  const ids = solution.getTrueVars();
+  const ids: string[] = solution.getTrueVars();
   const graph = ids.map(id => resolver.getRegistration(id));
 
   return graph;
@@ -86,8 +86,9 @@ export async function optimizeResolved(
   graph: ResolutionGraph,
   dependencies: Dependency[]
 ): Promise<string[]> {
-  const required = [];
-  const topLevel = {};
+  const required: string[] = [];
+  const topLevel: { [name: string]: string } = {};
+
   for (const dependency of dependencies) {
     const { name } = dependency;
     required.push(name);

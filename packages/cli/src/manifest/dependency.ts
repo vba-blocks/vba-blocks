@@ -63,6 +63,16 @@ export function parseDependency(
     tag,
     branch = 'master',
     rev
+  }: {
+    features?: string[];
+    'default-features'?: boolean;
+    optional?: boolean;
+    version?: string;
+    path?: string;
+    git?: string;
+    tag?: string;
+    branch?: string;
+    rev?: string;
   } = value;
 
   if (!version && !path && !git) {

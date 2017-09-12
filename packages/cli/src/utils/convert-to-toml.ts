@@ -1,6 +1,6 @@
 import { isString, isNumber, isBoolean, isDate, isObject } from './is';
 
-export default function convertToToml(value, level = 0): string {
+export default function convertToToml(value: any, level = 0): string {
   if (isString(value)) {
     return `"${value}"`;
   } else if (isNumber(value)) {

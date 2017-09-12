@@ -7,7 +7,9 @@
   "homepage": "https://github.com/vba-blocks/vba-blocks#readme",
   "license": "MIT",
   "repository": "https://github.com/vba-blocks/vba-blocks.git",
-  "bugs": { "url": "https://github.com/vba-blocks/vba-blocks/issues" },
+  "bugs": {
+    "url": "https://github.com/vba-blocks/vba-blocks/issues"
+  },
   "bin": "bin/vba-blocks",
   "main": "lib/index",
   "typings": "lib/index.d.ts",
@@ -28,6 +30,11 @@
     "toml": "^2.3.2"
   },
   "devDependencies": {
+    "@types/archiver": "^2.0.0",
+    "@types/fs-extra": "^4.0.2",
+    "@types/semver": "^5.4.0",
+    "@types/tar": "^4.0.0",
+    "@types/tmp": "^0.0.33",
     "pkg": "^4.2.4",
     "typescript": "^2.5.2"
   }

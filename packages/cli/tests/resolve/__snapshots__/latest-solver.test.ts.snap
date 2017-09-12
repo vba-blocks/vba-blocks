@@ -5,6 +5,8 @@ Array [
   Object {
     "dependencies": Array [
       Object {
+        "default_features": true,
+        "features": Array [],
         "name": "d",
         "version": "^2",
       },
@@ -18,6 +20,8 @@ Array [
   Object {
     "dependencies": Array [
       Object {
+        "default_features": true,
+        "features": Array [],
         "name": "c",
         "version": "^0.1.5",
       },
@@ -31,6 +35,8 @@ Array [
   Object {
     "dependencies": Array [
       Object {
+        "default_features": true,
+        "features": Array [],
         "name": "f",
         "version": "^2",
       },
@@ -44,6 +50,8 @@ Array [
   Object {
     "dependencies": Array [
       Object {
+        "default_features": true,
+        "features": Array [],
         "name": "g",
         "version": "^1",
       },
@@ -78,6 +86,8 @@ Array [
   Object {
     "dependencies": Array [
       Object {
+        "default_features": true,
+        "features": Array [],
         "name": "d",
         "version": "^2",
       },
@@ -91,6 +101,8 @@ Array [
   Object {
     "dependencies": Array [
       Object {
+        "default_features": true,
+        "features": Array [],
         "name": "f",
         "version": "^2",
       },
@@ -104,6 +116,8 @@ Array [
   Object {
     "dependencies": Array [
       Object {
+        "default_features": true,
+        "features": Array [],
         "name": "g",
         "version": "^1",
       },

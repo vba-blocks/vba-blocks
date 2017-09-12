@@ -3,7 +3,7 @@ import { Config } from '../config';
 import { Manifest, Dependency } from '../manifest';
 import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
-import Resolver from './resolver';
+import Resolver, { Resolution } from './resolver';
 import { unique } from '../utils';
 
 export default async function solve(
@@ -49,7 +49,7 @@ export async function resolveDependencies(
   }
 }
 
-export function getMatching(resolution): Registration | undefined {
+export function getMatching(resolution: Resolution): Registration | undefined {
   const range = unique(resolution.range).join(' ');
   const registered = resolution.registered.slice().reverse();
 

@@ -81,11 +81,11 @@ export async function loadConfig(): Promise<Config> {
   const packages = join(cache, 'packages');
   const sources = join(cache, 'sources');
 
-  const resolveRemotePackage = snapshot =>
+  const resolveRemotePackage = (snapshot: Snapshot) =>
     join(options.packages, snapshot.name, `v${snapshot.version}.tar.gz`);
-  const resolveLocalPackage = snapshot =>
+  const resolveLocalPackage = (snapshot: Snapshot) =>
     join(packages, snapshot.name, `v${snapshot.version}.tar.gz`);
-  const resolveSource = snapshot =>
+  const resolveSource = (snapshot: Snapshot) =>
     join(sources, snapshot.name, `v${snapshot.version}`.replace(/\./g, '-'));
 
   const config: Config = {
