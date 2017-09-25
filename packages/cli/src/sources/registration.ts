@@ -1,9 +1,13 @@
-import { Snapshot } from '../manifest';
+import { Snapshot, Manifest } from '../manifest';
 import { isString } from '../utils';
 
 export interface Registration extends Snapshot {
   id: string;
   source: string;
+
+  // Store fetched path and loaded manifest
+  path?: string;
+  manifest?: Manifest;
 }
 
 export function fromSnapshot(snapshot: Snapshot, source: string): Registration {

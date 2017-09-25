@@ -32,14 +32,14 @@ exports[`loads and parses manifest 1`] = `
 Object {
   "dependencies": Array [
     Object {
-      "default_features": true,
+      "defaultFeatures": true,
       "features": Array [],
       "name": "dictionary",
       "optional": true,
       "version": "1.4.1",
     },
     Object {
-      "default_features": false,
+      "defaultFeatures": false,
       "features": Array [
         "dictionary-scripting",
       ],
@@ -123,14 +123,14 @@ exports[`loads valid dependencies 1`] = `
 Object {
   "dependencies": Array [
     Object {
-      "default_features": true,
+      "defaultFeatures": true,
       "features": Array [],
       "name": "a",
       "optional": false,
       "version": "^1.0.0",
     },
     Object {
-      "default_features": false,
+      "defaultFeatures": false,
       "features": Array [
         "a",
         "b",
@@ -140,7 +140,7 @@ Object {
       "version": "^2.0.0",
     },
     Object {
-      "default_features": true,
+      "defaultFeatures": true,
       "features": Array [],
       "name": "c",
       "optional": false,
@@ -148,7 +148,7 @@ Object {
     },
     Object {
       "branch": "master",
-      "default_features": true,
+      "defaultFeatures": true,
       "features": Array [],
       "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "d",
@@ -156,14 +156,14 @@ Object {
     },
     Object {
       "branch": "next",
-      "default_features": true,
+      "defaultFeatures": true,
       "features": Array [],
       "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "e",
       "optional": false,
     },
     Object {
-      "default_features": true,
+      "defaultFeatures": true,
       "features": Array [],
       "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "f",
@@ -171,7 +171,7 @@ Object {
       "tag": "v1.0.0",
     },
     Object {
-      "default_features": true,
+      "defaultFeatures": true,
       "features": Array [],
       "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "g",

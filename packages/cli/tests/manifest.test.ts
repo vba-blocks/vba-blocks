@@ -182,6 +182,8 @@ test('throws for invalid targets', () => {
 });
 
 test('loads and parses manifest', async () => {
-  const manifest = await loadManifest(join(FIXTURES, 'build'));
+  const manifest = await loadManifest(join(FIXTURES, 'build'), {
+    resolve: false
+  });
   expect(manifest).toMatchSnapshot();
 });

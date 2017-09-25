@@ -1,27 +1,30 @@
 import { Version } from './version';
-import { has, isString } from '../utils';
+import { isString } from '../utils';
 
-export type Dependency = RegistryDependency | PathDependency | GitDependency;
-
-export interface BaseDependency {
+export interface Dependency {
   name: string;
-  default_features: boolean;
+  defaultFeatures: boolean;
   features: string[];
   optional?: boolean;
-}
 
-export interface RegistryDependency extends BaseDependency {
-  version: Version;
-}
-
-export interface PathDependency extends BaseDependency {
-  path: string;
-}
-
-export interface GitDependency extends BaseDependency {
-  git: string;
-  branch?: string;
+  version?: Version;
+  path?: string;
+  git?: string;
   tag?: string;
+  branch?: string;
+  rev?: string;
+}
+
+interface RawDependency {
+  'default-features': boolean;
+  features: string[];
+  optional?: boolean;
+
+  version?: Version;
+  path?: string;
+  git?: string;
+  tag?: string;
+  branch?: string;
   rev?: string;
 }
 
@@ -55,7 +58,7 @@ export function parseDependency(
 
   const {
     features = [],
-    'default-features': default_features = true,
+    'default-features': defaultFeatures = true,
     optional = false,
     version,
     path,
@@ -63,17 +66,8 @@ export function parseDependency(
     tag,
     branch = 'master',
     rev
-  }: {
-    features?: string[];
-    'default-features'?: boolean;
-    optional?: boolean;
-    version?: string;
-    path?: string;
-    git?: string;
-    tag?: string;
-    branch?: string;
-    rev?: string;
-  } = value;
+  }: RawDependency = value;
+  // console.log('value', value, version, path, git)
 
   if (!version && !path && !git) {
     throw new Error(
@@ -91,25 +85,7 @@ export function parseDependency(
   }
 
   return Object.assign(
-    { name, features, default_features, optional },
+    { name, features, defaultFeatures, optional },
     dependency
   );
-}
-
-export function isRegistryDependency(
-  dependency: Dependency
-): dependency is RegistryDependency {
-  return has(dependency, 'version');
-}
-
-export function isPathDependency(
-  dependency: Dependency
-): dependency is PathDependency {
-  return has(dependency, 'path');
-}
-
-export function isGitDependency(
-  dependency: Dependency
-): dependency is GitDependency {
-  return has(dependency, 'git');
 }

@@ -1,44 +1,55 @@
 import { Config } from '../config';
 import { Dependency } from '../manifest';
-import { isRegistryDependency, isGitDependency } from '../manifest/dependency';
 import { Registration } from './registration';
-import * as registry from './registry-source';
-import * as path from './path-source';
-import * as git from './git-source';
+import { Source } from './source';
+import { parallel } from '../utils';
+
+import registry from './registry-source';
+import path from './path-source';
+import git from './git-source';
 
 export { Registration, registry, path, git };
 export { getRegistrationId, getRegistrationSource } from './registration';
 
 export default class SourceManager {
   config: Config;
+  sources: Source[];
 
   constructor(config: Config) {
     this.config = config;
+    this.sources = [registry, path];
+
+    if (config.flags.gitDependencies) {
+      this.sources.push(git);
+    }
   }
 
   async update() {
-    await registry.update(this.config);
+    await parallel(this.sources, (source: Source) => {
+      return source.update && source.update(this.config);
+    });
   }
 
   async resolve(dependency: Dependency): Promise<Registration[]> {
-    if (isRegistryDependency(dependency)) {
-      return registry.resolve(this.config, dependency);
-    } else if (isGitDependency(dependency)) {
-      return git.resolve(this.config, dependency);
-    } else {
-      return path.resolve(this.config, dependency);
+    for (const source of this.sources) {
+      if (source.match(dependency)) {
+        return source.resolve(this.config, dependency);
+      }
     }
+
+    throw new Error('No source matches given dependency');
   }
 
   async fetch(registration: Registration): Promise<string> {
     const [type] = registration.source.split('+', 1);
-
-    if (type === 'registry') {
-      return registry.fetch(this.config, registration);
-    } else if (type === 'git') {
-      return git.fetch(this.config, registration);
-    } else {
-      return path.fetch(this.config, registration);
+    for (const source of this.sources) {
+      if (source.match(type)) {
+        return source.fetch(this.config, registration);
+      }
     }
+
+    throw new Error(
+      `No source matches given registration type "${type}" (source = "${registration.source}")`
+    );
   }
 }

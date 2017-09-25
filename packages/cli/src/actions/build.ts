@@ -1,5 +1,5 @@
 import { Config } from '../config';
-import { Manifest, Target, loadManifest } from '../manifest';
+import { Manifest, Target, Source, Reference, loadManifest } from '../manifest';
 import resolve, { DependencyGraph } from '../resolve';
 import SourceManager, { Registration } from '../sources';
 import {
@@ -11,26 +11,14 @@ import {
 import { writeLockfile } from '../lockfile';
 import { parallel } from '../utils';
 
-export interface BuildOptions {
-  release?: boolean;
-  features?: string[];
-  defaultFeatures?: boolean;
-  allFeatures?: boolean;
-}
+export interface BuildOptions {}
+const defaultOptions = {};
 
-export default async function build(
-  config: Config,
-  options: BuildOptions = {}
-) {
-  const {
-    release = false,
-    features = [],
-    defaultFeatures = true,
-    allFeatures = false
-  } = options;
+export default async function build(config: Config, options: BuildOptions) {
+  options = Object.assign({}, defaultOptions, options);
 
   // 1. Load manifest
-  const manifest = await loadManifest(config.cwd);
+  const manifest = await loadManifest(config.cwd, { resolve: true });
 
   // 2. Resolve dependencies
   const resolved = await resolve(config, manifest);
@@ -42,7 +30,7 @@ export default async function build(
   );
 
   // 4. Create build graph
-  const buildGraph = await createBuildGraph(manifest, resolved);
+  const buildGraph = await createBuildGraph(manifest, resolved, options);
 
   // 5. Create targets
   await parallel(manifest.targets, async (target: Target) => {
@@ -62,7 +50,37 @@ export default async function build(
 
 export async function createBuildGraph(
   manifest: Manifest,
-  resolved: DependencyGraph
+  resolved: DependencyGraph,
+  options: BuildOptions
 ): Promise<BuildGraph> {
-  return { src: [], references: [] };
+  const src: Map<string, Source> = new Map();
+  const references: Map<string, Reference> = new Map();
+
+  const srcError = (source: Source) =>
+    `Conflicting source named "${source.name}"`;
+  const referenceError = (reference: Reference) =>
+    `Conflicting reference named "${reference.name}"`;
+
+  for (const source of manifest.src) {
+    const { name } = source;
+    if (src.has(name)) throw new Error(srcError(source));
+    src.set(name, source);
+  }
+  for (const reference of manifest.references) {
+    const { name } = reference;
+    if (references.has(name) && references.get(name).guid !== reference.guid) {
+      throw new Error(referenceError(reference));
+    }
+    references.set(name, reference);
+  }
+
+  for (const dependency of resolved) {
+    // TODO Need manifest for each dependency (along with path information)
+    // (also, manifest src needs global path)
+  }
+
+  return {
+    src: Array.from(src.values()),
+    references: Array.from(references.values())
+  };
 }

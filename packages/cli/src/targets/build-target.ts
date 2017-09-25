@@ -14,5 +14,5 @@ export default async function buildTarget(
 ) {
   // TODO
   // 1. Find binary from config and target
-  // 2. Generate module/class/references list from manifest and import
+  // 2. Import src/references from BuildGraph (may need to remove outdated)
 }

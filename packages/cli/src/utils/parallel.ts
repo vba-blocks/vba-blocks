@@ -1,6 +1,6 @@
 export default async function parallel<T>(
   values: T[],
-  fn: (value: T) => Promise<any>
+  fn: (value: T) => any | Promise<any>
 ) {
   const waiting = [];
   for (const value of values) {

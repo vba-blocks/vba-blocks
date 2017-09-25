@@ -1,29 +1,44 @@
 import { Config } from '../config';
 import { Registration } from './registration';
-import { GitDependency } from '../manifest/dependency';
+import { Dependency } from '../manifest/dependency';
+import { Source } from './source';
+import { has, isString } from '../utils';
 
-export async function resolve(
-  config: Config,
-  dependency: GitDependency
-): Promise<Registration[]> {
-  // TODO
-  //
-  // 1. Shallow clone repository to cache
-  // 2. Checkout branch, tag, or revision
-  // 3. Convert manifest to registration
-  // 4. source = git+{repo}#{revision}
-
-  return [];
+interface GitDependency extends Dependency {
+  git: string;
+  branch?: string;
+  tag?: string;
+  rev?: string;
 }
 
-export async function fetch(
-  config: Config,
-  registration: Registration
-): Promise<string> {
-  // TODO
-  //
-  // 1. Checkout revision
-  // 2. Return path to local cache
+const git: Source = {
+  match(type) {
+    if (isString(type)) return type === 'git';
+    return isGitDependency(type);
+  },
 
-  return '';
+  async resolve(config, dependency: GitDependency): Promise<Registration[]> {
+    // TODO
+    //
+    // 1. Shallow clone repository to cache
+    // 2. Checkout branch, tag, or revision
+    // 3. Convert manifest to registration
+    // 4. source = git+{repo}#{revision}
+
+    return [];
+  },
+
+  async fetch(config, registration): Promise<string> {
+    // TODO
+    //
+    // 1. Checkout revision
+    // 2. Return path to local cache
+
+    return '';
+  }
+};
+export default git;
+
+function isGitDependency(dependency: Dependency): dependency is GitDependency {
+  return has(dependency, 'git');
 }

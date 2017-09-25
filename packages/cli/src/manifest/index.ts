@@ -119,7 +119,14 @@ export function parseManifest(value: any): Manifest {
   };
 }
 
-export async function loadManifest(dir: string): Promise<Manifest> {
+export interface LoadOptions {
+  resolve?: boolean;
+}
+
+export async function loadManifest(
+  dir: string,
+  options: LoadOptions = {}
+): Promise<Manifest> {
   const file = join(dir, 'vba-block.toml');
   if (!await pathExists(file)) {
     throw new Error(`vba-blocks.toml not found in "${dir}"`);
@@ -128,6 +135,17 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   const raw = await readFile(file);
   const parsed = toml.parse(raw.toString());
   const manifest = parseManifest(parsed);
+
+  // Resolve full paths (relative to dir) for sources and targets
+  const { resolve = true } = options;
+  if (resolve) {
+    for (const source of manifest.src) {
+      source.path = join(dir, source.path);
+    }
+    for (const target of manifest.targets) {
+      target.path = join(dir, target.path);
+    }
+  }
 
   return manifest;
 }

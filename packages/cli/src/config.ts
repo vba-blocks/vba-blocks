@@ -8,6 +8,14 @@ import { Snapshot } from './manifest';
  * Currently hardcoded, but I imagine an .rc or .config.js approach in the future
  */
 
+export interface Flags {
+  gitDependencies?: boolean;
+  workspaces?: boolean;
+  multiTarget?: boolean;
+  passwordProtection?: boolean;
+  codeSigning?: boolean;
+}
+
 export interface Config {
   /**
    * cwd for processing
@@ -42,6 +50,21 @@ export interface Config {
    * and url for git remote
    */
   registry: { local: string; remote: string };
+
+  /**
+   * packages directory in cache
+   */
+  packages: string;
+
+  /**
+   * sources directory in cache
+   */
+  sources: string;
+
+  /**
+   * flags for enabling/disabling features
+   */
+  flags: Flags;
 
   /**
    * resolve package from remote source
@@ -81,6 +104,14 @@ export async function loadConfig(): Promise<Config> {
   const packages = join(cache, 'packages');
   const sources = join(cache, 'sources');
 
+  const flags = {
+    gitDependencies: true,
+    workspaces: true,
+    multiTarget: true,
+    passwordProtection: true,
+    codeSigning: true
+  };
+
   const resolveRemotePackage = (snapshot: Snapshot) =>
     join(options.packages, snapshot.name, `v${snapshot.version}.tar.gz`);
   const resolveLocalPackage = (snapshot: Snapshot) =>
@@ -95,6 +126,9 @@ export async function loadConfig(): Promise<Config> {
     addins,
     cache,
     registry,
+    packages,
+    sources,
+    flags,
     resolveRemotePackage,
     resolveLocalPackage,
     resolveSource

@@ -1,26 +1,40 @@
 import { Config } from '../config';
 import { Registration } from './registration';
-import { PathDependency } from '../manifest/dependency';
+import { Dependency } from '../manifest/dependency';
+import { Source } from './source';
+import { has, isString } from '../utils';
 
-export async function resolve(
-  config: Config,
-  dependency: PathDependency
-): Promise<Registration[]> {
-  // TODO
-  //
-  // 1. Convert manifest to registration
-  // 2. source = path+{path}
-
-  return [];
+interface PathDependency extends Dependency {
+  path: string;
 }
 
-export async function fetch(
-  config: Config,
-  registration: Registration
-): Promise<string> {
-  // TODO
-  //
-  // 1. Return path
+const path: Source = {
+  match(type) {
+    if (isString(type)) return type === 'path';
+    return isPathDependency(type);
+  },
 
-  return '';
+  async resolve(config, dependency) {
+    // TODO
+    //
+    // 1. Convert manifest to registration
+    // 2. source = path+{path}
+
+    return [];
+  },
+
+  async fetch(config, registration): Promise<string> {
+    // TODO
+    //
+    // 1. Return path
+
+    return '';
+  }
+};
+export default path;
+
+function isPathDependency(
+  dependency: Dependency
+): dependency is PathDependency {
+  return has(dependency, 'path');
 }

@@ -1,7 +1,7 @@
 import { Config } from '../../config';
-import { Feature } from '../../manifest';
-import { RegistryDependency } from '../../manifest/dependency';
+import { Feature, Dependency } from '../../manifest';
 import { Registration } from '../';
+import { Source } from '../source';
 
 const features: Feature[] = [];
 const source = 'registry+<url>#<none>';
@@ -26,7 +26,7 @@ const registry: { [name: string]: Registration[] } = {
           name: 'd',
           version: '^1.0.0',
           features: [],
-          default_features: true
+          defaultFeatures: true
         }
       ]
     },
@@ -37,7 +37,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'd', version: '^1.2.0', features: [], default_features: true }
+        { name: 'd', version: '^1.2.0', features: [], defaultFeatures: true }
       ]
     },
     {
@@ -47,7 +47,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'd', version: '^2', features: [], default_features: true }
+        { name: 'd', version: '^2', features: [], defaultFeatures: true }
       ]
     }
   ],
@@ -59,7 +59,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'c', version: '^0.1.0', features: [], default_features: true }
+        { name: 'c', version: '^0.1.0', features: [], defaultFeatures: true }
       ]
     },
     {
@@ -69,7 +69,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'c', version: '^0.1.5', features: [], default_features: true }
+        { name: 'c', version: '^0.1.5', features: [], defaultFeatures: true }
       ]
     }
   ],
@@ -99,7 +99,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'f', version: '^1', features: [], default_features: true }
+        { name: 'f', version: '^1', features: [], defaultFeatures: true }
       ]
     },
     {
@@ -109,7 +109,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'f', version: '^1', features: [], default_features: true }
+        { name: 'f', version: '^1', features: [], defaultFeatures: true }
       ]
     },
     {
@@ -119,7 +119,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'f', version: '^1', features: [], default_features: true }
+        { name: 'f', version: '^1', features: [], defaultFeatures: true }
       ]
     },
     {
@@ -129,7 +129,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'f', version: '^2', features: [], default_features: true }
+        { name: 'f', version: '^2', features: [], defaultFeatures: true }
       ]
     }
   ],
@@ -142,7 +142,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'g', version: '^1', features: [], default_features: true }
+        { name: 'g', version: '^1', features: [], defaultFeatures: true }
       ]
     },
     {
@@ -152,7 +152,7 @@ const registry: { [name: string]: Registration[] } = {
       features,
       source,
       dependencies: [
-        { name: 'g', version: '^1', features: [], default_features: true }
+        { name: 'g', version: '^1', features: [], defaultFeatures: true }
       ]
     }
   ],
@@ -176,11 +176,16 @@ const registry: { [name: string]: Registration[] } = {
   ]
 };
 
-export async function update() {}
-
-export async function resolve(config: Config, dependency: RegistryDependency) {
-  const { name } = dependency;
-  return registry[name];
-}
-
-export async function fetch(config: Config, registration: Registration) {}
+const mock: Source = {
+  match(type) {
+    return true;
+  },
+  resolve(config, dependency) {
+    const { name } = dependency;
+    return registry[name];
+  },
+  fetch(config, registration) {
+    return '';
+  }
+};
+export default mock;

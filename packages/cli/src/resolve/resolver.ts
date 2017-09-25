@@ -1,8 +1,8 @@
 import { Config } from '../config';
 import { Version, Dependency } from '../manifest';
-import { isRegistryDependency } from '../manifest/dependency';
 import Manager, { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
+import { has } from '../utils';
 
 export interface Resolution {
   name: string;
@@ -55,7 +55,7 @@ export default class Resolver {
       this.graph.set(name, resolution);
     }
 
-    if (isRegistryDependency(dependency)) {
+    if (has(dependency, 'version')) {
       resolution.range.push(dependency.version);
     }
 

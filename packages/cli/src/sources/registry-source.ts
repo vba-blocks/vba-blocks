@@ -8,96 +8,105 @@ import {
   readFile
 } from 'fs-extra';
 import { extract } from 'tar';
-import * as tmp from 'tmp';
-import { download, checksum as getChecksum } from '../utils';
+import {
+  download,
+  checksum as getChecksum,
+  has,
+  isString,
+  tmpFile
+} from '../utils';
 import { clone, pull } from '../utils/git';
 import { Config } from '../config';
-import { Feature } from '../manifest';
-import { RegistryDependency } from '../manifest/dependency';
+import { Dependency, Feature, Version } from '../manifest';
 import {
   Registration,
   getRegistrationId,
   getRegistrationSource
 } from './registration';
+import { Source } from './source';
 
-const tmpFile: () => Promise<string> = () =>
-  new Promise((resolve, reject) => {
-    tmp.file((err: any, path: string) => {
-      if (err) return reject(err);
-      resolve(path);
-    });
-  });
-
-export async function update(config: Config) {
-  const { local, remote } = config.registry;
-
-  if (!await pathExists(local)) {
-    const dir = dirname(local);
-    await ensureDir(dir);
-    await clone(remote, basename(local), dir);
-  }
-
-  await pull(local);
+interface RegistryDependency extends Dependency {
+  version: Version;
 }
 
-export async function resolve(
-  config: Config,
-  dependency: RegistryDependency
-): Promise<Registration[]> {
-  const { name } = dependency;
-  const path = getPath(config, name);
+const registry: Source = {
+  match(type) {
+    if (isString(type)) return type === 'registry';
+    return isRegistryDependency(type);
+  },
 
-  if (!await pathExists(path)) {
-    throw new Error(`"${name}" was not found in the registry`);
-  }
+  async update(config: Config) {
+    const { local, remote } = config.registry;
 
-  const data = await readFile(path, 'utf8');
-  const registrations: Registration[] = data
-    .split(/\r?\n/)
-    .map((line: string) => JSON.parse(line))
-    .filter((value: any) => value && !value.yanked)
-    .map(parseRegistration);
-
-  return registrations;
-}
-
-export async function fetch(config: Config, registration: Registration) {
-  const url = config.resolveRemotePackage(registration);
-  const file = config.resolveLocalPackage(registration);
-
-  const [_, checksum] = registration.source.split('#', 2);
-
-  if (!await pathExists(file)) {
-    const unverifiedFile = await tmpFile();
-    await download(url, unverifiedFile);
-
-    const comparison = await getChecksum(unverifiedFile);
-    if (comparison !== checksum) {
-      throw new Error(`Invalid checksum for ${registration.id}`);
+    if (!await pathExists(local)) {
+      const dir = dirname(local);
+      await ensureDir(dir);
+      await clone(remote, basename(local), dir);
     }
 
-    await move(unverifiedFile, file);
+    await pull(local);
+  },
+
+  async resolve(
+    config: Config,
+    dependency: RegistryDependency
+  ): Promise<Registration[]> {
+    const { name } = dependency;
+    const path = getPath(config, name);
+
+    if (!await pathExists(path)) {
+      throw new Error(`"${name}" was not found in the registry`);
+    }
+
+    const data = await readFile(path, 'utf8');
+    const registrations: Registration[] = data
+      .split(/\r?\n/)
+      .map((line: string) => JSON.parse(line))
+      .filter((value: any) => value && !value.yanked)
+      .map(parseRegistration);
+
+    return registrations;
+  },
+
+  async fetch(config: Config, registration: Registration): Promise<string> {
+    const url = config.resolveRemotePackage(registration);
+    const file = config.resolveLocalPackage(registration);
+
+    const [_, checksum] = registration.source.split('#', 2);
+
+    if (!await pathExists(file)) {
+      const unverifiedFile = await tmpFile();
+      await download(url, unverifiedFile);
+
+      const comparison = await getChecksum(unverifiedFile);
+      if (comparison !== checksum) {
+        throw new Error(`Invalid checksum for ${registration.id}`);
+      }
+
+      await move(unverifiedFile, file);
+    }
+
+    const src = config.resolveSource(registration);
+
+    await ensureDir(src);
+    await extract({ file, cwd: src });
+
+    return src;
   }
-
-  const src = config.resolveSource(registration);
-
-  await ensureDir(src);
-  await extract({ file, cwd: src });
-
-  return src;
-}
+};
+export default registry;
 
 export function parseRegistration(value: any): Registration {
   const { name, vers: version, cksum: checksum } = value;
 
   const dependencies: RegistryDependency[] = value.deps.map((dep: any) => {
-    const { name, req, features, optional, default_features } = dep;
+    const { name, req, features, optional, defaultFeatures } = dep;
     const dependency: RegistryDependency = {
       name,
       version: req,
       features,
       optional,
-      default_features
+      defaultFeatures
     };
 
     return dependency;
@@ -122,7 +131,13 @@ export function parseRegistration(value: any): Registration {
   };
 }
 
-export function getPath(config: Config, name: string): string {
+function isRegistryDependency(
+  dependency: Dependency
+): dependency is RegistryDependency {
+  return has(dependency, 'version');
+}
+
+function getPath(config: Config, name: string): string {
   let parts;
   if (name.length === 1) {
     parts = ['1', name];

@@ -3,15 +3,10 @@ import { Solver, exactlyOne, atMostOne, implies, or } from 'logic-solver';
 
 import { Config } from '../config';
 import { Manifest, Dependency } from '../manifest';
-import {
-  isRegistryDependency,
-  isPathDependency,
-  isGitDependency
-} from '../manifest/dependency';
 import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution, ResolutionGraph } from './resolver';
-import { unique } from '../utils';
+import { has, unique } from '../utils';
 
 export default async function solve(
   config: Config,
@@ -93,7 +88,7 @@ export async function optimizeResolved(
     const { name } = dependency;
     required.push(name);
 
-    if (isRegistryDependency(dependency)) {
+    if (has(dependency, 'version')) {
       topLevel[name] = dependency.version;
     }
   }
@@ -113,14 +108,12 @@ export async function optimizeResolved(
 function getMatching(dependency: Dependency, resolved: Resolution): string[] {
   const { registered } = resolved;
 
-  if (isRegistryDependency(dependency)) {
+  if (has(dependency, 'version')) {
     const { version } = dependency;
 
     return registered
       .filter(registration => satisfies(registration.version, version))
       .map(registration => registration.id);
-  } else if (isPathDependency(dependency)) {
-    return [];
   } else {
     return [];
   }
