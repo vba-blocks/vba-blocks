@@ -3,12 +3,14 @@ import { pathExists, readFile, writeFile } from 'fs-extra';
 import { parse as parseToml } from 'toml';
 import { Config } from './config';
 import { Manifest } from './manifest';
-import { convertToToml } from './utils';
+import { Workspace } from './workspace';
 import { DependencyGraph } from './resolve';
+import { convertToToml } from './utils';
 
 export interface Lockfile {
-  manifest: {};
-  resolved: DependencyGraph;
+  manifest?: Manifest;
+  workspace: Workspace;
+  packages: DependencyGraph;
 }
 
 export async function readLockfile(config: Config): Promise<Lockfile | null> {
@@ -31,7 +33,7 @@ export async function writeLockfile(
   return writeFile(file, toml);
 }
 
-export function isLockfileValid(lockfile: Lockfile, manifest: Manifest) {
+export function isLockfileValid(lockfile: Lockfile, workspace: Workspace) {
   // TODO
   return false;
 }
@@ -44,7 +46,7 @@ export function fromToml(toml: string): Lockfile {
   const parsed = parseToml(toml);
 
   // TODO
-  return { manifest: {}, resolved: [] };
+  return { workspace: { root: null, members: [] }, packages: [] };
 }
 
 export function getLockfilePath(config: Config): string {

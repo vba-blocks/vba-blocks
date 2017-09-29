@@ -20,164 +20,135 @@ test('throws for invalid package metadata', () => {
 });
 
 test('loads valid sources', () => {
-  const value = Object.assign(
-    {
-      src: {
-        A: 'src/a.bas',
-        B: { path: 'src/b.cls' },
-        C: { path: 'src/c.frm', optional: true }
-      }
-    },
-    BASE_MANIFEST
-  );
+  const value = {
+    ...BASE_MANIFEST,
+    src: {
+      A: 'src/a.bas',
+      B: { path: 'src/b.cls' },
+      C: { path: 'src/c.frm', optional: true }
+    }
+  };
 
   expect(parseManifest(value)).toMatchSnapshot();
 });
 
 test('throws for invalid sources', () => {
-  const value = Object.assign(
-    {
-      src: {
-        missing_path: { optional: true }
-      }
-    },
-    BASE_MANIFEST
-  );
+  const value = {
+    ...BASE_MANIFEST,
+    src: {
+      missing_path: { optional: true }
+    }
+  };
 
   expect(() => parseManifest(value)).toThrow();
 });
 
 test('loads valid features', () => {
-  const value = Object.assign(
-    {
-      features: {
-        default: ['a', 'b'],
-        a: { src: ['A'] },
-        b: { dependencies: ['B'] },
-        c: { references: ['C'] }
-      }
-    },
-    BASE_MANIFEST
-  );
+  const value = {
+    ...BASE_MANIFEST,
+    features: {
+      default: ['a', 'b'],
+      a: { src: ['A'] },
+      b: { dependencies: ['B'] },
+      c: { references: ['C'] }
+    }
+  };
 
   expect(parseManifest(value)).toMatchSnapshot();
 });
 
 test('throws for invalid features', () => {
-  let value: any = Object.assign(
-    { features: { a: { src: 'A' } } },
-    BASE_MANIFEST
-  );
+  let value: any = { ...BASE_MANIFEST, features: { a: { src: 'A' } } };
   expect(() => parseManifest(value)).toThrow();
 
-  value = Object.assign(
-    { features: { b: { dependencies: 'B' } } },
-    BASE_MANIFEST
-  );
+  value = { ...BASE_MANIFEST, features: { b: { dependencies: 'B' } } };
   expect(() => parseManifest(value)).toThrow();
 
-  value = Object.assign(
-    { features: { c: { references: 'C' } } },
-    BASE_MANIFEST
-  );
+  value = { ...BASE_MANIFEST, features: { c: { references: 'C' } } };
   expect(() => parseManifest(value)).toThrow();
 });
 
 test('loads valid dependencies', () => {
-  const value = Object.assign(
-    {
-      dependencies: {
-        a: '^1.0.0',
-        b: {
-          version: '^2.0.0',
-          optional: true,
-          features: ['a', 'b'],
-          'default-features': false
-        },
-        c: { path: 'packages/c' },
-        d: { git: 'https://github.com/VBA-tools/VBA-Web' },
-        e: { git: 'https://github.com/VBA-tools/VBA-Web', branch: 'next' },
-        f: { git: 'https://github.com/VBA-tools/VBA-Web', tag: 'v1.0.0' },
-        g: { git: 'https://github.com/VBA-tools/VBA-Web', rev: 'a1b2c3d4' }
-      }
-    },
-    BASE_MANIFEST
-  );
+  const value = {
+    ...BASE_MANIFEST,
+    dependencies: {
+      a: '^1.0.0',
+      b: {
+        version: '^2.0.0',
+        optional: true,
+        features: ['a', 'b'],
+        'default-features': false
+      },
+      c: { path: 'packages/c' },
+      d: { git: 'https://github.com/VBA-tools/VBA-Web' },
+      e: { git: 'https://github.com/VBA-tools/VBA-Web', branch: 'next' },
+      f: { git: 'https://github.com/VBA-tools/VBA-Web', tag: 'v1.0.0' },
+      g: { git: 'https://github.com/VBA-tools/VBA-Web', rev: 'a1b2c3d4' }
+    }
+  };
 
   expect(parseManifest(value)).toMatchSnapshot();
 });
 
 test('throws for invalid dependencies', () => {
-  const value: any = Object.assign({ dependencies: { a: {} } }, BASE_MANIFEST);
+  const value: any = { ...BASE_MANIFEST, dependencies: { a: {} } };
   expect(() => parseManifest(value)).toThrow();
 });
 
 test('load valid references', () => {
-  const value = Object.assign(
-    {
-      references: {
-        a: {
-          version: '1.0',
-          guid: '{420B2830-E718-11CF-893D-00A0C9054228}',
-          optional: true
-        }
+  const value = {
+    ...BASE_MANIFEST,
+    references: {
+      a: {
+        version: '1.0',
+        guid: '{420B2830-E718-11CF-893D-00A0C9054228}',
+        optional: true
       }
-    },
-    BASE_MANIFEST
-  );
+    }
+  };
 
   expect(parseManifest(value)).toMatchSnapshot();
 });
 
 test('throws for invalid references', () => {
-  let value: any = Object.assign({ references: { a: {} } }, BASE_MANIFEST);
+  let value: any = { ...BASE_MANIFEST, references: { a: {} } };
   expect(() => parseManifest(value)).toThrow();
 
-  value = Object.assign(
-    { references: { b: { version: '1.0.0' } } },
-    BASE_MANIFEST
-  );
+  value = { ...BASE_MANIFEST, references: { b: { version: '1.0.0' } } };
   expect(() => parseManifest(value)).toThrow();
 
-  value = Object.assign(
-    { references: { c: { version: '1.0' } } },
-    BASE_MANIFEST
-  );
+  value = { ...BASE_MANIFEST, references: { c: { version: '1.0' } } };
   expect(() => parseManifest(value)).toThrow();
 
-  value = Object.assign(
-    {
-      references: {
-        d: { version: '1.0', guid: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' }
-      }
-    },
-    BASE_MANIFEST
-  );
+  value = {
+    ...BASE_MANIFEST,
+    references: {
+      d: { version: '1.0', guid: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' }
+    }
+  };
   expect(() => parseManifest(value)).toThrow();
 });
 
 test('loads valid targets', () => {
-  const value = Object.assign(
-    {
-      targets: [
-        { type: 'xlsm', path: 'targets/xlsm' },
-        { name: 'addin', type: 'xlam', path: 'targets/xlam' }
-      ]
-    },
-    BASE_MANIFEST
-  );
+  const value = {
+    ...BASE_MANIFEST,
+    targets: [
+      { type: 'xlsm', path: 'targets/xlsm' },
+      { name: 'addin', type: 'xlam', path: 'targets/xlam' }
+    ]
+  };
 
   expect(parseManifest(value)).toMatchSnapshot();
 });
 
 test('throws for invalid targets', () => {
-  let value: any = Object.assign({ targets: {} }, BASE_MANIFEST);
+  let value: any = { ...BASE_MANIFEST, targets: {} };
   expect(() => parseManifest(value)).toThrow();
 
-  value = Object.assign({ targets: [{}] }, BASE_MANIFEST);
+  value = { ...BASE_MANIFEST, targets: [{}] };
   expect(() => parseManifest(value)).toThrow();
 
-  value = Object.assign({ targets: [{ type: 'xlsm' }] }, BASE_MANIFEST);
+  value = { ...BASE_MANIFEST, targets: [{ type: 'xlsm' }] };
   expect(() => parseManifest(value)).toThrow();
 });
 

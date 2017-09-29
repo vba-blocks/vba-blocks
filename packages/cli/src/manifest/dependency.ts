@@ -84,8 +84,5 @@ export function parseDependency(
     else dependency = { git, branch };
   }
 
-  return Object.assign(
-    { name, features, defaultFeatures, optional },
-    dependency
-  );
+  return { name, features, defaultFeatures, optional, ...dependency };
 }

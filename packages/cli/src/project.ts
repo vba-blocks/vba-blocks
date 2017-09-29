@@ -1,11 +1,7 @@
 import { Config } from './config';
 import { Manifest, loadManifest } from './manifest';
+import { Workspace } from './workspace';
 import resolve, { DependencyGraph } from './resolve';
-
-export interface Workspace {
-  root: Manifest;
-  members: Manifest[];
-}
 
 export interface Project {
   manifest: Manifest;
@@ -21,7 +17,7 @@ export async function loadProject(config: Config): Promise<Project> {
   };
 
   // TODO resolve based on workspace, rather than manifest
-  const packages = await resolve(config, manifest);
+  const packages = await resolve(config, workspace);
 
   return {
     manifest,

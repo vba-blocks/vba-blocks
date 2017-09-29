@@ -2,6 +2,7 @@ import { satisfies } from 'semver';
 import { Solver, exactlyOne, atMostOne, implies, or } from 'logic-solver';
 
 import { Config } from '../config';
+import { Workspace } from '../workspace';
 import { Manifest, Dependency } from '../manifest';
 import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
@@ -10,14 +11,13 @@ import { has, unique } from '../utils';
 
 export default async function solve(
   config: Config,
-  manifest: Manifest,
+  workspace: Workspace,
   resolver: Resolver
 ): Promise<DependencyGraph> {
-  await resolveDependencies(manifest.dependencies, resolver);
-  const required = await optimizeResolved(
-    resolver.graph,
-    manifest.dependencies
-  );
+  const dependencies = workspace.root.dependencies;
+
+  await resolveDependencies(dependencies, resolver);
+  const required = await optimizeResolved(resolver.graph, dependencies);
 
   const solver = new Solver();
 
