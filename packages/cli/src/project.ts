@@ -1,7 +1,9 @@
 import { Config } from './config';
-import { Manifest, loadManifest } from './manifest';
+import { Manifest, Source, Reference, loadManifest } from './manifest';
 import { Workspace } from './workspace';
-import resolve, { DependencyGraph } from './resolve';
+import SourceManager, { Registration } from './sources';
+import resolve, { DependencyGraph, getRegistration } from './resolve';
+import { parallel } from './utils';
 
 export interface Project {
   manifest: Manifest;
@@ -16,7 +18,6 @@ export async function loadProject(config: Config): Promise<Project> {
     members: []
   };
 
-  // TODO resolve based on workspace, rather than manifest
   const packages = await resolve(config, workspace);
 
   return {
@@ -24,4 +25,23 @@ export async function loadProject(config: Config): Promise<Project> {
     workspace,
     packages
   };
+}
+
+export async function fetchDependencies(
+  config: Config,
+  project: Project
+): Promise<Manifest[]> {
+  const manager = new SourceManager(config);
+  const manifests = await parallel(
+    project.manifest.dependencies,
+    async dependency => {
+      const registration = getRegistration(project.packages, dependency);
+      const path = await manager.fetch(registration);
+      const manifest = await loadManifest(path);
+
+      return manifest;
+    }
+  );
+
+  return manifests;
 }

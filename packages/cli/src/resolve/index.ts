@@ -1,13 +1,13 @@
 import { Config } from '../config';
 import { Workspace } from '../workspace';
-import { Project } from '../project';
-import { DependencyGraph, fetchDependencies } from './dependency-graph';
+import Project from '../project';
+import { DependencyGraph, getRegistration } from './dependency-graph';
 import { readLockfile, isLockfileValid } from '../lockfile';
 import Resolver from './resolver';
 import solveLatest from './latest-solver';
 import solveSat from './sat-solver';
 
-export { DependencyGraph, fetchDependencies, Resolver, solveLatest, solveSat };
+export { DependencyGraph, getRegistration, Resolver, solveLatest, solveSat };
 
 export default async function resolve(
   config: Config,

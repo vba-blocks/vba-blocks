@@ -1,11 +1,10 @@
 import { Config } from '../config';
-import { BuildGraph } from './build-graph';
-import { Target } from '../manifest';
+import { Target, Source, Reference } from '../manifest';
 
 export default async function buildTarget(
   config: Config,
   target: Target,
-  graph: BuildGraph
+  graph: { src: Source[]; references: Reference[] }
 ) {
   // TODO
   // 1. Find binary from config and target
