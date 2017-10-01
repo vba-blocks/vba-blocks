@@ -1,7 +1,7 @@
 import { Config } from '../config';
 import { Project, loadProject } from '../project';
-import { Manifest, Target, Source, Reference } from '../manifest';
-import resolve, { DependencyGraph } from '../resolve';
+import { Manifest, Target, Source, Reference, loadManifest } from '../manifest';
+import resolve, { DependencyGraph, fetchDependencies } from '../resolve';
 import SourceManager, { Registration } from '../sources';
 import {
   BuildGraph,
@@ -22,10 +22,7 @@ export default async function build(config: Config, options: BuildOptions) {
   const project = await loadProject(config);
 
   // 2. Fetch and prepare dependencies
-  const manager = new SourceManager(config);
-  await parallel(project.packages, (registration: Registration) =>
-    manager.fetch(registration)
-  );
+  await fetchDependencies(config, project.packages);
 
   // 3. Create build graph
   const buildGraph = await createBuildGraph(project, options);

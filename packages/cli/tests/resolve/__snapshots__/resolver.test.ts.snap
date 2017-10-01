@@ -1,0 +1,241 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should get dependency from clean state 1`] = `
+Object {
+  "name": "a",
+  "range": Array [
+    "^1.0.0",
+  ],
+  "registered": Array [
+    Object {
+      "dependencies": Array [],
+      "features": Array [],
+      "id": "a@0.1.0",
+      "name": "a",
+      "source": "registry+<url>#<none>",
+      "version": "0.1.0",
+    },
+    Object {
+      "dependencies": Array [
+        Object {
+          "defaultFeatures": true,
+          "features": Array [],
+          "name": "d",
+          "version": "^1.0.0",
+        },
+      ],
+      "features": Array [],
+      "id": "a@1.0.0",
+      "name": "a",
+      "source": "registry+<url>#<none>",
+      "version": "1.0.0",
+    },
+    Object {
+      "dependencies": Array [
+        Object {
+          "defaultFeatures": true,
+          "features": Array [],
+          "name": "d",
+          "version": "^1.2.0",
+        },
+      ],
+      "features": Array [],
+      "id": "a@1.1.0",
+      "name": "a",
+      "source": "registry+<url>#<none>",
+      "version": "1.1.0",
+    },
+    Object {
+      "dependencies": Array [
+        Object {
+          "defaultFeatures": true,
+          "features": Array [],
+          "name": "d",
+          "version": "^2",
+        },
+      ],
+      "features": Array [],
+      "id": "a@1.2.0",
+      "name": "a",
+      "source": "registry+<url>#<none>",
+      "version": "1.2.0",
+    },
+  ],
+}
+`;
+
+exports[`should get dependency with existing 1`] = `
+Object {
+  "name": "a",
+  "range": Array [
+    "^1.0.0",
+  ],
+  "registered": Array [],
+}
+`;
+
+exports[`should get registration 1`] = `
+Object {
+  "dependencies": Array [
+    Object {
+      "defaultFeatures": true,
+      "features": Array [],
+      "name": "d",
+      "version": "^1.0.0",
+    },
+  ],
+  "features": Array [],
+  "id": "a@1.0.0",
+  "name": "a",
+  "source": "registry+<url>#<none>",
+  "version": "1.0.0",
+}
+`;
+
+exports[`should include preferred with resolved 1`] = `
+Object {
+  "name": "a",
+  "preferred": Object {
+    "dependencies": Array [
+      Object {
+        "defaultFeatures": true,
+        "features": Array [],
+        "name": "d",
+        "version": "^1.0.0",
+      },
+    ],
+    "features": Array [],
+    "id": "a@1.0.0",
+    "name": "a",
+    "source": "registry+<url>#<none>",
+    "version": "1.0.0",
+  },
+  "range": Array [
+    "^1.0.0",
+  ],
+  "registered": Array [
+    Object {
+      "dependencies": Array [],
+      "features": Array [],
+      "id": "a@0.1.0",
+      "name": "a",
+      "source": "registry+<url>#<none>",
+      "version": "0.1.0",
+    },
+    Object {
+      "dependencies": Array [
+        Object {
+          "defaultFeatures": true,
+          "features": Array [],
+          "name": "d",
+          "version": "^1.0.0",
+        },
+      ],
+      "features": Array [],
+      "id": "a@1.0.0",
+      "name": "a",
+      "source": "registry+<url>#<none>",
+      "version": "1.0.0",
+    },
+    Object {
+      "dependencies": Array [
+        Object {
+          "defaultFeatures": true,
+          "features": Array [],
+          "name": "d",
+          "version": "^1.2.0",
+        },
+      ],
+      "features": Array [],
+      "id": "a@1.1.0",
+      "name": "a",
+      "source": "registry+<url>#<none>",
+      "version": "1.1.0",
+    },
+    Object {
+      "dependencies": Array [
+        Object {
+          "defaultFeatures": true,
+          "features": Array [],
+          "name": "d",
+          "version": "^2",
+        },
+      ],
+      "features": Array [],
+      "id": "a@1.2.0",
+      "name": "a",
+      "source": "registry+<url>#<none>",
+      "version": "1.2.0",
+    },
+  ],
+}
+`;
+
+exports[`should iterate through graph entries 1`] = `
+Array [
+  Array [
+    "a",
+    Object {
+      "name": "a",
+      "range": Array [
+        "^1.0.0",
+      ],
+      "registered": Array [
+        Object {
+          "dependencies": Array [],
+          "features": Array [],
+          "id": "a@0.1.0",
+          "name": "a",
+          "source": "registry+<url>#<none>",
+          "version": "0.1.0",
+        },
+        Object {
+          "dependencies": Array [
+            Object {
+              "defaultFeatures": true,
+              "features": Array [],
+              "name": "d",
+              "version": "^1.0.0",
+            },
+          ],
+          "features": Array [],
+          "id": "a@1.0.0",
+          "name": "a",
+          "source": "registry+<url>#<none>",
+          "version": "1.0.0",
+        },
+        Object {
+          "dependencies": Array [
+            Object {
+              "defaultFeatures": true,
+              "features": Array [],
+              "name": "d",
+              "version": "^1.2.0",
+            },
+          ],
+          "features": Array [],
+          "id": "a@1.1.0",
+          "name": "a",
+          "source": "registry+<url>#<none>",
+          "version": "1.1.0",
+        },
+        Object {
+          "dependencies": Array [
+            Object {
+              "defaultFeatures": true,
+              "features": Array [],
+              "name": "d",
+              "version": "^2",
+            },
+          ],
+          "features": Array [],
+          "id": "a@1.2.0",
+          "name": "a",
+          "source": "registry+<url>#<none>",
+          "version": "1.2.0",
+        },
+      ],
+    },
+  ],
+]
+`;

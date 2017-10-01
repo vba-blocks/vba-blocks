@@ -13,7 +13,6 @@ export interface Flags {
   workspaces?: boolean;
   multiTarget?: boolean;
   passwordProtection?: boolean;
-  codeSigning?: boolean;
 }
 
 export interface Config {
@@ -108,8 +107,7 @@ export async function loadConfig(): Promise<Config> {
     gitDependencies: true,
     workspaces: true,
     multiTarget: true,
-    passwordProtection: true,
-    codeSigning: true
+    passwordProtection: true
   };
 
   const resolveRemotePackage = (snapshot: Snapshot) =>
