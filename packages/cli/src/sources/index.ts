@@ -8,7 +8,7 @@ import registry from './registry-source';
 import path from './path-source';
 import git from './git-source';
 
-export { Registration, registry, path, git };
+export { Registration, Source, registry, path, git };
 export { getRegistrationId, getRegistrationSource } from './registration';
 
 export default class SourceManager {

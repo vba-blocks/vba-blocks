@@ -14,6 +14,8 @@ export default async function createTarget(config: Config, target: Target) {
     );
   }
 
+  // TODO If target exists, backup to .backup/{name}
+
   await ensureDir(config.build);
   await zip(dir, file);
 }

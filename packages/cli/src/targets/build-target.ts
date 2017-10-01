@@ -1,11 +1,6 @@
 import { Config } from '../config';
-import { Manifest, Source, Reference, Target } from '../manifest';
-import { DependencyGraph } from '../resolve';
-
-export interface BuildGraph {
-  src: Source[];
-  references: Reference[];
-}
+import { BuildGraph } from './build-graph';
+import { Target } from '../manifest';
 
 export default async function buildTarget(
   config: Config,

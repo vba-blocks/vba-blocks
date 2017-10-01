@@ -28,15 +28,16 @@ test('fails to solve needs-sat tree', async () => {
   const config = await loadConfig();
   const resolver = new Resolver(config);
 
-  await expect(() => solve(config, toWorkspace(manifest.needsSat), resolver))
-    .rejects;
+  await expect(
+    solve(config, toWorkspace(manifest.needsSat), resolver)
+  ).rejects.toMatchSnapshot();
 });
 
 test('fails to solve unresolvable tree', async () => {
   const config = await loadConfig();
   const resolver = new Resolver(config);
 
-  await expect(() =>
+  await expect(
     solve(config, toWorkspace(manifest.unresolvable), resolver)
-  ).rejects;
+  ).rejects.toMatchSnapshot();
 });

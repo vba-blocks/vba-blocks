@@ -1,5 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`fails to solve unresolvable tree 1`] = `[Error: Failed to resolve dependency graph for given manifest]`;
+
 exports[`solves complex tree 1`] = `
 Array [
   Object {

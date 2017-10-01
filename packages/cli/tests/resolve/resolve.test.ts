@@ -25,6 +25,7 @@ test('solves needs-sat tree', async () => {
 
 test('fails to solve unresolvable tree', async () => {
   const config = await loadConfig();
-  await expect(() => resolve(config, toWorkspace(manifest.unresolvable)))
-    .rejects;
+  await expect(
+    resolve(config, toWorkspace(manifest.unresolvable))
+  ).rejects.toMatchSnapshot();
 });
