@@ -10,4 +10,5 @@ export { default as parallel } from './parallel';
 export { default as plural } from './plural';
 export { default as tmpFile } from './tmp-file';
 export { default as unique } from './unique';
-export { default as zip } from './zip';
+export { default as walk } from './walk';
+export * from './zip';

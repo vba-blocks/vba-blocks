@@ -84,13 +84,12 @@ export interface Config {
   resolveSource: (snapshot: Snapshot) => string;
 }
 
-export async function loadConfig(): Promise<Config> {
+export async function loadConfig(cwd: string = process.cwd()): Promise<Config> {
   const options = {
     registry: 'https://github.com/vba-blocks/registry',
     packages: 'https://packages.vba-blocks.com'
   };
 
-  const cwd = process.cwd();
   const build = join(cwd, 'build');
   const scripts = join(__dirname, '../scripts');
   const addins = join(__dirname, '../../addin/build');

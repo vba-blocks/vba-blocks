@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should create target 1`] = `
+Array [
+  "create-target.xlsm",
+]
+`;
+
+exports[`should create target 2`] = `
+Array [
+  "[Content_Types].xml",
+  "_rels/",
+  "_rels/.rels",
+  "docProps/",
+  "docProps/app.xml",
+  "docProps/core.xml",
+  "xl/",
+  "xl/_rels/",
+  "xl/_rels/workbook.xml.rels",
+  "xl/sharedStrings.xml",
+  "xl/styles.xml",
+  "xl/theme/",
+  "xl/theme/theme1.xml",
+  "xl/workbook.xml",
+  "xl/worksheets/",
+  "xl/worksheets/sheet1.xml",
+]
+`;
