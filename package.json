@@ -7,13 +7,21 @@
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "precommit": "lint-staged",
-    "test": "jest --config ./jest.config.js"
+    "test": "jest"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["prettier --write", "git add"]
   },
   "prettier": {
     "singleQuote": true
+  },
+  "jest": {
+    "moduleFileExtensions": ["ts", "js", "json"],
+    "projects": ["packages/*"],
+    "testRegex": "\\.(test|spec)\\.(ts|js)$",
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    }
   },
   "workspaces": ["packages/*"],
   "devDependencies": {

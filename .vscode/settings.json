@@ -1,6 +1,5 @@
 {
   "editor.formatOnSave": true,
-  "prettier.singleQuote": true,
   "search.exclude": {
     "**/node_modules": true,
     "packages/*/lib": true
