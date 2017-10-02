@@ -53,7 +53,7 @@ export async function createBuildGraph(
     }
     for (const reference of manifest.references) {
       const { name } = reference;
-      if (references.has(name))
+      if (references.has(name) && reference.guid !== references.get(name).guid)
         throw new Error(`Conficting reference named "${reference.name}"`);
       references.set(name, reference);
     }
