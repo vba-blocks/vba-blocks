@@ -1,8 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`should backup existing 1`] = `
+Array [
+  ".backup/",
+  ".backup/testing.xlsm",
+  "testing.xlsm",
+]
+`;
+
 exports[`should create target 1`] = `
 Array [
-  "create-target.xlsm",
+  "testing.xlsm",
 ]
 `;
 
@@ -24,5 +32,19 @@ Array [
   "xl/workbook.xml",
   "xl/worksheets/",
   "xl/worksheets/sheet1.xml",
+]
+`;
+
+exports[`should remove previous backup 1`] = `
+Array [
+  ".backup/",
+  ".backup/testing.xlsm",
+]
+`;
+
+exports[`should remove previous backup 2`] = `
+Array [
+  ".backup/",
+  "testing.xlsm",
 ]
 `;

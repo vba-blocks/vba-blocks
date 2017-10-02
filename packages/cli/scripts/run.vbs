@@ -11,33 +11,29 @@ Dim Manifest
 App = WScript.Arguments(0)
 Addin = Unescape(WScript.Arguments(1))
 Command = WScript.Arguments(2)
-Target = Unescape(WScript.Arguments(3))
-Manifest = Unescape(WScript.Arguments(4))
-Options = Unescape(WScript.Arguments(5))
+Args = Unescape(WScript.Arguments(3))
 
-Run App, Addin, Command, Target, Manifest, Options
+Run App, Addin, Command, Args
 
-Function Run(App, Command, Addin, Target, Manifest, Options)
+Function Run(App, Addin, Command, Args)
   Select Case App
-  Case "Excel"
-    RunExcel Command, Addin, Target, Manifest, Options
+  Case "excel"
+    RunExcel Addin, Command, Args
   Case Else
     WScript.Echo "Unsupported App: " & App
   End Select
 End Function
 
-Function RunExcel(Addin, Command, Target, Manifest, Options)
+Function RunExcel(Addin, Command, Args)
   WScript.Echo "Excel"
   WScript.Echo "-----"
   WScript.Echo "Addin: " & Addin
   WScript.Echo "Command: " & Command
-  WScript.Echo "Target: " & Target
-  WScript.Echo "Manifest: " & Manifest
-  WScript.Echo "Options: " & Options
+  WScript.Echo "Args: " & Args
 
   ' ExcelWasOpen = OpenExcel(Excel)
   ' WorkbookWasOpen = OpenWorkbook(Excel, Addin, Workbook)
-  ' TODO Application.Run 'addin!'.Comman Target, Manifest, Options
+  ' TODO Application.Run 'addin!'.Command Target, Manifest, Options
 End Function
 
 Function Unescape(Value)

@@ -1,12 +1,20 @@
+import { join } from 'path';
+import { pathExists } from 'fs-extra';
 import { Config } from '../config';
 import { Target, Source, Reference } from '../manifest';
+import run from '../run';
 
 export default async function buildTarget(
   config: Config,
   target: Target,
   graph: { src: Source[]; references: Reference[] }
 ) {
-  // TODO
-  // 1. Find binary from config and target
-  // 2. Import src/references from BuildGraph (may need to remove outdated)
+  const file = join(config.build, `${target.name}.${target.type}`);
+  if (!await pathExists(file)) {
+    throw new Error(
+      `Target binary for ${target.name}.${target.type} not found`
+    );
+  }
+
+  await run(config, target, 'import', graph);
 }

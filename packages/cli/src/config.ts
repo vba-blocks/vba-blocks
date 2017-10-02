@@ -28,6 +28,11 @@ export interface Config {
   build: string;
 
   /**
+   * absolute path to build + backup directory
+   */
+  backup: string;
+
+  /**
    * absolute path to scripts directory
    * (contains applescript and vbs)
    */
@@ -91,6 +96,7 @@ export async function loadConfig(cwd: string = process.cwd()): Promise<Config> {
   };
 
   const build = join(cwd, 'build');
+  const backup = join(build, '.backup');
   const scripts = join(__dirname, '../scripts');
   const addins = join(__dirname, '../../addin/build');
 
@@ -119,6 +125,7 @@ export async function loadConfig(cwd: string = process.cwd()): Promise<Config> {
   const config: Config = {
     cwd,
     build,
+    backup,
     scripts,
     addins,
     cache,

@@ -12,7 +12,7 @@ export default async function createTarget(
 ): Promise<string> {
   const dir = join(config.cwd, target.path);
   const file = join(config.build, `${target.name}.${target.type}`);
-  const backup = join(config.build, '.backup', `${target.name}.${target.type}`);
+  const backup = join(config.backup, `${target.name}.${target.type}`);
 
   if (!await pathExists(dir)) {
     throw new Error(
@@ -23,6 +23,7 @@ export default async function createTarget(
   // Backup file if target already exists
   if (await pathExists(backup)) await remove(backup);
   if (await pathExists(file)) {
+    await ensureDir(config.backup);
     await copyFile(file, backup);
     await remove(file);
   }
