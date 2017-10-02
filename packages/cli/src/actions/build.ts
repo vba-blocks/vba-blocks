@@ -8,7 +8,7 @@ export interface BuildOptions {}
 const defaultOptions = {};
 
 export default async function build(config: Config, options: BuildOptions) {
-  options = { ...defaultOptions, ...options };
+  options = Object.assign({}, defaultOptions, options);
 
   // 1. Load and fetch project
   const project = await loadProject(config);

@@ -102,11 +102,10 @@ export function parseManifest(value: any): Manifest {
   const references = parseReferences(value.references || {});
   const targets = parseTargets(value.targets || [], name);
 
-  const metadata = {
-    ...value.package,
+  const metadata = Object.assign({}, value.package, {
     publish,
     default_features
-  };
+  });
 
   return {
     name,

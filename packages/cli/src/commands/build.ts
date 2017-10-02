@@ -5,7 +5,7 @@ import { BuildOptions } from '../actions/build';
 export type Commander = any;
 export type Build = (config: Config, options: BuildOptions) => Promise<void>;
 
-export async function build(program: Commander) {
+export default function build(program: Commander) {
   program
     .command('build')
     .description('Build project from src and dependencies')
