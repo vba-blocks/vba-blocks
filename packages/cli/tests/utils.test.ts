@@ -1,4 +1,4 @@
-import { convertToToml } from '../src/utils';
+import { convertToToml, escape } from '../src/utils';
 
 test('convertToToml', () => {
   expect(
@@ -33,4 +33,8 @@ test('convertToToml', () => {
       ]
     })
   ).toMatchSnapshot();
+});
+
+test('should escape quotes and spaces', () => {
+  expect(escape(`" '!?a1`)).toEqual(`|Q||S|'!?a1`);
 });

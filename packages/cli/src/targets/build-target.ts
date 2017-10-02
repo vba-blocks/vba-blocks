@@ -2,7 +2,7 @@ import { join } from 'path';
 import { pathExists } from 'fs-extra';
 import { Config } from '../config';
 import { Target, Source, Reference } from '../manifest';
-import run from '../run';
+import { importManifest } from '../addin';
 
 export default async function buildTarget(
   config: Config,
@@ -16,5 +16,5 @@ export default async function buildTarget(
     );
   }
 
-  await run(config, target, 'import', graph);
+  await importManifest(config, target, graph);
 }

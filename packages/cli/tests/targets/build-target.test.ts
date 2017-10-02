@@ -5,7 +5,7 @@ import { Source, Reference } from '../../src/manifest';
 import { TargetType } from '../../src/manifest/target';
 import { loadConfig } from '../../src/config';
 
-jest.mock('../../src/run');
+jest.mock('../../src/utils/run');
 
 afterEach(async () => Promise.all([remove(build)]));
 
@@ -31,8 +31,9 @@ test('should build target', async () => {
   await createTarget(config, target);
   await buildTarget(config, target, graph);
 
-  const run = require('../../src/run').default;
-  const [_config, _target, command, ...args] = run.mock.calls[0];
+  const run = require('../../src/utils/run').default;
+  const [_config, _application, _addin, command, value] = run.mock.calls[0];
   expect(command).toEqual('import');
-  expect(args[0]).toEqual(graph);
+  expect(value.src).toBe(graph.src);
+  expect(value.references).toBe(graph.references);
 });

@@ -8,6 +8,7 @@ export { default as last } from './last';
 export { default as optionList } from './option-list';
 export { default as parallel } from './parallel';
 export { default as plural } from './plural';
+export { default as run, escape } from './run';
 export { default as tmpFile } from './tmp-file';
 export { default as unique } from './unique';
 export { default as walk } from './walk';
