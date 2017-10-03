@@ -2,6 +2,6 @@
   "editor.formatOnSave": true,
   "search.exclude": {
     "**/node_modules": true,
-    "packages/*/lib": true
+    "packages/**/lib": true
   }
 }

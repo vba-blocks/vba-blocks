@@ -16,12 +16,14 @@ for (const [name, value] of Object.entries(commands)) {
   }
 
   command.action((...args) => {
-    Promise.resolve(async () => {
+    const execute = async () => {
       const config = await loadConfig();
       const options = last(args);
 
       await action(config, options);
-    }).catch(err => {
+    };
+
+    execute().catch(err => {
       console.error(err.stack || err);
       process.exit(1);
     });

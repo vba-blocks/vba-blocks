@@ -1,10 +1,8 @@
 import { join } from 'path';
-import { promisify } from 'util';
 import { pathExists, ensureDir, remove } from 'fs-extra';
 import { Config } from '../config';
 import { Target } from '../manifest';
-import { zip } from '../utils';
-const copyFile = promisify(require('fs').copyFile);
+import { zip, copy } from '../utils';
 
 export default async function createTarget(
   config: Config,
@@ -24,7 +22,7 @@ export default async function createTarget(
   if (await pathExists(backup)) await remove(backup);
   if (await pathExists(file)) {
     await ensureDir(config.backup);
-    await copyFile(file, backup);
+    await copy(file, backup);
     await remove(file);
   }
 

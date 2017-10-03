@@ -7,7 +7,8 @@
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "precommit": "lint-staged",
-    "test": "jest"
+    "test": "jest",
+    "build": "cd packages/cli && yarn run build"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["prettier --write", "git add"]
