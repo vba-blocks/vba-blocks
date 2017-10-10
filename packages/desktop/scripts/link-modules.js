@@ -19,13 +19,11 @@ async function main() {
       const { name, path } = dependency;
       const dest = join(node_modules, name);
 
-      console.log(`Linking ${name}`);
       if (existsSync(dest)) return;
+      console.log(`Linking ${name}`);
       await symlink(path, dest, 'junction');
     })
   );
-
-  console.log('Done!');
 }
 
 main().catch(err => {

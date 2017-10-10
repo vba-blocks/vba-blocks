@@ -8,12 +8,14 @@
   "scripts": {
     "start": "electron .",
     "build": "next build src/renderer && next export src/renderer",
-    "pack": "node scripts/link-modules && electron-builder --dir"
+    "pack": "node scripts/link-modules && electron-builder --dir",
+    "check": "cd dist/win-unpacked/bin && vba-blocks"
   },
   "build": {
     "appId": "com.vba-blocks.desktop",
     "productName": "vba-blocks",
-    "files": ["src/**/*", "!src/renderer", "src/renderer/out"]
+    "files": ["src/**/*", "!src/renderer", "src/renderer/out"],
+    "extraFiles": [{ "from": "static" }]
   },
   "dependencies": {
     "app-root-path": "^2.0.1",
