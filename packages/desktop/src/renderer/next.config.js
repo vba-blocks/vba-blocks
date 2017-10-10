@@ -5,7 +5,7 @@ module.exports = {
   },
   exportPathMap() {
     return {
-      '/start': { page: '/start' }
+      '/': { page: '/index' }
     };
   }
 };

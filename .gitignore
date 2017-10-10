@@ -5,8 +5,9 @@ packages/cli/tests/fixtures/build
 
 packages/addin/build
 
-packages/desktop/renderer/.next
-packages/desktop/renderer/out
+packages/desktop/src/renderer/.next
+packages/desktop/src/renderer/out
+packages/desktop/dist
 
 # Ignore temporary Excel files
 */~$*
