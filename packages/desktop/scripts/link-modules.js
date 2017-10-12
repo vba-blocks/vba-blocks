@@ -1,29 +1,38 @@
 // Add symlink of workspace node_modules to desktop node_modules
 // (https://github.com/electron-userland/electron-builder/issues/1837)
 
-const { promisify } = require('util');
-const { symlink: _symlink, existsSync } = require('fs');
+const { pathExists, copy, symlink, remove } = require('fs-extra');
 const { join } = require('path');
 const resolvePkg = require('resolve-pkg');
-const symlink = promisify(_symlink);
 
 const cwd = process.cwd();
 const node_modules = join(__dirname, '..', 'node_modules');
 
+const internal_dependencies = ['vba-blocks'];
+
 async function main() {
+  // Remove internal dependencies to ensure they are always copied
+  await parallel(internal_dependencies, async name => {
+    const dest = join(node_modules, name);
+
+    if (!await pathExists(dest)) return;
+    await remove(dest);
+  });
+
   const graph = await loadGraph(cwd);
   const dependencies = filterGraph(graph, cwd);
 
-  await Promise.all(
-    dependencies.map(async dependency => {
-      const { name, path } = dependency;
-      const dest = join(node_modules, name);
+  await parallel(dependencies, async dependency => {
+    const { name, path } = dependency;
 
-      if (existsSync(dest)) return;
-      console.log(`Linking ${name}`);
-      await symlink(path, dest, 'junction');
-    })
-  );
+    const dest = join(node_modules, name);
+
+    // Always copy vba-blocks
+    if (await pathExists(dest)) return;
+
+    console.log(`Copying ${name}`);
+    await copy(path, dest);
+  });
 }
 
 main().catch(err => {
@@ -53,8 +62,12 @@ function filterGraph(graph, cwd) {
     if (path.indexOf(node_modules) === 0) return false;
 
     const depth = (path.match(/node_modules/g) || []).length;
-    if (depth !== 1) return false;
+    if (depth > 1) return false;
 
     return true;
   });
+}
+
+async function parallel(values, cb) {
+  return Promise.all(values.map(cb));
 }
