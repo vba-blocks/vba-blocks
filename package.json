@@ -36,5 +36,7 @@
     "resolve-pkg": "^1.0.0",
     "ts-jest": "^20.0.10",
     "typescript": "^2.5.2"
-  }
+  },
+  "version": "0.0.0",
+  "main": "index.js"
 }

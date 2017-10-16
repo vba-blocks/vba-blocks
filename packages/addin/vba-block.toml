@@ -3,8 +3,11 @@ name = "vba-blocks"
 version = "0.0.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 
+[src]
+
 [dependencies]
 installer = { path = "VBA-Installer" }
+json = "^2"
 
 [[targets]]
 type = "xlsm"
