@@ -1,20 +1,20 @@
 import { join } from 'path';
 import { pathExists } from 'fs-extra';
-import { Config } from '../config';
+import { Project } from '../project';
 import { Target, Source, Reference } from '../manifest';
-import { importManifest } from '../addin';
+import { importGraph } from '../addin';
 
 export default async function buildTarget(
-  config: Config,
+  project: Project,
   target: Target,
   graph: { src: Source[]; references: Reference[] }
 ) {
-  const file = join(config.build, `${target.name}.${target.type}`);
+  const file = join(project.paths.build, `${target.name}.${target.type}`);
   if (!await pathExists(file)) {
     throw new Error(
       `Target binary for ${target.name}.${target.type} not found`
     );
   }
 
-  await importManifest(config, target, graph);
+  await importGraph(project, target, graph);
 }

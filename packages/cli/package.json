@@ -14,10 +14,8 @@
   "main": "lib/index",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "build":
-      "tsc && pkg --targets node8.2.1-win-x86,node8.2.1-win-x64,node8.2.1-macos-x64 --out-dir build ."
+    "build": "tsc"
   },
-  "pkg": {},
   "dependencies": {
     "archiver": "^2.0.0",
     "commander": "^2.9.0",
@@ -37,7 +35,6 @@
     "@types/semver": "^5.4.0",
     "@types/tar": "^4.0.0",
     "@types/tmp": "^0.0.33",
-    "pkg": "^4.2.4",
     "typescript": "^2.5.2"
   }
 }

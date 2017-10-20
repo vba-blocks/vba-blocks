@@ -1,18 +1,17 @@
 import { join } from 'path';
 import { pathExists, ensureDir, remove } from 'fs-extra';
-import { Config } from '../config';
+import { Project } from '../project';
 import { Target } from '../manifest';
 import { zip, copy } from '../utils';
 
 export default async function createTarget(
-  config: Config,
+  project: Project,
   target: Target
 ): Promise<string> {
-  const dir = join(config.cwd, target.path);
-  const file = join(config.build, `${target.name}.${target.type}`);
-  const backup = join(config.backup, `${target.name}.${target.type}`);
+  const file = join(project.paths.build, `${target.name}.${target.type}`);
+  const backup = join(project.paths.backup, `${target.name}.${target.type}`);
 
-  if (!await pathExists(dir)) {
+  if (!await pathExists(target.path)) {
     throw new Error(
       `Path "${target.path}" not found for target "${target.name}"`
     );
@@ -21,14 +20,14 @@ export default async function createTarget(
   // Backup file if target already exists
   if (await pathExists(backup)) await remove(backup);
   if (await pathExists(file)) {
-    await ensureDir(config.backup);
+    await ensureDir(project.paths.backup);
     await copy(file, backup);
     await remove(file);
   }
 
   // Zip directory to create target
-  await ensureDir(config.build);
-  await zip(dir, file);
+  await ensureDir(project.paths.build);
+  await zip(target.path, file);
 
   return file;
 }

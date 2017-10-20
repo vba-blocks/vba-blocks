@@ -1,3 +1,4 @@
+export { default as env } from './env';
 export {
   Version,
   Dependency,
@@ -5,7 +6,8 @@ export {
   Reference,
   Source,
   Target,
-  Manifest
+  Manifest,
+  loadManifest
 } from './manifest';
 export { Config, loadConfig } from './config';
 export { default as resolve } from './resolve';

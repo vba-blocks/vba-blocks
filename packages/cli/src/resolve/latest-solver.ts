@@ -1,14 +1,12 @@
 import { satisfies } from 'semver';
-import { Config } from '../config';
 import { Workspace } from '../workspace';
-import { Manifest, Dependency } from '../manifest';
+import { Dependency } from '../manifest';
 import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution } from './resolver';
 import { unique } from '../utils';
 
 export default async function solve(
-  config: Config,
   workspace: Workspace,
   resolver: Resolver
 ): Promise<DependencyGraph> {

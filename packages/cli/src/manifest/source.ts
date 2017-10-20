@@ -1,4 +1,5 @@
-import * as assert from 'assert';
+import { ok } from 'assert';
+import { join } from 'path';
 import { isString } from '../utils';
 
 export interface Source {
@@ -14,15 +15,22 @@ const EXAMPLE = `Example vba-block.toml:
   B = { path = "src/b.cls" }
   C = { path = "src/c.frm, optional = true }`;
 
-export function parseSrc(value: any): Source[] {
-  return Object.entries(value).map(([name, value]) => parseSource(name, value));
+export function parseSrc(value: any, dir: string): Source[] {
+  return Object.entries(value).map(([name, value]) =>
+    parseSource(name, value, dir)
+  );
 }
 
-export function parseSource(name: string, value: string | any): Source {
+export function parseSource(
+  name: string,
+  value: string | any,
+  dir: string
+): Source {
   if (isString(value)) value = { path: value };
-  const { path, optional = false } = value;
+  const { path: relativePath, optional = false } = value;
 
-  assert.ok(path, `src "${name}" is missing path. ${EXAMPLE}`);
+  ok(relativePath, `src "${name}" is missing path. ${EXAMPLE}`);
+  const path = join(dir, relativePath);
 
   return { name, path, optional };
 }

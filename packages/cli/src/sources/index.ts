@@ -19,7 +19,7 @@ export default class SourceManager {
     this.config = config;
     this.sources = [registry, path];
 
-    if (config.flags.gitDependencies) {
+    if (config.flags.git) {
       this.sources.push(git);
     }
   }

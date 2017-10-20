@@ -1,3 +1,4 @@
+import { join } from 'path';
 import {
   Manifest,
   Source,
@@ -6,38 +7,45 @@ import {
   Reference,
   Target
 } from '../../src/manifest';
+import { ConfigValue } from '../../src/config';
 
 export interface Options {
   name?: string;
   version?: string;
-  default_features?: string[];
+  defaultFeatures?: string[];
   src?: Source[];
   features?: Feature[];
   dependencies?: Dependency[];
   references?: Reference[];
   targets?: Target[];
+  config?: ConfigValue;
+  dir?: string;
 }
 
 export function createManifest(options: Options): Manifest {
   const {
     name = 'testing',
     version = '1.0.0',
-    default_features = [],
+    defaultFeatures = [],
     src = [],
     features = [],
     dependencies = [],
     references = [],
-    targets = []
+    targets = [],
+    config = {},
+    dir = join(__dirname, '../fixtures')
   } = options;
 
   return {
     name,
     version,
-    metadata: { authors: [], publish: false, default_features },
+    metadata: { authors: [], publish: false, defaultFeatures },
     src,
     features,
     dependencies,
     references,
-    targets
+    targets,
+    config: {},
+    dir
   };
 }

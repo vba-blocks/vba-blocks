@@ -1,16 +1,13 @@
 import { satisfies } from 'semver';
 import { Solver, exactlyOne, atMostOne, implies, or } from 'logic-solver';
-
-import { Config } from '../config';
 import { Workspace } from '../workspace';
-import { Manifest, Dependency } from '../manifest';
+import { Dependency } from '../manifest';
 import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution, ResolutionGraph } from './resolver';
 import { has, unique } from '../utils';
 
 export default async function solve(
-  config: Config,
   workspace: Workspace,
   resolver: Resolver
 ): Promise<DependencyGraph> {

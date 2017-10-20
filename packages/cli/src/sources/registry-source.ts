@@ -8,6 +8,8 @@ import {
   readFile
 } from 'fs-extra';
 import { extract } from 'tar';
+import env from '../env';
+import { Config } from '../config';
 import {
   download,
   checksum as getChecksum,
@@ -16,7 +18,6 @@ import {
   tmpFile
 } from '../utils';
 import { clone, pull } from '../utils/git';
-import { Config } from '../config';
 import { Dependency, Feature, Version } from '../manifest';
 import {
   Registration,
@@ -36,7 +37,8 @@ const registry: Source = {
   },
 
   async update(config: Config) {
-    const { local, remote } = config.registry;
+    const local = env.registry;
+    const { index: remote } = config.registry;
 
     if (!await pathExists(local)) {
       const dir = dirname(local);
@@ -52,7 +54,7 @@ const registry: Source = {
     dependency: RegistryDependency
   ): Promise<Registration[]> {
     const { name } = dependency;
-    const path = getPath(config, name);
+    const path = getPath(name);
 
     if (!await pathExists(path)) {
       throw new Error(`"${name}" was not found in the registry`);
@@ -137,7 +139,7 @@ function isRegistryDependency(
   return has(dependency, 'version');
 }
 
-function getPath(config: Config, name: string): string {
+function getPath(name: string): string {
   let parts;
   if (name.length === 1) {
     parts = ['1', name];
@@ -149,5 +151,5 @@ function getPath(config: Config, name: string): string {
     parts = [name.substring(0, 2), name.substring(2, 4)];
   }
 
-  return join(config.registry.local, ...parts, name);
+  return join(env.registry, ...parts, name);
 }

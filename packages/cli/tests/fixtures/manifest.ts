@@ -1,4 +1,4 @@
-import { RegistryDependency } from '../../src/manifest/dependency';
+import { Dependency } from '../../src/manifest/dependency';
 import { createManifest } from '../helpers/manifest';
 
 export const simple = createManifest({
@@ -35,13 +35,13 @@ export const unresolvable = createManifest({
   })
 });
 
-function toDependencies(values: object): RegistryDependency[] {
+function toDependencies(values: object): Dependency[] {
   const dependencies = [];
   for (const [name, version] of Object.entries(values)) {
-    dependencies.push(<RegistryDependency>{
+    dependencies.push(<Dependency>{
       name,
       version,
-      default_features: true,
+      defaultFeatures: true,
       features: [],
       optional: false
     });

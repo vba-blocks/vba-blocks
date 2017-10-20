@@ -10,7 +10,7 @@ test('solves simple tree', async () => {
   const config = await loadConfig();
   const resolver = new Resolver(config);
 
-  const solution = await solve(config, toWorkspace(manifest.simple), resolver);
+  const solution = await solve(toWorkspace(manifest.simple), resolver);
 
   expect(solution).toMatchSnapshot();
 });
@@ -19,7 +19,7 @@ test('solves complex tree', async () => {
   const config = await loadConfig();
   const resolver = new Resolver(config);
 
-  const solution = await solve(config, toWorkspace(manifest.complex), resolver);
+  const solution = await solve(toWorkspace(manifest.complex), resolver);
 
   expect(solution).toMatchSnapshot();
 });
@@ -29,7 +29,7 @@ test('fails to solve needs-sat tree', async () => {
   const resolver = new Resolver(config);
 
   await expect(
-    solve(config, toWorkspace(manifest.needsSat), resolver)
+    solve(toWorkspace(manifest.needsSat), resolver)
   ).rejects.toMatchSnapshot();
 });
 
@@ -38,6 +38,6 @@ test('fails to solve unresolvable tree', async () => {
   const resolver = new Resolver(config);
 
   await expect(
-    solve(config, toWorkspace(manifest.unresolvable), resolver)
+    solve(toWorkspace(manifest.unresolvable), resolver)
   ).rejects.toMatchSnapshot();
 });

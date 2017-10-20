@@ -18,16 +18,16 @@ const EXAMPLE = `Example vba-block.toml:
 
 export function parseFeatures(
   value: any
-): { features: Feature[]; default_features: string[] } {
-  let default_features: string[] = [];
+): { features: Feature[]; defaultFeatures: string[] } {
+  let defaultFeatures: string[] = [];
   let features: Feature[] = [];
 
   Object.entries(value).forEach(([name, value]) => {
-    if (name === 'default') default_features = value;
+    if (name === 'default') defaultFeatures = value;
     else features.push(parseFeature(name, value));
   });
 
-  return { features, default_features };
+  return { features, defaultFeatures };
 }
 
 export function parseFeature(name: string, value: any): Feature {

@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join, relative, sep } from 'path';
 import { Manifest, parseManifest, loadManifest } from '../src/manifest';
 
 const BASE_MANIFEST = {
@@ -8,15 +8,21 @@ const BASE_MANIFEST = {
 const FIXTURES = join(__dirname, 'fixtures');
 
 test('loads valid package metadata', () => {
-  expect(parseManifest(BASE_MANIFEST)).toMatchSnapshot();
+  expect(normalize(parseManifest(BASE_MANIFEST, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid package metadata', () => {
-  expect(() => parseManifest({})).toThrow();
-  expect(() => parseManifest({ package: {} })).toThrow();
-  expect(() => parseManifest({ package: { name: 'package-name' } })).toThrow();
-  expect(() => parseManifest({ package: { version: '1.0.0' } })).toThrow();
-  expect(() => parseManifest({ package: { authors: ['Tim Hall'] } })).toThrow();
+  expect(() => parseManifest({}, FIXTURES)).toThrow();
+  expect(() => parseManifest({ package: {} }, FIXTURES)).toThrow();
+  expect(() =>
+    parseManifest({ package: { name: 'package-name' } }, FIXTURES)
+  ).toThrow();
+  expect(() =>
+    parseManifest({ package: { version: '1.0.0' } }, FIXTURES)
+  ).toThrow();
+  expect(() =>
+    parseManifest({ package: { authors: ['Tim Hall'] } }, FIXTURES)
+  ).toThrow();
 });
 
 test('loads valid sources', () => {
@@ -29,7 +35,7 @@ test('loads valid sources', () => {
     }
   };
 
-  expect(parseManifest(value)).toMatchSnapshot();
+  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid sources', () => {
@@ -40,7 +46,7 @@ test('throws for invalid sources', () => {
     }
   };
 
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 });
 
 test('loads valid features', () => {
@@ -54,18 +60,18 @@ test('loads valid features', () => {
     }
   };
 
-  expect(parseManifest(value)).toMatchSnapshot();
+  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid features', () => {
   let value: any = { ...BASE_MANIFEST, features: { a: { src: 'A' } } };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 
   value = { ...BASE_MANIFEST, features: { b: { dependencies: 'B' } } };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 
   value = { ...BASE_MANIFEST, features: { c: { references: 'C' } } };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 });
 
 test('loads valid dependencies', () => {
@@ -87,12 +93,12 @@ test('loads valid dependencies', () => {
     }
   };
 
-  expect(parseManifest(value)).toMatchSnapshot();
+  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid dependencies', () => {
   const value: any = { ...BASE_MANIFEST, dependencies: { a: {} } };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 });
 
 test('load valid references', () => {
@@ -107,18 +113,18 @@ test('load valid references', () => {
     }
   };
 
-  expect(parseManifest(value)).toMatchSnapshot();
+  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid references', () => {
   let value: any = { ...BASE_MANIFEST, references: { a: {} } };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 
   value = { ...BASE_MANIFEST, references: { b: { version: '1.0.0' } } };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 
   value = { ...BASE_MANIFEST, references: { c: { version: '1.0' } } };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 
   value = {
     ...BASE_MANIFEST,
@@ -126,7 +132,7 @@ test('throws for invalid references', () => {
       d: { version: '1.0', guid: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa' }
     }
   };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 });
 
 test('loads valid targets', () => {
@@ -138,23 +144,43 @@ test('loads valid targets', () => {
     ]
   };
 
-  expect(parseManifest(value)).toMatchSnapshot();
+  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid targets', () => {
   let value: any = { ...BASE_MANIFEST, targets: {} };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 
   value = { ...BASE_MANIFEST, targets: [{}] };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 
   value = { ...BASE_MANIFEST, targets: [{ type: 'xlsm' }] };
-  expect(() => parseManifest(value)).toThrow();
+  expect(() => parseManifest(value, FIXTURES)).toThrow();
 });
 
 test('loads and parses manifest', async () => {
-  const manifest = await loadManifest(join(FIXTURES, 'build'), {
-    resolve: false
-  });
-  expect(manifest).toMatchSnapshot();
+  const manifest = await loadManifest(join(FIXTURES, 'build'));
+  expect(normalize(manifest, join(FIXTURES, 'build'))).toMatchSnapshot();
 });
+
+function normalize(
+  manifest: Manifest,
+  relativeTo: string = FIXTURES
+): Manifest {
+  manifest.dir = normalizePath(manifest.dir, relativeTo);
+
+  for (const src of manifest.src) {
+    src.path = normalizePath(src.path, relativeTo);
+  }
+  for (const target of manifest.targets) {
+    target.path = normalizePath(target.path, relativeTo);
+  }
+
+  return manifest;
+}
+
+function normalizePath(path: string, relativeTo: string = FIXTURES): string {
+  return relative(relativeTo, path)
+    .split(sep)
+    .join('/');
+}

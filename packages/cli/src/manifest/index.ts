@@ -2,6 +2,7 @@ import { pathExists, readFile } from 'fs-extra';
 import { join } from 'path';
 import * as assert from 'assert';
 import * as toml from 'toml';
+import { ConfigValue } from '../config';
 import { Version } from './version';
 import { Source, parseSrc } from './source';
 import { Feature, parseFeatures } from './feature';
@@ -66,7 +67,7 @@ export interface Snapshot {
 export interface Metadata {
   authors: string[];
   publish: boolean;
-  default_features: string[];
+  defaultFeatures: string[];
   [name: string]: any;
 }
 
@@ -75,6 +76,8 @@ export interface Manifest extends Snapshot {
   src: Source[];
   references: Reference[];
   targets: Target[];
+  config: ConfigValue;
+  dir: string;
 }
 
 const EXAMPLE = `Example vba-block.toml:
@@ -84,7 +87,7 @@ const EXAMPLE = `Example vba-block.toml:
   version = "0.0.0"
   authors = ["Name <email> (url)"]`;
 
-export function parseManifest(value: any): Manifest {
+export function parseManifest(value: any, dir: string): Manifest {
   assert.ok(
     value && value.package,
     `[package] is a required field, with name, version, and authors specified. ${EXAMPLE}`
@@ -96,16 +99,21 @@ export function parseManifest(value: any): Manifest {
   assert.ok(version, `[package] version is a required field. ${EXAMPLE}`);
   assert.ok(authors, `[package] authors is a required field. ${EXAMPLE}`);
 
-  const src = parseSrc(value.src || {});
-  const { features, default_features } = parseFeatures(value.features || {});
+  const src = parseSrc(value.src || {}, dir);
+  const { features, defaultFeatures } = parseFeatures(value.features || {});
   const dependencies = parseDependencies(value.dependencies || {});
   const references = parseReferences(value.references || {});
-  const targets = parseTargets(value.targets || [], name);
+  const targets = parseTargets(value.targets || [], name, dir);
 
   const metadata = Object.assign({}, value.package, {
     publish,
-    default_features
+    defaultFeatures
   });
+
+  const config = {
+    registry: value.registry,
+    build: value.build
+  };
 
   return {
     name,
@@ -115,18 +123,13 @@ export function parseManifest(value: any): Manifest {
     features,
     dependencies,
     references,
-    targets
+    targets,
+    config,
+    dir
   };
 }
 
-export interface LoadOptions {
-  resolve?: boolean;
-}
-
-export async function loadManifest(
-  dir: string,
-  options: LoadOptions = {}
-): Promise<Manifest> {
+export async function loadManifest(dir: string): Promise<Manifest> {
   const file = join(dir, 'vba-block.toml');
   if (!await pathExists(file)) {
     throw new Error(`vba-blocks.toml not found in "${dir}"`);
@@ -134,18 +137,7 @@ export async function loadManifest(
 
   const raw = await readFile(file);
   const parsed = toml.parse(raw.toString());
-  const manifest = parseManifest(parsed);
-
-  // Resolve full paths (relative to dir) for sources and targets
-  const { resolve = true } = options;
-  if (resolve) {
-    for (const source of manifest.src) {
-      source.path = join(dir, source.path);
-    }
-    for (const target of manifest.targets) {
-      target.path = join(dir, target.path);
-    }
-  }
+  const manifest = parseManifest(parsed, dir);
 
   return manifest;
 }

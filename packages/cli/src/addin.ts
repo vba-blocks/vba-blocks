@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { Config } from './config';
+import { Project } from './project';
 import { Target, Source, Reference } from './manifest';
 import { run } from './utils';
 
@@ -13,24 +13,24 @@ const addins: { [application: string]: string } = {
   excel: 'vba-blocks.xlam'
 };
 
-export async function importManifest(
-  config: Config,
+export async function importGraph(
+  project: Project,
   target: Target,
   graph: { src: Source[]; references: Reference[] }
 ): Promise<void> {
-  const { application, addin, file } = getTargetInfo(config, target);
+  const { application, addin, file } = getTargetInfo(project, target);
   const { src, references } = graph;
 
-  run(config, application, addin, 'import', { file, src, references });
+  run(project.config, application, addin, 'import', { file, src, references });
 }
 
 export function getTargetInfo(
-  config: Config,
+  project: Project,
   target: Target
 ): { application: Application; addin: Addin; file: string } {
   const application = getApplication(target);
   const addin = getAddin(target);
-  const file = join(config.build, `${target.name}.${target.type}`);
+  const file = join(project.paths.build, `${target.name}.${target.type}`);
 
   return { application, addin, file };
 }

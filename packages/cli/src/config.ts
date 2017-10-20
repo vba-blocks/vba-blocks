@@ -1,142 +1,118 @@
 import { join } from 'path';
-import { homedir } from 'os';
-import { Snapshot } from './manifest';
-
-/**
- * Keep track of absolute paths to various resources and package resolution
- * 
- * Currently hardcoded, but I imagine an .rc or .config.js approach in the future
- */
+import { pathExists, readFile } from 'fs-extra';
+import { parse as parseToml } from 'toml';
+import env from './env';
+import { Snapshot, Manifest } from './manifest';
+import { Workspace } from './workspace';
 
 export interface Flags {
-  gitDependencies?: boolean;
-  workspaces?: boolean;
-  multiTarget?: boolean;
-  passwordProtection?: boolean;
+  git?: boolean;
+}
+
+export interface ConfigValue {
+  registry?: { index?: string; packages?: string };
+  build?: { script?: { windows?: string; mac?: string } };
+  flags?: Flags;
 }
 
 export interface Config {
-  /**
-   * cwd for processing
-   */
-  cwd: string;
-
-  /**
-   * absolute path to build directory
-   * (build contains binary output of build process)
-   */
-  build: string;
-
-  /**
-   * absolute path to build + backup directory
-   */
-  backup: string;
-
-  /**
-   * absolute path to scripts directory
-   * (contains applescript and vbs)
-   */
-  scripts: string;
-
-  /**
-   * absolute path to addins directory
-   */
-  addins: string;
-
-  /**
-   * absolute path to cache directory
-   * (default is .vba-blocks in home directory)
-   */
-  cache: string;
-
-  /**
-   * absolute path to local registry
-   * and url for git remote
-   */
-  registry: { local: string; remote: string };
-
-  /**
-   * packages directory in cache
-   */
-  packages: string;
-
-  /**
-   * sources directory in cache
-   */
-  sources: string;
-
-  /**
-   * flags for enabling/disabling features
-   */
+  registry: { index: string; packages: string };
+  build: { script: { windows: string; mac: string } };
   flags: Flags;
 
-  /**
-   * resolve package from remote source
-   * (default is packages.vba-blocks.com/...)
-   */
   resolveRemotePackage: (snapshot: Snapshot) => string;
-
-  /**
-   * resolve package locally
-   * (default is in {cache}/packages/...)
-   */
   resolveLocalPackage: (snapshot: Snapshot) => string;
-
-  /**
-   * resolve expanded package ("source")
-   * (default is in {cache}/sources/...)
-   */
   resolveSource: (snapshot: Snapshot) => string;
 }
 
-export async function loadConfig(cwd: string = process.cwd()): Promise<Config> {
-  const options = {
-    registry: 'https://github.com/vba-blocks/registry',
+const defaults: ConfigValue = {
+  registry: {
+    index: 'https://github.com/vba-blocks/registry',
     packages: 'https://packages.vba-blocks.com'
-  };
+  },
+  build: {
+    script: {
+      windows: join(env.scripts, 'run.vbs'),
+      mac: join(env.scripts, 'run.scpt')
+    }
+  },
+  flags: { git: true }
+};
 
-  const build = join(cwd, 'build');
-  const backup = join(build, '.backup');
-  const scripts = join(__dirname, '../scripts');
-  const addins = join(__dirname, '../../addin/build');
+export async function loadConfig(
+  manifest?: Manifest,
+  workspace?: Workspace
+): Promise<Config> {
+  const configSources = [
+    manifest && manifest.config,
+    workspace && workspace.root.config,
+    await readConfig(),
+    defaults
+  ];
 
-  const cache = join(homedir(), '.vba-blocks');
   const registry = {
-    local: join(cache, 'registry'),
-    remote: options.registry
+    index: resolveConfig(configSources, 'registry.index'),
+    packages: resolveConfig(configSources, 'registry.packages')
   };
-  const packages = join(cache, 'packages');
-  const sources = join(cache, 'sources');
+
+  const build = {
+    script: {
+      windows: resolveConfig(configSources, 'build.script.windows'),
+      mac: resolveConfig(configSources, 'build.script.mac')
+    }
+  };
 
   const flags = {
-    gitDependencies: true,
-    workspaces: true,
-    multiTarget: true,
-    passwordProtection: true
+    git: resolveConfig(configSources, 'flags.git')
   };
 
   const resolveRemotePackage = (snapshot: Snapshot) =>
-    join(options.packages, snapshot.name, `v${snapshot.version}.tar.gz`);
+    join(registry.packages, snapshot.name, `v${snapshot.version}`);
   const resolveLocalPackage = (snapshot: Snapshot) =>
-    join(packages, snapshot.name, `v${snapshot.version}.tar.gz`);
+    join(env.packages, snapshot.name, `v${snapshot.version}.block`);
   const resolveSource = (snapshot: Snapshot) =>
-    join(sources, snapshot.name, `v${snapshot.version}`.replace(/\./g, '-'));
+    join(
+      env.sources,
+      snapshot.name,
+      `v${snapshot.version}`.replace(/\./g, '-')
+    );
 
-  const config: Config = {
-    cwd,
-    build,
-    backup,
-    scripts,
-    addins,
-    cache,
+  return {
     registry,
-    packages,
-    sources,
+    build,
     flags,
     resolveRemotePackage,
     resolveLocalPackage,
     resolveSource
   };
+}
 
-  return config;
+export async function readConfig(): Promise<ConfigValue> {
+  const file = join(env.cache, 'config.toml');
+  if (!await pathExists(file)) return {};
+
+  const raw = await readFile(file);
+  const parsed = parseToml(raw.toString());
+
+  return parsed;
+}
+
+function resolveConfig(sources: ConfigValue[], path: string): any {
+  const parts = path.split('.');
+
+  const envValue = env.values[`VBA_BLOCKS_${parts.join('_').toUpperCase()}`];
+  if (envValue != null) return envValue;
+
+  for (const source of sources) {
+    const value = pick(source, parts);
+    if (value != null) return value;
+  }
+}
+
+function pick(value: any, parts: string | string[]): any {
+  if (!Array.isArray(parts)) parts = parts.split('.');
+
+  return parts.reduce((memo, key) => {
+    return memo && memo[key];
+  }, value);
 }

@@ -1,4 +1,5 @@
-import * as assert from 'assert';
+import { ok } from 'assert';
+import { join } from 'path';
 import { has } from '../utils';
 
 export type TargetType = 'xlsx' | 'xlsm' | 'xlam';
@@ -20,21 +21,27 @@ const EXAMPLE = `Example vba-block.toml:
   type = "xlam"
   path = "targets/xlam"`;
 
-export function parseTargets(values: any[], pkgName: string): Target[] {
-  assert.ok(Array.isArray(values), `targets must be an array. ${EXAMPLE}`);
+export function parseTargets(
+  values: any[],
+  pkgName: string,
+  dir: string
+): Target[] {
+  ok(Array.isArray(values), `targets must be an array. ${EXAMPLE}`);
 
-  return values.map(value => parseTarget(value, pkgName));
+  return values.map(value => parseTarget(value, pkgName, dir));
 }
 
-export function parseTarget(value: any, pkgName: string): Target {
+export function parseTarget(value: any, pkgName: string, dir: string): Target {
   if (!has(value, 'name')) value = Object.assign({ name: pkgName }, value);
-  const { name, type, path } = value;
+  const { name, type, path: relativePath } = value;
 
-  assert.ok(type, `target "${name}" is missing type. ${EXAMPLE}`);
-  assert.ok(
-    path,
+  ok(type, `target "${name}" is missing type. ${EXAMPLE}`);
+  ok(
+    relativePath,
     `target "${name}" (type = "${type}") is missing path. ${EXAMPLE}`
   );
+
+  const path = join(dir, relativePath);
 
   return { name, type, path };
 }

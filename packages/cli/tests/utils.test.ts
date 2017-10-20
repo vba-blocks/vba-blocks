@@ -7,8 +7,8 @@ test('convertToToml', () => {
         name: 'project',
         dependencies: ['a 1.2.3']
       },
-      project: [],
-      package: [
+      members: [],
+      packages: [
         {
           name: 'a',
           version: '1.2.3',

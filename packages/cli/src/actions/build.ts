@@ -1,29 +1,25 @@
-import { Config } from '../config';
 import { Source, Reference } from '../manifest';
 import { Project, loadProject, fetchDependencies } from '../project';
 import { createTarget, buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
 
 export interface BuildOptions {}
-const defaultOptions = {};
 
-export default async function build(config: Config, options: BuildOptions) {
-  options = Object.assign({}, defaultOptions, options);
-
+export default async function build(options: BuildOptions = {}) {
   // 1. Load and fetch project
-  const project = await loadProject(config);
+  const project = await loadProject();
 
   // 2. Determine src and references for build
-  const buildGraph = await createBuildGraph(config, project, options);
+  const buildGraph = await createBuildGraph(project, options);
 
   // 3. Create and build targets (sequentially to avoid contention issues)
   for (const target of project.manifest.targets) {
-    await createTarget(config, target);
-    await buildTarget(config, target, buildGraph);
+    await createTarget(project, target);
+    await buildTarget(project, target, buildGraph);
   }
 
   // 3. On success, write lockfile
-  await writeLockfile(config, project);
+  await writeLockfile(project.workspace.root.dir, project);
 }
 
 export interface BuildGraph {
@@ -32,17 +28,13 @@ export interface BuildGraph {
 }
 
 export async function createBuildGraph(
-  config: Config,
   project: Project,
   options: BuildOptions
 ): Promise<BuildGraph> {
   const src: Map<string, Source> = new Map();
   const references: Map<string, Reference> = new Map();
 
-  const manifests = [
-    project.manifest,
-    ...(await fetchDependencies(config, project))
-  ];
+  const manifests = [project.manifest, ...(await fetchDependencies(project))];
 
   for (const manifest of manifests) {
     for (const source of manifest.src) {

@@ -1,5 +1,5 @@
 import { Config } from '../config';
-import { Version, Dependency } from '../manifest';
+import { Dependency } from '../manifest';
 import Manager, { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import { has } from '../utils';
@@ -13,7 +13,6 @@ export interface Resolution {
 export type ResolutionGraph = Map<string, Resolution>;
 
 export default class Resolver {
-  config: Config;
   manager: Manager;
   graph: ResolutionGraph;
   loading: Map<string, Promise<Registration[]>>;

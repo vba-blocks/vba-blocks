@@ -13,7 +13,7 @@ export default async function resolve(
   config: Config,
   workspace: Workspace
 ): Promise<DependencyGraph> {
-  const lockfile = await readLockfile(config);
+  const lockfile = await readLockfile(workspace.root.dir);
 
   // If lockfile is up-to-date with manifest, use cached dependency graph
   if (lockfile && !isLockfileValid(lockfile, workspace)) {
@@ -29,16 +29,15 @@ export default async function resolve(
   resolver.prefer(preferred);
 
   // Attempt latest solver, saving errors for recommendations on failure
-  let conficts;
   try {
-    return await solveLatest(config, workspace, resolver);
+    return await solveLatest(workspace, resolver);
   } catch (err) {
     // TODO extract conflicts from latest solver error
   }
 
   // Fallback to SAT solver
   try {
-    return await solveSat(config, workspace, resolver);
+    return await solveSat(workspace, resolver);
   } catch (err) {
     // No useful information from SAT solver failure, ignore
   }

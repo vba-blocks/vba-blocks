@@ -1,7 +1,6 @@
 const program = require('commander');
 const { version } = require('../package.json');
 const commands = require('../lib/commands');
-const { loadConfig } = require('../lib/config');
 const { last } = require('../lib/utils');
 
 for (const [name, value] of Object.entries(commands)) {
@@ -17,10 +16,8 @@ for (const [name, value] of Object.entries(commands)) {
 
   command.action((...args) => {
     const execute = async () => {
-      const config = await loadConfig();
       const options = last(args);
-
-      await action(config, options);
+      await action(options);
     };
 
     execute().catch(err => {
