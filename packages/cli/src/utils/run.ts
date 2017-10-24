@@ -10,14 +10,27 @@ export default async function run(
   addin: string,
   command: string,
   value: object
-): Promise<any> {
+): Promise<string> {
   const { build: { script } } = config;
 
   const prepared = escape(JSON.stringify(value));
   const cmd = env.isWindows ? `cscript "${script.windows}"` : `"${script.mac}"`;
-  const { stdout, stderr } = await exec(
-    `${cmd} ${application} ${addin} ${command} "${value}"`
-  );
+
+  try {
+    const { stdout } = await exec(
+      `${cmd} ${application} ${addin} ${command} "${prepared}"`
+    );
+
+    if (env.isWindows) {
+      // For windows, remove cscript header (denoted by ----- divider)
+      const divider = stdout.indexOf('-----\r\n');
+      return divider >= 0 ? stdout.substr(divider + 7) : stdout;
+    } else {
+      return stdout;
+    }
+  } catch (err) {
+    throw new Error(err.stderr);
+  }
 }
 
 export function escape(value: string): string {

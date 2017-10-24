@@ -1,4 +1,5 @@
 import { join } from 'path';
+import env from './env';
 import { Project } from './project';
 import { Target, Source, Reference } from './manifest';
 import { run } from './utils';
@@ -21,7 +22,11 @@ export async function importGraph(
   const { application, addin, file } = getTargetInfo(project, target);
   const { src, references } = graph;
 
-  run(project.config, application, addin, 'import', { file, src, references });
+  await run(project.config, application, addin, 'ImportGraph', {
+    file,
+    src,
+    references
+  });
 }
 
 export function getTargetInfo(
@@ -45,5 +50,5 @@ export function getApplication(target: Target): Application {
 
 export function getAddin(target: Target): Addin {
   const application = getApplication(target);
-  return addins[application];
+  return join(env.addins, addins[application]);
 }

@@ -5,15 +5,22 @@ Dim Workbook
 Dim WorkbookWasOpen
 Set Workbook = Nothing
 
+' TODO Other apps
+
+Dim App
+Dim Addin
 Dim Command
-Dim Manifest
+Dim Args
+Dim Result
 
 App = WScript.Arguments(0)
 Addin = Unescape(WScript.Arguments(1))
 Command = WScript.Arguments(2)
 Args = Unescape(WScript.Arguments(3))
 
+PrintLn "-----"
 Run App, Addin, Command, Args
+WScript.Quit 0
 
 Function Run(App, Addin, Command, Args)
   Select Case App
@@ -24,20 +31,41 @@ Function Run(App, Addin, Command, Args)
   End Select
 End Function
 
+' Excel
+' -----
+
 Function RunExcel(Addin, Command, Args)
-  WScript.Echo "Excel"
-  WScript.Echo "-----"
-  WScript.Echo "Addin: " & Addin
-  WScript.Echo "Command: " & Command
-  WScript.Echo "Args: " & Args
+  On Error Resume Next
 
-  ' ExcelWasOpen = OpenExcel(Excel)
-  ' WorkbookWasOpen = OpenWorkbook(Excel, Addin, Workbook)
-  ' TODO Application.Run 'addin!'.Command Target, Manifest, Options
-End Function
+  ExcelWasOpen = OpenExcel(Excel)
+  If Excel Is Nothing Then
+    PrintErr "Error #1: Failed to open Excel" & vbNewLine & IIf(Err.Number <> 0, Err.Description, "Unknown Error")
+    WScript.Quit 1
+  End If
 
-Function Unescape(Value)
-  Unescape = Replace(Replace(Value, "|Q|", Chr(34)), "|S|", Chr(32))
+  WorkbookWasOpen = OpenWorkbook(Excel, Addin, Workbook)
+
+  If Workbook Is Nothing Then
+    PrintErr "Error #2: Failed to open workbook" & vbNewLine & IIf(Err.Number <> 0, Err.Description, "Unknown Error")
+    
+    CloseExcel Excel, ExcelWasOpen
+    WScript.Quit 1
+  End if
+
+  Result = Excel.Run("'" & Workbook.Name & "'!" & Command, Args)
+
+  If Err.Number <> 0 Then
+    PrintErr "Error #3: Failed to run command" & vbNewLine & IIf(Err.Number <> 0, Err.Description, "Unknown Error")
+
+    CloseWorkbook Workbook, WorkbookWasOpen
+    CloseExcel Excel, ExcelWasOpen
+    WScript.Quit 1
+  End If
+
+  PrintLn Result
+
+  CloseWorkbook Workbook, WorkbookWasOpen
+  CloseExcel Excel, ExcelWasOpen
 End Function
 
 Function OpenExcel(ByRef Excel)
@@ -55,6 +83,12 @@ Function OpenExcel(ByRef Excel)
   End If
 End Function
 
+Sub CloseExcel(ByRef Excel, KeepExcelOpen)
+  If Not KeepExcelOpen And Not Excel Is Nothing Then
+    Excel.Quit
+  End If
+End Sub
+
 Function OpenWorkbook(Excel, Path, ByRef Workbook)
   On Error Resume Next
 
@@ -70,9 +104,36 @@ Function OpenWorkbook(Excel, Path, ByRef Workbook)
   End If
 End Function
 
+Sub CloseWorkbook(ByRef Workbook, KeepWorkbookOpen)
+  If Not KeepWorkbookOpen And Not Workbook Is Nothing Then
+    Workbook.Close True
+  End If
+
+  Set Workbook = Nothing
+End Sub
+
+' General
+' -------
+
+Function Unescape(Value)
+  Unescape = Replace(Replace(Value, "|Q|", Chr(34)), "|S|", Chr(32))
+End Function
+
 Function GetFilename(Path)
   Dim Parts
   Parts = Split(Path, "\")
 
   GetFilename = Parts(UBound(Parts))
 End Function
+
+Sub Print(Message)		
+  WScript.StdOut.Write Message		
+End Sub
+ 		
+Sub PrintLn(Message)		
+  WScript.Echo Message		
+End Sub
+
+Sub PrintErr(Message)
+  WScript.StdErr.Write Message
+End Sub

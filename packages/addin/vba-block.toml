@@ -3,15 +3,12 @@ name = "vba-blocks"
 version = "0.0.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
 
-[build.script]
-windows = "./scripts/bootstrap.vbs"
-mac = "./scripts/bootstrap.scpt"
-
 [src]
+Messages = { path = "src/Messages.bas" }
 # TODO
 
 [dependencies]
-installer = { path = "VBA-Installer" }
+# TODO installer = { path = "VBA-Installer" }
 # TODO json = "^2"
 
 [[targets]]
