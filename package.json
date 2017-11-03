@@ -19,7 +19,7 @@
   },
   "jest": {
     "moduleFileExtensions": ["ts", "js", "json"],
-    "projects": ["packages/*"],
+    "projects": ["packages/{cli}"],
     "testRegex": "\\.(test|spec)\\.(ts|js)$",
     "transform": {
       "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"

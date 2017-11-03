@@ -82,10 +82,7 @@ test('should throw on unknown type', async () => {
 
 async function getManager() {
   const config = await loadConfig();
-  const instance = new Manager(config);
-  instance.sources = [registry(), git()];
-
-  return instance;
+  return new Manager(config, [registry(), git()]);
 }
 
 function registry(): Source {

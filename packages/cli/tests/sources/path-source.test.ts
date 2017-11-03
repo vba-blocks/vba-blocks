@@ -1,7 +1,9 @@
 import path from '../../src/sources/path-source';
 
 test('should match "path" type', () => {
+  expect(path.match('registry')).toEqual(false);
   expect(path.match('path')).toEqual(true);
+  expect(path.match('git')).toEqual(false);
 });
 
 test('should match path dependency', () => {

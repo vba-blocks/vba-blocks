@@ -13,9 +13,9 @@ export default async function download(
       .get(url, response => {
         try {
           const code = response.statusCode;
-          if (code >= 400) {
+          if (code && code >= 400) {
             reject(new Error(`${code} ${response.statusMessage}`));
-          } else if (code >= 300) {
+          } else if (code && code >= 300) {
             const location = response.headers.location;
             const redirect = Array.isArray(location) ? location[0] : location;
 

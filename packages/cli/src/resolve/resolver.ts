@@ -33,7 +33,7 @@ export default class Resolver {
     const { name } = dependency;
 
     if (this.loading.has(name)) await this.loading.get(name);
-    let resolution: Resolution = this.graph.get(name);
+    let resolution: Resolution | undefined = this.graph.get(name);
 
     if (!resolution) {
       const loading = this.manager.resolve(dependency);
@@ -55,15 +55,16 @@ export default class Resolver {
     }
 
     if (has(dependency, 'version')) {
-      resolution.range.push(dependency.version);
+      resolution.range.push(dependency.version!);
     }
 
     return resolution;
   }
 
-  getRegistration(id: string) {
+  getRegistration(id: string): Registration | undefined {
     const [name, version] = id.split('@', 2);
-    const { registered } = this.graph.get(name);
+    if (!this.graph.has(name)) return;
+    const { registered } = this.graph.get(name)!;
     return registered.find(registration => registration.version === version);
   }
 

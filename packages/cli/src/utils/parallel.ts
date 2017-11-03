@@ -1,11 +1,40 @@
+import { ok } from 'assert';
+import { Progress } from '../reporter';
+
+export interface ParallelOptions {
+  concurrency?: number;
+  progress?: Progress;
+}
+
+const DEFAULT_CONCURRENCY = 4;
+
 export default async function parallel<T>(
   values: T[],
-  fn: (value: T) => any | Promise<any>
-) {
-  const waiting = [];
-  for (const value of values) {
-    waiting.push(fn(value));
+  fn: (value: T) => any | Promise<any>,
+  options: ParallelOptions = {}
+): Promise<any[]> {
+  const { concurrency = DEFAULT_CONCURRENCY, progress } = options;
+  const queue = Array.from(values);
+  let results: any[] = [];
+
+  ok(concurrency >= 1, 'parallel: options.concurrency must be at least 1');
+
+  if (progress) progress.start(queue.length);
+
+  while (queue.length) {
+    const items = queue.splice(0, concurrency);
+    results = results.concat(
+      await Promise.all(
+        items.map(async item => {
+          const result = await fn(item);
+          if (progress) progress.tick();
+          return result;
+        })
+      )
+    );
   }
 
-  return await Promise.all(waiting);
+  if (progress) progress.done();
+
+  return results;
 }

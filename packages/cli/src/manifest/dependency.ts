@@ -3,8 +3,9 @@ import { isString } from '../utils';
 
 export interface Dependency {
   name: string;
-  defaultFeatures: boolean;
-  features: string[];
+
+  defaultFeatures?: boolean;
+  features?: string[];
   optional?: boolean;
 
   version?: Version;
@@ -67,7 +68,6 @@ export function parseDependency(
     branch = 'master',
     rev
   }: RawDependency = value;
-  // console.log('value', value, version, path, git)
 
   if (!version && !path && !git) {
     throw new Error(

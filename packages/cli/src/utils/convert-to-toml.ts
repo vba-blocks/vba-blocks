@@ -41,5 +41,9 @@ export default function convertToToml(value: any, level = 0): string {
     }
 
     return converted;
+  } else {
+    throw new Error(
+      `Unsupported type passed to convertToToml. Only String, Number, Boolean, Date, Array, and Object are supported`
+    );
   }
 }

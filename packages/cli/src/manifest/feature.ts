@@ -1,4 +1,4 @@
-import * as assert from 'assert';
+import { ok } from 'assert';
 
 export interface Feature {
   name: string;
@@ -37,15 +37,15 @@ export function parseFeature(name: string, value: any): Feature {
     references = []
   }: { src?: string[]; dependencies?: string[]; references?: string[] } = value;
 
-  assert.ok(
+  ok(
     Array.isArray(src),
     `Feature "${name}" has invalid src (must be an array). ${EXAMPLE}`
   );
-  assert.ok(
+  ok(
     Array.isArray(dependencies),
     `Feature "${name}" has invalid dependencies (must be an array). ${EXAMPLE}`
   );
-  assert.ok(
+  ok(
     Array.isArray(references),
     `Feature "${name}" has invalid references (must be an array). ${EXAMPLE}`
   );

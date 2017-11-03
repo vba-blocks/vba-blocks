@@ -7,15 +7,14 @@ export interface Registration extends Snapshot {
 }
 
 export function fromSnapshot(snapshot: Snapshot, source: string): Registration {
-  const { name, version, dependencies, features } = snapshot;
+  const { name, version, dependencies } = snapshot;
 
   return {
     id: getRegistrationId(snapshot),
     source,
     name,
     version,
-    dependencies,
-    features
+    dependencies
   };
 }
 

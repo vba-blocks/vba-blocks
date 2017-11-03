@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
+    "strict": true,
     "module": "commonjs",
     "moduleResolution": "node",
-    "noImplicitAny": true,
     "target": "es2017"
   }
 }

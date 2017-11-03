@@ -14,6 +14,13 @@ const addins: { [application: string]: string } = {
   excel: 'vba-blocks.xlam'
 };
 
+const byExtension: { [extension: string]: string } = {};
+for (const [application, values] of Object.entries(extensions)) {
+  for (const extension of values) {
+    byExtension[extension] = application;
+  }
+}
+
 export async function importGraph(
   project: Project,
   target: Target,
@@ -33,22 +40,11 @@ export function getTargetInfo(
   project: Project,
   target: Target
 ): { application: Application; addin: Addin; file: string } {
-  const application = getApplication(target);
-  const addin = getAddin(target);
+  const application = byExtension[target.type];
+  if (!application) throw new Error(`Unsupported target type "${target.type}"`);
+
+  const addin = join(env.addins, addins[application]);
   const file = join(project.paths.build, `${target.name}.${target.type}`);
 
   return { application, addin, file };
-}
-
-export function getApplication(target: Target): Application {
-  for (const [application, values] of Object.entries(extensions)) {
-    if (values.includes(target.type)) return application;
-  }
-
-  throw new Error(`Unsupported target type "${target.type}"`);
-}
-
-export function getAddin(target: Target): Addin {
-  const application = getApplication(target);
-  return join(env.addins, addins[application]);
 }

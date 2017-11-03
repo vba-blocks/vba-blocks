@@ -25,7 +25,7 @@ export interface Config {
   resolveSource: (snapshot: Snapshot) => string;
 }
 
-const defaults: ConfigValue = {
+export const defaultConfig: ConfigValue = {
   registry: {
     index: 'https://github.com/vba-blocks/registry',
     packages: 'https://packages.vba-blocks.com'
@@ -39,31 +39,25 @@ const defaults: ConfigValue = {
   flags: { git: true }
 };
 
-export async function loadConfig(
-  manifest?: Manifest,
-  workspace?: Workspace
-): Promise<Config> {
-  const configSources = [
-    manifest && manifest.config,
-    workspace && workspace.root.config,
-    await readConfig(),
-    defaults
-  ];
+export async function loadConfig(): Promise<Config> {
+  return resolveConfig([await readConfig(), defaultConfig]);
+}
 
+export function resolveConfig(sources: Array<ConfigValue | undefined>): Config {
   const registry = {
-    index: resolveConfig(configSources, 'registry.index'),
-    packages: resolveConfig(configSources, 'registry.packages')
+    index: resolveValue(sources, 'registry.index'),
+    packages: resolveValue(sources, 'registry.packages')
   };
 
   const build = {
     script: {
-      windows: resolveConfig(configSources, 'build.script.windows'),
-      mac: resolveConfig(configSources, 'build.script.mac')
+      windows: resolveValue(sources, 'build.script.windows'),
+      mac: resolveValue(sources, 'build.script.mac')
     }
   };
 
   const flags = {
-    git: resolveConfig(configSources, 'flags.git')
+    git: resolveValue(sources, 'flags.git')
   };
 
   const resolveRemotePackage = (snapshot: Snapshot) =>
@@ -97,7 +91,10 @@ export async function readConfig(): Promise<ConfigValue> {
   return parsed;
 }
 
-function resolveConfig(sources: ConfigValue[], path: string): any {
+function resolveValue(
+  sources: Array<ConfigValue | undefined>,
+  path: string
+): any {
   const parts = path.split('.');
 
   const envValue = env.values[`VBA_BLOCKS_${parts.join('_').toUpperCase()}`];

@@ -1,12 +1,5 @@
-import { promisify } from 'util';
 import { join, dirname, basename } from 'path';
-import {
-  createReadStream,
-  ensureDir,
-  pathExists,
-  move,
-  readFile
-} from 'fs-extra';
+import { ensureDir, pathExists, move, readFile } from 'fs-extra';
 import { extract } from 'tar';
 import env from '../env';
 import { Config } from '../config';
@@ -114,11 +107,6 @@ export function parseRegistration(value: any): Registration {
     return dependency;
   });
 
-  const features: Feature[] = [];
-  for (const [name, dependencies] of Object.entries(value.features)) {
-    features.push({ name, dependencies, src: [], references: [] });
-  }
-
   return {
     id: getRegistrationId(name, version),
     source: getRegistrationSource(
@@ -128,8 +116,7 @@ export function parseRegistration(value: any): Registration {
     ),
     name,
     version,
-    dependencies,
-    features
+    dependencies
   };
 }
 

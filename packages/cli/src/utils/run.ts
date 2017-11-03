@@ -17,17 +17,17 @@ export default async function run(
   const cmd = env.isWindows ? `cscript "${script.windows}"` : `"${script.mac}"`;
 
   try {
-    const { stdout } = await exec(
+    let { stdout } = await exec(
       `${cmd} ${application} ${addin} ${command} "${prepared}"`
     );
 
+    // For windows, remove cscript header (denoted by ----- divider)
     if (env.isWindows) {
-      // For windows, remove cscript header (denoted by ----- divider)
       const divider = stdout.indexOf('-----\r\n');
-      return divider >= 0 ? stdout.substr(divider + 7) : stdout;
-    } else {
-      return stdout;
+      stdout = divider >= 0 ? stdout.substr(divider + 7) : stdout;
     }
+
+    return stdout;
   } catch (err) {
     throw new Error(err.stderr);
   }

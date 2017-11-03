@@ -1,6 +1,8 @@
 import git from '../../src/sources/git-source';
 
 test('should match "git" type', () => {
+  expect(git.match('registry')).toEqual(false);
+  expect(git.match('path')).toEqual(false);
   expect(git.match('git')).toEqual(true);
 });
 

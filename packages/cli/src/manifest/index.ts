@@ -1,8 +1,7 @@
 import { pathExists, readFile } from 'fs-extra';
 import { join } from 'path';
-import * as assert from 'assert';
-import * as toml from 'toml';
-import { ConfigValue } from '../config';
+import { ok } from 'assert';
+import { parse as parseToml } from 'toml';
 import { Version } from './version';
 import { Source, parseSrc } from './source';
 import { Feature, parseFeatures } from './feature';
@@ -60,14 +59,12 @@ export { Version, Source, Feature, Dependency, Reference, Target };
 export interface Snapshot {
   name: string;
   version: Version;
-  features: Feature[];
   dependencies: Dependency[];
 }
 
 export interface Metadata {
   authors: string[];
   publish: boolean;
-  defaultFeatures: string[];
   [name: string]: any;
 }
 
@@ -76,7 +73,8 @@ export interface Manifest extends Snapshot {
   src: Source[];
   references: Reference[];
   targets: Target[];
-  config: ConfigValue;
+  features: Feature[];
+  defaultFeatures: string[];
   dir: string;
 }
 
@@ -85,19 +83,19 @@ const EXAMPLE = `Example vba-block.toml:
   [package]
   name = "my-package"
   version = "0.0.0"
-  authors = ["Name <email> (url)"]`;
+  authors = ["..."]`;
 
 export function parseManifest(value: any, dir: string): Manifest {
-  assert.ok(
+  ok(
     value && value.package,
     `[package] is a required field, with name, version, and authors specified. ${EXAMPLE}`
   );
 
   const { name, version, authors, publish = false } = value.package;
 
-  assert.ok(name, `[package] name is a required field. ${EXAMPLE}`);
-  assert.ok(version, `[package] version is a required field. ${EXAMPLE}`);
-  assert.ok(authors, `[package] authors is a required field. ${EXAMPLE}`);
+  ok(name, `[package] name is a required field. ${EXAMPLE}`);
+  ok(version, `[package] version is a required field. ${EXAMPLE}`);
+  ok(authors, `[package] authors is a required field. ${EXAMPLE}`);
 
   const src = parseSrc(value.src || {}, dir);
   const { features, defaultFeatures } = parseFeatures(value.features || {});
@@ -105,15 +103,7 @@ export function parseManifest(value: any, dir: string): Manifest {
   const references = parseReferences(value.references || {});
   const targets = parseTargets(value.targets || [], name, dir);
 
-  const metadata = Object.assign({}, value.package, {
-    publish,
-    defaultFeatures
-  });
-
-  const config = {
-    registry: value.registry,
-    build: value.build
-  };
+  const metadata = { publish, ...value.package };
 
   return {
     name,
@@ -121,10 +111,10 @@ export function parseManifest(value: any, dir: string): Manifest {
     metadata,
     src,
     features,
+    defaultFeatures,
     dependencies,
     references,
     targets,
-    config,
     dir
   };
 }
@@ -136,7 +126,7 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   }
 
   const raw = await readFile(file);
-  const parsed = toml.parse(raw.toString());
+  const parsed = parseToml(raw.toString());
   const manifest = parseManifest(parsed, dir);
 
   return manifest;

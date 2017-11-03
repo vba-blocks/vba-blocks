@@ -1,12 +1,3 @@
-Dim Excel
-Dim ExcelWasOpen
-Set Excel = Nothing
-Dim Workbook
-Dim WorkbookWasOpen
-Set Workbook = Nothing
-
-' TODO Other apps
-
 Dim App
 Dim Addin
 Dim Command
@@ -35,16 +26,22 @@ End Function
 ' -----
 
 Function RunExcel(Addin, Command, Args)
+  Dim Excel
+  Dim ExcelWasOpen
+  Dim Workbook
+  Dim WorkbookWasOpen
+
   On Error Resume Next
 
+  Set Excel = Nothing
   ExcelWasOpen = OpenExcel(Excel)
   If Excel Is Nothing Then
     PrintErr "Error #1: Failed to open Excel" & vbNewLine & IIf(Err.Number <> 0, Err.Description, "Unknown Error")
     WScript.Quit 1
   End If
 
+  Set Workbook = Nothing
   WorkbookWasOpen = OpenWorkbook(Excel, Addin, Workbook)
-
   If Workbook Is Nothing Then
     PrintErr "Error #2: Failed to open workbook" & vbNewLine & IIf(Err.Number <> 0, Err.Description, "Unknown Error")
     

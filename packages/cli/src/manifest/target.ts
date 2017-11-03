@@ -32,7 +32,7 @@ export function parseTargets(
 }
 
 export function parseTarget(value: any, pkgName: string, dir: string): Target {
-  if (!has(value, 'name')) value = Object.assign({ name: pkgName }, value);
+  if (!has(value, 'name')) value = { name: pkgName, ...value };
   const { name, type, path: relativePath } = value;
 
   ok(type, `target "${name}" is missing type. ${EXAMPLE}`);

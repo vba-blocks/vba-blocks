@@ -1,3 +1,4 @@
+import env from '../env';
 import { Config } from '../config';
 import { Dependency } from '../manifest';
 import { Registration } from './registration';
@@ -15,19 +16,23 @@ export default class SourceManager {
   config: Config;
   sources: Source[];
 
-  constructor(config: Config) {
+  constructor(config: Config, sources?: Source[]) {
     this.config = config;
-    this.sources = [registry, path];
+    this.sources = sources || [registry, path];
 
-    if (config.flags.git) {
+    if (!sources && config.flags.git) {
       this.sources.push(git);
     }
   }
 
   async update() {
-    await parallel(this.sources, (source: Source) => {
-      return source.update && source.update(this.config);
-    });
+    await parallel(
+      this.sources,
+      (source: Source) => {
+        return source.update && source.update(this.config);
+      },
+      { progress: env.reporter.progress('Update sources') }
+    );
   }
 
   async resolve(dependency: Dependency): Promise<Registration[]> {

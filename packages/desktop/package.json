@@ -15,7 +15,11 @@
     "appId": "com.vba-blocks.desktop",
     "productName": "vba-blocks",
     "files": ["src/**/*", "!src/renderer", "src/renderer/out"],
-    "extraFiles": [{ "from": "static" }]
+    "extraFiles": [
+      {
+        "from": "static"
+      }
+    ]
   },
   "dependencies": {
     "app-root-path": "^2.0.1",

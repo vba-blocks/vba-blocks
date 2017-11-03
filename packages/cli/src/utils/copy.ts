@@ -1,10 +1,5 @@
 import { promisify } from 'util';
-import { readFileSync, writeFileSync } from 'fs-extra';
-const { copyFile } = require('fs');
+import { copyFile } from 'fs';
 
-const copy = copyFile
-  ? promisify(copyFile)
-  : async (src: string, dest: string) => {
-      writeFileSync(readFileSync(src), dest);
-    };
+const copy = copyFile ? promisify(copyFile) : require('fs-extra').copy;
 export default copy;

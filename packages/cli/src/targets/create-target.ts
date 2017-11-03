@@ -1,8 +1,8 @@
 import { join } from 'path';
-import { pathExists, ensureDir, remove } from 'fs-extra';
+import { pathExists, ensureDir, remove, move } from 'fs-extra';
 import { Project } from '../project';
 import { Target } from '../manifest';
-import { zip, copy } from '../utils';
+import { zip } from '../utils';
 
 export default async function createTarget(
   project: Project,
@@ -21,8 +21,7 @@ export default async function createTarget(
   if (await pathExists(backup)) await remove(backup);
   if (await pathExists(file)) {
     await ensureDir(project.paths.backup);
-    await copy(file, backup);
-    await remove(file);
+    await move(file, backup);
   }
 
   // Zip directory to create target

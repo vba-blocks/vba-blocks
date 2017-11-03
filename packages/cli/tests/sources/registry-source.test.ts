@@ -2,6 +2,8 @@ import registry from '../../src/sources/registry-source';
 
 test('should match "registry" type', () => {
   expect(registry.match('registry')).toEqual(true);
+  expect(registry.match('path')).toEqual(false);
+  expect(registry.match('git')).toEqual(false);
 });
 
 test('should match registry dependency', () => {

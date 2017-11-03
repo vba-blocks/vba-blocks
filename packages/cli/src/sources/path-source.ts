@@ -14,7 +14,7 @@ const path: Source = {
     return isPathDependency(type);
   },
 
-  async resolve(config, dependency) {
+  async resolve(config, dependency: PathDependency): Promise<Registration[]> {
     // TODO
     //
     // 1. Convert manifest to registration

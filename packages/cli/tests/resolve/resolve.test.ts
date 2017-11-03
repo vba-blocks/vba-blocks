@@ -1,5 +1,7 @@
 import resolve from '../../src/resolve';
 import { loadConfig } from '../../src/config';
+import { Manifest } from '../../src/manifest';
+import { Workspace } from '../../src/workspace';
 import { toWorkspace } from '../helpers/workspace';
 import * as manifest from '../fixtures/manifest';
 

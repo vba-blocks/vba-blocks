@@ -1,3 +1,4 @@
+import { ok } from 'assert';
 import { satisfies } from 'semver';
 import { Solver, exactlyOne, atMostOne, implies, or } from 'logic-solver';
 import { Workspace } from '../workspace';
@@ -37,7 +38,9 @@ export default async function solve(
     for (const registration of registered) {
       for (const dependency of registration.dependencies) {
         const resolved = resolver.graph.get(dependency.name);
-        const matching = getMatching(dependency, resolved);
+        ok(resolved, `Dependency "${dependency.name}" hasn't been resolved`);
+
+        const matching = getMatching(dependency, resolved!);
 
         solver.require(implies(registration.id, or(...matching)));
       }
@@ -51,9 +54,18 @@ export default async function solve(
   }
 
   const ids: string[] = solution.getTrueVars();
-  const graph = ids.map(id => resolver.getRegistration(id));
+
+  const graph = ids
+    .map(id => resolver.getRegistration(id))
+    .filter(isRegistration);
 
   return graph;
+
+  function isRegistration(
+    value: Registration | undefined
+  ): value is Registration {
+    return value != null;
+  }
 }
 
 export async function resolveDependencies(
@@ -86,7 +98,7 @@ export async function optimizeResolved(
     required.push(name);
 
     if (has(dependency, 'version')) {
-      topLevel[name] = dependency.version;
+      topLevel[name] = dependency.version!;
     }
   }
 
@@ -109,7 +121,7 @@ function getMatching(dependency: Dependency, resolved: Resolution): string[] {
     const { version } = dependency;
 
     return registered
-      .filter(registration => satisfies(registration.version, version))
+      .filter(registration => satisfies(registration.version, version!))
       .map(registration => registration.id);
   } else {
     return [];
