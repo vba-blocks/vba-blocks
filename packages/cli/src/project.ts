@@ -30,7 +30,7 @@ export async function loadProject(dir?: string): Promise<Project> {
   const config = await loadConfig();
   const lockfile = await readLockfile(config, workspace.root.dir);
   const packages =
-    lockfile && isLockfileValid(lockfile, workspace)
+    lockfile && isLockfileValid(config, lockfile, workspace)
       ? lockfile.packages
       : await resolve(config, workspace, lockfile ? lockfile.packages : []);
 

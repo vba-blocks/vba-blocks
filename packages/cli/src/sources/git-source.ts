@@ -24,6 +24,10 @@ const git: Source = {
     return { name, git, rev };
   },
 
+  satisfies(value: GitDependency, comparison: GitDependency) {
+    return true;
+  },
+
   async resolve(config, dependency: GitDependency): Promise<Registration[]> {
     // TODO
     //

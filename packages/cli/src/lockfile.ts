@@ -2,7 +2,6 @@ import { ok } from 'assert';
 import { join } from 'path';
 import { pathExists, readFile, writeFile } from 'fs-extra';
 import { parse as parseToml } from 'toml';
-import { satisfies } from 'semver';
 import env from './env';
 import { Config } from './config';
 import { has, convertToToml } from './utils';
@@ -51,10 +50,13 @@ export async function writeLockfile(
   return writeFile(file, toml);
 }
 
-export function isLockfileValid(lockfile: Lockfile, workspace: Workspace) {
-  // Compare root and members, looking for differences in version and dependencies
-  if (lockfile.workspace.root.version !== workspace.root.version) return false;
-  if (!compareDependencies(workspace.root, lockfile.workspace.root))
+export function isLockfileValid(
+  config: Config,
+  lockfile: Lockfile,
+  workspace: Workspace
+): boolean {
+  const manager = new SourceManager(config);
+  if (!compareDependencies(manager, workspace.root, lockfile.workspace.root))
     return false;
 
   if (lockfile.workspace.members.length !== workspace.members.length)
@@ -62,11 +64,14 @@ export function isLockfileValid(lockfile: Lockfile, workspace: Workspace) {
 
   const byName: { [name: string]: Snapshot } = {};
   workspace.members.forEach(member => (byName[member.name] = member));
+
   for (const member of lockfile.workspace.members) {
-    const userMember = byName[member.name];
-    if (!userMember || member.version !== userMember.version) return false;
-    if (!compareDependencies(userMember, member)) return false;
+    const currentMember = byName[member.name];
+    if (!currentMember) return false;
+    if (!compareDependencies(manager, currentMember, member)) return false;
   }
+
+  return true;
 }
 
 export function toToml(lockfile: Lockfile): string {
@@ -184,21 +189,22 @@ function getDependency(id: string, byName: DependencyByName): Dependency {
   return dependency!;
 }
 
-function compareDependencies(user: Snapshot, locked: Snapshot): boolean {
-  if (user.dependencies.length !== locked.dependencies.length) return false;
+function compareDependencies(
+  manager: SourceManager,
+  current: Snapshot,
+  locked: Snapshot
+): boolean {
+  if (current.dependencies.length !== locked.dependencies.length) return false;
 
   const byName: { [name: string]: Dependency } = {};
-  user.dependencies.forEach(
+  current.dependencies.forEach(
     dependency => (byName[dependency.name] = dependency)
   );
 
   for (const dependency of locked.dependencies) {
-    const userValue = byName[dependency.name];
-    if (!userValue) return false;
-
-    // TODO Compare non-registry dependencies
-    if (!has(userValue, 'version')) continue;
-    if (!satisfies(dependency.version!, userValue.version!)) return false;
+    const currentValue = byName[dependency.name];
+    if (!currentValue) return false;
+    if (!manager.satisfies(currentValue, dependency)) return false;
   }
 
   return true;

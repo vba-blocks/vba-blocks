@@ -1,6 +1,7 @@
 import { join, dirname, basename } from 'path';
 import { ensureDir, pathExists, move, readFile } from 'fs-extra';
 import { extract } from 'tar';
+import { satisfies } from 'semver';
 import env from '../env';
 import { Config } from '../config';
 import {
@@ -32,6 +33,10 @@ const registry: Source = {
   toDependency(registration) {
     const { name, version } = registration;
     return { name, version };
+  },
+
+  satisfies(value: RegistryDependency, comparison: RegistryDependency) {
+    return satisfies(comparison.version, value.version);
   },
 
   async update(config: Config) {

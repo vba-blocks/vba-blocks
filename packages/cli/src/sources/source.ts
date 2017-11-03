@@ -14,4 +14,5 @@ export interface Source {
     registration: Registration
   ) => string | Promise<string>;
   toDependency: (registration: Registration) => Dependency;
+  satisfies: (value: Dependency, comparison: Dependency) => boolean;
 }

@@ -21,6 +21,10 @@ const path: Source = {
     return { name, path };
   },
 
+  satisfies(value: PathDependency, comparison: PathDependency) {
+    return true;
+  },
+
   async resolve(config, dependency: PathDependency): Promise<Registration[]> {
     // TODO
     //

@@ -70,4 +70,15 @@ export default class SourceManager {
       `No source mantches given registration type "${type}" (source = "${registration.source}")`
     );
   }
+
+  satisfies(value: Dependency, comparison: Dependency): boolean {
+    for (const source of this.sources) {
+      if (source.match(comparison)) {
+        if (!source.match(value)) return false;
+        return source.satisfies(value, comparison);
+      }
+    }
+
+    throw new Error('No source matches given dependency');
+  }
 }
