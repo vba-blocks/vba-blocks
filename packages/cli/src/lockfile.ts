@@ -4,9 +4,11 @@ import { pathExists, readFile, writeFile } from 'fs-extra';
 import { parse as parseToml } from 'toml';
 import { satisfies } from 'semver';
 import env from './env';
-import { isString, has, convertToToml } from './utils';
 import { Config } from './config';
-import { Snapshot, Manifest, Version, Dependency } from './manifest';
+import { has, convertToToml } from './utils';
+import { Snapshot, Manifest } from './manifest';
+import SourceManager from './sources';
+import { Dependency } from './manifest/dependency';
 import { Workspace } from './workspace';
 import { Registration, getRegistrationId } from './sources';
 import { DependencyGraph, getRegistration } from './resolve';
@@ -19,18 +21,22 @@ export interface Lockfile {
   packages: DependencyGraph;
 }
 
-type DependencyByName = { [name: string]: Dependency };
+type DependencyByName = Map<string, Dependency>;
 
-export async function readLockfile(dir: string): Promise<Lockfile | null> {
+export async function readLockfile(
+  config: Config,
+  dir: string
+): Promise<Lockfile | null> {
   const file = join(dir, 'vba-block.lock');
   if (!await pathExists(file)) return null;
 
   try {
     const toml = await readFile(file, 'utf8');
-    const lockfile = fromToml(toml);
+    const lockfile = fromToml(toml, config);
 
     return lockfile;
   } catch (err) {
+    // TODO Log error
     return null;
   }
 }
@@ -87,13 +93,14 @@ export function toToml(lockfile: Lockfile): string {
   return convertToToml({ root, members, packages });
 }
 
-export function fromToml(toml: string): Lockfile {
+export function fromToml(toml: string, config: Config): Lockfile {
   const parsed = parseToml(toml);
-  ok(has(parsed, 'root'), 'vba-blocks.toml is missing [root] field');
+  ok(has(parsed, 'root'), 'vba-block.lock is missing [root] field');
 
   // First pass through packages to load high-level information
   // (needed to map dependencies to parsed packages)
-  const byName: DependencyByName = {};
+  const byName: DependencyByName = new Map();
+  const manager = new SourceManager(config);
   const packages = (parsed.packages || []).map((value: any) => {
     const { name, version, source, dependencies } = value;
     ok(
@@ -101,21 +108,22 @@ export function fromToml(toml: string): Lockfile {
       'Invalid package in lockfile'
     );
 
-    const pkg = {
+    const registration = {
       id: getRegistrationId(name, version),
       name,
       version,
       source,
       dependencies
     };
-    byName[name] = pkg;
 
-    return pkg;
+    byName.set(name, manager.toDependency(registration));
+
+    return registration;
   });
 
   // Hydrate dependencies of packages
-  packages.forEach((pkg: any) => {
-    pkg.dependencies = pkg.dependencies.map((id: string) =>
+  packages.forEach((registration: any) => {
+    registration.dependencies = registration.dependencies.map((id: string) =>
       getDependency(id, byName)
     );
   });
@@ -169,11 +177,11 @@ function toDependencyId(dependency: Dependency, packages: DependencyGraph) {
 
 function getDependency(id: string, byName: DependencyByName): Dependency {
   const [name] = id.split(' ', 1);
-  const dependency = byName[name];
+  const dependency = byName.get(name);
 
   ok(dependency, `Package not found in lockfile, "${id}"`);
 
-  return dependency;
+  return dependency!;
 }
 
 function compareDependencies(user: Snapshot, locked: Snapshot): boolean {

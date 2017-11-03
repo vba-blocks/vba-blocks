@@ -1,3 +1,4 @@
+import { ok } from 'assert';
 import { Version } from './version';
 import { isString } from '../utils';
 
@@ -6,19 +7,6 @@ export interface Dependency {
 
   defaultFeatures?: boolean;
   features?: string[];
-  optional?: boolean;
-
-  version?: Version;
-  path?: string;
-  git?: string;
-  tag?: string;
-  branch?: string;
-  rev?: string;
-}
-
-interface RawDependency {
-  'default-features': boolean;
-  features: string[];
   optional?: boolean;
 
   version?: Version;
@@ -67,13 +55,12 @@ export function parseDependency(
     tag,
     branch = 'master',
     rev
-  }: RawDependency = value;
+  }: any = value;
 
-  if (!version && !path && !git) {
-    throw new Error(
-      `Invalid dependency "${name}", no version, path, or git specified. ${EXAMPLE}`
-    );
-  }
+  ok(
+    version || path || git,
+    `Invalid dependency "${name}", no version, path, or git specified. ${EXAMPLE}`
+  );
 
   let dependency;
   if (version) dependency = { version };

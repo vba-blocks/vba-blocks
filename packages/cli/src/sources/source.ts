@@ -13,4 +13,5 @@ export interface Source {
     config: Config,
     registration: Registration
   ) => string | Promise<string>;
+  toDependency: (registration: Registration) => Dependency;
 }

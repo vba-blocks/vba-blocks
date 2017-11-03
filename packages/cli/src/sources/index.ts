@@ -57,4 +57,17 @@ export default class SourceManager {
       `No source matches given registration type "${type}" (source = "${registration.source}")`
     );
   }
+
+  toDependency(registration: Registration): Dependency {
+    const [type] = registration.source.split('+', 1);
+    for (const source of this.sources) {
+      if (source.match(type)) {
+        return source.toDependency(registration);
+      }
+    }
+
+    throw new Error(
+      `No source mantches given registration type "${type}" (source = "${registration.source}")`
+    );
+  }
 }

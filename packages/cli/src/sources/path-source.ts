@@ -14,6 +14,13 @@ const path: Source = {
     return isPathDependency(type);
   },
 
+  toDependency(registration) {
+    const { name, source } = registration;
+    const [type, path] = source;
+
+    return { name, path };
+  },
+
   async resolve(config, dependency: PathDependency): Promise<Registration[]> {
     // TODO
     //

@@ -17,6 +17,13 @@ const git: Source = {
     return isGitDependency(type);
   },
 
+  toDependency(registration) {
+    const { name, source } = registration;
+    const [type, git, rev] = source;
+
+    return { name, git, rev };
+  },
+
   async resolve(config, dependency: GitDependency): Promise<Registration[]> {
     // TODO
     //

@@ -29,6 +29,11 @@ const registry: Source = {
     return isRegistryDependency(type);
   },
 
+  toDependency(registration) {
+    const { name, version } = registration;
+    return { name, version };
+  },
+
   async update(config: Config) {
     const local = env.registry;
     const { index: remote } = config.registry;
