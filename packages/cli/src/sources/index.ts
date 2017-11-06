@@ -21,14 +21,14 @@ export {
   toDependency
 } from './registration';
 
-const notSupported = (name: string) => {
-  const message = `${name} dependencies are not supported. Upgrade to Professional Edition for ${name} dependencies and more`;
+const notSupported = (name: 'git' | 'path') => {
+  const id = name === 'git' ? 'unsupported-git' : 'unsupported-path';
   return {
     resolve(dependency: Dependency): Registration[] {
-      throw new Error(message);
+      throw env.reporter.error(id);
     },
     fetch(registration: Registration): string {
-      throw new Error(message);
+      throw env.reporter.error(id);
     }
   };
 };

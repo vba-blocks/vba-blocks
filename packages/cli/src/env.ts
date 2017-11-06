@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { homedir } from 'os';
-import Reporter from './reporter';
+import { Reporter, reporter } from './reporter';
 
 export interface Env {
   isWindows: boolean;
@@ -30,7 +30,7 @@ const env: Env = {
   packages: join(cache, 'packages'),
   sources: join(cache, 'sources'),
 
-  reporter: new Reporter()
+  reporter
 };
 
 export default env;
