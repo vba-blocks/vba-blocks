@@ -1,5 +1,5 @@
 import { Config } from '../config';
-import { Dependency } from '../manifest';
+import { Dependency, isRegistryDependency } from '../manifest/dependency';
 import Manager, { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import { has } from '../utils';
@@ -23,10 +23,6 @@ export default class Resolver {
     this.graph = new Map();
     this.loading = new Map();
     this.preferred = new Map();
-  }
-
-  async update() {
-    await this.manager.update();
   }
 
   async get(dependency: Dependency): Promise<Resolution> {
@@ -54,8 +50,8 @@ export default class Resolver {
       this.graph.set(name, resolution);
     }
 
-    if (has(dependency, 'version')) {
-      resolution.range.push(dependency.version!);
+    if (isRegistryDependency(dependency)) {
+      resolution.range.push(dependency.version);
     }
 
     return resolution;

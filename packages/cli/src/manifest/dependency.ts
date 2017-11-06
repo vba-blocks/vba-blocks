@@ -1,21 +1,33 @@
 import { ok } from 'assert';
+import { satisfies as satisfiesSemver } from 'semver';
 import { Version } from './version';
-import { isString } from '../utils';
+import { isString, has } from '../utils';
+import { Registration } from '../sources';
 
-export interface Dependency {
+export interface DependencyDetails {
   name: string;
-
   defaultFeatures?: boolean;
   features?: string[];
   optional?: boolean;
+}
 
-  version?: Version;
-  path?: string;
-  git?: string;
+export interface RegistryDependency extends DependencyDetails {
+  registry: string;
+  version: string;
+}
+
+export interface PathDependency extends DependencyDetails {
+  path: string;
+}
+
+export interface GitDependency extends DependencyDetails {
+  git: string;
   tag?: string;
   branch?: string;
   rev?: string;
 }
+
+export type Dependency = RegistryDependency | PathDependency | GitDependency;
 
 const EXAMPLE = `Example vba-block.toml:
 
@@ -49,27 +61,84 @@ export function parseDependency(
     features = [],
     'default-features': defaultFeatures = true,
     optional = false,
+    registry = 'vba-blocks',
     version,
     path,
     git,
     tag,
     branch = 'master',
     rev
-  }: any = value;
+  }: {
+    features?: string[];
+    'default-features'?: boolean;
+    optional?: boolean;
+    registry?: string;
+    version?: string;
+    path?: string;
+    git?: string;
+    tag?: string;
+    branch?: string;
+    rev: string;
+  } = value;
 
   ok(
     version || path || git,
     `Invalid dependency "${name}", no version, path, or git specified. ${EXAMPLE}`
   );
 
-  let dependency;
-  if (version) dependency = { version };
-  else if (path) dependency = { path };
-  else if (git) {
-    if (rev) dependency = { git, rev };
-    else if (tag) dependency = { git, tag };
-    else dependency = { git, branch };
+  const details = { name, defaultFeatures, features, optional };
+
+  if (version) {
+    return { ...details, registry, version };
+  } else if (path) {
+    return { ...details, path };
+  } else {
+    if (rev) return { ...details, git: git!, rev };
+    else if (tag) return { ...details, git: git!, tag };
+    else return { ...details, git: git!, branch };
+  }
+}
+
+export function satisfies(value: Dependency, comparison: Dependency): boolean {
+  if (isRegistryDependency(comparison)) {
+    // Note: Order matters in value / comparison
+    //
+    // value = manifest / user value
+    // comparison = lockfile value (more specific)
+    return (
+      isRegistryDependency(value) &&
+      satisfiesSemver(comparison.version, value.version)
+    );
+  } else if (isPathDependency(comparison)) {
+    return isPathDependency(value) && value.path === comparison.path;
+  } else if (isGitDependency(comparison)) {
+    if (!isGitDependency(value)) return false;
+
+    if (has(value, 'rev') && has(comparison, 'rev'))
+      return value.rev === comparison.rev;
+    if (has(value, 'tag') && has(comparison, 'tag'))
+      return value.tag === comparison.tag;
+    if (has(value, 'branch') && has(comparison, 'branch'))
+      return value.branch === comparison.branch;
   }
 
-  return { name, features, defaultFeatures, optional, ...dependency };
+  return false;
+}
+
+export function isRegistryDependency(
+  dependency: Dependency
+): dependency is RegistryDependency {
+  return has(dependency, 'registry');
+}
+
+export function isPathDependency(
+  dependency: Dependency
+): dependency is PathDependency {
+  return has(dependency, 'path');
+}
+
+export function isGitDependency(
+  dependency: Dependency
+): dependency is GitDependency {
+  return has(dependency, 'git');
 }

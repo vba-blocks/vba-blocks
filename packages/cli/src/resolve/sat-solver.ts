@@ -2,7 +2,7 @@ import { ok } from 'assert';
 import { satisfies } from 'semver';
 import { Solver, exactlyOne, atMostOne, implies, or } from 'logic-solver';
 import { Workspace } from '../workspace';
-import { Dependency } from '../manifest';
+import { Dependency, isRegistryDependency } from '../manifest/dependency';
 import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution, ResolutionGraph } from './resolver';
@@ -97,8 +97,8 @@ export async function optimizeResolved(
     const { name } = dependency;
     required.push(name);
 
-    if (has(dependency, 'version')) {
-      topLevel[name] = dependency.version!;
+    if (isRegistryDependency(dependency)) {
+      topLevel[name] = dependency.version;
     }
   }
 
@@ -117,7 +117,7 @@ export async function optimizeResolved(
 function getMatching(dependency: Dependency, resolved: Resolution): string[] {
   const { registered } = resolved;
 
-  if (has(dependency, 'version')) {
+  if (isRegistryDependency(dependency)) {
     const { version } = dependency;
 
     return registered

@@ -1,84 +1,94 @@
+import { ok } from 'assert';
 import env from '../env';
 import { Config } from '../config';
-import { Dependency } from '../manifest';
+import {
+  Dependency,
+  isRegistryDependency,
+  isPathDependency,
+  isGitDependency
+} from '../manifest/dependency';
 import { Registration } from './registration';
 import { Source } from './source';
-import { parallel } from '../utils';
 
-import registry from './registry-source';
+import RegistrySource from './registry-source';
 import path from './path-source';
 import git from './git-source';
 
-export { Registration, Source, registry, path, git };
-export { getRegistrationId, getRegistrationSource } from './registration';
+export { Registration, Source, RegistrySource, path, git };
+export {
+  getRegistrationId,
+  getRegistrationSource,
+  toDependency
+} from './registration';
+
+const notSupported = (name: string) => {
+  const message = `${name} dependencies are not supported. Upgrade to Professional Edition for ${name} dependencies and more`;
+  return {
+    resolve(dependency: Dependency): Registration[] {
+      throw new Error(message);
+    },
+    fetch(registration: Registration): string {
+      throw new Error(message);
+    }
+  };
+};
 
 export default class SourceManager {
-  config: Config;
-  sources: Source[];
+  sources: {
+    registry: { [name: string]: Source };
+    git: Source;
+    path: Source;
+  };
 
-  constructor(config: Config, sources?: Source[]) {
-    this.config = config;
-    this.sources = sources || [registry, path];
+  constructor(config: Config) {
+    this.sources = {
+      registry: {},
+      git: config.flags.git ? git : notSupported('git'),
+      path: config.flags.path ? path : notSupported('path')
+    };
 
-    if (!sources && config.flags.git) {
-      this.sources.push(git);
+    for (const [name, { index, packages }] of Object.entries(config.registry)) {
+      this.sources.registry[name] = new RegistrySource({
+        name,
+        index,
+        packages
+      });
     }
   }
 
-  async update() {
-    await parallel(
-      this.sources,
-      (source: Source) => {
-        return source.update && source.update(this.config);
-      },
-      { progress: env.reporter.progress('Update sources') }
-    );
-  }
-
   async resolve(dependency: Dependency): Promise<Registration[]> {
-    for (const source of this.sources) {
-      if (source.match(dependency)) {
-        return source.resolve(this.config, dependency);
-      }
+    if (isRegistryDependency(dependency)) {
+      const { registry } = dependency;
+      const source = this.sources.registry[registry];
+      ok(source, `No matching registry configured for "${registry}"`);
+
+      return source.resolve(dependency);
+    } else if (isPathDependency(dependency)) {
+      return this.sources.path.resolve(dependency);
+    } else if (isGitDependency(dependency)) {
+      return this.sources.git.resolve(dependency);
     }
 
     throw new Error('No source matches given dependency');
   }
 
   async fetch(registration: Registration): Promise<string> {
-    const [type] = registration.source.split('+', 1);
-    for (const source of this.sources) {
-      if (source.match(type)) {
-        return source.fetch(this.config, registration);
-      }
+    const [info, details] = registration.source.split('#');
+    const [type, value] = info.split('+');
+
+    if (type === 'registry') {
+      const source = this.sources.registry[value];
+      ok(source, `No matching registry configured for "${value}"`);
+
+      return this.sources.registry[value].fetch(registration);
+    } else if (type === 'path') {
+      return this.sources.path.fetch(registration);
+    } else if (type === 'git') {
+      return this.sources.git.fetch(registration);
     }
 
     throw new Error(
       `No source matches given registration type "${type}" (source = "${registration.source}")`
     );
-  }
-
-  toDependency(registration: Registration): Dependency {
-    const [type] = registration.source.split('+', 1);
-    for (const source of this.sources) {
-      if (source.match(type)) {
-        return source.toDependency(registration);
-      }
-    }
-
-    throw new Error(
-      `No source mantches given registration type "${type}" (source = "${registration.source}")`
-    );
-  }
-
-  satisfies(value: Dependency, comparison: Dependency): boolean {
-    for (const source of this.sources) {
-      if (source.match(comparison)) {
-        if (!source.match(value)) return false;
-        return source.satisfies(value, comparison);
-      }
-    }
-
-    throw new Error('No source matches given dependency');
   }
 }

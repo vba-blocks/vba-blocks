@@ -1,31 +1,9 @@
-import { Config } from '../config';
 import { Registration } from './registration';
-import { Dependency } from '../manifest/dependency';
+import { PathDependency } from '../manifest/dependency';
 import { Source } from './source';
-import { has, isString } from '../utils';
-
-interface PathDependency extends Dependency {
-  path: string;
-}
 
 const path: Source = {
-  match(type) {
-    if (isString(type)) return type === 'path';
-    return isPathDependency(type);
-  },
-
-  toDependency(registration) {
-    const { name, source } = registration;
-    const [type, path] = source;
-
-    return { name, path };
-  },
-
-  satisfies(value: PathDependency, comparison: PathDependency) {
-    return true;
-  },
-
-  async resolve(config, dependency: PathDependency): Promise<Registration[]> {
+  async resolve(dependency: PathDependency): Promise<Registration[]> {
     // TODO
     //
     // 1. Convert manifest to registration
@@ -34,7 +12,7 @@ const path: Source = {
     return [];
   },
 
-  async fetch(config, registration): Promise<string> {
+  async fetch(registration: Registration): Promise<string> {
     // TODO
     //
     // 1. Return path
@@ -43,9 +21,3 @@ const path: Source = {
   }
 };
 export default path;
-
-function isPathDependency(
-  dependency: Dependency
-): dependency is PathDependency {
-  return has(dependency, 'path');
-}

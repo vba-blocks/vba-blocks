@@ -1,4 +1,4 @@
-import { Snapshot, Manifest } from '../manifest';
+import { Snapshot, Manifest, Dependency } from '../manifest';
 import { isString } from '../utils';
 
 export interface Registration extends Snapshot {
@@ -43,4 +43,20 @@ export function getRegistrationSource(
   }
 
   return source;
+}
+
+export function toDependency(registration: Registration): Dependency {
+  const { name, version, source } = registration;
+  const [info, details] = source.split('#');
+  const [type, value] = info.split('+');
+
+  if (type === 'registry') {
+    return { name, version, registry: value };
+  } else if (type === 'path') {
+    return { name, git: value, rev: details };
+  } else if (type === 'git') {
+    return { name, path: value };
+  } else {
+    throw new Error(`Unrecognized registration type "${type}"`);
+  }
 }

@@ -1,34 +1,9 @@
-import { Config } from '../config';
 import { Registration } from './registration';
-import { Dependency } from '../manifest/dependency';
+import { GitDependency } from '../manifest/dependency';
 import { Source } from './source';
-import { has, isString } from '../utils';
-
-interface GitDependency extends Dependency {
-  git: string;
-  branch?: string;
-  tag?: string;
-  rev?: string;
-}
 
 const git: Source = {
-  match(type) {
-    if (isString(type)) return type === 'git';
-    return isGitDependency(type);
-  },
-
-  toDependency(registration) {
-    const { name, source } = registration;
-    const [type, git, rev] = source;
-
-    return { name, git, rev };
-  },
-
-  satisfies(value: GitDependency, comparison: GitDependency) {
-    return true;
-  },
-
-  async resolve(config, dependency: GitDependency): Promise<Registration[]> {
+  async resolve(dependency: GitDependency): Promise<Registration[]> {
     // TODO
     //
     // 1. Shallow clone repository to cache
@@ -39,7 +14,7 @@ const git: Source = {
     return [];
   },
 
-  async fetch(config, registration): Promise<string> {
+  async fetch(registration: Registration): Promise<string> {
     // TODO
     //
     // 1. Checkout revision
@@ -49,7 +24,3 @@ const git: Source = {
   }
 };
 export default git;
-
-function isGitDependency(dependency: Dependency): dependency is GitDependency {
-  return has(dependency, 'git');
-}

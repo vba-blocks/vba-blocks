@@ -7,9 +7,9 @@ import { Config } from './config';
 import { has, convertToToml } from './utils';
 import { Snapshot, Manifest } from './manifest';
 import SourceManager from './sources';
-import { Dependency } from './manifest/dependency';
+import { Dependency, satisfies } from './manifest/dependency';
 import { Workspace } from './workspace';
-import { Registration, getRegistrationId } from './sources';
+import { Registration, getRegistrationId, toDependency } from './sources';
 import { DependencyGraph, getRegistration } from './resolve';
 
 export interface Lockfile {
@@ -22,16 +22,13 @@ export interface Lockfile {
 
 type DependencyByName = Map<string, Dependency>;
 
-export async function readLockfile(
-  config: Config,
-  dir: string
-): Promise<Lockfile | null> {
+export async function readLockfile(dir: string): Promise<Lockfile | null> {
   const file = join(dir, 'vba-block.lock');
   if (!await pathExists(file)) return null;
 
   try {
     const toml = await readFile(file, 'utf8');
-    const lockfile = fromToml(toml, config);
+    const lockfile = fromToml(toml);
 
     return lockfile;
   } catch (err) {
@@ -51,12 +48,10 @@ export async function writeLockfile(
 }
 
 export function isLockfileValid(
-  config: Config,
   lockfile: Lockfile,
   workspace: Workspace
 ): boolean {
-  const manager = new SourceManager(config);
-  if (!compareDependencies(manager, workspace.root, lockfile.workspace.root))
+  if (!compareDependencies(workspace.root, lockfile.workspace.root))
     return false;
 
   if (lockfile.workspace.members.length !== workspace.members.length)
@@ -68,7 +63,7 @@ export function isLockfileValid(
   for (const member of lockfile.workspace.members) {
     const currentMember = byName[member.name];
     if (!currentMember) return false;
-    if (!compareDependencies(manager, currentMember, member)) return false;
+    if (!compareDependencies(currentMember, member)) return false;
   }
 
   return true;
@@ -98,14 +93,13 @@ export function toToml(lockfile: Lockfile): string {
   return convertToToml({ root, members, packages });
 }
 
-export function fromToml(toml: string, config: Config): Lockfile {
+export function fromToml(toml: string): Lockfile {
   const parsed = parseToml(toml);
   ok(has(parsed, 'root'), 'vba-block.lock is missing [root] field');
 
   // First pass through packages to load high-level information
   // (needed to map dependencies to parsed packages)
   const byName: DependencyByName = new Map();
-  const manager = new SourceManager(config);
   const packages = (parsed.packages || []).map((value: any) => {
     const { name, version, source, dependencies } = value;
     ok(
@@ -121,7 +115,7 @@ export function fromToml(toml: string, config: Config): Lockfile {
       dependencies
     };
 
-    byName.set(name, manager.toDependency(registration));
+    byName.set(name, toDependency(registration));
 
     return registration;
   });
@@ -189,11 +183,7 @@ function getDependency(id: string, byName: DependencyByName): Dependency {
   return dependency!;
 }
 
-function compareDependencies(
-  manager: SourceManager,
-  current: Snapshot,
-  locked: Snapshot
-): boolean {
+function compareDependencies(current: Snapshot, locked: Snapshot): boolean {
   if (current.dependencies.length !== locked.dependencies.length) return false;
 
   const byName: { [name: string]: Dependency } = {};
@@ -204,7 +194,7 @@ function compareDependencies(
   for (const dependency of locked.dependencies) {
     const currentValue = byName[dependency.name];
     if (!currentValue) return false;
-    if (!manager.satisfies(currentValue, dependency)) return false;
+    if (!satisfies(currentValue, dependency)) return false;
   }
 
   return true;

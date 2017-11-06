@@ -4,18 +4,16 @@ import { Project } from '../project';
 import { DependencyGraph, getRegistration } from './dependency-graph';
 import Resolver from './resolver';
 import solveLatest from './latest-solver';
-import solveSat from './sat-solver';
 
-export { DependencyGraph, getRegistration, Resolver, solveLatest, solveSat };
+export { DependencyGraph, getRegistration, Resolver };
 
 export default async function resolve(
   config: Config,
   workspace: Workspace,
   preferred: DependencyGraph = []
 ): Promise<DependencyGraph> {
-  // Load, update, and see resolver
+  // Load, update, and seed resolver
   const resolver = new Resolver(config);
-  await resolver.update();
   resolver.prefer(preferred);
 
   // Attempt latest solver, saving errors for recommendations on failure
@@ -27,6 +25,7 @@ export default async function resolve(
 
   // Fallback to SAT solver
   try {
+    const solveSat = require('./sat-solver').default;
     return await solveSat(workspace, resolver);
   } catch (err) {
     // No useful information from SAT solver failure, ignore

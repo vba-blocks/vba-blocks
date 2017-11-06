@@ -11,9 +11,12 @@ export default async function run(
   command: string,
   value: object
 ): Promise<string> {
-  const { build: { script } } = config;
-
+  const script = {
+    windows: join(env.scripts, 'run.vbs'),
+    mac: join(env.scripts, 'run.scpt')
+  };
   const prepared = escape(JSON.stringify(value));
+
   const cmd = env.isWindows ? `cscript "${script.windows}"` : `"${script.mac}"`;
 
   try {
