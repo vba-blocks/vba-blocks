@@ -1,4 +1,4 @@
-import { createWriteStream } from 'fs-extra';
+import { createWriteStream } from 'fs';
 import { create as createArchive } from 'archiver';
 import decompress from 'decompress';
 

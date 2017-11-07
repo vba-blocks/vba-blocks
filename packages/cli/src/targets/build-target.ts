@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { pathExists } from 'fs-extra';
+import { pathExists } from '../utils/fs';
 import { Project } from '../project';
 import { Target, Source, Reference } from '../manifest';
 import { importGraph } from '../addin';

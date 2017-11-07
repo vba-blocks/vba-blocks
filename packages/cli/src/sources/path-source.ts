@@ -2,7 +2,7 @@ import { Registration } from './registration';
 import { PathDependency } from '../manifest/dependency';
 import { Source } from './source';
 
-const path: Source = {
+export default class PathSource implements Source {
   async resolve(dependency: PathDependency): Promise<Registration[]> {
     // TODO
     //
@@ -10,7 +10,7 @@ const path: Source = {
     // 2. source = path+{path}
 
     return [];
-  },
+  }
 
   async fetch(registration: Registration): Promise<string> {
     // TODO
@@ -19,5 +19,4 @@ const path: Source = {
 
     return '';
   }
-};
-export default path;
+}

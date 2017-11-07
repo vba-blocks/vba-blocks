@@ -1,5 +1,5 @@
 import { createHash } from 'crypto';
-import { readFile } from 'fs-extra';
+import { readFile } from './fs';
 
 export default async function checksum(
   file: string,

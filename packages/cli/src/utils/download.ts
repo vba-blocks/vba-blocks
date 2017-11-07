@@ -1,6 +1,7 @@
 import * as https from 'https';
 import { dirname } from 'path';
-import { createWriteStream, ensureDir } from 'fs-extra';
+import { createWriteStream } from 'fs';
+import { ensureDir } from './fs';
 
 export default async function download(
   url: string,

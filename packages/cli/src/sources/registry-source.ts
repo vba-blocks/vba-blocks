@@ -1,5 +1,4 @@
 import { join, dirname, basename } from 'path';
-import { ensureDir, pathExists, move, readFile } from 'fs-extra';
 import { extract } from 'tar';
 import env from '../env';
 import {
@@ -9,6 +8,7 @@ import {
   isString,
   tmpFile
 } from '../utils';
+import { ensureDir, pathExists, move, readFile } from '../utils/fs';
 import { clone, pull } from '../utils/git';
 import { Feature, Version } from '../manifest';
 import { RegistryDependency } from '../manifest/dependency';

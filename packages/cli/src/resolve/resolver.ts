@@ -1,6 +1,6 @@
 import { Config } from '../config';
 import { Dependency, isRegistryDependency } from '../manifest/dependency';
-import Manager, { Registration } from '../sources';
+import { Registration, resolve } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import { has } from '../utils';
 
@@ -13,13 +13,13 @@ export interface Resolution {
 export type ResolutionGraph = Map<string, Resolution>;
 
 export default class Resolver {
-  manager: Manager;
+  config: Config;
   graph: ResolutionGraph;
   loading: Map<string, Promise<Registration[]>>;
   preferred: Map<string, Registration>;
 
   constructor(config: Config) {
-    this.manager = new Manager(config);
+    this.config = config;
     this.graph = new Map();
     this.loading = new Map();
     this.preferred = new Map();
@@ -32,7 +32,7 @@ export default class Resolver {
     let resolution: Resolution | undefined = this.graph.get(name);
 
     if (!resolution) {
-      const loading = this.manager.resolve(dependency);
+      const loading = resolve(this.config.sources, dependency);
       this.loading.set(name, loading);
 
       const registered = await loading;

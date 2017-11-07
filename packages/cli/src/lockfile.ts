@@ -1,15 +1,16 @@
 import { ok } from 'assert';
 import { join } from 'path';
-import { pathExists, readFile, writeFile } from 'fs-extra';
 import { parse as parseToml } from 'toml';
-import env from './env';
-import { Config } from './config';
 import { has, convertToToml } from './utils';
+import { pathExists, readFile, writeFile } from './utils/fs';
 import { Snapshot, Manifest } from './manifest';
-import SourceManager from './sources';
 import { Dependency, satisfies } from './manifest/dependency';
 import { Workspace } from './workspace';
-import { Registration, getRegistrationId, toDependency } from './sources';
+import {
+  Registration,
+  getRegistrationId,
+  toDependency
+} from './sources/registration';
 import { DependencyGraph, getRegistration } from './resolve';
 
 export interface Lockfile {
@@ -22,21 +23,33 @@ export interface Lockfile {
 
 type DependencyByName = Map<string, Dependency>;
 
+/**
+ * Read lockfile at given dir (if present)
+ * (for invalid lockfile, errors are ignored and treated as no lockfile)
+ * 
+ * @param {string} dir
+ * @returns {Promise<Lockfile | null>} 
+ */
 export async function readLockfile(dir: string): Promise<Lockfile | null> {
-  const file = join(dir, 'vba-block.lock');
-  if (!await pathExists(file)) return null;
-
   try {
-    const toml = await readFile(file, 'utf8');
-    const lockfile = fromToml(toml);
+    const file = join(dir, 'vba-block.lock');
+    if (!await pathExists(file)) return null;
 
-    return lockfile;
+    const toml = await readFile(file, 'utf8');
+    return fromToml(toml);
   } catch (err) {
     // TODO Log error
+
     return null;
   }
 }
 
+/**
+ * Write lockfile for project to given dir
+ * 
+ * @param {string} dir 
+ * @param {Lockfile} lockfile 
+ */
 export async function writeLockfile(
   dir: string,
   lockfile: Lockfile
@@ -47,6 +60,14 @@ export async function writeLockfile(
   return writeFile(file, toml);
 }
 
+/**
+ * Check if lockfile is still valid for loaded workspace
+ * (e.g. invalidated by changing/adding dependency to manifest)
+ * 
+ * @param {Lockfile} lockfile 
+ * @param {Workspace} workspace
+ * @returns {boolean} 
+ */
 export function isLockfileValid(
   lockfile: Lockfile,
   workspace: Workspace
@@ -69,6 +90,13 @@ export function isLockfileValid(
   return true;
 }
 
+/**
+ * Convert lockfile/project to toml
+ * - toml, alphabetized and with trailing commas, should be suitable for VCS
+ * 
+ * @param {Lockfile} lockfile
+ * @returns {string} 
+ */
 export function toToml(lockfile: Lockfile): string {
   const root = prepareManifest(lockfile.workspace.root, lockfile.packages);
   const members: any[] = lockfile.workspace.members.map((member: Manifest) =>
@@ -93,6 +121,12 @@ export function toToml(lockfile: Lockfile): string {
   return convertToToml({ root, members, packages });
 }
 
+/**
+ * Load lockfile from toml (including "hydrating" dependencies from packages)
+ * 
+ * @param {string} toml
+ * @returns {Lockfile} 
+ */
 export function fromToml(toml: string): Lockfile {
   const parsed = parseToml(toml);
   ok(has(parsed, 'root'), 'vba-block.lock is missing [root] field');
@@ -127,6 +161,7 @@ export function fromToml(toml: string): Lockfile {
     );
   });
 
+  // Load manifests for workspace
   const root = toManifest(parsed.root, byName);
   const members = (parsed.members || []).map((member: any) =>
     toManifest(member, byName)
@@ -135,6 +170,7 @@ export function fromToml(toml: string): Lockfile {
   return { workspace: { root, members }, packages };
 }
 
+// Convert raw toml value to manifest
 function toManifest(value: any, byName: DependencyByName): Snapshot {
   const { name, version } = value;
   ok(
@@ -153,6 +189,7 @@ function toManifest(value: any, byName: DependencyByName): Snapshot {
   };
 }
 
+// Prepare manifest for toml
 function prepareManifest(manifest: Snapshot, packages: DependencyGraph): any {
   const { name, version } = manifest;
   const dependencies = manifest.dependencies.map(dependency =>
@@ -166,6 +203,10 @@ function prepareManifest(manifest: Snapshot, packages: DependencyGraph): any {
   };
 }
 
+// Get dependency id
+//
+// Minimum information needed for lockfile:
+// "{name} {version} {source}"
 function toDependencyId(dependency: Dependency, packages: DependencyGraph) {
   const registration = getRegistration(packages, dependency);
   ok(registration, 'No package found for dependency');
@@ -174,6 +215,7 @@ function toDependencyId(dependency: Dependency, packages: DependencyGraph) {
   return `${dependency.name} ${version} ${source}`;
 }
 
+// Get dependency by id (using name from id)
 function getDependency(id: string, byName: DependencyByName): Dependency {
   const [name] = id.split(' ', 1);
   const dependency = byName.get(name);
@@ -183,6 +225,7 @@ function getDependency(id: string, byName: DependencyByName): Dependency {
   return dependency!;
 }
 
+// Compare dependencies between current user manifest and lockfile manifest
 function compareDependencies(current: Snapshot, locked: Snapshot): boolean {
   if (current.dependencies.length !== locked.dependencies.length) return false;
 

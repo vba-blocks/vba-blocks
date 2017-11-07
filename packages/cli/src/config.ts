@@ -1,53 +1,104 @@
 import { join } from 'path';
-import { pathExists, readFile } from 'fs-extra';
 import { parse as parseToml } from 'toml';
 import env from './env';
+import { pathExists, readFile } from './utils/fs';
+import {
+  Sources,
+  RegistrySource,
+  PathSource,
+  GitSource,
+  UnsupportedSource
+} from './sources';
 
-export interface Config {
-  registry: { [name: string]: { index: string; packages: string } };
-  flags: {
-    git?: boolean;
-    path?: boolean;
-  };
+export type Registry =
+  | {}
+  | { [name: string]: { index: string; packages: string } };
+
+export interface Flags {
+  git?: boolean;
+  path?: boolean;
 }
 
+export interface Config {
+  registry: Registry;
+  flags: Flags;
+  sources: Sources;
+}
+
+export interface ConfigValue {
+  registry?: Registry;
+  flags?: Flags;
+}
+
+const empty: ConfigValue = { registry: {}, flags: {} };
+const defaults: ConfigValue = {
+  registry: {
+    'vba-blocks': {
+      index: 'https://github.com/vba-blocks/registry',
+      packages: 'https://packages.vba-blocks.com'
+    }
+  },
+  flags: { git: true, path: true }
+};
+
+/**
+ * Load config, from local, user, and environment values
+ * 
+ * - Search for .vba-blocks/config.toml up from cwd
+ * - Load ~/.vba-blocks/config.toml
+ * - Load VBA_BLOCKS_* from environment
+ */
 export async function loadConfig(): Promise<Config> {
-  const empty = { registry: {}, flags: {} };
-
-  const defaults = {
-    registry: {
-      'vba-blocks': {
-        index: 'https://github.com/vba-blocks/registry',
-        packages: 'https://packages.vba-blocks.com'
-      }
-    },
-    flags: { git: true, path: true }
+  const user: ConfigValue = {
+    ...empty,
+    ...((await readConfig(env.cache)) || {})
   };
-
-  const user = { ...empty, ...((await readConfig(env.cache)) || {}) };
-
   const file = await findConfig(env.cwd);
-  const local = { ...empty, ...file ? await readConfig(file) : {} };
-
+  const local: ConfigValue = {
+    ...empty,
+    ...file ? await readConfig(file) : {}
+  };
   const override = loadConfigFromEnv();
 
-  const registry = {
+  const registry: Registry = {
     ...defaults.registry,
     ...user.registry,
     ...local.registry,
-    ...override.flags
+    ...override.registry
   };
-  const flags = {
+  const flags: Flags = {
     ...defaults.flags,
     ...user.flags,
     ...local.flags,
     ...override.flags
   };
 
-  return { registry, flags };
+  const sources: Sources = {
+    registry: {},
+    git: flags.git ? new GitSource() : new UnsupportedSource('git'),
+    path: flags.path ? new PathSource() : new UnsupportedSource('path')
+  };
+
+  for (const [name, { index, packages }] of Object.entries(registry)) {
+    sources.registry[name] = new RegistrySource({
+      name,
+      index,
+      packages
+    });
+  }
+
+  return { registry, flags, sources };
 }
 
-export async function readConfig(dir: string): Promise<any | undefined> {
+/**
+ * Read config from dir (if present)
+ * 
+ * @param {string} dir
+ * @returns {Promise<ConfigValue | undefined>} Parsed config file, if found
+ */
+export async function readConfig(
+  dir: string
+): Promise<ConfigValue | undefined> {
   const file = join(dir, 'config.toml');
   if (!await pathExists(file)) return {};
 
@@ -57,12 +108,24 @@ export async function readConfig(dir: string): Promise<any | undefined> {
   return parsed;
 }
 
+/**
+ * Find config up from and including given dir
+ * (looking for .vba-blocks/config.toml)
+ * 
+ * @param {string} dir
+ * @returns {Promise<string | undefined>} Config file, if found
+ */
 export async function findConfig(dir: string): Promise<string | undefined> {
   // TODO Search from .vba-blocks/config.toml starting at cwd
   return;
 }
 
-export function loadConfigFromEnv(): any {
+/**
+ * Load config values from environment
+ * 
+ * @returns {ConfigValue}
+ */
+export function loadConfigFromEnv(): ConfigValue {
   // TODO Load override config from VBA_BLOCKS_* env variables
   return {};
 }

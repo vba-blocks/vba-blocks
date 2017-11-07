@@ -1,7 +1,5 @@
-import { Config } from '../config';
-import SourceManager, { Registration } from '../sources';
-import { Manifest, Dependency, loadManifest } from '../manifest';
-import { parallel } from '../utils';
+import { Registration } from '../sources';
+import { Dependency } from '../manifest';
 
 export type DependencyGraph = Registration[];
 

@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { pathExists, ensureDir, remove, move } from 'fs-extra';
+import { pathExists, ensureDir, remove, move } from '../utils/fs';
 import { Project } from '../project';
 import { Target } from '../manifest';
 import { zip } from '../utils';

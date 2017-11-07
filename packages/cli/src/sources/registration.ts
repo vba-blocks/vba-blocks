@@ -1,5 +1,6 @@
+import { parse as parseQuerystring } from 'querystring';
 import { Snapshot, Manifest, Dependency } from '../manifest';
-import { isString } from '../utils';
+import { has, isString } from '../utils';
 
 export interface Registration extends Snapshot {
   id: string;
@@ -45,18 +46,34 @@ export function getRegistrationSource(
   return source;
 }
 
+export function getSourceParts(
+  source: string
+): { type: string; value: string; details: string | undefined } {
+  const [info, details] = source.split('#', 2);
+  const [type, value] = info.split('+', 2);
+
+  return { type, value, details };
+}
+
 export function toDependency(registration: Registration): Dependency {
   const { name, version, source } = registration;
-  const [info, details] = source.split('#');
-  const [type, value] = info.split('+');
+  const { type, value, details } = getSourceParts(source);
 
   if (type === 'registry') {
     return { name, version, registry: value };
-  } else if (type === 'path') {
-    return { name, git: value, rev: details };
   } else if (type === 'git') {
+    // For git, tag / branch and/or rev are encoded as querystring
+    const gitDetails = parseQuerystring(details!);
+    return { name, git: value, ...gitDetails };
+  } else if (type === 'path') {
     return { name, path: value };
   } else {
     throw new Error(`Unrecognized registration type "${type}"`);
   }
+}
+
+export function isRegistration(
+  value: Registration | Dependency
+): value is Registration {
+  return has(value, 'source');
 }

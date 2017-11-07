@@ -1,7 +1,7 @@
-import { valid } from 'semver';
+import { validRange } from 'semver';
 
 export type Version = string;
 
 export function isValid(value: string): boolean {
-  return !!value && valid(value) != null;
+  return !!value && validRange(value) != null;
 }
