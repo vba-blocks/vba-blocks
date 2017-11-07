@@ -1,14 +1,15 @@
 import { join, dirname, basename } from 'path';
 import { extract } from 'tar';
 import env from '../env';
+import { download, has, isString } from '../utils';
 import {
-  download,
   checksum as getChecksum,
-  has,
-  isString,
+  ensureDir,
+  pathExists,
+  move,
+  readFile,
   tmpFile
-} from '../utils';
-import { ensureDir, pathExists, move, readFile } from '../utils/fs';
+} from '../utils/fs';
 import { clone, pull } from '../utils/git';
 import { Feature, Version } from '../manifest';
 import { RegistryDependency } from '../manifest/dependency';

@@ -1,4 +1,4 @@
-import { isString, isNumber, isBoolean, isDate, isObject } from './is';
+import { isString, isNumber, isBoolean, isDate, isObject } from './';
 
 export default function convertToToml(value: any, level = 0): string {
   if (isString(value)) {

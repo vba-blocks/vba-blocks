@@ -1,17 +1,45 @@
-export { default as checksum } from './checksum';
 export { default as convertToToml } from './convert-to-toml';
 export { default as download } from './download';
 export * from './fs';
 export * from './git';
-export { default as has } from './has';
-export * from './is';
-export { default as last } from './last';
 export { default as optionList } from './option-list';
 export { default as parallel } from './parallel';
-export { default as plural } from './plural';
 export { default as run, escape } from './run';
-export { default as tmpFile } from './tmp-file';
-export { default as unique } from './unique';
 export { default as unixPath } from './unix-path';
-export { default as walk } from './walk';
 export * from './zip';
+
+const toString = Object.prototype.toString;
+
+export function has(value: any, key: string): boolean {
+  return !!value && value.hasOwnProperty(key);
+}
+
+export function isString(value: any): value is string {
+  return typeof value === 'string';
+}
+
+export function isDate(value: any): value is Date {
+  return toString.call(value) === '[object Date]';
+}
+
+export function isNumber(value: any): value is number {
+  return typeof value === 'number';
+}
+
+export function isBoolean(value: any): value is boolean {
+  return typeof value === 'boolean';
+}
+
+export function isObject(value: any): value is object {
+  return value != null && typeof value === 'object';
+}
+
+export function last<T>(values: T[]): T | undefined {
+  return (
+    (values && values.length >= 1 && values[values.length - 1]) || undefined
+  );
+}
+
+export function unique(values: any) {
+  return Array.from(new Set(values));
+}
