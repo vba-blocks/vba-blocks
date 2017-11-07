@@ -1,5 +1,6 @@
 import { ok } from 'assert';
 import { satisfies as satisfiesSemver } from 'semver';
+import { join } from 'path';
 import { Version } from './version';
 import { isString, has } from '../utils';
 import { Registration } from '../sources';
@@ -45,15 +46,16 @@ const EXAMPLE = `Example vba-block.toml:
   default-features = false
   features ["a", "b"]`;
 
-export function parseDependencies(value: any): Dependency[] {
+export function parseDependencies(value: any, dir: string): Dependency[] {
   return Object.entries(value).map(([name, value]) =>
-    parseDependency(name, value)
+    parseDependency(name, value, dir)
   );
 }
 
 export function parseDependency(
   name: string,
-  value: Version | any
+  value: Version | any,
+  dir: string
 ): Dependency {
   if (isString(value)) value = { version: value };
 
@@ -91,7 +93,7 @@ export function parseDependency(
   if (version) {
     return { ...details, registry, version };
   } else if (path) {
-    return { ...details, path };
+    return { ...details, path: join(dir, path) };
   } else {
     if (rev) return { ...details, git: git!, rev };
     else if (tag) return { ...details, git: git!, tag };

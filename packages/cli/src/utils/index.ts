@@ -12,5 +12,6 @@ export { default as plural } from './plural';
 export { default as run, escape } from './run';
 export { default as tmpFile } from './tmp-file';
 export { default as unique } from './unique';
+export { default as unixPath } from './unix-path';
 export { default as walk } from './walk';
 export * from './zip';

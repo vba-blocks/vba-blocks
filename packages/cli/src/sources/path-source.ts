@@ -1,22 +1,38 @@
-import { Registration } from './registration';
+import {
+  Registration,
+  getSourceParts,
+  getRegistrationId,
+  getRegistrationSource
+} from './registration';
+import { loadManifest } from '../manifest';
 import { PathDependency } from '../manifest/dependency';
 import { Source } from './source';
+import { pathExists, readFile } from '../utils/fs';
 
 export default class PathSource implements Source {
   async resolve(dependency: PathDependency): Promise<Registration[]> {
-    // TODO
-    //
-    // 1. Convert manifest to registration
-    // 2. source = path+{path}
+    const { name, path } = dependency;
+    if (!pathExists(path))
+      throw new Error(`Path not found for dependency "${name}" (${path})`);
 
-    return [];
+    // Load registration details (version and dependencies) from manifest directly
+    const manifest = await loadManifest(path);
+    const { version, dependencies } = manifest;
+
+    const registration: Registration = {
+      id: getRegistrationId(manifest),
+      source: getRegistrationSource('path', path),
+      name,
+      version,
+      dependencies
+    };
+
+    return [registration];
   }
 
   async fetch(registration: Registration): Promise<string> {
-    // TODO
-    //
-    // 1. Return path
-
-    return '';
+    // Path dependency is already "fetched", simply return path
+    const { value } = getSourceParts(registration.source);
+    return value;
   }
 }

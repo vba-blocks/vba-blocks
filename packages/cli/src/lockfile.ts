@@ -1,7 +1,7 @@
 import { ok } from 'assert';
-import { join } from 'path';
+import { join, relative } from 'path';
 import { parse as parseToml } from 'toml';
-import { has, convertToToml } from './utils';
+import { has, convertToToml, unixPath } from './utils';
 import { pathExists, readFile, writeFile } from './utils/fs';
 import { Snapshot, Manifest } from './manifest';
 import { Dependency, satisfies } from './manifest/dependency';
@@ -9,6 +9,8 @@ import { Workspace } from './workspace';
 import {
   Registration,
   getRegistrationId,
+  getRegistrationSource,
+  getSourceParts,
   toDependency
 } from './sources/registration';
 import { DependencyGraph, getRegistration } from './resolve';
@@ -36,7 +38,7 @@ export async function readLockfile(dir: string): Promise<Lockfile | null> {
     if (!await pathExists(file)) return null;
 
     const toml = await readFile(file, 'utf8');
-    return fromToml(toml);
+    return fromToml(toml, dir);
   } catch (err) {
     // TODO Log error
 
@@ -55,7 +57,7 @@ export async function writeLockfile(
   lockfile: Lockfile
 ): Promise<void> {
   const file = join(dir, 'vba-block.lock');
-  const toml = toToml(lockfile);
+  const toml = toToml(lockfile, dir);
 
   return writeFile(file, toml);
 }
@@ -95,9 +97,10 @@ export function isLockfileValid(
  * - toml, alphabetized and with trailing commas, should be suitable for VCS
  * 
  * @param {Lockfile} lockfile
+ * @param {string} dir
  * @returns {string} 
  */
-export function toToml(lockfile: Lockfile): string {
+export function toToml(lockfile: Lockfile, dir: string): string {
   const root = prepareManifest(lockfile.workspace.root, lockfile.packages);
   const members: any[] = lockfile.workspace.members.map((member: Manifest) =>
     prepareManifest(member, lockfile.packages)
@@ -112,7 +115,7 @@ export function toToml(lockfile: Lockfile): string {
       return {
         name,
         version,
-        source,
+        source: prepareSource(source, dir),
         dependencies
       };
     }
@@ -125,9 +128,10 @@ export function toToml(lockfile: Lockfile): string {
  * Load lockfile from toml (including "hydrating" dependencies from packages)
  * 
  * @param {string} toml
+ * @param {string} dir
  * @returns {Lockfile} 
  */
-export function fromToml(toml: string): Lockfile {
+export function fromToml(toml: string, dir: string): Lockfile {
   const parsed = parseToml(toml);
   ok(has(parsed, 'root'), 'vba-block.lock is missing [root] field');
 
@@ -145,7 +149,7 @@ export function fromToml(toml: string): Lockfile {
       id: getRegistrationId(name, version),
       name,
       version,
-      source,
+      source: getSource(source, dir),
       dependencies
     };
 
@@ -201,6 +205,26 @@ function prepareManifest(manifest: Snapshot, packages: DependencyGraph): any {
     version,
     dependencies
   };
+}
+
+// Prepare registration source for toml
+// (Convert full path to relative to root dir)
+function prepareSource(source: string, dir: string): string {
+  const { type, value, details } = getSourceParts(source);
+  if (type !== 'path') return source;
+
+  const relativePath = unixPath(relative(dir, value));
+  return getRegistrationSource(type, relativePath, details);
+}
+
+// "Hydrate" registration source from toml
+// (Convert relative paths to absolute)
+function getSource(source: string, dir: string): string {
+  const { type, value, details } = getSourceParts(source);
+  if (type !== 'path') return source;
+
+  const absolutePath = join(dir, value);
+  return getRegistrationSource(type, absolutePath, details);
 }
 
 // Get dependency id

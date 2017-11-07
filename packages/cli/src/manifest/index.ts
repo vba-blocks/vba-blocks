@@ -99,7 +99,7 @@ export function parseManifest(value: any, dir: string): Manifest {
 
   const src = parseSrc(value.src || {}, dir);
   const { features, defaultFeatures } = parseFeatures(value.features || {});
-  const dependencies = parseDependencies(value.dependencies || {});
+  const dependencies = parseDependencies(value.dependencies || {}, dir);
   const references = parseReferences(value.references || {});
   const targets = parseTargets(value.targets || [], name, dir);
 
