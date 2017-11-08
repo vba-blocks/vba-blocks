@@ -26,6 +26,5 @@ Building CLI:
 
 Building add-in:
 
-1. Build CLI (see above)
-2. `cd packages/addin`
-3. `yarn run build`
+1. `cd packages/addin`
+2. `yarn run build`
