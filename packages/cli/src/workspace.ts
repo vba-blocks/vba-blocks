@@ -7,13 +7,10 @@ export interface Workspace {
 
 /**
  * Load workspace from given manifest
- * 
+ *
  * - Check for [package.workspace]
  * - Check for [workspace]
  * - Search up for vba-blocks.toml with [workspace]
- * 
- * @param {Manifest} manifest 
- * @returns {Promise<Workspace>}
  */
 export async function loadWorkspace(manifest: Manifest): Promise<Workspace> {
   // TODO Load workspace

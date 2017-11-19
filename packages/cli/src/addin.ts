@@ -22,11 +22,7 @@ for (const [application, values] of Object.entries(extensions)) {
 }
 
 /**
- * Import graph of src and references into given target 
- * 
- * @param {Project} project 
- * @param {Target} target 
- * @param {BuildGraph} graph 
+ * Import graph of src and references into given target
  */
 export async function importGraph(
   project: Project,
@@ -44,11 +40,7 @@ export async function importGraph(
 }
 
 /**
- * Get application, addin, and file for given target 
- * 
- * @param {Project} project 
- * @param {Target} target
- * @returns {object} 
+ * Get application, addin, and file for given target
  */
 export function getTargetInfo(
   project: Project,

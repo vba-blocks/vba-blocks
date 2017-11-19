@@ -29,7 +29,7 @@ export default function convertToToml(value: any, level = 0): string {
         if (Array.isArray(item)) {
           converted += `${key} = [\n`;
           converted += item
-            .map(subitem => `  ${convertToToml(subitem, level + 1)}`)
+            .map(subitem => `  ${convertToToml(subitem, level + 1)},`)
             .join(',\n');
           converted += '\n]\n';
         } else {

@@ -12,7 +12,7 @@ import {
 } from '../utils/fs';
 import { clone, pull } from '../utils/git';
 import { Feature, Version } from '../manifest';
-import { RegistryDependency } from '../manifest/dependency';
+import { Dependency, RegistryDependency } from '../manifest/dependency';
 import {
   Registration,
   getRegistrationId,
@@ -45,8 +45,8 @@ export default class RegistrySource implements Source {
     this.pulling = pullIndex(this.local.index, this.remote.index);
   }
 
-  async resolve(dependency: RegistryDependency): Promise<Registration[]> {
-    const { name } = dependency;
+  async resolve(dependency: Dependency): Promise<Registration[]> {
+    const { name } = <RegistryDependency>dependency;
     const path = getPath(this.local.index, name);
 
     await this.pulling;

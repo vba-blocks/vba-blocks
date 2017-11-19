@@ -5,13 +5,13 @@ import {
   getRegistrationSource
 } from './registration';
 import { loadManifest } from '../manifest';
-import { PathDependency } from '../manifest/dependency';
+import { Dependency, PathDependency } from '../manifest/dependency';
 import { Source } from './source';
 import { pathExists, readFile } from '../utils/fs';
 
 export default class PathSource implements Source {
-  async resolve(dependency: PathDependency): Promise<Registration[]> {
-    const { name, path } = dependency;
+  async resolve(dependency: Dependency): Promise<Registration[]> {
+    const { name, path } = <PathDependency>dependency;
     if (!pathExists(path))
       throw new Error(`Path not found for dependency "${name}" (${path})`);
 

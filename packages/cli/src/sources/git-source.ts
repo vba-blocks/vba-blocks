@@ -1,9 +1,11 @@
 import { Registration } from './registration';
-import { GitDependency } from '../manifest/dependency';
+import { Dependency, GitDependency } from '../manifest/dependency';
 import { Source } from './source';
 
 export default class GitSource implements Source {
-  async resolve(dependency: GitDependency): Promise<Registration[]> {
+  async resolve(dependency: Dependency): Promise<Registration[]> {
+    const { git, branch, tag, rev } = <GitDependency>dependency;
+
     // TODO
     //
     // 1. Shallow clone repository to cache

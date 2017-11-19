@@ -18,19 +18,19 @@ export { Version, Source, Feature, Dependency, Reference, Target };
  * name = "package-name"
  * version = "1.0.0-rc.1"
  * authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
- * 
+ *
  * [src]
  * A = "src/a.bas"
  * B = { path = "src/b.cls" }
  * C = { path = "src/c.frm", optional = true }
- * 
+ *
  * [features]
  * default = ["a"]
- * 
+ *
  * a = { src = ["C"] }
  * b = { dependencies = ["dictionary"] }
  * c = { references = ["Scripting"] }
- * 
+ *
  * [dependencies]
  * dictionary = "v1.4.1"
  * with-features = { version = "1.0.0", default-features = false, features = ["other"] }
@@ -39,16 +39,16 @@ export { Version, Source, Feature, Dependency, Reference, Target };
  * from-git-branch = { git = "https://github.com/VBA-tools/VBA-Web.git", branch = "beta" }
  * from-git-tag = { git = "https://github.com/VBA-tools/VBA-Web.git", tag = "v1.0.0" }
  * from-git-rev = { git = "https://github.com/VBA-tools/VBA-Web.git", rev = "a1b2c3d4" }
- * 
+ *
  * [references.Scripting]
  * version = "1.0"
  * guid = "{420B2830-E718-11CF-893D-00A0C9054228}"
  * optional = true
- * 
+ *
  * [[targets]]
  * type = "xlsm"
  * path = "targets/xlsm"
- * 
+ *
  * [[targets]]
  * name = "custom-name"
  * type = "xlam"
@@ -88,7 +88,9 @@ const EXAMPLE = `Example vba-block.toml:
 export function parseManifest(value: any, dir: string): Manifest {
   ok(
     value && value.package,
-    `[package] is a required field, with name, version, and authors specified. ${EXAMPLE}`
+    `[package] is a required field, with name, version, and authors specified. ${
+      EXAMPLE
+    }`
   );
 
   const { name, version, authors, publish = false } = value.package;

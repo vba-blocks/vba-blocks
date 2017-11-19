@@ -28,9 +28,6 @@ type DependencyByName = Map<string, Dependency>;
 /**
  * Read lockfile at given dir (if present)
  * (for invalid lockfile, errors are ignored and treated as no lockfile)
- * 
- * @param {string} dir
- * @returns {Promise<Lockfile | null>} 
  */
 export async function readLockfile(dir: string): Promise<Lockfile | null> {
   try {
@@ -48,9 +45,6 @@ export async function readLockfile(dir: string): Promise<Lockfile | null> {
 
 /**
  * Write lockfile for project to given dir
- * 
- * @param {string} dir 
- * @param {Lockfile} lockfile 
  */
 export async function writeLockfile(
   dir: string,
@@ -62,14 +56,8 @@ export async function writeLockfile(
   return writeFile(file, toml);
 }
 
-/**
- * Check if lockfile is still valid for loaded workspace
- * (e.g. invalidated by changing/adding dependency to manifest)
- * 
- * @param {Lockfile} lockfile 
- * @param {Workspace} workspace
- * @returns {boolean} 
- */
+// Check if lockfile is still valid for loaded workspace
+// (e.g. invalidated by changing/adding dependency to manifest)
 export function isLockfileValid(
   lockfile: Lockfile,
   workspace: Workspace
@@ -92,24 +80,18 @@ export function isLockfileValid(
   return true;
 }
 
-/**
- * Convert lockfile/project to toml
- * - toml, alphabetized and with trailing commas, should be suitable for VCS
- * 
- * @param {Lockfile} lockfile
- * @param {string} dir
- * @returns {string} 
- */
+// Convert lockfile/project to toml
+// - toml, alphabetized and with trailing commas, should be suitable for VCS
 export function toToml(lockfile: Lockfile, dir: string): string {
-  const root = prepareManifest(lockfile.workspace.root, lockfile.packages);
-  const members: any[] = lockfile.workspace.members.map((member: Manifest) =>
-    prepareManifest(member, lockfile.packages)
+  const root = prepareManifest(lockfile.workspace.root, lockfile.packages, dir);
+  const members: any[] = lockfile.workspace.members.map((member: Snapshot) =>
+    prepareManifest(member, lockfile.packages, dir)
   );
   const packages: any[] = lockfile.packages.map(
     (registration: Registration) => {
       const { name, version, source } = registration;
       const dependencies = registration.dependencies.map(dependency =>
-        toDependencyId(dependency, lockfile.packages)
+        toDependencyId(dependency, lockfile.packages, dir)
       );
 
       return {
@@ -124,13 +106,7 @@ export function toToml(lockfile: Lockfile, dir: string): string {
   return convertToToml({ root, members, packages });
 }
 
-/**
- * Load lockfile from toml (including "hydrating" dependencies from packages)
- * 
- * @param {string} toml
- * @param {string} dir
- * @returns {Lockfile} 
- */
+// Load lockfile from toml (including "hydrating" dependencies from packages)
 export function fromToml(toml: string, dir: string): Lockfile {
   const parsed = parseToml(toml);
   ok(has(parsed, 'root'), 'vba-block.lock is missing [root] field');
@@ -194,10 +170,14 @@ function toManifest(value: any, byName: DependencyByName): Snapshot {
 }
 
 // Prepare manifest for toml
-function prepareManifest(manifest: Snapshot, packages: DependencyGraph): any {
+function prepareManifest(
+  manifest: Snapshot,
+  packages: DependencyGraph,
+  dir: string
+): any {
   const { name, version } = manifest;
   const dependencies = manifest.dependencies.map(dependency =>
-    toDependencyId(dependency, packages)
+    toDependencyId(dependency, packages, dir)
   );
 
   return {
@@ -231,11 +211,22 @@ function getSource(source: string, dir: string): string {
 //
 // Minimum information needed for lockfile:
 // "{name} {version} {source}"
-function toDependencyId(dependency: Dependency, packages: DependencyGraph) {
+function toDependencyId(
+  dependency: Dependency,
+  packages: DependencyGraph,
+  dir: string
+) {
   const registration = getRegistration(packages, dependency);
   ok(registration, 'No package found for dependency');
 
-  const { version, source } = registration!;
+  let { version, source } = registration!;
+  const { type, value, details } = getSourceParts(source);
+
+  if (type === 'path') {
+    const relativePath = unixPath(relative(dir, value));
+    source = getRegistrationSource(type, relativePath, details);
+  }
+
   return `${dependency.name} ${version} ${source}`;
 }
 

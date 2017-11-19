@@ -24,14 +24,11 @@ export interface Project {
 
 /**
  * Load project, starting at given dir
- * 
+ *
  * - Loads manifest at given dir
  * - Loads workspace from that manifest
  * - Loads config
  * - Loads packages (with lockfile)
- * 
- * @param {string} [dir = cwd]
- * @returns {Promise<Project>} 
  */
 export async function loadProject(dir?: string): Promise<Project> {
   const manifest = await loadManifest(dir || env.cwd);
@@ -63,11 +60,8 @@ export async function loadProject(dir?: string): Promise<Project> {
 /**
  * Fetch all dependencies for project
  * (based on already resolve project.packages)
- * 
+ *
  * After sources complete fetches, manifests are loaded and returned for each package
- * 
- * @param {Project} project
- * @returns {Promise<Manifest[]>}
  */
 export async function fetchDependencies(project: Project): Promise<Manifest[]> {
   const manifests = await parallel(

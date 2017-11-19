@@ -43,7 +43,7 @@ const defaults: ConfigValue = {
 
 /**
  * Load config, from local, user, and environment values
- * 
+ *
  * - Search for .vba-blocks/config.toml up from cwd
  * - Load ~/.vba-blocks/config.toml
  * - Load VBA_BLOCKS_* from environment
@@ -90,12 +90,7 @@ export async function loadConfig(): Promise<Config> {
   return { registry, flags, sources };
 }
 
-/**
- * Read config from dir (if present)
- * 
- * @param {string} dir
- * @returns {Promise<ConfigValue | undefined>} Parsed config file, if found
- */
+// Read config from dir (if present)
 export async function readConfig(
   dir: string
 ): Promise<ConfigValue | undefined> {
@@ -108,23 +103,14 @@ export async function readConfig(
   return parsed;
 }
 
-/**
- * Find config up from and including given dir
- * (looking for .vba-blocks/config.toml)
- * 
- * @param {string} dir
- * @returns {Promise<string | undefined>} Config file, if found
- */
+// Find config up from and including given dir
+// (looking for .vba-blocks/config.toml)
 export async function findConfig(dir: string): Promise<string | undefined> {
   // TODO Search from .vba-blocks/config.toml starting at cwd
   return;
 }
 
-/**
- * Load config values from environment
- * 
- * @returns {ConfigValue}
- */
+// Load config values from environment
 export function loadConfigFromEnv(): ConfigValue {
   // TODO Load override config from VBA_BLOCKS_* env variables
   return {};
