@@ -57,16 +57,17 @@ export default class RegistrySource implements Source {
     const data = await readFile(path, 'utf8');
     const registrations: Registration[] = data
       .split(/\r?\n/)
+      .filter((line: string) => !!line)
       .map((line: string) => JSON.parse(line))
       .filter((value: any) => value && !value.yanked)
-      .map(parseRegistration);
+      .map((value: string) => parseRegistration(this.name, value));
 
     return registrations;
   }
 
   async fetch(registration: Registration): Promise<string> {
-    const url = getPackage(this.remote.packages, registration);
-    const file = getPackage(this.local.packages, registration);
+    const url = getRemotePackage(this.remote.packages, registration);
+    const file = getLocalPackage(this.local.packages, registration);
 
     const [_, checksum] = registration.source.split('#', 2);
 
@@ -104,14 +105,11 @@ export function parseRegistration(registry: string, value: any): Registration {
   const { name, vers: version, cksum: checksum } = value;
 
   const dependencies: RegistryDependency[] = value.deps.map((dep: any) => {
-    const { name, req, features, optional, defaultFeatures } = dep;
+    const { name, req } = dep;
     const dependency: RegistryDependency = {
       name,
       registry,
-      version: req,
-      features,
-      optional,
-      defaultFeatures
+      version: req
     };
 
     return dependency;
@@ -119,7 +117,7 @@ export function parseRegistration(registry: string, value: any): Registration {
 
   return {
     id: getRegistrationId(name, version),
-    source: getRegistrationSource('registry', name, checksum),
+    source: getRegistrationSource('registry', registry, checksum),
     name,
     version,
     dependencies
@@ -141,7 +139,15 @@ function getPath(index: string, name: string): string {
   return join(index, ...parts, name);
 }
 
-function getPackage(packages: string, registration: Registration): string {
+function getRemotePackage(
+  packages: string,
+  registration: Registration
+): string {
+  const { name, version } = registration;
+  return `${packages}/${name}/v${version}.block`;
+}
+
+function getLocalPackage(packages: string, registration: Registration): string {
   const { name, version } = registration;
   return join(packages, name, `v${version}.block`);
 }

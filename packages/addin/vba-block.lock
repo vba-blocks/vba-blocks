@@ -2,7 +2,8 @@
 name = "vba-blocks"
 version = "0.0.0"
 dependencies = [
-  "installer 0.0.0 path+VBA-Installer",
+  "installer 0.0.0 path+VBA-Installer",,
+  "dictionary 1.4.1 registry+vba-blocks#bdc77f888e0a83361217c663ce7d2a47b94b7d9bb52c2700ab1b2034fecbf3ef",
 ]
 
 [[packages]]
@@ -11,6 +12,14 @@ version = "0.0.0"
 source = "path+VBA-Installer"
 dependencies = [
   "filesystem 0.0.0 path+VBA-FileSystem",
+]
+
+[[packages]]
+name = "dictionary"
+version = "1.4.1"
+source = "registry+vba-blocks#bdc77f888e0a83361217c663ce7d2a47b94b7d9bb52c2700ab1b2034fecbf3ef"
+dependencies = [
+
 ]
 
 [[packages]]

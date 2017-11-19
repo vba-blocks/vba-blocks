@@ -64,6 +64,8 @@ export async function fetch(
   }
 
   throw new Error(
-    `No source matches given registration type "${type}" (source = "${registration.source}")`
+    `No source matches given registration type "${type}" (source = "${
+      registration.source
+    }")`
   );
 }
