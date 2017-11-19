@@ -2,6 +2,22 @@
 name = "vba-blocks"
 version = "0.0.0"
 dependencies = [
+  "installer 0.0.0 path+VBA-Installer",
+]
+
+[[packages]]
+name = "installer"
+version = "0.0.0"
+source = "path+VBA-Installer"
+dependencies = [
+  "filesystem 0.0.0 path+VBA-FileSystem",
+]
+
+[[packages]]
+name = "filesystem"
+version = "0.0.0"
+source = "path+VBA-FileSystem"
+dependencies = [
 
 ]
 

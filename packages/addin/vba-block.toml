@@ -4,11 +4,10 @@ version = "0.0.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
 
 [src]
-Messages = { path = "src/Messages.bas" }
 # TODO
 
 [dependencies]
-# TODO installer = { path = "VBA-Installer" }
+installer = { path = "VBA-Installer" }
 # TODO json = "^2"
 
 [[targets]]
