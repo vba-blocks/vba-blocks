@@ -1,13 +1,11 @@
 import solve from '../../src/resolve/latest-solver';
-import { loadConfig } from '../../src/config';
+import { getConfig } from '../helpers/config';
 import Resolver from '../../src/resolve/resolver';
 import { toWorkspace } from '../helpers/workspace';
 import * as manifest from '../fixtures/manifest';
 
-jest.mock('../../src/sources/registry-source');
-
 test('solves simple tree', async () => {
-  const config = await loadConfig();
+  const config = getConfig();
   const resolver = new Resolver(config);
 
   const solution = await solve(toWorkspace(manifest.simple), resolver);
@@ -16,7 +14,7 @@ test('solves simple tree', async () => {
 });
 
 test('solves complex tree', async () => {
-  const config = await loadConfig();
+  const config = getConfig();
   const resolver = new Resolver(config);
 
   const solution = await solve(toWorkspace(manifest.complex), resolver);
@@ -25,7 +23,7 @@ test('solves complex tree', async () => {
 });
 
 test('fails to solve needs-sat tree', async () => {
-  const config = await loadConfig();
+  const config = getConfig();
   const resolver = new Resolver(config);
 
   await expect(
@@ -34,7 +32,7 @@ test('fails to solve needs-sat tree', async () => {
 });
 
 test('fails to solve unresolvable tree', async () => {
-  const config = await loadConfig();
+  const config = getConfig();
   const resolver = new Resolver(config);
 
   await expect(

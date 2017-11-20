@@ -52,7 +52,6 @@ interface Options {
   dependencies?: Dependency[];
   references?: Reference[];
   targets?: Target[];
-  config?: ConfigValue;
   dir?: string;
 }
 
@@ -66,20 +65,19 @@ function createManifest(options: Options): Manifest {
     dependencies = [],
     references = [],
     targets = [],
-    config = {},
     dir = join(__dirname, '../fixtures')
   } = options;
 
   return {
     name,
     version,
-    metadata: { authors: [], publish: false, defaultFeatures },
+    metadata: { authors: [], publish: false },
     src,
     features,
+    defaultFeatures,
     dependencies,
     references,
     targets,
-    config: {},
     dir
   };
 }
@@ -90,9 +88,7 @@ function toDependencies(values: object): Dependency[] {
     dependencies.push(<Dependency>{
       name,
       version,
-      defaultFeatures: true,
-      features: [],
-      optional: false
+      registry: 'vba-blocks'
     });
   }
 

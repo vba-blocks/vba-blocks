@@ -1,7 +1,8 @@
 import {
   getRegistrationId,
   getRegistrationSource,
-  fromSnapshot
+  fromSnapshot,
+  getSourceParts
 } from '../../src/sources/registration';
 
 const snapshot = {
@@ -32,4 +33,12 @@ test('should get registration source', () => {
 test('should get registration from snapshot', () => {
   const registration = fromSnapshot(snapshot, 'type+value#details');
   expect(registration).toMatchSnapshot();
+});
+
+test('should get paths from source', () => {
+  let parts = getSourceParts('type+value#details');
+  expect(parts).toMatchSnapshot();
+
+  parts = getSourceParts('registry+has+plus#with#hash');
+  expect(parts).toMatchSnapshot();
 });

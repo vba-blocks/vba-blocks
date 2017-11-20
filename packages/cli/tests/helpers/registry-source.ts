@@ -1,17 +1,13 @@
-import { Config } from '../../config';
-import { Feature, Dependency } from '../../manifest';
-import { Registration } from '../';
-import { Source } from '../source';
+import { Feature, Dependency } from '../../src/manifest';
+import { Source, Registration } from '../../src/sources';
 
-const features: Feature[] = [];
-const source = 'registry+<url>#<none>';
+const source = 'registry+vba-blocks#<hash>';
 const registry: { [name: string]: Registration[] } = {
   a: [
     {
       id: 'a@0.1.0',
       name: 'a',
       version: '0.1.0',
-      features,
       source,
       dependencies: []
     },
@@ -20,13 +16,11 @@ const registry: { [name: string]: Registration[] } = {
       source,
       name: 'a',
       version: '1.0.0',
-      features,
       dependencies: [
         {
           name: 'd',
           version: '^1.0.0',
-          features: [],
-          defaultFeatures: true
+          registry: 'vba-blocks'
         }
       ]
     },
@@ -34,21 +28,15 @@ const registry: { [name: string]: Registration[] } = {
       id: 'a@1.1.0',
       name: 'a',
       version: '1.1.0',
-      features,
       source,
-      dependencies: [
-        { name: 'd', version: '^1.2.0', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'd', version: '^1.2.0', registry: 'vba-blocks' }]
     },
     {
       id: 'a@1.2.0',
       name: 'a',
       version: '1.2.0',
-      features,
       source,
-      dependencies: [
-        { name: 'd', version: '^2', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'd', version: '^2', registry: 'vba-blocks' }]
     }
   ],
   b: [
@@ -56,21 +44,15 @@ const registry: { [name: string]: Registration[] } = {
       id: 'b@1.0.0',
       name: 'b',
       version: '1.0.0',
-      features,
       source,
-      dependencies: [
-        { name: 'c', version: '^0.1.0', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'c', version: '^0.1.0', registry: 'vba-blocks' }]
     },
     {
       id: 'b@1.1.0',
       name: 'b',
       version: '1.1.0',
-      features,
       source,
-      dependencies: [
-        { name: 'c', version: '^0.1.5', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'c', version: '^0.1.5', registry: 'vba-blocks' }]
     }
   ],
   c: [
@@ -78,7 +60,6 @@ const registry: { [name: string]: Registration[] } = {
       id: 'c@0.1.0',
       name: 'c',
       version: '0.1.0',
-      features,
       source,
       dependencies: []
     },
@@ -86,7 +67,6 @@ const registry: { [name: string]: Registration[] } = {
       id: 'c@0.1.6',
       name: 'c',
       version: '0.1.6',
-      features,
       source,
       dependencies: []
     }
@@ -96,41 +76,29 @@ const registry: { [name: string]: Registration[] } = {
       id: 'd@1.0.0',
       name: 'd',
       version: '1.0.0',
-      features,
       source,
-      dependencies: [
-        { name: 'f', version: '^1', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'f', version: '^1', registry: 'vba-blocks' }]
     },
     {
       id: 'd@1.1.0',
       name: 'd',
       version: '1.1.0',
-      features,
       source,
-      dependencies: [
-        { name: 'f', version: '^1', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'f', version: '^1', registry: 'vba-blocks' }]
     },
     {
       id: 'd@1.2.0',
       name: 'd',
       version: '1.2.0',
-      features,
       source,
-      dependencies: [
-        { name: 'f', version: '^1', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'f', version: '^1', registry: 'vba-blocks' }]
     },
     {
       id: 'd@2.0.0',
       name: 'd',
       version: '2.0.0',
-      features,
       source,
-      dependencies: [
-        { name: 'f', version: '^2', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'f', version: '^2', registry: 'vba-blocks' }]
     }
   ],
   e: [],
@@ -139,21 +107,15 @@ const registry: { [name: string]: Registration[] } = {
       id: 'f@1.0.0',
       name: 'f',
       version: '1.0.0',
-      features,
       source,
-      dependencies: [
-        { name: 'g', version: '^1', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'g', version: '^1', registry: 'vba-blocks' }]
     },
     {
       id: 'f@2.0.0',
       name: 'f',
       version: '2.0.0',
-      features,
       source,
-      dependencies: [
-        { name: 'g', version: '^1', features: [], defaultFeatures: true }
-      ]
+      dependencies: [{ name: 'g', version: '^1', registry: 'vba-blocks' }]
     }
   ],
   g: [
@@ -161,7 +123,6 @@ const registry: { [name: string]: Registration[] } = {
       id: 'g@1.0.0',
       name: 'g',
       version: '1.0.0',
-      features,
       source,
       dependencies: []
     },
@@ -169,23 +130,19 @@ const registry: { [name: string]: Registration[] } = {
       id: 'g@2.0.0',
       name: 'g',
       version: '2.0.0',
-      features,
       source,
       dependencies: []
     }
   ]
 };
 
-const mock: Source = {
-  match(type) {
-    return true;
-  },
-  resolve(config, dependency) {
+export default class RegistrySource {
+  resolve(dependency: Dependency) {
     const { name } = dependency;
     return registry[name];
-  },
-  fetch(config, registration) {
+  }
+
+  fetch(registration: Registration) {
     return '';
   }
-};
-export default mock;
+}

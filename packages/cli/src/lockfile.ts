@@ -88,20 +88,13 @@ export function toToml(lockfile: Lockfile, dir: string): string {
     prepareManifest(member, lockfile.packages, dir)
   );
 
-  console.log('before');
-  lockfile.packages.forEach(p => console.log(p.name));
-
-  lockfile.packages.sort((a, b) => {
-    if (a.name < b.name) return -1;
-    if (a.name > b.name) return 1;
-    return 0;
-  });
-
-  console.log('after');
-  lockfile.packages.forEach(p => console.log(p.name));
-
-  const packages: any[] = lockfile.packages.map(
-    (registration: Registration) => {
+  const packages: any[] = lockfile.packages
+    .sort((a, b) => {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    })
+    .map((registration: Registration) => {
       const { name, version, source } = registration;
       const dependencies = registration.dependencies.map(dependency =>
         toDependencyId(dependency, lockfile.packages, dir)
@@ -113,8 +106,7 @@ export function toToml(lockfile: Lockfile, dir: string): string {
         source: prepareSource(source, dir),
         dependencies
       };
-    }
-  );
+    });
 
   return convertToToml({ root, members, packages });
 }

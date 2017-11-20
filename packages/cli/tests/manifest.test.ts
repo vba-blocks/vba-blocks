@@ -1,5 +1,6 @@
 import { join, relative, sep } from 'path';
 import { Manifest, parseManifest, loadManifest } from '../src/manifest';
+import { isPathDependency } from '../src/manifest/dependency';
 
 const BASE_MANIFEST = {
   package: { name: 'package-name', version: '1.0.0', authors: ['Tim Hall'] }
@@ -174,6 +175,11 @@ function normalize(
   }
   for (const target of manifest.targets) {
     target.path = normalizePath(target.path, relativeTo);
+  }
+  for (const dependency of manifest.dependencies) {
+    if (isPathDependency(dependency)) {
+      dependency.path = normalizePath(dependency.path, relativeTo);
+    }
   }
 
   return manifest;

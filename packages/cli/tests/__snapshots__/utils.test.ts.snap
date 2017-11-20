@@ -4,7 +4,7 @@ exports[`convertToToml 1`] = `
 "[root]
 name = \\"project\\"
 dependencies = [
-  \\"a 1.2.3\\"
+  \\"a 1.2.3\\",
 ]
 
 [[packages]]
@@ -12,7 +12,7 @@ name = \\"a\\"
 version = \\"1.2.3\\"
 source = \\"registry+...#...\\"
 dependencies = [
-  \\"d 0.0.0\\"
+  \\"d 0.0.0\\",
 ]
 
 [[packages]]

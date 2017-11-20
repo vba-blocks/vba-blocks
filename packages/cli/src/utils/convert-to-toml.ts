@@ -27,11 +27,12 @@ export default function convertToToml(value: any, level = 0): string {
       // For next level, use key = value appraoch
       for (const [key, item] of Object.entries(value)) {
         if (Array.isArray(item)) {
+          const empty = item.length === 0;
           converted += `${key} = [\n`;
           converted += item
-            .map(subitem => `  ${convertToToml(subitem, level + 1)},`)
+            .map(subitem => `  ${convertToToml(subitem, level + 1)}`)
             .join(',\n');
-          converted += '\n]\n';
+          converted += empty ? ']\n' : ',\n]\n';
         } else {
           converted += `${key} = ${convertToToml(item, level + 1)}\n`;
         }

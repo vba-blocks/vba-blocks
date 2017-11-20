@@ -9,55 +9,48 @@ Object {
   "registered": Array [
     Object {
       "dependencies": Array [],
-      "features": Array [],
       "id": "a@0.1.0",
       "name": "a",
-      "source": "registry+<url>#<none>",
+      "source": "registry+vba-blocks#<hash>",
       "version": "0.1.0",
     },
     Object {
       "dependencies": Array [
         Object {
-          "defaultFeatures": true,
-          "features": Array [],
           "name": "d",
+          "registry": "vba-blocks",
           "version": "^1.0.0",
         },
       ],
-      "features": Array [],
       "id": "a@1.0.0",
       "name": "a",
-      "source": "registry+<url>#<none>",
+      "source": "registry+vba-blocks#<hash>",
       "version": "1.0.0",
     },
     Object {
       "dependencies": Array [
         Object {
-          "defaultFeatures": true,
-          "features": Array [],
           "name": "d",
+          "registry": "vba-blocks",
           "version": "^1.2.0",
         },
       ],
-      "features": Array [],
       "id": "a@1.1.0",
       "name": "a",
-      "source": "registry+<url>#<none>",
+      "source": "registry+vba-blocks#<hash>",
       "version": "1.1.0",
     },
     Object {
       "dependencies": Array [
         Object {
-          "defaultFeatures": true,
-          "features": Array [],
           "name": "d",
+          "registry": "vba-blocks",
           "version": "^2",
         },
       ],
-      "features": Array [],
       "id": "a@1.2.0",
       "name": "a",
-      "source": "registry+<url>#<none>",
+      "source": "registry+vba-blocks#<hash>",
       "version": "1.2.0",
     },
   ],
@@ -78,16 +71,14 @@ exports[`should get registration 1`] = `
 Object {
   "dependencies": Array [
     Object {
-      "defaultFeatures": true,
-      "features": Array [],
       "name": "d",
+      "registry": "vba-blocks",
       "version": "^1.0.0",
     },
   ],
-  "features": Array [],
   "id": "a@1.0.0",
   "name": "a",
-  "source": "registry+<url>#<none>",
+  "source": "registry+vba-blocks#<hash>",
   "version": "1.0.0",
 }
 `;
@@ -98,16 +89,14 @@ Object {
   "preferred": Object {
     "dependencies": Array [
       Object {
-        "defaultFeatures": true,
-        "features": Array [],
         "name": "d",
+        "registry": "vba-blocks",
         "version": "^1.0.0",
       },
     ],
-    "features": Array [],
     "id": "a@1.0.0",
     "name": "a",
-    "source": "registry+<url>#<none>",
+    "source": "registry+vba-blocks#<hash>",
     "version": "1.0.0",
   },
   "range": Array [
@@ -116,55 +105,48 @@ Object {
   "registered": Array [
     Object {
       "dependencies": Array [],
-      "features": Array [],
       "id": "a@0.1.0",
       "name": "a",
-      "source": "registry+<url>#<none>",
+      "source": "registry+vba-blocks#<hash>",
       "version": "0.1.0",
     },
     Object {
       "dependencies": Array [
         Object {
-          "defaultFeatures": true,
-          "features": Array [],
           "name": "d",
+          "registry": "vba-blocks",
           "version": "^1.0.0",
         },
       ],
-      "features": Array [],
       "id": "a@1.0.0",
       "name": "a",
-      "source": "registry+<url>#<none>",
+      "source": "registry+vba-blocks#<hash>",
       "version": "1.0.0",
     },
     Object {
       "dependencies": Array [
         Object {
-          "defaultFeatures": true,
-          "features": Array [],
           "name": "d",
+          "registry": "vba-blocks",
           "version": "^1.2.0",
         },
       ],
-      "features": Array [],
       "id": "a@1.1.0",
       "name": "a",
-      "source": "registry+<url>#<none>",
+      "source": "registry+vba-blocks#<hash>",
       "version": "1.1.0",
     },
     Object {
       "dependencies": Array [
         Object {
-          "defaultFeatures": true,
-          "features": Array [],
           "name": "d",
+          "registry": "vba-blocks",
           "version": "^2",
         },
       ],
-      "features": Array [],
       "id": "a@1.2.0",
       "name": "a",
-      "source": "registry+<url>#<none>",
+      "source": "registry+vba-blocks#<hash>",
       "version": "1.2.0",
     },
   ],
@@ -183,55 +165,48 @@ Array [
       "registered": Array [
         Object {
           "dependencies": Array [],
-          "features": Array [],
           "id": "a@0.1.0",
           "name": "a",
-          "source": "registry+<url>#<none>",
+          "source": "registry+vba-blocks#<hash>",
           "version": "0.1.0",
         },
         Object {
           "dependencies": Array [
             Object {
-              "defaultFeatures": true,
-              "features": Array [],
               "name": "d",
+              "registry": "vba-blocks",
               "version": "^1.0.0",
             },
           ],
-          "features": Array [],
           "id": "a@1.0.0",
           "name": "a",
-          "source": "registry+<url>#<none>",
+          "source": "registry+vba-blocks#<hash>",
           "version": "1.0.0",
         },
         Object {
           "dependencies": Array [
             Object {
-              "defaultFeatures": true,
-              "features": Array [],
               "name": "d",
+              "registry": "vba-blocks",
               "version": "^1.2.0",
             },
           ],
-          "features": Array [],
           "id": "a@1.1.0",
           "name": "a",
-          "source": "registry+<url>#<none>",
+          "source": "registry+vba-blocks#<hash>",
           "version": "1.1.0",
         },
         Object {
           "dependencies": Array [
             Object {
-              "defaultFeatures": true,
-              "features": Array [],
               "name": "d",
+              "registry": "vba-blocks",
               "version": "^2",
             },
           ],
-          "features": Array [],
           "id": "a@1.2.0",
           "name": "a",
-          "source": "registry+<url>#<none>",
+          "source": "registry+vba-blocks#<hash>",
           "version": "1.2.0",
         },
       ],

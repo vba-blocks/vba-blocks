@@ -1,9 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`should get paths from source 1`] = `
+Object {
+  "details": "details",
+  "type": "type",
+  "value": "value",
+}
+`;
+
+exports[`should get paths from source 2`] = `
+Object {
+  "details": "with#hash",
+  "type": "registry",
+  "value": "has+plus",
+}
+`;
+
 exports[`should get registration from snapshot 1`] = `
 Object {
   "dependencies": Array [],
-  "features": Array [],
   "id": "a@1.0.0",
   "name": "a",
   "source": "type+value#details",

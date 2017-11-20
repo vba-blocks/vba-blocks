@@ -2,14 +2,14 @@ import { join } from 'path';
 import { Project } from '../../src/project';
 import { Manifest } from '../../src/manifest';
 import { Workspace } from '../../src/workspace';
-import { defaultConfig, resolveConfig } from '../../src/config';
+import { getConfig } from '../helpers/config';
 import * as manifest from './manifest';
 
 export const simple = toProject(manifest.simple);
 export const complex = toProject(manifest.complex);
 
 export function toProject(manifest: Manifest): Project {
-  const config = resolveConfig([defaultConfig]);
+  const config = getConfig();
   const paths = {
     root: manifest.dir,
     dir: manifest.dir,

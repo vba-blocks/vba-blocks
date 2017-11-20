@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should resolve from git using sources 1`] = `
+Array [
+  Object {
+    "dependencies": Array [],
+    "id": "a@1.0.0",
+    "name": "a",
+    "source": "git+<repo>#<rev>",
+    "version": "1.0.0",
+  },
+]
+`;
+
+exports[`should resolve from path using sources 1`] = `
+Array [
+  Object {
+    "dependencies": Array [],
+    "id": "c@1.0.0",
+    "name": "c",
+    "source": "path+c",
+    "version": "1.0.0",
+  },
+]
+`;
+
+exports[`should resolve from registry using sources 1`] = `
+Array [
+  Object {
+    "dependencies": Array [],
+    "id": "b@1.0.0",
+    "name": "b",
+    "source": "registry+vba-blocks#<hash>",
+    "version": "1.0.0",
+  },
+]
+`;
+
+exports[`should throw on unknown type 1`] = `[AssertionError [ERR_ASSERTION]: No matching registry configured for "unknown-registry"]`;
+
+exports[`should throw on unknown type 2`] = `[AssertionError [ERR_ASSERTION]: No matching registry configured for "unknown-registry"]`;

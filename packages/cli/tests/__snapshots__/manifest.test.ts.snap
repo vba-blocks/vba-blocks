@@ -2,10 +2,7 @@
 
 exports[`load valid references 1`] = `
 Object {
-  "config": Object {
-    "build": undefined,
-    "registry": undefined,
-  },
+  "defaultFeatures": Array [],
   "dependencies": Array [],
   "dir": "",
   "features": Array [],
@@ -13,7 +10,6 @@ Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "defaultFeatures": Array [],
     "name": "package-name",
     "publish": false,
     "version": "1.0.0",
@@ -35,16 +31,17 @@ Object {
 
 exports[`loads and parses manifest 1`] = `
 Object {
-  "config": Object {
-    "build": undefined,
-    "registry": undefined,
-  },
+  "defaultFeatures": Array [
+    "a",
+    "b",
+  ],
   "dependencies": Array [
     Object {
       "defaultFeatures": true,
       "features": Array [],
       "name": "dictionary",
       "optional": true,
+      "registry": "vba-blocks",
       "version": "1.4.1",
     },
     Object {
@@ -89,10 +86,6 @@ Object {
     "authors": Array [
       "Tim Hall <tim.hall.engr@gmail.com>",
     ],
-    "defaultFeatures": Array [
-      "a",
-      "b",
-    ],
     "name": "testing",
     "publish": true,
     "version": "0.1.0",
@@ -131,16 +124,14 @@ Object {
 
 exports[`loads valid dependencies 1`] = `
 Object {
-  "config": Object {
-    "build": undefined,
-    "registry": undefined,
-  },
+  "defaultFeatures": Array [],
   "dependencies": Array [
     Object {
       "defaultFeatures": true,
       "features": Array [],
       "name": "a",
       "optional": false,
+      "registry": "vba-blocks",
       "version": "^1.0.0",
     },
     Object {
@@ -151,6 +142,7 @@ Object {
       ],
       "name": "b",
       "optional": true,
+      "registry": "vba-blocks",
       "version": "^2.0.0",
     },
     Object {
@@ -199,7 +191,6 @@ Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "defaultFeatures": Array [],
     "name": "package-name",
     "publish": false,
     "version": "1.0.0",
@@ -214,10 +205,10 @@ Object {
 
 exports[`loads valid features 1`] = `
 Object {
-  "config": Object {
-    "build": undefined,
-    "registry": undefined,
-  },
+  "defaultFeatures": Array [
+    "a",
+    "b",
+  ],
   "dependencies": Array [],
   "dir": "",
   "features": Array [
@@ -250,10 +241,6 @@ Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "defaultFeatures": Array [
-      "a",
-      "b",
-    ],
     "name": "package-name",
     "publish": false,
     "version": "1.0.0",
@@ -268,10 +255,7 @@ Object {
 
 exports[`loads valid package metadata 1`] = `
 Object {
-  "config": Object {
-    "build": undefined,
-    "registry": undefined,
-  },
+  "defaultFeatures": Array [],
   "dependencies": Array [],
   "dir": "",
   "features": Array [],
@@ -279,7 +263,6 @@ Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "defaultFeatures": Array [],
     "name": "package-name",
     "publish": false,
     "version": "1.0.0",
@@ -294,10 +277,7 @@ Object {
 
 exports[`loads valid sources 1`] = `
 Object {
-  "config": Object {
-    "build": undefined,
-    "registry": undefined,
-  },
+  "defaultFeatures": Array [],
   "dependencies": Array [],
   "dir": "",
   "features": Array [],
@@ -305,7 +285,6 @@ Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "defaultFeatures": Array [],
     "name": "package-name",
     "publish": false,
     "version": "1.0.0",
@@ -336,10 +315,7 @@ Object {
 
 exports[`loads valid targets 1`] = `
 Object {
-  "config": Object {
-    "build": undefined,
-    "registry": undefined,
-  },
+  "defaultFeatures": Array [],
   "dependencies": Array [],
   "dir": "",
   "features": Array [],
@@ -347,7 +323,6 @@ Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "defaultFeatures": Array [],
     "name": "package-name",
     "publish": false,
     "version": "1.0.0",

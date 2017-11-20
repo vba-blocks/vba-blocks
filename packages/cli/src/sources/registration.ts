@@ -49,10 +49,10 @@ export function getRegistrationSource(
 export function getSourceParts(
   source: string
 ): { type: string; value: string; details: string | undefined } {
-  const [info, details] = source.split('#', 2);
-  const [type, value] = info.split('+', 2);
+  const [info, ...details] = source.split('#');
+  const [type, ...value] = info.split('+');
 
-  return { type, value, details };
+  return { type, value: value.join('+'), details: details.join('#') };
 }
 
 export function toDependency(registration: Registration): Dependency {
