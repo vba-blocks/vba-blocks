@@ -1,0 +1,38 @@
+[root]
+name = "bootstrap"
+version = "0.0.0"
+dependencies = [
+  "installer 0.0.0 path+../VBA-Installer",
+  "json 2.2.3 registry+vba-blocks#75694d68d6163bfa01a7311e9174b15d28397f613cfa9a6fc3723199da6395b0",
+]
+
+[[packages]]
+name = "dictionary"
+version = "1.4.1"
+source = "registry+vba-blocks#bdc77f888e0a83361217c663ce7d2a47b94b7d9bb52c2700ab1b2034fecbf3ef"
+dependencies = [
+]
+
+[[packages]]
+name = "filesystem"
+version = "0.0.0"
+source = "path+../VBA-FileSystem"
+dependencies = [
+]
+
+[[packages]]
+name = "installer"
+version = "0.0.0"
+source = "path+../VBA-Installer"
+dependencies = [
+  "filesystem 0.0.0 path+../VBA-FileSystem",
+]
+
+[[packages]]
+name = "json"
+version = "2.2.3"
+source = "registry+vba-blocks#75694d68d6163bfa01a7311e9174b15d28397f613cfa9a6fc3723199da6395b0"
+dependencies = [
+  "dictionary 1.4.1 registry+vba-blocks#bdc77f888e0a83361217c663ce7d2a47b94b7d9bb52c2700ab1b2034fecbf3ef",
+]
+

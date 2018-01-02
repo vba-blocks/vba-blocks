@@ -11,7 +11,7 @@ const extensions: { [application: string]: string[] } = {
   excel: ['xlsx', 'xlsm', 'xlam']
 };
 const addins: { [application: string]: string } = {
-  excel: 'vba-blocks.xlam'
+  excel: 'vba-blocks.xlsm' // TEMP vba-blocks.xlam
 };
 
 const byExtension: { [extension: string]: string } = {};
@@ -32,11 +32,17 @@ export async function importGraph(
   const { application, addin, file } = getTargetInfo(project, target);
   const { src, references } = graph;
 
-  await run(project.config, application, addin, 'ImportGraph', {
-    file,
-    src,
-    references
-  });
+  const stdout = await run(
+    project.config,
+    application,
+    addin,
+    'Build.ImportGraph',
+    {
+      file,
+      src,
+      references
+    }
+  );
 }
 
 /**

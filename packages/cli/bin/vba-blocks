@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const mri = require('mri');
 const chalk = require('chalk');
 const { version } = require('../package.json');
@@ -20,7 +22,7 @@ Visit {white.bold https://vba-blocks.com} to learn more about vba-blocks.`;
 main()
   .then(() => process.exit(0))
   .catch(err => {
-    console.error(err.message);
+    console.error(`${chalk.redBright('ERROR')} ${err.message}`);
     process.exit(1);
   });
 
@@ -44,7 +46,7 @@ async function main() {
     subcommand = require(`./vba-blocks-${command}`);
   } catch (err) {
     throw new Error(
-      `${chalk.redBright('ERROR')} Unknown command "${
+      `Unknown command "${
         command
       }". Try "vba-blocks --help" for a list of commands.`
     );

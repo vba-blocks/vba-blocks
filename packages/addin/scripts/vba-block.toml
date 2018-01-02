@@ -1,0 +1,18 @@
+[package]
+name = "bootstrap"
+version = "0.0.0"
+authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
+publish = false
+
+[src]
+Build = "./src/Build.bas"
+Bootstrap = "./src/Bootstrap.bas"
+Project = "./src/Project.cls"
+
+[dependencies]
+installer = { path = "../VBA-Installer" }
+json = "^2"
+
+[[targets]]
+type = "xlsm"
+path = "targets/xlsm"

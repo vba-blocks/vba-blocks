@@ -10,7 +10,7 @@
   "bugs": {
     "url": "https://github.com/vba-blocks/vba-blocks/issues"
   },
-  "bin": "bin/vba-blocks.js",
+  "bin": "bin/vba-blocks",
   "main": "lib/index",
   "typings": "lib/index.d.ts",
   "scripts": {

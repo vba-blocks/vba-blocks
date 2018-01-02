@@ -4,7 +4,7 @@ version = "0.0.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
 
 [src]
-# TODO
+Build = "./src/Build.bas"
 
 [dependencies]
 installer = { path = "VBA-Installer" }

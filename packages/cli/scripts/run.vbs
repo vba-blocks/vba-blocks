@@ -36,14 +36,17 @@ Function RunExcel(Addin, Command, Args)
   Set Excel = Nothing
   ExcelWasOpen = OpenExcel(Excel)
   If Excel Is Nothing Then
-    PrintErr "Error #1: Failed to open Excel" & vbNewLine & IIf(Err.Number <> 0, Err.Description, "Unknown Error")
+    PrintErr "Error #1: Failed to open Excel"
+    PrintErr IIf(Err.Number <> 0, Err.Description, "Unknown Error")
+
     WScript.Quit 1
   End If
 
   Set Workbook = Nothing
   WorkbookWasOpen = OpenWorkbook(Excel, Addin, Workbook)
   If Workbook Is Nothing Then
-    PrintErr "Error #2: Failed to open workbook" & vbNewLine & IIf(Err.Number <> 0, Err.Description, "Unknown Error")
+    PrintErr "Error #2: Failed to open workbook"
+    PrintErr IIf(Err.Number <> 0, Err.Description, "Unknown Error")
     
     CloseExcel Excel, ExcelWasOpen
     WScript.Quit 1
@@ -52,7 +55,8 @@ Function RunExcel(Addin, Command, Args)
   Result = Excel.Run("'" & Workbook.Name & "'!" & Command, Args)
 
   If Err.Number <> 0 Then
-    PrintErr "Error #3: Failed to run command" & vbNewLine & IIf(Err.Number <> 0, Err.Description, "Unknown Error")
+    PrintErr "Error #3: Failed to run command."
+    PrintErr Err.Description
 
     CloseWorkbook Workbook, WorkbookWasOpen
     CloseExcel Excel, ExcelWasOpen

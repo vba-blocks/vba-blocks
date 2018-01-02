@@ -3,6 +3,7 @@ packages/cli/lib
 packages/cli/tests/fixtures/build
 
 packages/addin/build
+packages/addin/scripts/build
 
 packages/desktop/src/renderer/.next
 packages/desktop/src/renderer/out
