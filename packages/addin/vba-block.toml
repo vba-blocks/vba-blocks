@@ -5,6 +5,8 @@ authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
 
 [src]
 Build = "./src/Build.bas"
+OfficeApplication = "./src/OfficeApplication.cls"
+Output = "./src/Output.bas"
 
 [dependencies]
 installer = { path = "VBA-Installer" }
