@@ -9,8 +9,8 @@
     "precommit": "lint-staged",
     "test": "jest",
     "build": "yarn build:cli && yarn build:addin",
-    "build:cli": "cd packages/cli && yarn build && cd ../",
-    "build:addin": "cd packages/addin && yarn build && cd ../"
+    "build:cli": "cd packages/cli && yarn build",
+    "build:addin": "cd packages/addin && cross-env DEBUG=csnw-build yarn build"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["prettier --write", "git add"]
@@ -30,6 +30,7 @@
   "devDependencies": {
     "@types/jest": "^20.0.8",
     "@types/node": "^8.0.25",
+    "cross-env": "^5.1.4",
     "husky": "^0.14.3",
     "jest": "^21.0.0",
     "lint-staged": "^4.0.4",

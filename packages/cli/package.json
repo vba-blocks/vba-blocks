@@ -19,6 +19,7 @@
   "dependencies": {
     "archiver": "^2.0.0",
     "chalk": "^2.3.0",
+    "debug": "^3.1.0",
     "decompress": "^4.2.0",
     "dugite": "^1.39.0",
     "fs-extra": "^4.0.2",
@@ -27,7 +28,8 @@
     "semver": "^5.4.1",
     "tar": "^4.0.1",
     "tmp": "^0.0.33",
-    "toml": "^2.3.2"
+    "toml": "^2.3.2",
+    "v8-compile-cache": "^1.1.2"
   },
   "devDependencies": {
     "@types/archiver": "^2.0.0",

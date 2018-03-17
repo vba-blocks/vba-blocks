@@ -23,7 +23,10 @@ mock('../../cli/lib/addin', {
 
 const vba = require('vba-blocks');
 
-main().catch(err => console.error(err));
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
+});
 
 async function main() {
   await vba.build();

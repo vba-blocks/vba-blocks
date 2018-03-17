@@ -1,40 +1,44 @@
 #!/usr/bin/env node
+require('v8-compile-cache');
+Error.stackTraceLimit = Infinity;
 
+const debug = require('debug')('csnw-build');
 const mri = require('mri');
 const chalk = require('chalk');
+const { cleanError } = require('../lib/utils');
 const { version } = require('../package.json');
+
+const commands = ['build'];
+const args = mri(process.argv.slice(2), {
+  alias: {
+    v: 'version',
+    h: 'help'
+  }
+});
 
 const help = chalk`
 vba-blocks v${version}
 
 Usage: vba-blocks [command] [options]
 
+Commands
+  - build         Build project from manifest
+
 Options:
   -h, --help      Output usage information
   -v, --version   Output the version number
-
-Commands
-  - build         Build project from manifest
   
 Use \`{white.bold vba-blocks COMMAND --help}\` for help on specific commands.
 Visit {white.bold https://vba-blocks.com} to learn more about vba-blocks.`;
 
-const commands = ['build'];
+process.name = 'csnw-build';
+process.on('unhandledRejection', handleError);
 
 main()
   .then(() => process.exit(0))
-  .catch(err => {
-    console.error(`${chalk.redBright('ERROR')} ${err.message}`);
-    process.exit(1);
-  });
+  .catch(handleError);
 
 async function main() {
-  const args = mri(process.argv.slice(2), {
-    alias: {
-      v: 'version',
-      h: 'help'
-    }
-  });
   const [command] = args._;
 
   if (!command) {
@@ -58,5 +62,15 @@ async function main() {
     throw new Error(`Failed to load command "${command}".\n${err.stack}`);
   }
 
+  debug(`starting "${command}" with args ${JSON.stringify(args)}`);
   await subcommand(args);
+}
+
+function handleError(err) {
+  const { message, stack } = cleanError(err);
+
+  console.error(`${chalk.redBright('ERROR')} ${message}`);
+  debug(stack);
+
+  process.exit(1);
 }

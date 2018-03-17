@@ -2,7 +2,7 @@ import { join } from 'path';
 import { pathExists, ensureDir, remove, move } from '../utils/fs';
 import { Project } from '../project';
 import { Target } from '../manifest';
-import { zip } from '../utils';
+import { zip, CliError } from '../utils';
 
 export default async function createTarget(
   project: Project,
@@ -21,7 +21,19 @@ export default async function createTarget(
   if (await pathExists(backup)) await remove(backup);
   if (await pathExists(file)) {
     await ensureDir(project.paths.backup);
-    await move(file, backup);
+
+    try {
+      await move(file, backup);
+    } catch (err) {
+      throw new CliError(
+        `Failed to build target "${
+          target.name
+        }", it is currently open. Close "${file}" and try again.`,
+        {
+          original: err
+        }
+      );
+    }
   }
 
   // Zip directory to create target
