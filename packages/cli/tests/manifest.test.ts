@@ -160,8 +160,8 @@ test('throws for invalid targets', () => {
 });
 
 test('loads and parses manifest', async () => {
-  const manifest = await loadManifest(join(FIXTURES, 'build'));
-  expect(normalize(manifest, join(FIXTURES, 'build'))).toMatchSnapshot();
+  const manifest = await loadManifest(join(FIXTURES, 'project'));
+  expect(normalize(manifest, join(FIXTURES, 'project'))).toMatchSnapshot();
 });
 
 function normalize(

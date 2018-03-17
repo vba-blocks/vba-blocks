@@ -1,6 +1,6 @@
 # Ignore compiled packages
 packages/cli/lib
-packages/cli/tests/fixtures/build
+packages/cli/tests/fixtures/project/build
 
 packages/addin/build
 packages/addin/scripts/build

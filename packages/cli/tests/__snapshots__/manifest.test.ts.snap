@@ -18,6 +18,8 @@ Object {
   "references": Array [
     Object {
       "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
+      "major": 1,
+      "minor": 0,
       "name": "a",
       "optional": true,
       "version": "1.0",
@@ -94,6 +96,8 @@ Object {
   "references": Array [
     Object {
       "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
+      "major": 1,
+      "minor": 0,
       "name": "Scripting",
       "optional": true,
       "version": "1.0",

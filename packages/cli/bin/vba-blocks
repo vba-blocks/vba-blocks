@@ -19,6 +19,8 @@ Commands
 Use \`{white.bold vba-blocks COMMAND --help}\` for help on specific commands.
 Visit {white.bold https://vba-blocks.com} to learn more about vba-blocks.`;
 
+const commands = ['build'];
+
 main()
   .then(() => process.exit(0))
   .catch(err => {
@@ -41,15 +43,19 @@ async function main() {
     return;
   }
 
-  let subcommand;
-  try {
-    subcommand = require(`./vba-blocks-${command}`);
-  } catch (err) {
+  if (!commands.includes(command)) {
     throw new Error(
       `Unknown command "${
         command
       }". Try "vba-blocks --help" for a list of commands.`
     );
+  }
+
+  let subcommand;
+  try {
+    subcommand = require(`./vba-blocks-${command}`);
+  } catch (err) {
+    throw new Error(`Failed to load command "${command}".\n${err.stack}`);
   }
 
   await subcommand(args);

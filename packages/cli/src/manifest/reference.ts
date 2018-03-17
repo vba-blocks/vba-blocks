@@ -5,6 +5,8 @@ export interface Reference {
   name: string;
   version: string;
   guid: string;
+  major: number;
+  minor: number;
   optional?: boolean;
 }
 
@@ -39,5 +41,9 @@ export function parseReference(name: string, value: any): Reference {
     `Reference "${name}" has an invalid guid "${guid}". ${EXAMPLE}'`
   );
 
-  return { name, version, guid, optional };
+  const [major, minor] = version
+    .split('.')
+    .map((part: string) => parseInt(part, 10));
+
+  return { name, version, guid, major, minor, optional };
 }

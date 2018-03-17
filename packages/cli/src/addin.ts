@@ -32,17 +32,11 @@ export async function importGraph(
   const { application, addin, file } = getTargetInfo(project, target);
   const { src, references } = graph;
 
-  const stdout = await run(
-    project.config,
-    application,
-    addin,
-    'Build.ImportGraph',
-    {
-      file,
-      src,
-      references
-    }
-  );
+  await run(project.config, application, addin, 'Build.ImportGraph', {
+    file,
+    src,
+    references
+  });
 }
 
 /**
