@@ -8,7 +8,9 @@
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "precommit": "lint-staged",
     "test": "jest",
-    "build": "cd packages/cli && yarn build && cd ../addin && yarn build"
+    "build": "yarn build:cli && yarn build:addin",
+    "build:cli": "cd packages/cli && yarn build && cd ../",
+    "build:addin": "cd packages/addin && yarn build && cd ../"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["prettier --write", "git add"]

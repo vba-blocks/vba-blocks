@@ -15,11 +15,15 @@ Public Function ImportGraph(Graph As Variant) As String
         Installer.Import Document.VBProject, Src("name"), Src("path"), Overwrite:=True
     Next Src
 
-    Dim Ref As Dictionary
-    For Each Ref In Values("references")
-        Output.Messages.Add "ref: " & Ref("name") & ", " & Ref("guid") & ", " & Ref("major") & ", " & Ref("minor")
-        Installer.AddReference Document.VBProject, Ref("guid"), Ref("major"), Ref("minor")
-    Next Ref
+    ' TODO Receiving the following error:
+    '
+    ' Failed to add reference. -2147319779: Object library not registered
+    '
+    ' Dim Ref As Dictionary
+    ' For Each Ref In Values("references")
+    '     Output.Messages.Add "ref: " & Ref("name") & ", " & Ref("guid") & ", " & Ref("major") & ", " & Ref("minor")
+    '     Installer.AddReference Document.VBProject, Ref("guid"), Ref("major"), Ref("minor")
+    ' Next Ref
 
     Document.Save
 

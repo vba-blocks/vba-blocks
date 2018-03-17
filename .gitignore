@@ -3,7 +3,6 @@ packages/cli/lib
 packages/cli/tests/fixtures/project/build
 
 packages/addin/build
-packages/addin/scripts/build
 
 packages/desktop/src/renderer/.next
 packages/desktop/src/renderer/out
@@ -11,6 +10,7 @@ packages/desktop/dist
 
 # Ignore temporary Excel files
 */~$*
+.backup
 
 # OS and other
 .DS_Store

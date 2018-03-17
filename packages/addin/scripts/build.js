@@ -10,7 +10,7 @@ mock('../../cli/lib/addin', {
     const result = await run(
       project.config,
       'excel',
-      join(__dirname, 'bootstrap.xlsm'),
+      join(__dirname, 'build/bootstrap.xlsm'),
       'Build.ImportGraph',
       {
         file,

@@ -23,6 +23,8 @@ Attribute VB_Name = "Installer"
 ' @license MIT (http://www.opensource.org/licenses/mit-license.php)
 '' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
 
+' TODO Add reference to VBIDE for proper typing of VBProject and friends
+
 ' --------------------------------------------- '
 ' Constants and Private Variables
 ' --------------------------------------------- '
@@ -38,7 +40,7 @@ Attribute VB_Name = "Installer"
 ' @param {String} FullPath
 ' @param {Boolean} [Overwrite = False]
 ''
-Public Sub Import(Project As VBProject, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
+Public Sub Import(Project As Object, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
     Precheck Project
     
     If Not FileSystem.FileExists(FullPath) Then
@@ -46,7 +48,7 @@ Public Sub Import(Project As VBProject, ComponentName As String, FullPath As Str
             "Component file not found. No component file found at path: """ & FullPath & """."
     End If
     
-    Dim ExistingComponent As VBComponent
+    Dim ExistingComponent As Object ' VBComponent
     Set ExistingComponent = GetComponent(Project, ComponentName)
     
     If Not ExistingComponent Is Nothing Then
@@ -77,7 +79,7 @@ End Sub
 ' @param {String} FullPath
 ' @param {Boolean} [Overwrite = False]
 ''
-Public Sub Export(Project As VBProject, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
+Public Sub Export(Project As Object, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
     Precheck Project
     
     If Not Overwrite And FileSystem.FileExists(FullPath) Then
@@ -86,7 +88,7 @@ Public Sub Export(Project As VBProject, ComponentName As String, FullPath As Str
             "Use `Installer.Export(Project, ComponentName, FullPath, Overwrite:=True)` to overwrite an existing file."""
     End If
     
-    Dim Component As VBComponent
+    Dim Component As Object ' VBComponent
     Set Component = GetComponent(Project, ComponentName)
     
     If Component Is Nothing Then
@@ -110,10 +112,10 @@ End Sub
 ' @param {VBProject} Project
 ' @param {String} ComponentName
 ''
-Public Sub Remove(Project As VBProject, ComponentName As String)
+Public Sub Remove(Project As Object, ComponentName As String)
     Precheck Project
     
-    Dim Component As VBComponent
+    Dim Component As Object ' VBComponent
     Set Component = GetComponent(Project, ComponentName)
 
     If Component Is Nothing Then
@@ -138,7 +140,7 @@ End Sub
 ' @param {Long} MajorVersion
 ' @param {Long} MinorVersion
 ''
-Public Sub AddReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long)
+Public Sub AddReference(Project As Object, Guid As String, MajorVersion As Long, MinorVersion As Long)
     Precheck Project
 
     If Not GetReference(Project, Guid, MajorVersion, MinorVersion) Is Nothing Then
@@ -147,7 +149,7 @@ Public Sub AddReference(Project As VBProject, Guid As String, MajorVersion As Lo
     
     On Error GoTo ErrorHandling
     
-    Project.References.AddFromGuid Reference, MajorVersion, MinorVersion
+    Project.References.AddFromGuid Guid, MajorVersion, MinorVersion
     Exit Sub
     
 ErrorHandling:
@@ -163,10 +165,10 @@ End Sub
 ' @param {Long} MajorVersion
 ' @param {Long} MinorVersion
 ''
-Public Sub RemoveReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long)
+Public Sub RemoveReference(Project As Object, Guid As String, MajorVersion As Long, MinorVersion As Long)
     Precheck Project
 
-    Dim ExistingReference As Reference
+    Dim ExistingReference As Object ' Reference
     Set ExistingReference = GetReference(Project, Guid, MajorVersion, MinorVersion)
     
     If ExistingReference Is Nothing Then
@@ -188,15 +190,17 @@ End Sub
 ' Private Methods
 ' ============================================= '
 
-Private Function GetComponent(Project As VBProject, ComponentName As String) As VBComponent
+' (VBProject, String) => VBComponent
+Private Function GetComponent(Project As Object, ComponentName As String) As Object
     On Error Resume Next
     Set GetComponent = Project.VBComponents(ComponentName)
 
     On Error GoTo 0
 End Function
 
-Private Function GetReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long) As Reference
-    Dim Ref As Reference
+' (VBProject, String, Long, Long) => Reference
+Private Function GetReference(Project As Object, Guid As String, MajorVersion As Long, MinorVersion As Long) As Object
+    Dim Ref As Object ' Reference
     For Each Ref In Project.References
         If Ref.Guid = Guid And Ref.Major = MajorVersion And Ref.Minor = MinorVersion Then
             Set GetReference = Ref
@@ -204,7 +208,8 @@ Private Function GetReference(Project As VBProject, Guid As String, MajorVersion
     Next Ref
 End Function
 
-Private Sub Precheck(Project As VBProject)
+' (VBProject)
+Private Sub Precheck(Project As Object)
     If Not VbaIsTrusted(Project) Then
         Err.Raise 10100, "Installer.Export", _
             "VBA Project access is disabled. To enable:" & vbNewLine & _
@@ -220,13 +225,16 @@ Private Sub Precheck(Project As VBProject)
     End If
 End Sub
 
-Private Function VbaIsUnlocked(Project As VBProject) As Boolean
-    If Project.Protection = vbext_ProjectProtection.vbext_pp_none Then
+' (VBProject)
+Private Function VbaIsUnlocked(Project As Object) As Boolean
+    ' 0 = vbext_ProjectProtection.vbext_pp_none
+    If Project.Protection = 0 Then
         VbaIsUnlocked = True
     End If
 End Function
 
-Private Function VbaIsTrusted(Project As VBProject) As Boolean
+' (VBProject)
+Private Function VbaIsTrusted(Project As Object) As Boolean
     On Error Resume Next
     
     Dim ComponentCount As Long
