@@ -8,11 +8,11 @@ export interface ParallelOptions {
 
 const DEFAULT_CONCURRENCY = 4;
 
-export default async function parallel<T>(
+export default async function parallel<T, U>(
   values: T[],
-  fn: (value: T) => any | Promise<any>,
+  fn: (value: T) => U | Promise<U>,
   options: ParallelOptions = {}
-): Promise<any[]> {
+): Promise<U[]> {
   const { concurrency = DEFAULT_CONCURRENCY, progress } = options;
   const queue = Array.from(values);
   let results: any[] = [];

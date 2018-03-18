@@ -19,7 +19,7 @@ async function checksum(file: string, algorithm = 'sha256'): Promise<string> {
 }
 
 // Use built-in node copyFile, if available
-const copy: (path: string) => Promise<void> = copyFile
+const copy: (src: string, dest: string) => Promise<void> = copyFile
   ? promisify(copyFile)
   : require('fs-extra').copy;
 

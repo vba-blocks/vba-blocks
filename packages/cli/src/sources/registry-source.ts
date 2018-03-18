@@ -19,6 +19,7 @@ import {
   getRegistrationSource
 } from './registration';
 import { Source } from './source';
+import { dependencyNotFound, dependencyInvalidChecksum } from '../errors';
 
 export interface RegistryOptions {
   name: string;
@@ -51,7 +52,7 @@ export default class RegistrySource implements Source {
 
     await this.pulling;
     if (!await pathExists(path)) {
-      throw new Error(`"${name}" was not found in the registry`);
+      throw dependencyNotFound(name, this.name);
     }
 
     const data = await readFile(path, 'utf8');
@@ -77,7 +78,7 @@ export default class RegistrySource implements Source {
 
       const comparison = await getChecksum(unverifiedFile);
       if (comparison !== checksum) {
-        throw new Error(`Invalid checksum for ${registration.id}`);
+        throw dependencyInvalidChecksum(registration);
       }
 
       await move(unverifiedFile, file);

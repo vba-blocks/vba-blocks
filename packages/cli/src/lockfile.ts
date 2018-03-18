@@ -148,7 +148,7 @@ export function fromToml(toml: string, dir: string): Lockfile {
 
   // Load manifests for workspace
   const root = toManifest(parsed.root, byName);
-  const members = (parsed.members || []).map((member: any) =>
+  const members: Snapshot[] = (parsed.members || []).map((member: any) =>
     toManifest(member, byName)
   );
 
@@ -163,7 +163,7 @@ function toManifest(value: any, byName: DependencyByName): Snapshot {
     'Invalid manifest in lockfile'
   );
 
-  const dependencies = value.dependencies.map((id: string) =>
+  const dependencies: Dependency[] = value.dependencies.map((id: string) =>
     getDependency(id, byName)
   );
 

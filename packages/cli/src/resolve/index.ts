@@ -4,6 +4,7 @@ import { Project } from '../project';
 import { DependencyGraph, getRegistration } from './dependency-graph';
 import Resolver from './resolver';
 import solveLatest from './latest-solver';
+import { resolveFailed } from '../errors';
 
 export { DependencyGraph, getRegistration, Resolver };
 
@@ -32,5 +33,5 @@ export default async function resolve(
   }
 
   // TODO Include conflicts with error
-  throw new Error('Unable to resolve dependency graph for given manifest');
+  throw resolveFailed();
 }

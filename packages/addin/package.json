@@ -6,7 +6,7 @@
   "author": "Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)",
   "license": "MIT",
   "scripts": {
-    "build": "yarn build:addin && yarn build:bootstrap",
+    "build": "yarn build:addin",
     "build:addin": "node scripts/build",
     "build:bootstrap": "cd scripts && vba-blocks build && cd ../"
   },
