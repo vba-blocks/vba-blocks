@@ -19,7 +19,9 @@ async function checksum(file: string, algorithm = 'sha256'): Promise<string> {
 }
 
 // Use built-in node copyFile, if available
-const copy = copyFile ? promisify(copyFile) : require('fs-extra').copy;
+const copy: (path: string) => Promise<void> = copyFile
+  ? promisify(copyFile)
+  : require('fs-extra').copy;
 
 async function tmpFile(): Promise<string> {
   return new Promise<string>((resolve, reject) => {

@@ -1,21 +1,24 @@
-export interface Errors {
-  'unsupported-git': Error;
-  'unsupported-path': Error;
-}
+import { CliErrors } from './errors';
+import { Target } from './manifest';
 
-const errors: Errors = {
-  'unsupported-git': new Error(
-    'git dependencies are not supported. Upgrade to Professional Edition for git dependencies and more'
-  ),
-  'unsupported-path': new Error(
-    'path dependencies are not supported. Upgrade to Professional Edition for path dependencies and more'
-  )
+const errors: CliErrors = {
+  'unsupported-source': type =>
+    `${type} dependencies are not supported. 
+
+Upgrade to Professional Edition for ${type} dependencies and more`,
+  'target-is-open': (target, path) =>
+    `Failed to build target "${target.name}", it is currently open. 
+
+Please close "${path}" and try again.`,
+  'unknown-command': command =>
+    `Unknown command "${command}". 
+
+Try "vba-blocks --help" for a list of commands.`
 };
 
 export interface Reporter {
   progress: (name?: string) => Progress;
-  errors: Errors;
-  error: (id: keyof Errors) => Error;
+  errors: CliErrors;
 }
 
 export interface Progress {
@@ -33,8 +36,5 @@ export const reporter: Reporter = {
     };
   },
 
-  errors,
-  error(id) {
-    return errors[id] || new Error(`An unknown error occurred. (#${id})`);
-  }
+  errors
 };

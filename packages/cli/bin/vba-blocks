@@ -2,10 +2,10 @@
 require('v8-compile-cache');
 Error.stackTraceLimit = Infinity;
 
-const debug = require('debug')('csnw-build');
 const mri = require('mri');
 const chalk = require('chalk');
 const { cleanError } = require('../lib/utils');
+const { unknownCommand } = require('../lib/errors');
 const { version } = require('../package.json');
 
 const commands = ['build'];
@@ -15,6 +15,18 @@ const args = mri(process.argv.slice(2), {
     h: 'help'
   }
 });
+
+if (args.debug) {
+  let debug = args.debug;
+  if (debug === true) debug = '*';
+  else if (Array.isArray(debug)) debug = debug.join(',');
+
+  const filters = debug.split(',').map(filter => `vba-blocks:${filter}`);
+  const existing = process.env.DEBUG ? process.env.DEBUG.split(',') : [];
+
+  process.env.DEBUG = existing.concat(filters).join(',');
+}
+const debug = require('debug')('vba-blocks:main');
 
 const help = chalk`
 vba-blocks v${version}
@@ -28,10 +40,10 @@ Options:
   -h, --help      Output usage information
   -v, --version   Output the version number
   
-Use \`{white.bold vba-blocks COMMAND --help}\` for help on specific commands.
-Visit {white.bold https://vba-blocks.com} to learn more about vba-blocks.`;
+Use "vba-blocks COMMAND --help" for help on specific commands.
+Visit https://vba-blocks.com to learn more about vba-blocks.`;
 
-process.name = 'csnw-build';
+process.name = 'vba-blocks';
 process.on('unhandledRejection', handleError);
 
 main()
@@ -48,11 +60,7 @@ async function main() {
   }
 
   if (!commands.includes(command)) {
-    throw new Error(
-      `Unknown command "${
-        command
-      }". Try "vba-blocks --help" for a list of commands.`
-    );
+    throw unknownCommand(command);
   }
 
   let subcommand;
@@ -70,7 +78,20 @@ function handleError(err) {
   const { message, stack } = cleanError(err);
 
   console.error(`${chalk.redBright('ERROR')} ${message}`);
-  debug(stack);
+
+  // TODO
+  // if (err.code) {
+  //   console.log(
+  //     chalk`\n{dim Visit https://vba-blocks.com/errors/${
+  //       err.code
+  //     } for more information}`
+  //   );
+  // }
+
+  debug(err);
+  if (err.underlying) {
+    debug(err.underlying);
+  }
 
   process.exit(1);
 }

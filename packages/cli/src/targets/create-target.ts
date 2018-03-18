@@ -2,7 +2,8 @@ import { join } from 'path';
 import { pathExists, ensureDir, remove, move } from '../utils/fs';
 import { Project } from '../project';
 import { Target } from '../manifest';
-import { zip, CliError } from '../utils';
+import { zip } from '../utils';
+import { targetIsOpen } from '../errors';
 
 export default async function createTarget(
   project: Project,
@@ -25,14 +26,7 @@ export default async function createTarget(
     try {
       await move(file, backup);
     } catch (err) {
-      throw new CliError(
-        `Failed to build target "${
-          target.name
-        }", it is currently open. Close "${file}" and try again.`,
-        {
-          original: err
-        }
-      );
+      throw targetIsOpen(target, file);
     }
   }
 

@@ -2,7 +2,7 @@ import { join } from 'path';
 import { promisify } from 'util';
 const exec = promisify(require('child_process').exec);
 import env from '../env';
-import { isString } from '../utils';
+import { isString, pathExists } from '../utils';
 import { Config } from '../config';
 
 export interface RunResult {
@@ -18,7 +18,8 @@ export class RunError extends Error {
   result: RunResult;
 
   constructor(result: RunResult) {
-    super(result.errors.join('\n'));
+    const message = result.errors.join('\n');
+    super(message);
 
     this.result = result;
   }
@@ -31,13 +32,14 @@ export default async function run(
   command: string,
   value: object
 ): Promise<RunResult> {
-  const script = {
-    windows: join(env.scripts, 'run.vbs'),
-    mac: join(env.scripts, 'run.scpt')
-  };
+  const script = join(env.scripts, env.isWindows ? 'run.vbs' : 'run.scpt');
+  if (!await pathExists(script)) {
+    throw new Error(`run script "${script}" not found`);
+  }
+
   const prepared = escape(JSON.stringify(value));
 
-  const cmd = env.isWindows ? `cscript "${script.windows}"` : `"${script.mac}"`;
+  const cmd = env.isWindows ? `cscript "${script}"` : `"${script}"`;
 
   let result;
   try {

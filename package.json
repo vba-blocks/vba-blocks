@@ -10,7 +10,7 @@
     "test": "jest",
     "build": "yarn build:cli && yarn build:addin",
     "build:cli": "cd packages/cli && yarn build",
-    "build:addin": "cd packages/addin && cross-env DEBUG=csnw-build yarn build"
+    "build:addin": "cd packages/addin && cross-env DEBUG=vba-blocks yarn build"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["prettier --write", "git add"]
@@ -38,7 +38,7 @@
     "resolve-from": "^4.0.0",
     "resolve-pkg": "^1.0.0",
     "ts-jest": "^20.0.10",
-    "typescript": "^2.5.2"
+    "typescript": "^2.7.2"
   },
   "version": "0.0.0",
   "main": "index.js"
