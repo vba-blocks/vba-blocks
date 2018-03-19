@@ -3,7 +3,13 @@ const { default: build } = require('../lib/actions/build');
 const help = `
 Build project from manifest.
 
-Usage: vba-blocks build`;
+Creates a clean build of the project (after backing up any existing built targets).
+If the project has already been built, "vba-blocks import" can be used to rebuild just the VBA project.
+
+Usage: vba-blocks build [options]
+
+Options:
+  --target=TYPE   Build the given target`;
 
 module.exports = async args => {
   if (args.help) {
@@ -11,5 +17,5 @@ module.exports = async args => {
     return;
   }
 
-  await build();
+  await build(args);
 };
