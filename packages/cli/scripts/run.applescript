@@ -9,10 +9,10 @@ on run argv
 	set output to ""
 
 	if (count of argv) = 4 then
-		set appname to item 1 of argv
-		set addin to POSIX file item 2 of argv
-		set command to item 3 of argv
-		set args to item 4 of argv
+		set appname to (item 1 of argv)
+		set addin to POSIX file (item 2 of argv)
+		set command to (item 3 of argv)
+		set args to (item 4 of argv)
 		
 		if appname is "excel" then
 			-- TODO

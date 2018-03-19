@@ -4,6 +4,7 @@ const exec = promisify(require('child_process').exec);
 import env from '../env';
 import { isString, pathExists } from '../utils';
 import { Config } from '../config';
+import { runScriptNotFound } from '../errors';
 
 export interface RunResult {
   success: boolean;
@@ -28,24 +29,30 @@ export class RunError extends Error {
 export default async function run(
   config: Config,
   application: string,
-  addin: string,
-  command: string,
-  value: object
+  file: string,
+  macro: string,
+  args: object
 ): Promise<RunResult> {
-  const script = join(env.scripts, env.isWindows ? 'run.vbs' : 'run.scpt');
+  const script = join(
+    env.scripts,
+    env.isWindows ? 'run.vbs' : 'run.applescript'
+  );
   if (!await pathExists(script)) {
-    throw new Error(`run script "${script}" not found`);
+    throw runScriptNotFound(script);
   }
 
-  const prepared = escape(JSON.stringify(value));
-
-  const cmd = env.isWindows ? `cscript "${script}"` : `"${script}"`;
+  const command = env.isWindows
+    ? `cscript ${script} ${application} "${escape(file)}" ${macro} "${escape(
+        JSON.stringify(args)
+      )}"`
+    : `osascript ${script} '${application}' '${file}' '${
+        macro
+      }' '${JSON.stringify(args)}'`;
 
   let result;
   try {
-    const { stdout, stderr } = await exec(
-      `${cmd} ${application} "${escape(addin)}" ${command} "${prepared}"`
-    );
+    const { stdout, stderr } = await exec(command);
+
     result = toResult(stdout, stderr);
   } catch (err) {
     result = toResult(err.stdout, err.stderr, err);
@@ -68,6 +75,7 @@ export function toResult(
   err?: Error
 ): RunResult {
   // For windows, remove cscript header (denoted by ----- divider)
+  // TODO Pass /nologo argument to script
   if (stdout && env.isWindows) {
     const divider = stdout.indexOf('-----\r\n');
     if (divider >= 0) stdout = stdout.substr(divider + 7);

@@ -18,6 +18,8 @@ export interface CliErrors {
   'target-restore-failed': (backup: string, file: string) => string;
 
   'resolve-failed': (details?: string) => string;
+
+  'run-script-not-found': (path: string) => string;
 }
 
 export interface CliErrorOptions {
@@ -113,6 +115,13 @@ export function resolveFailed(details?: string): Error {
   if (details) {
     message += `\n${details}`;
   }
+
+  return new CliError(message, { code });
+}
+
+export function runScriptNotFound(path: string): Error {
+  const code = 'run-script-not-found';
+  const message = env.reporter.errors[code](path);
 
   return new CliError(message, { code });
 }

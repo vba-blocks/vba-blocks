@@ -30,7 +30,10 @@ Please close "${path}" and try again.`,
 The previous version can be moved back manually, if desired.`,
   'resolve-failed': () =>
     `Unable to resolve dependency graph for project.
-There are dependencies that cannot be satisfied.`
+There are dependencies that cannot be satisfied.`,
+  'run-script-not-found': path =>
+    `Bridge script not found at "${path}".
+This is a fatal error and will require vba-blocks to be re-installed.`
 };
 
 export interface Reporter {
