@@ -1,6 +1,5 @@
-import { Source, Reference } from '../manifest';
-import { Project, loadProject, fetchDependencies } from '../project';
-import { createTarget, buildTarget } from '../targets';
+import { Project, loadProject } from '../project';
+import { createBuildGraph, createTarget, buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
 
 export interface BuildOptions {}
@@ -20,36 +19,4 @@ export default async function build(options: BuildOptions = {}) {
 
   // 3. On success, write lockfile
   await writeLockfile(project.workspace.root.dir, project);
-}
-
-export interface BuildGraph {
-  src: Source[];
-  references: Reference[];
-}
-
-export async function createBuildGraph(
-  project: Project,
-  options: BuildOptions
-): Promise<BuildGraph> {
-  const src: Map<string, Source> = new Map();
-  const references: Map<string, Reference> = new Map();
-
-  const manifests = [project.manifest, ...(await fetchDependencies(project))];
-
-  for (const manifest of manifests) {
-    for (const source of manifest.src) {
-      const { name } = source;
-      if (src.has(name))
-        throw new Error(`Conflicting source named "${source.name}"`);
-      src.set(name, source);
-    }
-    for (const reference of manifest.references) {
-      const { name, guid } = reference;
-      if (references.has(name) && references.get(name)!.guid !== guid)
-        throw new Error(`Conficting reference named "${reference.name}"`);
-      references.set(name, reference);
-    }
-  }
-
-  return { src: [...src.values()], references: [...references.values()] };
 }

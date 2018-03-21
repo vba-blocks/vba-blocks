@@ -2,6 +2,8 @@ import { join } from 'path';
 import { Target } from '../manifest';
 import { Project } from '../project';
 
+export { BuildGraph, createBuildGraph } from './build-graph';
+export { default as stageBuildGraph } from './stage-build-graph';
 export { default as createTarget } from './create-target';
 export { default as buildTarget } from './build-target';
 
