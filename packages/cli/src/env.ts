@@ -13,6 +13,7 @@ export interface Env {
   registry: string;
   packages: string;
   sources: string;
+  staging: string | null;
 
   reporter: Reporter;
 }
@@ -29,6 +30,7 @@ const env: Env = {
   registry: join(cache, 'registry'),
   packages: join(cache, 'packages'),
   sources: join(cache, 'sources'),
+  staging: null,
 
   reporter
 };

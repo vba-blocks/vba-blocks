@@ -33,6 +33,15 @@ async function tmpFile(): Promise<string> {
   });
 }
 
+async function tmpFolder(): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    require('tmp').dir((err: any, path: string) => {
+      if (err) return reject(err);
+      resolve(path);
+    });
+  });
+}
+
 export {
   checksum,
   copy as copyFile,
@@ -42,5 +51,6 @@ export {
   readFile,
   remove,
   tmpFile,
+  tmpFolder,
   writeFile
 };

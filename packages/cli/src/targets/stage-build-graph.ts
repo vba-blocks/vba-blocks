@@ -1,4 +1,6 @@
+import { join, basename } from 'path';
 import { BuildGraph } from './build-graph';
+import { getStaging, ensureDir, copyFile, parallel } from '../utils';
 import env from '../env';
 
 // To avoid "Grant File Access" prompts on Mac,
@@ -13,11 +15,20 @@ export default async function stageBuildGraph(
 ): Promise<BuildGraph> {
   if (env.isWindows) return graph;
 
-  // TODO
-  // 1. Find .Office folder (default seems to be UBF8T346G9.Office)
-  // 2. Ensure vba-blocks staging folder inside
-  // 3. Add build graph files to staging folder
-  // 4. Replace paths inside build graph
+  const staging = env.staging || (env.staging = await getStaging());
 
-  return graph;
+  const src = await parallel(
+    graph.src,
+    async source => {
+      const { name, path, optional } = source;
+
+      const dest = join(staging, basename(source.path));
+      await copyFile(source.path, dest);
+
+      return { name, path: dest, optional };
+    },
+    { progress: env.reporter.progress('Staging dependencies') }
+  );
+
+  return Object.assign({}, graph, { src });
 }
