@@ -1,21 +1,20 @@
 import { Source, Reference } from '../manifest';
-import { Project, fetchDependencies } from '../project';
+import { Project, fetchDependencies, loadManifests } from '../project';
+import { BuildOptions } from './build-target';
 
 export interface BuildGraph {
   src: Source[];
   references: Reference[];
 }
 
-export interface BuildGraphOptions {}
-
 export async function createBuildGraph(
   project: Project,
-  options: BuildGraphOptions
+  options: BuildOptions
 ): Promise<BuildGraph> {
   const src: Map<string, Source> = new Map();
   const references: Map<string, Reference> = new Map();
 
-  const manifests = [project.manifest, ...(await fetchDependencies(project))];
+  const manifests = project.manifests || (await loadManifests(project));
 
   for (const manifest of manifests) {
     for (const source of manifest.src) {

@@ -5,12 +5,13 @@ import { Workspace, loadWorkspace } from './workspace';
 import { fetch, Registration } from './sources';
 import resolve, { DependencyGraph } from './resolve';
 import { readLockfile, isLockfileValid } from './lockfile';
-import { parallel, unixJoin } from './utils';
+import { parallel, unixJoin, isString } from './utils';
 
 export interface Project {
   manifest: Manifest;
   workspace: Workspace;
   packages: DependencyGraph;
+  manifests: null | Manifest[];
 
   config: Config;
   paths: {
@@ -21,6 +22,10 @@ export interface Project {
   };
 }
 
+export interface LoadOptions {
+  manifests?: boolean;
+}
+
 /**
  * Load project, starting at given dir
  *
@@ -29,8 +34,18 @@ export interface Project {
  * - Loads config
  * - Loads packages (with lockfile)
  */
-export async function loadProject(dir?: string): Promise<Project> {
-  const manifest = await loadManifest(dir || env.cwd);
+export async function loadProject(options?: LoadOptions): Promise<Project>;
+export async function loadProject(
+  dir?: string | object,
+  options?: LoadOptions
+): Promise<Project> {
+  if (!isString(dir)) {
+    options = dir;
+    dir = env.cwd;
+  }
+  const include_manifest = options ? !!options.manifests : false;
+
+  const manifest = await loadManifest(dir);
   const workspace = await loadWorkspace(manifest);
 
   const config = await loadConfig();
@@ -39,6 +54,9 @@ export async function loadProject(dir?: string): Promise<Project> {
     lockfile && isLockfileValid(lockfile, workspace)
       ? lockfile.packages
       : await resolve(config, workspace, lockfile ? lockfile.packages : []);
+  const manifests = include_manifest
+    ? await loadManifests({ manifest, packages, config })
+    : null;
 
   const paths = {
     root: workspace.root.dir,
@@ -51,18 +69,36 @@ export async function loadProject(dir?: string): Promise<Project> {
     manifest,
     workspace,
     packages,
+    manifests: null,
     config,
     paths
   };
 }
 
+export interface FetchProject {
+  manifest: Manifest;
+  packages: DependencyGraph;
+  config: Config;
+}
+
+/**
+ * Load all manifests for project (including project's)
+ */
+export async function loadManifests(
+  project: FetchProject
+): Promise<Manifest[]> {
+  return [project.manifest, ...(await fetchDependencies(project))];
+}
+
 /**
  * Fetch all dependencies for project
- * (based on already resolve project.packages)
+ * (based on already resolved project.packages)
  *
  * After sources complete fetches, manifests are loaded and returned for each package
  */
-export async function fetchDependencies(project: Project): Promise<Manifest[]> {
+export async function fetchDependencies(
+  project: FetchProject
+): Promise<Manifest[]> {
   const manifests = await parallel(
     project.packages,
     async registration => {

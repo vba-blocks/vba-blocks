@@ -1,19 +1,14 @@
-import { Project, loadProject } from '../project';
-import { createBuildGraph, createTarget, buildTarget } from '../targets';
+import { loadProject } from '../project';
+import { BuildOptions, createBuildGraph, buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
 
-export interface BuildOptions {}
-
 export default async function build(options: BuildOptions = {}) {
-  // 1. Load and fetch project
-  const project = await loadProject();
+  // Load and fetch project
+  const project = await loadProject({ manifests: true });
 
-  // 2. Determine src and references for build
-  const buildGraph = await createBuildGraph(project, options);
-
-  // 3. Create and build targets (sequentially to avoid contention issues)
+  // Create and build targets (sequentially to avoid contention issues)
   for (const target of project.manifest.targets) {
-    await buildTarget(project, target, buildGraph);
+    await buildTarget(project, target, options);
   }
 
   // 3. On success, write lockfile
