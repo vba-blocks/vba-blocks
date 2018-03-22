@@ -5,6 +5,7 @@ export interface Source {
   name: string;
   path: string;
   optional?: boolean;
+  original?: string;
 }
 
 const EXAMPLE = `Example vba-block.toml:

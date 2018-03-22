@@ -25,7 +25,7 @@ export default async function stageBuildGraph(
       const dest = unixJoin(staging, basename(source.path));
       await copyFile(source.path, dest);
 
-      return { name, path: dest, optional };
+      return { name, path: dest, optional, original: path };
     },
     { progress: env.reporter.progress('Staging dependencies') }
   );

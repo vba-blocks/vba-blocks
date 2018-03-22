@@ -17,4 +17,5 @@ test('should stage build graph for Mac', async () => {
 
   expect(staged.src.length).toEqual(4);
   expect(staged.src[0].path).toEqual(unixJoin(env.staging, 'a.bas'));
+  expect(staged.src[0].original).toMatch(/fixtures\/sources\/a\/a\.bas/);
 });
