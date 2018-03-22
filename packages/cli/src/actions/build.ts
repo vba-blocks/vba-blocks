@@ -11,6 +11,8 @@ export default async function build(options: BuildOptions = {}) {
     await buildTarget(project, target, options);
   }
 
-  // 3. On success, write lockfile
-  await writeLockfile(project.workspace.root.dir, project);
+  // On success, write lockfile (if necessary)
+  if (project.dirty_lockfile) {
+    await writeLockfile(project.workspace.root.dir, project);
+  }
 }

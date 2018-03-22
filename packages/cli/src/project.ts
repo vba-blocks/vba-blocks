@@ -20,6 +20,7 @@ export interface Project {
     build: string;
     backup: string;
   };
+  dirty_lockfile: boolean;
 }
 
 export interface LoadOptions {
@@ -50,8 +51,9 @@ export async function loadProject(
 
   const config = await loadConfig();
   const lockfile = await readLockfile(workspace.root.dir);
+  const dirty_lockfile = !lockfile || !isLockfileValid(lockfile, workspace);
   const packages =
-    lockfile && isLockfileValid(lockfile, workspace)
+    lockfile && !dirty_lockfile
       ? lockfile.packages
       : await resolve(config, workspace, lockfile ? lockfile.packages : []);
   const manifests = include_manifest
@@ -71,7 +73,8 @@ export async function loadProject(
     packages,
     manifests: null,
     config,
-    paths
+    paths,
+    dirty_lockfile
   };
 }
 
