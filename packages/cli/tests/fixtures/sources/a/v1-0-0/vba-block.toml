@@ -1,0 +1,10 @@
+[package]
+name = "a"
+version = "1.0.0"
+authors = []
+
+[src]
+a = "../a.bas"
+
+[dependencies]
+d = "^1.0.0"

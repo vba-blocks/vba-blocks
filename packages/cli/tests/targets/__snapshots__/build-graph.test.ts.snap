@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should create build graph 1`] = `
+Object {
+  "references": Array [],
+  "src": Array [
+    Object {
+      "name": "a",
+      "optional": false,
+      "path": "C:\\\\dev\\\\vba-blocks\\\\packages\\\\cli\\\\tests\\\\fixtures\\\\sources\\\\a\\\\a.bas",
+    },
+    Object {
+      "name": "b",
+      "optional": false,
+      "path": "C:\\\\dev\\\\vba-blocks\\\\packages\\\\cli\\\\tests\\\\fixtures\\\\sources\\\\b\\\\b.cls",
+    },
+    Object {
+      "name": "d",
+      "optional": false,
+      "path": "C:\\\\dev\\\\vba-blocks\\\\packages\\\\cli\\\\tests\\\\fixtures\\\\sources\\\\d\\\\d.cls",
+    },
+    Object {
+      "name": "f",
+      "optional": false,
+      "path": "C:\\\\dev\\\\vba-blocks\\\\packages\\\\cli\\\\tests\\\\fixtures\\\\sources\\\\f\\\\f.bas",
+    },
+    Object {
+      "name": "g",
+      "optional": false,
+      "path": "C:\\\\dev\\\\vba-blocks\\\\packages\\\\cli\\\\tests\\\\fixtures\\\\sources\\\\g\\\\g.cls",
+    },
+    Object {
+      "name": "c",
+      "optional": false,
+      "path": "C:\\\\dev\\\\vba-blocks\\\\packages\\\\cli\\\\tests\\\\fixtures\\\\sources\\\\c\\\\c.bas",
+    },
+  ],
+}
+`;

@@ -1,0 +1,10 @@
+[package]
+name = "b"
+version = "1.0.0"
+authors = []
+
+[src]
+b = "../b.cls"
+
+[dependencies]
+c = "^0.1.0"

@@ -1,3 +1,4 @@
+import { join } from 'path';
 import { Feature, Dependency } from '../../src/manifest';
 import { Source, Registration } from '../../src/sources';
 
@@ -143,6 +144,11 @@ export default class RegistrySource {
   }
 
   fetch(registration: Registration) {
-    return '';
+    return join(
+      __dirname,
+      '../fixtures/sources',
+      registration.name,
+      `v${registration.version}`.replace(/\./g, '-')
+    );
   }
 }
