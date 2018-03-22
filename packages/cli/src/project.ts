@@ -1,4 +1,3 @@
-import { join } from 'path';
 import env from './env';
 import { Config, loadConfig } from './config';
 import { Manifest, loadManifest } from './manifest';
@@ -6,7 +5,7 @@ import { Workspace, loadWorkspace } from './workspace';
 import { fetch, Registration } from './sources';
 import resolve, { DependencyGraph } from './resolve';
 import { readLockfile, isLockfileValid } from './lockfile';
-import { parallel } from './utils';
+import { parallel, unixJoin } from './utils';
 
 export interface Project {
   manifest: Manifest;
@@ -44,8 +43,8 @@ export async function loadProject(dir?: string): Promise<Project> {
   const paths = {
     root: workspace.root.dir,
     dir: manifest.dir,
-    build: join(manifest.dir, 'build'),
-    backup: join(manifest.dir, 'build', '.backup')
+    build: unixJoin(manifest.dir, 'build'),
+    backup: unixJoin(manifest.dir, 'build', '.backup')
   };
 
   return {

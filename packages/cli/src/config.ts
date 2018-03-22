@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { parse as parseToml } from 'toml';
 import env from './env';
-import { pathExists, readFile } from './utils/fs';
+import { pathExists, readFile } from './utils';
 import {
   Sources,
   RegistrySource,

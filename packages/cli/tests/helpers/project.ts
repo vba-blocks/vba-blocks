@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { unixJoin } from '../../src/utils';
 import { Manifest } from '../../src/manifest';
 import { Project } from '../../src/project';
 import resolve from '../../src/resolve';
@@ -12,8 +12,8 @@ export async function toProject(manifest: Manifest): Promise<Project> {
   const paths = {
     root: workspace.root.dir,
     dir: manifest.dir,
-    build: join(manifest.dir, 'build'),
-    backup: join(manifest.dir, 'build', '.backup')
+    build: unixJoin(manifest.dir, 'build'),
+    backup: unixJoin(manifest.dir, 'build', '.backup')
   };
 
   return { manifest, workspace, packages, config, paths };

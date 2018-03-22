@@ -1,6 +1,6 @@
-import { join, basename } from 'path';
+import { basename } from 'path';
 import { BuildGraph } from './build-graph';
-import { getStaging, ensureDir, copyFile, parallel } from '../utils';
+import { getStaging, ensureDir, copyFile, parallel, unixJoin } from '../utils';
 import env from '../env';
 
 // To avoid "Grant File Access" prompts on Mac,
@@ -22,7 +22,7 @@ export default async function stageBuildGraph(
     async source => {
       const { name, path, optional } = source;
 
-      const dest = join(staging, basename(source.path));
+      const dest = unixJoin(staging, basename(source.path));
       await copyFile(source.path, dest);
 
       return { name, path: dest, optional };

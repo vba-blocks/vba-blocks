@@ -1,8 +1,7 @@
-import { join } from 'path';
 import env from './env';
 import { Project } from './project';
 import { Target, Source, Reference } from './manifest';
-import { run } from './utils';
+import { run, unixJoin } from './utils';
 
 export type Application = string;
 export type Addin = string;
@@ -49,8 +48,8 @@ export function getTargetInfo(
   const application = byExtension[target.type];
   if (!application) throw new Error(`Unsupported target type "${target.type}"`);
 
-  const addin = join(env.addins, addins[application]);
-  const file = join(project.paths.build, `${target.name}.${target.type}`);
+  const addin = unixJoin(env.addins, addins[application]);
+  const file = unixJoin(project.paths.build, `${target.name}.${target.type}`);
 
   return { application, addin, file };
 }

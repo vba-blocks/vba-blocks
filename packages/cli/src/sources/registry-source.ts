@@ -1,7 +1,7 @@
-import { join, dirname, basename } from 'path';
+import { dirname, basename } from 'path';
 import { extract } from 'tar';
 import env from '../env';
-import { download, has, isString } from '../utils';
+import { download, has, isString, unixJoin } from '../utils';
 import {
   checksum as getChecksum,
   ensureDir,
@@ -37,11 +37,11 @@ export default class RegistrySource implements Source {
   constructor({ name, index, packages }: RegistryOptions) {
     this.name = name;
     this.local = {
-      index: join(env.registry, name),
-      packages: join(env.packages, name)
+      index: unixJoin(env.registry, name),
+      packages: unixJoin(env.packages, name)
     };
     this.remote = { index, packages };
-    this.sources = join(env.sources, name);
+    this.sources = unixJoin(env.sources, name);
 
     this.pulling = pullIndex(this.local.index, this.remote.index);
   }
@@ -137,7 +137,7 @@ function getPath(index: string, name: string): string {
     parts = [name.substring(0, 2), name.substring(2, 4)];
   }
 
-  return join(index, ...parts, name);
+  return unixJoin(index, ...parts, name);
 }
 
 function getRemotePackage(
@@ -150,11 +150,11 @@ function getRemotePackage(
 
 function getLocalPackage(packages: string, registration: Registration): string {
   const { name, version } = registration;
-  return join(packages, name, `v${version}.block`);
+  return unixJoin(packages, name, `v${version}.block`);
 }
 
 function getSource(sources: string, registration: Registration): string {
   const { name, version } = registration;
   const file = `v${version}`.replace(/\./g, '-');
-  return join(sources, name, file);
+  return unixJoin(sources, name, file);
 }

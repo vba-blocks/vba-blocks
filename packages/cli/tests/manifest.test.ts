@@ -1,4 +1,5 @@
-import { join, relative, sep } from 'path';
+import { join, relative } from 'path';
+import { unixPath } from '../src/utils';
 import { Manifest, parseManifest, loadManifest } from '../src/manifest';
 import { isPathDependency } from '../src/manifest/dependency';
 
@@ -186,7 +187,5 @@ function normalize(
 }
 
 function normalizePath(path: string, relativeTo: string = FIXTURES): string {
-  return relative(relativeTo, path)
-    .split(sep)
-    .join('/');
+  return unixPath(relative(relativeTo, path));
 }

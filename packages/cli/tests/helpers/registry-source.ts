@@ -1,6 +1,7 @@
-import { join } from 'path';
+import { join, relative } from 'path';
 import { Feature, Dependency } from '../../src/manifest';
 import { Source, Registration } from '../../src/sources';
+import { unixPath } from '../../src/utils';
 
 const source = 'registry+vba-blocks#<hash>';
 const registry: { [name: string]: Registration[] } = {
@@ -144,11 +145,14 @@ export default class RegistrySource {
   }
 
   fetch(registration: Registration) {
-    return join(
-      __dirname,
-      '../fixtures/sources',
+    const sources = join(__dirname, '../fixtures/sources');
+    const dir = join(
       registration.name,
       `v${registration.version}`.replace(/\./g, '-')
     );
+    const path = join(sources, dir);
+
+    // Use relative + unix path for consistency between Mac and Windows
+    return unixPath(relative(process.cwd(), path));
   }
 }

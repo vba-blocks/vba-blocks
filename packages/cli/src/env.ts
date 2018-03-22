@@ -1,5 +1,5 @@
-import { join } from 'path';
 import { homedir } from 'os';
+import unixJoin from './utils/unix-join';
 import { Reporter, reporter } from './reporter';
 
 export interface Env {
@@ -18,18 +18,18 @@ export interface Env {
   reporter: Reporter;
 }
 
-const cache = join(homedir(), '.vba-blocks');
+const cache = unixJoin(homedir(), '.vba-blocks');
 const env: Env = {
   isWindows: process.platform === 'win32',
   cwd: process.cwd(),
   values: process.env,
 
-  addins: join(__dirname, '../../addin/build'),
-  scripts: join(__dirname, '../scripts'),
+  addins: unixJoin(__dirname, '../../addin/build'),
+  scripts: unixJoin(__dirname, '../scripts'),
   cache,
-  registry: join(cache, 'registry'),
-  packages: join(cache, 'packages'),
-  sources: join(cache, 'sources'),
+  registry: unixJoin(cache, 'registry'),
+  packages: unixJoin(cache, 'packages'),
+  sources: unixJoin(cache, 'sources'),
   staging: null,
 
   reporter

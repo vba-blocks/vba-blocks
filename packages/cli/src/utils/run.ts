@@ -1,8 +1,9 @@
-import { join } from 'path';
 import { promisify } from 'util';
 const exec = promisify(require('child_process').exec);
 import env from '../env';
-import { isString, pathExists } from '../utils';
+import { isString } from './is';
+import { pathExists } from './fs';
+import unixJoin from './unix-join';
 import { Config } from '../config';
 import { runScriptNotFound } from '../errors';
 
@@ -33,7 +34,7 @@ export default async function run(
   macro: string,
   args: object
 ): Promise<RunResult> {
-  const script = join(
+  const script = unixJoin(
     env.scripts,
     env.isWindows ? 'run.vbs' : 'run.applescript'
   );

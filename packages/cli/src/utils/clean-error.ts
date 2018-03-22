@@ -1,4 +1,4 @@
-import { isString } from './';
+import { isString } from './is';
 
 const MESSAGE_REGEXP = /(^(.|\n)*?(?=\n\s*at\s.*\:\d*\:\d*))/;
 const ERROR_TEXT = 'Error: ';

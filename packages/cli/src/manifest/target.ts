@@ -1,6 +1,5 @@
 import { ok } from 'assert';
-import { join } from 'path';
-import { has } from '../utils';
+import { has, unixJoin } from '../utils';
 
 export type TargetType = 'xlsx' | 'xlsm' | 'xlam';
 
@@ -41,7 +40,7 @@ export function parseTarget(value: any, pkgName: string, dir: string): Target {
     `target "${name}" (type = "${type}") is missing path. ${EXAMPLE}`
   );
 
-  const path = join(dir, relativePath);
+  const path = unixJoin(dir, relativePath);
 
   return { name, type, path };
 }

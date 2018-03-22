@@ -1,6 +1,5 @@
 import { ok } from 'assert';
-import { join } from 'path';
-import { isString } from '../utils';
+import { isString, unixJoin } from '../utils';
 
 export interface Source {
   name: string;
@@ -30,7 +29,7 @@ export function parseSource(
   const { path: relativePath, optional = false } = value;
 
   ok(relativePath, `src "${name}" is missing path. ${EXAMPLE}`);
-  const path = join(dir, relativePath);
+  const path = unixJoin(dir, relativePath);
 
   return { name, path, optional };
 }

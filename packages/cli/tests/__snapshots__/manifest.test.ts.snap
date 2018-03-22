@@ -4,7 +4,7 @@ exports[`load valid references 1`] = `
 Object {
   "defaultFeatures": Array [],
   "dependencies": Array [],
-  "dir": "",
+  "dir": ".",
   "features": Array [],
   "metadata": Object {
     "authors": Array [
@@ -57,7 +57,7 @@ Object {
       "tag": "v4.1.3",
     },
   ],
-  "dir": "",
+  "dir": ".",
   "features": Array [
     Object {
       "dependencies": Array [],
@@ -189,7 +189,7 @@ Object {
       "rev": "a1b2c3d4",
     },
   ],
-  "dir": "",
+  "dir": ".",
   "features": Array [],
   "metadata": Object {
     "authors": Array [
@@ -214,7 +214,7 @@ Object {
     "b",
   ],
   "dependencies": Array [],
-  "dir": "",
+  "dir": ".",
   "features": Array [
     Object {
       "dependencies": Array [],
@@ -261,7 +261,7 @@ exports[`loads valid package metadata 1`] = `
 Object {
   "defaultFeatures": Array [],
   "dependencies": Array [],
-  "dir": "",
+  "dir": ".",
   "features": Array [],
   "metadata": Object {
     "authors": Array [
@@ -283,7 +283,7 @@ exports[`loads valid sources 1`] = `
 Object {
   "defaultFeatures": Array [],
   "dependencies": Array [],
-  "dir": "",
+  "dir": ".",
   "features": Array [],
   "metadata": Object {
     "authors": Array [
@@ -321,7 +321,7 @@ exports[`loads valid targets 1`] = `
 Object {
   "defaultFeatures": Array [],
   "dependencies": Array [],
-  "dir": "",
+  "dir": ".",
   "features": Array [],
   "metadata": Object {
     "authors": Array [

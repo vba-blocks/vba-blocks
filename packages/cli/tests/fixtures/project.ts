@@ -5,6 +5,9 @@ import { Workspace } from '../../src/workspace';
 import { getConfig } from '../helpers/config';
 import * as manifest from './manifest';
 
+// TODO toProject differs from helpers/project with empty packages + sync
+// Check usage and unify both approaches
+
 export const simple = toProject(manifest.simple);
 export const complex = toProject(manifest.complex);
 

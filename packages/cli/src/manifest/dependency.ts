@@ -1,8 +1,7 @@
 import { ok } from 'assert';
 import { satisfies as satisfiesSemver } from 'semver';
-import { join } from 'path';
 import { Version } from './version';
-import { isString, has } from '../utils';
+import { isString, has, unixJoin } from '../utils';
 import { Registration } from '../sources';
 
 export interface DependencyDetails {
@@ -85,7 +84,9 @@ export function parseDependency(
 
   ok(
     version || path || git,
-    `Invalid dependency "${name}", no version, path, or git specified. ${EXAMPLE}`
+    `Invalid dependency "${name}", no version, path, or git specified. ${
+      EXAMPLE
+    }`
   );
 
   const details = { name, defaultFeatures, features, optional };
@@ -93,7 +94,7 @@ export function parseDependency(
   if (version) {
     return { ...details, registry, version };
   } else if (path) {
-    return { ...details, path: join(dir, path) };
+    return { ...details, path: unixJoin(dir, path) };
   } else {
     if (rev) return { ...details, git: git!, rev };
     else if (tag) return { ...details, git: git!, tag };

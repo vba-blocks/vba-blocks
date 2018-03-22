@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { ok } from 'assert';
 import { parse as parseToml } from 'toml';
-import { pathExists, readFile } from '../utils/fs';
+import { pathExists, readFile, unixPath } from '../utils';
 import { Version } from './version';
 import { Source, parseSrc } from './source';
 import { Feature, parseFeatures } from './feature';
@@ -129,7 +129,7 @@ export async function loadManifest(dir: string): Promise<Manifest> {
 
   const raw = await readFile(file);
   const parsed = parseToml(raw.toString());
-  const manifest = parseManifest(parsed, dir);
+  const manifest = parseManifest(parsed, unixPath(dir));
 
   return manifest;
 }

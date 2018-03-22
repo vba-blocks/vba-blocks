@@ -1,9 +1,7 @@
-import { join } from 'path';
-import { pathExists, ensureDir, remove, move } from '../utils/fs';
+import { ensureDir } from '../utils/fs';
 import { Project } from '../project';
 import { Target } from '../manifest';
 import { zip } from '../utils';
-import { targetNotFound, targetIsOpen } from '../errors';
 import { getFile } from './';
 
 export default async function createTarget(project: Project, target: Target) {
