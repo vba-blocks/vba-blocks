@@ -13,7 +13,6 @@ export default async function build(options: BuildOptions = {}) {
 
   // 3. Create and build targets (sequentially to avoid contention issues)
   for (const target of project.manifest.targets) {
-    await createTarget(project, target);
     await buildTarget(project, target, buildGraph);
   }
 
