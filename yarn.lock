@@ -2262,6 +2262,10 @@ enhanced-resolve@^3.4.0:
     object-assign "^4.0.1"
     tapable "^0.2.7"
 
+ensure-posix-path@^1.0.0:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/ensure-posix-path/-/ensure-posix-path-1.0.2.tgz#a65b3e42d0b71cfc585eb774f9943c8d9b91b0c2"
+
 env-paths@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-1.0.0.tgz#4168133b42bb05c38a35b1ae4397c8298ab369e0"
@@ -4365,6 +4369,12 @@ makeerror@1.0.x:
 map-obj@^1.0.0, map-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-1.0.1.tgz#d933ceb9205d82bdcf4886f6742bdc2b4dea146d"
+
+matcher-collection@^1.0.0:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/matcher-collection/-/matcher-collection-1.0.5.tgz#2ee095438372cb8884f058234138c05c644ec339"
+  dependencies:
+    minimatch "^3.0.2"
 
 maximatch@^0.1.0:
   version "0.1.0"
@@ -6714,6 +6724,13 @@ vm-browserify@0.0.4:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
   dependencies:
     indexof "0.0.1"
+
+walk-sync@^0.3.2:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/walk-sync/-/walk-sync-0.3.2.tgz#4827280afc42d0e035367c4a4e31eeac0d136f75"
+  dependencies:
+    ensure-posix-path "^1.0.0"
+    matcher-collection "^1.0.0"
 
 walk@2.3.9, walk@^2.3.9:
   version "2.3.9"

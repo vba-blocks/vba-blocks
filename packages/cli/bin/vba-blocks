@@ -8,7 +8,7 @@ const { cleanError } = require('../lib/utils');
 const { unknownCommand } = require('../lib/errors');
 const { version } = require('../package.json');
 
-const commands = ['build', 'import'];
+const commands = ['build', 'export', 'import'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -35,6 +35,7 @@ Usage: vba-blocks [command] [options]
 
 Commands
   - build         Build project from manifest
+  - export        Export src from built targets
   - import        Import src to built targets
 
 Options:

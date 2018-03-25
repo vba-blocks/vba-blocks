@@ -29,7 +29,8 @@
     "tar": "^4.0.1",
     "tmp": "^0.0.33",
     "toml": "^2.3.2",
-    "v8-compile-cache": "^1.1.2"
+    "v8-compile-cache": "^1.1.2",
+    "walk-sync": "^0.3.2"
   },
   "devDependencies": {
     "@types/archiver": "^2.0.0",

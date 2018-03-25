@@ -39,6 +39,22 @@ export async function importGraph(
 }
 
 /**
+ * Export src and references from given target
+ */
+export async function exportTo(
+  project: Project,
+  target: Target,
+  staging: string
+): Promise<void> {
+  const { application, addin, file } = getTargetInfo(project, target);
+
+  await run(project.config, application, addin, 'Build.ExportTo', {
+    file,
+    staging
+  });
+}
+
+/**
  * Get application, addin, and file for given target
  */
 export function getTargetInfo(

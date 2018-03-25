@@ -42,6 +42,11 @@ async function tmpFolder(): Promise<string> {
   });
 }
 
+async function readJson(path: string): Promise<any> {
+  const raw = await readFile(path);
+  return JSON.parse(raw.toString());
+}
+
 export {
   checksum,
   copy as copyFile,
@@ -49,6 +54,7 @@ export {
   move,
   pathExists,
   readFile,
+  readJson,
   remove,
   tmpFile,
   tmpFolder,
