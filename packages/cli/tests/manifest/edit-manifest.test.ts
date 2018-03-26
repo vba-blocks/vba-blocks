@@ -51,9 +51,31 @@ test('should add src to empty manifest', async () => {
   expect(result).toMatchSnapshot();
 });
 
-test('should remove inline src', async () => {});
+test('should remove inline src', async () => {
+  const manifest = await loadManifest(join(FIXTURES, 'project'));
+  const lines = await readManifestLines(manifest.dir);
 
-test('should remove table src', async () => {});
+  const operation = removeSrc({
+    name: 'b',
+    path: '...'
+  });
+  const result = operation.run(manifest, lines);
+
+  expect(result).toMatchSnapshot();
+});
+
+test('should remove table src', async () => {
+  const manifest = await loadManifest(join(FIXTURES, 'project'));
+  const lines = await readManifestLines(manifest.dir);
+
+  const operation = removeSrc({
+    name: 'c',
+    path: '...'
+  });
+  const result = operation.run(manifest, lines);
+
+  expect(result).toMatchSnapshot();
+});
 
 async function readManifestLines(dir: string): Promise<string[]> {
   const file = join(dir, 'vba-block.toml');

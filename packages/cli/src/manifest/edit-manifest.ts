@@ -27,6 +27,14 @@ export interface RemoveDependency extends OperationDetails {
 }
 export type Operation = AddSrc | RemoveSrc | AddDependency | RemoveDependency;
 
+/**
+ * Apply edit operations to manifest
+ *
+ * 1. Read manifest and split by line
+ * 2. Apply operation line-by-line
+ * 3. Join lines (using original newline)
+ * 4. Overwrite existing manifest
+ */
 export default async function editManifest(
   manifest: Manifest,
   operations: Operation[]
@@ -45,7 +53,7 @@ export default async function editManifest(
   await writeFile(file, data);
 }
 
-const isNotSrc = /^\[(?!src).*/g;
+const isNotSrc = /^\[(?!src).*/;
 
 export function addSrc(source: Source): AddSrc {
   const run = (manifest: Manifest, lines: string[]) => {
@@ -81,25 +89,29 @@ export function removeSrc(source: Source): RemoveSrc {
       );
     }
 
+    // Check for table-style src
     let remove_index = lines.findIndex(
       line => line.trim() === `[src.${source.name}]`
     );
     if (remove_index > src_index) {
-      // TODO
+      // Find next table/section
+      let next_index = findNextSection(lines, remove_index + 1);
+      if (next_index < 0) next_index = lines.length;
 
+      lines.splice(remove_index, next_index - remove_index);
       return lines;
     }
 
+    // Check for inline src
     const next_index = findAfter(lines, line => isNotSrc.test(line), src_index);
     const isMatch = new RegExp(`^${source.name}`);
-    remove_index = lines.slice(src_index).findIndex(line => isMatch.test(line));
+    remove_index = findAfter(lines, line => isMatch.test(line), src_index);
 
     if (remove_index <= 0 || (next_index > 0 && remove_index > next_index)) {
       throw new Error(`Failed to remove "${source.name}", not found`);
     }
 
-    // TODO
-
+    lines.splice(remove_index, 1);
     return lines;
   };
 
@@ -124,6 +136,10 @@ export function removeDependency(dependency: Dependency): RemoveDependency {
   return { type: 'remove-dependency', dependency, run };
 }
 
+//
+// Utilities
+//
+
 function findOrAddSection(lines: string[], section: string): number {
   section = `[${section}]`;
   let index = lines.findIndex(line => line.trim() === section);
@@ -141,6 +157,12 @@ function findOrAddSection(lines: string[], section: string): number {
 function findSection(lines: string[], section: string): number {
   section = `[${section}]`;
   return lines.findIndex(line => line.trim() === section);
+}
+
+const isSection = /^\[/;
+
+function findNextSection(lines: string[], index: number): number {
+  return findAfter(lines, line => isSection.test(line), index);
 }
 
 function findAfter(
