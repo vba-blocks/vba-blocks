@@ -1,6 +1,14 @@
 import { join, basename, extname } from 'path';
 import walk from 'walk-sync';
-import { Target, Source, Reference, writeManifest } from '../manifest';
+import {
+  Target,
+  Source,
+  Reference,
+  Operation,
+  editManifest,
+  addSrc,
+  removeSrc
+} from '../manifest';
 import { Project, loadManifests } from '../project';
 import {
   without,
@@ -28,6 +36,8 @@ export default async function exportTarget(
 
   // Update src
   const actions: Promise<void>[] = [];
+  const operations: Operation[] = [];
+
   for (const [file, source] of graph.src.existing) {
     actions.push(copyFile(join(staging, file), source.path));
   }
@@ -37,13 +47,11 @@ export default async function exportTarget(
     const source = { name, path };
 
     actions.push(copyFile(join(staging, file), path));
-    project.manifest.src.push(source);
+    operations.push(addSrc(source));
   }
   for (const source of graph.src.removed) {
     actions.push(remove(source.path));
-
-    const index = project.manifest.src.indexOf(source);
-    project.manifest.src.splice(index, 1);
+    operations.push(removeSrc(source));
   }
 
   // Update references
@@ -58,7 +66,7 @@ export default async function exportTarget(
   }
 
   await Promise.all(actions);
-  await writeManifest(project.manifest);
+  await editManifest(project.manifest, operations);
   await remove(staging);
 }
 

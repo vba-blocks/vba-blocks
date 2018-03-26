@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { ok } from 'assert';
 import { parse as parseToml } from 'toml';
-import { pathExists, readFile, unixPath, convertToToml } from '../utils';
+import { pathExists, readFile, unixPath } from '../utils';
 import { Version } from './version';
 import { Source, parseSrc } from './source';
 import { Feature, parseFeatures } from './feature';
@@ -10,6 +10,15 @@ import { Reference, parseReferences } from './reference';
 import { Target, parseTargets } from './target';
 
 export { Version, Source, Feature, Dependency, Reference, Target };
+
+export {
+  default as editManifest,
+  Operation,
+  addSrc,
+  removeSrc,
+  addDependency,
+  removeDependency
+} from './edit-manifest';
 
 /**
  * @example
@@ -132,10 +141,4 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   const manifest = parseManifest(parsed, unixPath(dir));
 
   return manifest;
-}
-
-export async function writeManifest(manifest: Manifest) {
-  const path = join(manifest.dir, 'vba-block.toml');
-
-  // TODO specialized writeToml that works with existing to keep format and comments
 }

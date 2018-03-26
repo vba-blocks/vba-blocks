@@ -1,13 +1,13 @@
 import { join, relative } from 'path';
-import { unixPath } from '../src/utils';
-import { Manifest, parseManifest, loadManifest } from '../src/manifest';
-import { isPathDependency } from '../src/manifest/dependency';
+import { unixPath } from '../../src/utils';
+import { Manifest, parseManifest, loadManifest } from '../../src/manifest';
+import { isPathDependency } from '../../src/manifest/dependency';
 
 const BASE_MANIFEST = {
   package: { name: 'package-name', version: '1.0.0', authors: ['Tim Hall'] }
 };
 
-const FIXTURES = join(__dirname, 'fixtures');
+const FIXTURES = join(__dirname, '../fixtures');
 
 test('loads valid package metadata', () => {
   expect(normalize(parseManifest(BASE_MANIFEST, FIXTURES))).toMatchSnapshot();

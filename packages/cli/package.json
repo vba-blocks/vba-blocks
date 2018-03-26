@@ -21,6 +21,7 @@
     "chalk": "^2.3.0",
     "debug": "^3.1.0",
     "decompress": "^4.2.0",
+    "detect-newline": "^2.1.0",
     "dugite": "^1.39.0",
     "fs-extra": "^4.0.2",
     "logic-solver": "^2.0.1",

@@ -8,6 +8,10 @@ publish = true
 a = "src/a.bas"
 b = { path = "src/b.cls", optional = true }
 
+[src.c]
+path = "src/c.bas"
+optional = false
+
 [features]
 default = ["a", "b"]
 

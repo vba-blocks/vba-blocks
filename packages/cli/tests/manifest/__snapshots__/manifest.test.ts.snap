@@ -114,6 +114,11 @@ Object {
       "optional": true,
       "path": "src/b.cls",
     },
+    Object {
+      "name": "c",
+      "optional": false,
+      "path": "src/c.bas",
+    },
   ],
   "targets": Array [
     Object {
