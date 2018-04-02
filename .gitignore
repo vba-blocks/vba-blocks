@@ -1,14 +1,13 @@
 # Ignore compiled packages
 packages/cli/lib
 packages/cli/tests/fixtures/project/build
+packages/cli/e2e/*/build
 
 packages/addin/build
 
 packages/desktop/src/renderer/.next
 packages/desktop/src/renderer/out
 packages/desktop/dist
-
-packages/e2e/*/build
 
 # Ignore temporary Excel files
 */~$*

@@ -1,17 +1,15 @@
+const { promisify } = require('util');
+const exec = promisify(require('child_process').exec);
 const { resolve } = require('path');
 const walkSync = require('walk-sync');
-const env = require('../lib/env').default;
 const { checksum, pathExists } = require('../lib/utils');
 
 const isBackup = /\.backup/g;
 const isBinary = /\.xlsm/g;
 
 module.exports = async (cwd, command, args = {}) => {
-  env.cwd = cwd;
-
-  // TODO Run directly with fork
-  const execute = require(`../bin/vba-blocks-${command}`);
-  await execute(args);
+  const bin = resolve(__dirname, '../bin/vba-blocks');
+  const { stdout, stderr } = await exec(`node ${bin} ${command}`, { cwd });
 
   const files = walkSync(cwd, { directories: false });
   const details = {};
