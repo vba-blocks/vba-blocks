@@ -4,7 +4,7 @@ const { default: run } = require('vba-blocks/lib/utils/run');
 
 mock('../../cli/lib/addin', {
   async importGraph(project, target, graph) {
-    const file = join(project.paths.build, `${target.name}.${target.type}`);
+    const file = join(project.paths.build, target.filename);
     const { src, references } = graph;
 
     const result = await run(

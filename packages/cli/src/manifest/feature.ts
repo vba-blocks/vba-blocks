@@ -23,7 +23,7 @@ export function parseFeatures(
   let features: Feature[] = [];
 
   Object.entries(value).forEach(([name, value]) => {
-    if (name === 'default') defaultFeatures = value;
+    if (name === 'default') defaultFeatures = <string[]>value;
     else features.push(parseFeature(name, value));
   });
 

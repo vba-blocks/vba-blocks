@@ -13,9 +13,9 @@ export { default as exportTarget } from './export-target';
 export { default as restoreTarget } from './restore-target';
 
 export function getFile(project: Project, target: Target): string {
-  return unixJoin(project.paths.build, `${target.name}.${target.type}`);
+  return unixJoin(project.paths.build, target.filename);
 }
 
 export function getBackup(project: Project, target: Target): string {
-  return unixJoin(project.paths.backup, `${target.name}.${target.type}`);
+  return unixJoin(project.paths.backup, target.filename);
 }

@@ -4,16 +4,21 @@ import decompress from 'decompress';
 
 export async function zip(dir: string, file: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    const output = createWriteStream(file);
-    const archive = createArchive('zip');
+    try {
+      const output = createWriteStream(file);
+      const archive = createArchive('zip');
 
-    output.on('close', () => resolve());
-    archive.on('error', reject);
+      output.on('close', () => resolve());
+      output.on('error', reject);
 
-    archive.pipe(output);
+      archive.pipe(output);
+      archive.on('error', reject);
 
-    archive.directory(dir, '/');
-    archive.finalize();
+      archive.directory(dir, '/');
+      archive.finalize();
+    } catch (err) {
+      reject(err);
+    }
   });
 }
 

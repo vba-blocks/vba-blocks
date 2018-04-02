@@ -23,6 +23,8 @@ The downloaded file signature for ${
     `Failed to build target "${target.name}", it is currently open. 
 
 Please close "${path}" and try again.`,
+  'target-create-failed': target =>
+    `Failed to create project for target "${target.name}"`,
   'target-import-failed': target =>
     `Failed to import project for target "${target.name}"`,
   'target-restore-failed': (backup, file) =>

@@ -1,5 +1,5 @@
 import { ok } from 'assert';
-import { has, unixJoin } from '../utils';
+import { has, unixJoin, sanitize } from '../utils';
 
 export type TargetType = 'xlsx' | 'xlsm' | 'xlam';
 
@@ -7,6 +7,7 @@ export interface Target {
   name: string;
   type: TargetType;
   path: string;
+  filename: string;
 }
 
 const EXAMPLE = `Example vba-block.toml:
@@ -41,6 +42,7 @@ export function parseTarget(value: any, pkgName: string, dir: string): Target {
   );
 
   const path = unixJoin(dir, relativePath);
+  const filename = `${sanitize(name)}.${type}`;
 
-  return { name, type, path };
+  return { name, type, path, filename };
 }

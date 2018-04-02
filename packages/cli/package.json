@@ -26,6 +26,7 @@
     "fs-extra": "^4.0.2",
     "logic-solver": "^2.0.1",
     "mri": "^1.1.0",
+    "sanitize-filename": "^1.6.1",
     "semver": "^5.4.1",
     "tar": "^4.0.1",
     "tmp": "^0.0.33",

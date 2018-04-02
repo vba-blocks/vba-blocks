@@ -8,6 +8,7 @@
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "precommit": "lint-staged",
     "test": "jest",
+    "e2e": "jest --config ./packages/e2e/jest.config.js",
     "build": "yarn build:cli && yarn build:addin",
     "build:cli": "cd packages/cli && yarn build",
     "build:addin": "cd packages/addin && cross-env DEBUG=vba-blocks yarn build"
@@ -19,9 +20,10 @@
     "singleQuote": true
   },
   "jest": {
+    "testEnvironment": "node",
     "moduleFileExtensions": ["ts", "js", "json"],
-    "projects": ["packages/{cli}"],
     "testRegex": "\\.(test|spec)\\.(ts|js)$",
+    "testPathIgnorePatterns": ["/node_modules/", "/packages/e2e/"],
     "transform": {
       "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     }
@@ -38,7 +40,8 @@
     "resolve-from": "^4.0.0",
     "resolve-pkg": "^1.0.0",
     "ts-jest": "^20.0.10",
-    "typescript": "^2.7.2"
+    "typescript": "^2.8",
+    "walk-sync": "^0.3.2"
   },
   "version": "0.0.0",
   "main": "index.js"

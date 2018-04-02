@@ -122,6 +122,7 @@ Object {
   ],
   "targets": Array [
     Object {
+      "filename": "testing.xlsm",
       "name": "testing",
       "path": "targets/xlsm",
       "type": "xlsm",
@@ -341,11 +342,13 @@ Object {
   "src": Array [],
   "targets": Array [
     Object {
+      "filename": "package-name.xlsm",
       "name": "package-name",
       "path": "targets/xlsm",
       "type": "xlsm",
     },
     Object {
+      "filename": "addin.xlam",
       "name": "addin",
       "path": "targets/xlam",
       "type": "xlam",

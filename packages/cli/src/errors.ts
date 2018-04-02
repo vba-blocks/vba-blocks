@@ -14,6 +14,7 @@ export interface CliErrors {
 
   'target-not-found': (target: Target) => string;
   'target-is-open': (target: Target, path: string) => string;
+  'target-create-failed': (target: Target) => string;
   'target-import-failed': (target: Target) => string;
   'target-restore-failed': (backup: string, file: string) => string;
 
@@ -89,6 +90,13 @@ export function targetIsOpen(target: Target, path: string): Error {
   const message = env.reporter.errors[code](target, path);
 
   return new CliError(message, { code });
+}
+
+export function targetCreateFailed(target: Target, underlying: Error): Error {
+  const code = 'target-create-failed';
+  const message = env.reporter.errors[code](target);
+
+  return new CliError(message, { code, underlying });
 }
 
 export function targetImportFailed(target: Target, underlying: Error): Error {

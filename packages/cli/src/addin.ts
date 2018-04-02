@@ -65,7 +65,7 @@ export function getTargetInfo(
   if (!application) throw new Error(`Unsupported target type "${target.type}"`);
 
   const addin = unixJoin(env.addins, addins[application]);
-  const file = unixJoin(project.paths.build, `${target.name}.${target.type}`);
+  const file = unixJoin(project.paths.build, target.filename);
 
   return { application, addin, file };
 }

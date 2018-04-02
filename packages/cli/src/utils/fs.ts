@@ -9,6 +9,7 @@ import {
   move,
   remove
 } from 'fs-extra';
+import sanitizeFilename from 'sanitize-filename';
 
 async function checksum(file: string, algorithm = 'sha256'): Promise<string> {
   const hash = createHash(algorithm);
@@ -47,6 +48,10 @@ async function readJson(path: string): Promise<any> {
   return JSON.parse(raw.toString());
 }
 
+function sanitize(name: string): string {
+  return sanitizeFilename(name, { replacement: '-' });
+}
+
 export {
   checksum,
   copy as copyFile,
@@ -56,6 +61,7 @@ export {
   readFile,
   readJson,
   remove,
+  sanitize,
   tmpFile,
   tmpFolder,
   writeFile

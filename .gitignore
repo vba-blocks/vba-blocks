@@ -8,6 +8,8 @@ packages/desktop/src/renderer/.next
 packages/desktop/src/renderer/out
 packages/desktop/dist
 
+packages/e2e/*/build
+
 # Ignore temporary Excel files
 */~$*
 .backup

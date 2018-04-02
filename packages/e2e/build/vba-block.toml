@@ -1,0 +1,12 @@
+[package]
+name = "e2e/build"
+version = "0.0.0"
+authors = []
+
+[src]
+A = "./src/A.bas"
+B = "./src/B.cls"
+
+[[targets]]
+type = "xlsm"
+path = "targets/xlsm"
