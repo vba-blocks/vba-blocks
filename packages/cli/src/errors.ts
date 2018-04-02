@@ -1,35 +1,20 @@
 import chalk from 'chalk';
 import env from './env';
-import { cleanError, isString } from './utils';
+import { cleanError, isString, isObject } from './utils';
 
 import { Target } from './manifest';
 import { Registration } from './sources';
+import { ErrorMessages } from './reporter';
 
-export interface CliErrors {
-  'unknown-command': (command: string) => string;
-
-  'unsupported-source': (type: string) => string;
-  'dependency-not-found': (dependency: string, registry: string) => string;
-  'dependency-invalid-checksum': (registration: Registration) => string;
-
-  'target-not-found': (target: Target) => string;
-  'target-is-open': (target: Target, path: string) => string;
-  'target-create-failed': (target: Target) => string;
-  'target-import-failed': (target: Target) => string;
-  'target-restore-failed': (backup: string, file: string) => string;
-
-  'resolve-failed': (details?: string) => string;
-
-  'run-script-not-found': (path: string) => string;
-}
+export type CliErrorCode = keyof ErrorMessages;
 
 export interface CliErrorOptions {
-  code?: string;
+  code?: CliErrorCode;
   underlying?: Error;
 }
 
 export class CliError extends Error {
-  code?: string;
+  code?: CliErrorCode;
   underlying?: Error;
 
   constructor(message: string, options: CliErrorOptions = {}) {
@@ -45,91 +30,59 @@ export class CliError extends Error {
   }
 }
 
-// TODO Resolve typing issues so the following isn't so repetitive/verbose
+export const unknownCommand = (command: string) =>
+  generateError('unknown-command', { command });
 
-export function unknownCommand(command: string): Error {
-  const code = 'unknown-command';
-  const message = env.reporter.errors[code](command);
+export const unsupportedSource = (type: string) =>
+  generateError('unsupported-source', { type });
 
-  return new CliError(message, { code });
-}
+export const dependencyNotFound = (dependency: string, registry: string) =>
+  generateError('dependency-not-found', { dependency, registry });
 
-export function unsupportedSource(type: string): Error {
-  const code = 'unsupported-source';
-  const message = env.reporter.errors[code](type);
+export const dependencyInvalidChecksum = (registration: Registration) =>
+  generateError('dependency-invalid-checksum', { registration });
 
-  return new CliError(message, { code });
-}
+export const targetNotFound = (target: Target) =>
+  generateError('target-not-found', { target });
 
-export function dependencyNotFound(
-  dependency: string,
-  registry: string
-): Error {
-  const code = 'dependency-not-found';
-  const message = env.reporter.errors[code](dependency, registry);
+export const targetIsOpen = (target: Target, path: string) =>
+  generateError('target-is-open', { target, path });
 
-  return new CliError(message, { code });
-}
+export const targetCreateFailed = (target: Target, underlying: Error) =>
+  generateError('target-create-failed', { target }, underlying);
 
-export function dependencyInvalidChecksum(registration: Registration): Error {
-  const code = 'dependency-invalid-checksum';
-  const message = env.reporter.errors[code](registration);
+export const targetImportFailed = (target: Target, underlying: Error) =>
+  generateError('target-import-failed', { target }, underlying);
 
-  return new CliError(message, { code });
-}
-
-export function targetNotFound(target: Target): Error {
-  const code = 'target-not-found';
-  const message = env.reporter.errors[code](target);
-
-  return new CliError(message, { code });
-}
-
-export function targetIsOpen(target: Target, path: string): Error {
-  const code = 'target-is-open';
-  const message = env.reporter.errors[code](target, path);
-
-  return new CliError(message, { code });
-}
-
-export function targetCreateFailed(target: Target, underlying: Error): Error {
-  const code = 'target-create-failed';
-  const message = env.reporter.errors[code](target);
-
-  return new CliError(message, { code, underlying });
-}
-
-export function targetImportFailed(target: Target, underlying: Error): Error {
-  const code = 'target-import-failed';
-  const message = env.reporter.errors[code](target);
-
-  return new CliError(message, { code, underlying });
-}
-
-export function targetRestoreFailed(
+export const targetRestoreFailed = (
   backup: string,
   file: string,
   underlying: Error
-): Error {
-  const code = 'target-restore-failed';
-  const message = env.reporter.errors[code](backup, file);
+) => generateError('target-restore-failed', { backup, file }, underlying);
 
-  return new CliError(message, { code, underlying });
-}
-
-export function resolveFailed(details?: string): Error {
+export const resolveFailed = (details?: string) => {
   const code = 'resolve-failed';
-  let message = env.reporter.errors[code]();
+
+  let formatted = env.reporter.messages.errors[code]({});
   if (details) {
-    message += `\n${details}`;
+    formatted += `\n${details}`;
   }
 
-  return new CliError(message, { code });
-}
+  return new CliError(formatted, { code });
+};
 
-export function runScriptNotFound(path: string): Error {
-  const code = 'run-script-not-found';
-  const message = env.reporter.errors[code](path);
+export const runScriptNotFound = (path: string) =>
+  generateError('run-script-not-found', { path });
 
-  return new CliError(message, { code });
+function generateError<T extends CliErrorCode>(
+  code: T,
+  values: ErrorMessages[T],
+  underlying?: Error
+): CliError {
+  type Message = (values: ErrorMessages[T]) => string;
+
+  const message = <Message>env.reporter.messages.errors[code];
+  const formatted = message(values);
+
+  return new CliError(formatted, { code, underlying });
 }
