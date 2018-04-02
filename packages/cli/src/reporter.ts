@@ -57,16 +57,17 @@ export const reporter: Reporter = {
 
       'dependency-invalid-checksum': ({ registration }) => dedent`
         Dependency "${registration.name}" failed validation.
-  
-        The downloaded file signature for ${registration.id}
-        does not match the signature in the registry.`,
+
+        The downloaded file signature for ${
+          registration.id
+        } does not match the signature in the registry.`,
 
       'target-not-found': ({ target }) => dedent`
         Target "${target.name}" not found at "${target.path}"`,
 
       'target-is-open': ({ target, path }) => dedent`
         Failed to build target "${target.name}", it is currently open.
-  
+
         Please close "${path}" and try again.`,
 
       'target-create-failed': ({ target }) => dedent`

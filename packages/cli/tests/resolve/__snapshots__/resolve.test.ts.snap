@@ -2,6 +2,7 @@
 
 exports[`fails to solve unresolvable tree 1`] = `
 [Error: Unable to resolve dependency graph for project.
+
 There are dependencies that cannot be satisfied.]
 `;
 

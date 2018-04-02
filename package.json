@@ -8,7 +8,7 @@
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "precommit": "lint-staged",
     "test": "jest",
-    "e2e": "jest --config ./packages/e2e/jest.config.js",
+    "e2e": "jest --config ./e2e.config.js",
     "build": "yarn build:cli && yarn build:addin",
     "build:cli": "cd packages/cli && yarn build",
     "build:addin": "cd packages/addin && cross-env DEBUG=vba-blocks yarn build"
@@ -22,8 +22,7 @@
   "jest": {
     "testEnvironment": "node",
     "moduleFileExtensions": ["ts", "js", "json"],
-    "testRegex": "\\.(test|spec)\\.(ts|js)$",
-    "testPathIgnorePatterns": ["/node_modules/", "/packages/e2e/"],
+    "testRegex": "\\.test\\.(ts|js)$",
     "transform": {
       "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     }

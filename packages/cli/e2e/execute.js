@@ -1,7 +1,7 @@
 const { resolve } = require('path');
 const walkSync = require('walk-sync');
-const env = require('../cli/lib/env').default;
-const { checksum, pathExists } = require('../cli/lib/utils');
+const env = require('../lib/env').default;
+const { checksum, pathExists } = require('../lib/utils');
 
 const isBackup = /\.backup/g;
 const isBinary = /\.xlsm/g;
@@ -9,7 +9,8 @@ const isBinary = /\.xlsm/g;
 module.exports = async (cwd, command, args = {}) => {
   env.cwd = cwd;
 
-  const execute = require(`../cli/bin/vba-blocks-${command}`);
+  // TODO Run directly with fork
+  const execute = require(`../bin/vba-blocks-${command}`);
   await execute(args);
 
   const files = walkSync(cwd, { directories: false });
