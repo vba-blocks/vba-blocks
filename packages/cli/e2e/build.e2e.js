@@ -5,9 +5,12 @@ test('build', async () => {
   const dir = resolve(__dirname, `./fixtures/standard`);
   const { path: cwd, cleanup } = await tmp(dir);
 
-  await execute(cwd, 'build');
-  const result = await check(cwd);
+  try {
+    await execute(cwd, 'build');
 
-  await cleanup();
-  expect(result).toMatchSnapshot();
+    const result = await check(cwd);
+    expect(result).toMatchSnapshot();
+  } finally {
+    await cleanup();
+  }
 });
