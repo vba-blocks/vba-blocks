@@ -39,8 +39,7 @@
     "resolve-from": "^4.0.0",
     "resolve-pkg": "^1.0.0",
     "ts-jest": "^20.0.10",
-    "typescript": "^2.8",
-    "walk-sync": "^0.3.2"
+    "typescript": "^2.8"
   },
   "version": "0.0.0",
   "main": "index.js"

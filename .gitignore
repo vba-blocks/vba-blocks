@@ -1,7 +1,6 @@
 # Ignore compiled packages
 packages/cli/lib
 packages/cli/tests/fixtures/project/build
-packages/cli/e2e/*/build
 
 packages/addin/build
 
