@@ -6,6 +6,8 @@ test('build', async () => {
   const { path: cwd, cleanup } = await tmp(dir);
 
   await execute(cwd, 'build');
+  // TODO Just zip target
+  // TODO await execute(cwd, 'import');
   const result = await check(cwd);
 
   await cleanup();

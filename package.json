@@ -8,7 +8,7 @@
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "precommit": "lint-staged",
     "test": "jest",
-    "e2e": "jest --config ./e2e.config.js",
+    "e2e": "jest --config ./e2e.config.js --runInBand",
     "build": "yarn build:cli && yarn build:addin",
     "build:cli": "cd packages/cli && yarn build",
     "build:addin": "cd packages/addin && cross-env DEBUG=vba-blocks yarn build"
