@@ -1,11 +1,10 @@
+const dedent = require('dedent');
 const { default: exportProject } = require('../lib/actions/export-project');
 
-const help = `
-Export src from built targets.
+const help = dedent`
+  Export src from built target.
 
-Export src from built targets.
-
-Usage: vba-blocks export <target>`;
+  Usage: vba-blocks export <target>`;
 
 module.exports = async args => {
   if (args.help) {

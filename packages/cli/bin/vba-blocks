@@ -4,6 +4,7 @@ Error.stackTraceLimit = Infinity;
 
 const mri = require('mri');
 const chalk = require('chalk');
+const dedent = require('dedent');
 const { cleanError } = require('../lib/utils');
 const { unknownCommand } = require('../lib/errors');
 const { version } = require('../package.json');
@@ -28,22 +29,22 @@ if (args.debug) {
 }
 const debug = require('debug')('vba-blocks:main');
 
-const help = chalk`
-vba-blocks v${version}
+const help = dedent`
+  vba-blocks v${version}
 
-Usage: vba-blocks [command] [options]
+  Usage: vba-blocks [command] [options]
 
-Commands
-  - build         Build project from manifest
-  - export        Export src from built targets
-  - import        Import src to built targets
+  Commands
+    - build         Build project from manifest
+    - export        Export src from built target
+    - import        Import src to built targets
 
-Options:
-  -h, --help      Output usage information
-  -v, --version   Output the version number
-  
-Use "vba-blocks COMMAND --help" for help on specific commands.
-Visit https://vba-blocks.com to learn more about vba-blocks.`;
+  Options:
+    -h, --help      Output usage information
+    -v, --version   Output the version number
+    
+  Use "vba-blocks COMMAND --help" for help on specific commands.
+  Visit https://vba-blocks.com to learn more about vba-blocks.`;
 
 process.name = 'vba-blocks';
 process.on('unhandledRejection', handleError);
