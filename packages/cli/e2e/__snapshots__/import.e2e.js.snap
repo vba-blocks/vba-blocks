@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`build 1`] = `
+exports[`import 1`] = `
 Object {
   "build/e2e-build.xlsm": "<TODO>",
   "src/A.bas": "7530e3fbdb802143df3c9302dbf6a74b4542b30cd0fd0634796b8a65fddba45f",

@@ -1,6 +1,8 @@
 const { resolve } = require('path');
 const { tmp, execute, check } = require('./helpers/execute');
 
+jest.setTimeout(10000);
+
 test('build', async () => {
   const dir = resolve(__dirname, `./fixtures/standard`);
   const { path: cwd, cleanup } = await tmp(dir);
