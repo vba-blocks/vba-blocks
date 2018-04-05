@@ -132,3 +132,21 @@ Public Function NormalizePath(FilePath As String) As String
         End If
     Next i
 End Function
+
+''
+' Join path parts with separator
+'
+' @method JoinPath
+' @returns {String}
+''
+Public Function JoinPath(ParamArray Parts()) As String
+    Dim Path As String
+    Path = Parts(LBound(Parts))
+    
+    Dim i As Long
+    For i = LBound(Parts) + 1 To UBound(Parts)
+        Path = Path & Separator & Parts(i)
+    Next i
+    
+    JoinPath = NormalizePath(Path)
+End Function

@@ -18,6 +18,8 @@ Array [
   "",
   "d = { path = \\"src/d.bas\\", optional = true }",
   "",
+  "e = \\"src/e.cls\\"",
+  "",
   "[features]",
   "default = [\\"a\\", \\"b\\"]",
   "",

@@ -22,6 +22,10 @@ Object {
 
 exports[`export 1`] = `
 Object {
+  "A.bas": "7530e3fbdb802143df3c9302dbf6a74b4542b30cd0fd0634796b8a65fddba45f",
+  "B.cls": "04f1372b93222974d1a64dc571241589fa3e09ec628506d647a22562bfa2d7f6",
+  "Sheet1.cls": "53279ec0e31ca2ec31267d871654588dcbda97343d3e2e6b2487fedda858c0ba",
+  "ThisWorkbook.cls": "ffc5d3e2a71c29a2c69fc82c77d3d11b2dbc3cc6111e3e0074b6af7e7e689639",
   "build/e2e-empty.xlsm": "<TODO>",
   "targets/xlsm/[Content_Types].xml": "1201ce9d35181763181e983a4fc7a947695e8c8659eff83e0d47d39aef2f2d49",
   "targets/xlsm/_rels/.rels": "73e5a29f48d5ab979eeda062493bc7e679265c1344ef936978b8becec5549497",
@@ -34,7 +38,7 @@ Object {
   "targets/xlsm/xl/workbook.xml": "8e72e019326a2b3348c6865e66c248c751f99945dea6bdb53bca29366a3e0fa6",
   "targets/xlsm/xl/worksheets/sheet1.xml": "4e256f9a068483eec8facf4a640938e507905642b5248a22d487b491786fa93f",
   "vba-block.lock": "77dd85aed5bfeb1bc6195fd5ce4e5c5eb13bdfcab746ea072b4b3fc090c89849",
-  "vba-block.toml": "d812629faed7ea23e926439564a7bde937bfd8baa4224081c63864ca3de378b7",
+  "vba-block.toml": "260dd08a1e514115c543e29b3b8948d5578a24d2e4274fc7093d4dd8e12ad788",
 }
 `;
 

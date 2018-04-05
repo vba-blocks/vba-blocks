@@ -1,4 +1,9 @@
 Attribute VB_Name = "Build"
+Private Const vbext_ct_StdModule = 1
+Private Const vbext_ct_ClassModule = 2
+Private Const vbext_ct_MSForm = 3
+Private Const vbext_ct_Document = 100
+
 Public Function ImportGraph(Graph As Variant) As String
     On Error GoTo ErrorHandling
 
@@ -49,10 +54,23 @@ Public Function ExportTo(Info As Variant) As String
     Staging = Values("staging")
 
     Dim Component As Object
-    For Each Component In Document.VBProject.Components
-        ' TODO
-        ' Installer.Export Document.VBProject, Component.Name, FileSystem.Join(Staging, Component.Name & ...?), Overwrite:=True
-        Output.Messages.Add "Export: " & Component.Name
+    For Each Component In Document.VBProject.VBComponents
+        Dim Extension As String
+        Select Case Component.Type
+        Case vbext_ct_StdModule
+            Extension = ".bas"
+        Case vbext_ct_ClassModule
+            Extension = ".cls"
+        Case vbext_ct_MSForm
+            Extension = ".frm"
+        Case vbext_ct_Document
+            Extension = ".cls"
+        End Select
+    
+        Dim Path As String
+        Path = FileSystem.JoinPath(Staging, Component.Name & Extension)
+    
+        Installer.Export Document.VBProject, Component.Name, Path, Overwrite:=True
     Next Component
 
     ExportTo = Output.Result

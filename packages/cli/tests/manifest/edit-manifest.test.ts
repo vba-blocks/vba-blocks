@@ -22,12 +22,18 @@ test('should add optional src', async () => {
   const manifest = await loadManifest(join(FIXTURES, 'project'));
   const lines = await readManifestLines(manifest.dir);
 
-  const operation = addSrc({
+  let operation = addSrc({
     name: 'd',
     path: join(FIXTURES, 'project', 'src', 'd.bas'),
     optional: true
   });
-  const result = operation.run(manifest, lines);
+  let result = operation.run(manifest, lines);
+
+  operation = addSrc({
+    name: 'e',
+    path: join(FIXTURES, 'project', 'src', 'e.cls')
+  });
+  result = operation.run(manifest, result);
 
   expect(result).toMatchSnapshot();
 });

@@ -43,7 +43,7 @@ export default async function exportTarget(
   }
   for (const file of graph.src.added) {
     const name = basename(file, extname(file));
-    const path = unixJoin(project.manifest.dir, file);
+    const path = unixJoin(project.manifest.dir, 'src', file);
     const source: Source = { name, path };
 
     actions.push(copyFile(join(staging, file), path));

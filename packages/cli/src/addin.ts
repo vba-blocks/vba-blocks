@@ -52,7 +52,6 @@ export async function exportTo(
     file,
     staging
   });
-  console.log('export result', result);
 }
 
 /**

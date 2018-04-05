@@ -140,6 +140,8 @@ export function removeDependency(dependency: Dependency): RemoveDependency {
 // Utilities
 //
 
+// TODO combine these into findLandmarks helper for sections + items (including ranges and table check)
+
 function findOrAddSection(lines: string[], section: string): number {
   section = `[${section}]`;
   let index = lines.findIndex(line => line.trim() === section);
