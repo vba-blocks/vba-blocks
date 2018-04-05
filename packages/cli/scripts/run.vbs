@@ -9,7 +9,6 @@ Addin = Unescape(WScript.Arguments(1))
 Command = WScript.Arguments(2)
 Args = Unescape(WScript.Arguments(3))
 
-PrintLn "-----"
 Run App, Addin, Command, Args
 WScript.Quit 0
 

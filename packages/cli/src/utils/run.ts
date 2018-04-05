@@ -71,7 +71,9 @@ async function execute(script: string, args: string[]): Promise<RunResult> {
   }
 
   const command = env.isWindows
-    ? `cscript ${script} ${args.map(part => `"${escape(part)}"`).join(' ')}`
+    ? `cscript //Nologo ${script} ${args
+        .map(part => `"${escape(part)}"`)
+        .join(' ')}`
     : `osascript ${script}  ${args.map(part => `'${part}'`).join(' ')}`;
 
   let result;
@@ -100,13 +102,6 @@ export function toResult(
   stderr: string,
   err?: Error
 ): RunResult {
-  // For windows, remove cscript header (denoted by ----- divider)
-  // TODO Pass /nologo argument to script
-  if (stdout && env.isWindows) {
-    const divider = stdout.indexOf('-----\r\n');
-    if (divider >= 0) stdout = stdout.substr(divider + 7);
-  }
-
   let info;
   try {
     info = JSON.parse(stdout);

@@ -4,7 +4,6 @@ Dim Addin
 App = WScript.Arguments(0)
 Addin = Unescape(WScript.Arguments(1))
 
-PrintLn "-----"
 Run App, Addin
 WScript.Quit 0
 
