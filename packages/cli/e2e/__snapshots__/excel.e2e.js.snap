@@ -1,5 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`build 1`] = `
+Object {
+  "build/e2e-build.xlsm": "<TODO>",
+  "src/A.bas": "7530e3fbdb802143df3c9302dbf6a74b4542b30cd0fd0634796b8a65fddba45f",
+  "src/B.cls": "04f1372b93222974d1a64dc571241589fa3e09ec628506d647a22562bfa2d7f6",
+  "targets/xlsm/[Content_Types].xml": "1201ce9d35181763181e983a4fc7a947695e8c8659eff83e0d47d39aef2f2d49",
+  "targets/xlsm/_rels/.rels": "73e5a29f48d5ab979eeda062493bc7e679265c1344ef936978b8becec5549497",
+  "targets/xlsm/docProps/app.xml": "487796376309f7eed5ba21ce8a9f55395787862d8121c85cdb7258b128baa0f8",
+  "targets/xlsm/docProps/core.xml": "1d4e563a25803684e1973d771cc8393b0fb15ed7bbbd547a97daf6e5f3924e58",
+  "targets/xlsm/xl/_rels/workbook.xml.rels": "353383fbe90f202be596bdf0a86439c704d7024f4f8c19ebc9d06b42a341dba1",
+  "targets/xlsm/xl/sharedStrings.xml": "3dbe932e2d7a4c57b784cccc469ebd14b0a80e6efc8fa71bf2dfb498c746ed5e",
+  "targets/xlsm/xl/styles.xml": "f2608cf432cf5939abe03f4fc8545f59c8632dd50d2255ae89525652ab6cda07",
+  "targets/xlsm/xl/theme/theme1.xml": "b16106f4229f6ece6d74426b3e73ff6a677df2908d2a06f76ef0329fa27c0282",
+  "targets/xlsm/xl/workbook.xml": "8e72e019326a2b3348c6865e66c248c751f99945dea6bdb53bca29366a3e0fa6",
+  "targets/xlsm/xl/worksheets/sheet1.xml": "4e256f9a068483eec8facf4a640938e507905642b5248a22d487b491786fa93f",
+  "vba-block.lock": "5d88a7afe0a6004141d2120ef856f8f1ff048162bcd6a3f9664e899a0ef14cc4",
+  "vba-block.toml": "e791a974d3b0691e22eb72ffaa7757dbc10fb5addc96dca1015d7b0f2809c1af",
+}
+`;
+
 exports[`import 1`] = `
 Object {
   "build/e2e-build.xlsm": "<TODO>",
