@@ -1,31 +1,29 @@
 Dim App
 Dim Addin
-Dim Command
-Dim Args
-Dim Result
 
 App = WScript.Arguments(0)
 Addin = Unescape(WScript.Arguments(1))
-Command = WScript.Arguments(2)
-Args = Unescape(WScript.Arguments(3))
 
 PrintLn "-----"
-Run App, Addin, Command, Args
+Run App, Addin
 WScript.Quit 0
 
-Function Run(App, Addin, Command, Args)
+Function Run(App, Addin)
   Select Case App
   Case "excel"
-    RunExcel Addin, Command, Args
+    RunExcel Addin
   Case Else
     WScript.Echo "Unsupported App: " & App
+    WScript.Quit 1
   End Select
+
+  PrintLn "{""success"":true}"
 End Function
 
 ' Excel
 ' -----
 
-Sub RunExcel(Addin, Command, Args)
+Sub RunExcel(Addin)
   Dim Excel
   Dim ExcelWasOpen
   Dim Workbook
@@ -51,22 +49,6 @@ Sub RunExcel(Addin, Command, Args)
     CloseExcel Excel, ExcelWasOpen
     WScript.Quit 1
   End if
-
-  Result = Excel.Run("'" & Workbook.Name & "'!" & Command, Args)
-
-  If Err.Number <> 0 Then
-    PrintErr "Error #3: Failed to run command."
-    PrintErr Err.Description
-
-    CloseWorkbook Workbook, WorkbookWasOpen
-    CloseExcel Excel, ExcelWasOpen
-    WScript.Quit 1
-  End If
-
-  PrintLn Result
-
-  CloseWorkbook Workbook, WorkbookWasOpen
-  CloseExcel Excel, ExcelWasOpen
 End Sub
 
 Function OpenExcel(ByRef Excel)
@@ -104,14 +86,6 @@ Function OpenWorkbook(Excel, Path, ByRef Workbook)
     OpenWorkbook = True
   End If
 End Function
-
-Sub CloseWorkbook(ByRef Workbook, KeepWorkbookOpen)
-  If Not KeepWorkbookOpen And Not Workbook Is Nothing Then
-    Workbook.Close True
-  End If
-
-  Set Workbook = Nothing
-End Sub
 
 ' General
 ' -------

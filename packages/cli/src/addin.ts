@@ -6,10 +6,10 @@ import { run, unixJoin } from './utils';
 export type Application = string;
 export type Addin = string;
 
-const extensions: { [application: string]: string[] } = {
+export const extensions: { [application: string]: string[] } = {
   excel: ['xlsx', 'xlsm', 'xlam']
 };
-const addins: { [application: string]: string } = {
+export const addins: { [application: string]: string } = {
   excel: 'vba-blocks.xlsm' // TEMP vba-blocks.xlam
 };
 
@@ -31,7 +31,7 @@ export async function importGraph(
   const { application, addin, file } = getTargetInfo(project, target);
   const { src, references } = graph;
 
-  await run(project.config, application, addin, 'Build.ImportGraph', {
+  await run(application, addin, 'Build.ImportGraph', {
     file,
     src,
     references
@@ -48,7 +48,7 @@ export async function exportTo(
 ): Promise<void> {
   const { application, addin, file } = getTargetInfo(project, target);
 
-  await run(project.config, application, addin, 'Build.ExportTo', {
+  await run(application, addin, 'Build.ExportTo', {
     file,
     staging
   });

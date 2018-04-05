@@ -28,7 +28,6 @@ export class RunError extends Error {
 }
 
 export default async function run(
-  config: Config,
   application: string,
   file: string,
   macro: string,
@@ -38,17 +37,42 @@ export default async function run(
     env.scripts,
     env.isWindows ? 'run.vbs' : 'run.applescript'
   );
+
+  return execute(script, [application, file, macro, JSON.stringify(args)]);
+}
+
+export async function open(
+  application: string,
+  file: string
+): Promise<RunResult> {
+  const script = unixJoin(
+    env.scripts,
+    env.isWindows ? 'open.vbs' : 'open.applescript'
+  );
+
+  return execute(script, [application, file]);
+}
+
+export async function close(
+  application: string,
+  file: string
+): Promise<RunResult> {
+  const script = unixJoin(
+    env.scripts,
+    env.isWindows ? 'close.vbs' : 'close.applescript'
+  );
+
+  return execute(script, [application, file]);
+}
+
+async function execute(script: string, args: string[]): Promise<RunResult> {
   if (!await pathExists(script)) {
     throw runScriptNotFound(script);
   }
 
   const command = env.isWindows
-    ? `cscript ${script} ${application} "${escape(file)}" ${macro} "${escape(
-        JSON.stringify(args)
-      )}"`
-    : `osascript ${script} '${application}' '${file}' '${
-        macro
-      }' '${JSON.stringify(args)}'`;
+    ? `cscript ${script} ${args.map(part => `"${escape(part)}"`).join(' ')}`
+    : `osascript ${script}  ${args.map(part => `'${part}'`).join(' ')}`;
 
   let result;
   try {
@@ -67,6 +91,7 @@ export default async function run(
 }
 
 export function escape(value: string): string {
+  // TODO Test robustness/validity of this approach
   return value.replace(/\"/g, '|Q|').replace(/ /g, '|S|');
 }
 
