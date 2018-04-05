@@ -71,7 +71,7 @@ export async function loadProject(
     manifest,
     workspace,
     packages,
-    manifests: null,
+    manifests,
     config,
     paths,
     dirty_lockfile

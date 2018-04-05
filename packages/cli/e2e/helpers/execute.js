@@ -18,7 +18,10 @@ module.exports = {
   },
   async execute(cwd, command) {
     const bin = resolve(__dirname, '../../bin/vba-blocks');
-    await exec(`node ${bin} ${command}`, { cwd });
+    const { stdout, stderr } = await exec(`node ${bin} ${command}`, { cwd });
+
+    if (stdout) console.log(stdout);
+    if (stderr) console.error(stderr);
   },
   async check(dir) {
     const files = walkSync(dir, { directories: false });

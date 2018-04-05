@@ -1,6 +1,7 @@
 const { resolve, join } = require('path');
 const { tmp, execute, check } = require('./helpers/execute');
 const { openExcel, closeExcel } = require('./helpers/addin');
+const { copyFile } = require('../lib/utils/fs');
 const { default: createTarget } = require('../lib/targets/create-target');
 
 jest.setTimeout(10000);
@@ -31,9 +32,9 @@ test('import', async () => {
       paths: { build: join(cwd, 'build') }
     };
     const target = {
-      name: 'e2e-build',
+      name: 'e2e-standard',
       path: join(cwd, 'targets/xlsm'),
-      filename: 'e2e-build.xlsm'
+      filename: 'e2e-standard.xlsm'
     };
 
     await createTarget(project, target);
@@ -43,5 +44,35 @@ test('import', async () => {
     expect(result).toMatchSnapshot();
   } finally {
     await cleanup();
+  }
+});
+
+test('export', async () => {
+  const empty = resolve(__dirname, './fixtures/empty');
+  const std = resolve(__dirname, './fixtures/standard');
+
+  const [
+    { path: cwdEmpty, cleanup: cleanupEmpty },
+    { path: cwdStd, cleanup: cleanupStd }
+  ] = await Promise.all([tmp(empty), tmp(std)]);
+
+  try {
+    // First, build projects
+    await execute(cwdEmpty, 'build');
+    await execute(cwdStd, 'build');
+
+    // Move standard to empty (new things to export)
+    // TODO only checks add, need to check change and remove
+    await copyFile(
+      join(cwdStd, 'build/e2e-standard.xlsm'),
+      join(cwdEmpty, 'build/e2e-empty.xlsm')
+    );
+
+    await execute(cwdEmpty, 'export xlsm');
+
+    const result = await check(cwdEmpty);
+    expect(result).toMatchSnapshot();
+  } finally {
+    await Promise.all([cleanupEmpty(), cleanupStd()]);
   }
 });

@@ -36,3 +36,30 @@ ErrorHandling:
     ImportGraph = Output.Result
 End Function
 
+Public Function ExportTo(Info As Variant) As String
+    On Error GoTo ErrorHandling
+
+    Dim Values As Dictionary
+    Dim Staging As String
+    Dim Document As Object
+    Dim App As New OfficeApplication
+
+    Set Values = JsonConverter.ParseJson(Info)
+    Set Document = App.GetDocument(Values("file"))
+    Staging = Values("staging")
+
+    Dim Component As Object
+    For Each Component In Document.VBProject.Components
+        ' TODO
+        ' Installer.Export Document.VBProject, Component.Name, FileSystem.Join(Staging, Component.Name & ...?), Overwrite:=True
+        Output.Messages.Add "Export: " & Component.Name
+    Next Component
+
+    ExportTo = Output.Result
+    Exit Function
+
+ErrorHandling:
+
+    Output.Errors.Add Err.Number & ": " & Err.Description
+    ExportTo = Output.Result
+End Function

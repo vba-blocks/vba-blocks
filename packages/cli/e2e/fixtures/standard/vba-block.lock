@@ -1,6 +1,0 @@
-[root]
-name = "e2e/build"
-version = "0.0.0"
-dependencies = [
-]
-

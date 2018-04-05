@@ -62,6 +62,8 @@ export function isLockfileValid(
   lockfile: Lockfile,
   workspace: Workspace
 ): boolean {
+  // TODO Check features of project (specifically name and version)
+
   if (!compareDependencies(workspace.root, lockfile.workspace.root))
     return false;
 

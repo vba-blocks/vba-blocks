@@ -48,10 +48,11 @@ export async function exportTo(
 ): Promise<void> {
   const { application, addin, file } = getTargetInfo(project, target);
 
-  await run(application, addin, 'Build.ExportTo', {
+  const result = await run(application, addin, 'Build.ExportTo', {
     file,
     staging
   });
+  console.log('export result', result);
 }
 
 /**
