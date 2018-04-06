@@ -32,6 +32,7 @@
     "@types/jest": "^20.0.8",
     "@types/node": "^8.0.25",
     "cross-env": "^5.1.4",
+    "dedent": "^0.7.0",
     "husky": "^0.14.3",
     "jest": "^21.0.0",
     "lint-staged": "^4.0.4",
@@ -39,7 +40,7 @@
     "resolve-from": "^4.0.0",
     "resolve-pkg": "^1.0.0",
     "ts-jest": "^20.0.10",
-    "typescript": "^2.8"
+    "typescript": "^2.8.1"
   },
   "version": "0.0.0",
   "main": "index.js"

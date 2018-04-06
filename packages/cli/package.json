@@ -41,6 +41,6 @@
     "@types/semver": "^5.4.0",
     "@types/tar": "^4.0.0",
     "@types/tmp": "^0.0.33",
-    "typescript": "^2.5.2"
+    "typescript": "^2.8.1"
   }
 }
