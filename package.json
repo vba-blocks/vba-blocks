@@ -11,7 +11,8 @@
     "e2e": "jest --config ./e2e.config.js --runInBand",
     "build": "yarn build:cli && yarn build:addin",
     "build:cli": "cd packages/cli && yarn build",
-    "build:addin": "cd packages/addin && cross-env DEBUG=vba-blocks yarn build"
+    "build:addin": "cd packages/addin && cross-env DEBUG=vba-blocks yarn build",
+    "build:toml": "cd packages/toml-converter && yarn build"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["prettier --write", "git add"]

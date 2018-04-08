@@ -24,7 +24,10 @@ export const fixture = dedent`
   index = 0
 
   [[array]]
-  index = 1`;
+  index = 1
+  
+  [[array]]
+  index = 2`;
 
 test('patch', () => {
   const value = parse(fixture);
@@ -33,9 +36,12 @@ test('patch', () => {
   value.dependencies.b.optional = true;
   value.dependencies.d = '0.0.0';
   value.dependencies.e = { version: '1.0.0', optional: true };
+
+  value.array.pop();
+  value.array[0].other = 'yes';
   value.array.unshift({ index: -1 });
 
-  console.log(JSON.stringify(value, null, 2));
-  const result = patch(fixture, value);
-  // console.log(result);
+  const result = patch(fixture, value, {
+    getId: value => (typeof value !== 'object' ? value : value.index)
+  });
 });

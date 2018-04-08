@@ -1,5 +1,6 @@
-import { Change } from 'deep-diff';
+import { Path } from 'deep-diff';
 import { graceful as detectNewline } from 'detect-newline';
+import { Change } from './diff';
 
 const { parse: inspectToml } = require('toml/lib/parser');
 const { compile: compileToml } = require('toml/lib/compiler');
@@ -25,204 +26,104 @@ export interface Node {
 
 export default function inspect(toml: string): AST {
   const nodes: Node[] = inspectToml(toml);
-  return new AST(toml, nodes);
+  const landmarks = toLandmarks(nodes);
+
+  // TODO
+  return {};
 }
 
-export class AST {
-  nodes: Node[];
-  lines: string[];
-  newline: string;
+// TODO Unify landmarks and AST
 
-  constructor(toml: string, nodes: Node[]) {
-    this.nodes = nodes;
-    this.lines = toml.replace(/\r/g, '').split('\n');
-    this.newline = detectNewline(toml);
-  }
+export interface AST {}
 
-  applyChanges(changes: Change[]) {
-    for (const change of changes) {
-      console.log(change.kind, change.path, change);
+export type Landmarks = { [key: string]: Landmark } | Landmark[];
+export interface Landmark {
+  node: Node;
+  inline?: Node;
+  children?: Landmarks;
+}
+
+export function toLandmarks(nodes: Node[]): Landmarks | Landmark {
+  const landmarks = {};
+  let active = landmarks;
+
+  for (const node of nodes) {
+    // For inline tables and arrays, need to store some additional information
+    // store in `inline` value
+    const inline =
+      node.value.type === 'InlineTable' || node.value.type === 'Array'
+        ? node.value
+        : null;
+
+    switch (node.type) {
+      case 'ObjectPath':
+        // { "value": ["package"] }
+        active = {};
+        set(landmarks, node.value, { node, children: active });
+        break;
+      case 'ArrayPath':
+        // { "value": ["array"] }
+        active = {};
+        push(landmarks, node.value, { node, children: active });
+        break;
+      case 'Assign':
+      case 'InlineTableValue':
+        // { "key": "name", "value": { "type": "String", "value": "package-name" }
+        const children = toLandmarks([node.value]);
+        set(
+          active,
+          [node.key!],
+          inline ? { node, inline, children } : { node, children }
+        );
+        break;
+
+      case 'InlineTable':
+        return toLandmarks(node.value);
+      case 'Array':
+        return node.value.map((value: any) => toLandmarks([value]));
+
+      case 'String':
+      case 'Float':
+      case 'Integer':
+      case 'Boolean':
+      case 'Date':
+        return { node };
+
+      default:
+        throw new Error(`Unrecognized node landmark type "${node.type}"`);
     }
   }
 
-  toToml(): string {
-    // TODO
-    return this.lines.join(this.newline);
-  }
+  return landmarks;
 }
 
-/*
+function get(object: any, path: Path): any {
+  if (!object) return undefined;
+  object = object[path[0]];
 
-[
-  {
-    "type": "ObjectPath",
-    "value": [
-      "package"
-    ],
-    "line": 1,
-    "column": 1
-  },
-  {
-    "type": "Assign",
-    "value": {
-      "type": "String",
-      "value": "package-name",
-      "line": 2,
-      "column": 8
-    },
-    "line": 2,
-    "column": 1,
-    "key": "name"
-  },
-  {
-    "type": "Assign",
-    "value": {
-      "type": "String",
-      "value": "0.0.0",
-      "line": 3,
-      "column": 11
-    },
-    "line": 3,
-    "column": 1,
-    "key": "version"
-  },
-  {
-    "type": "Assign",
-    "value": {
-      "type": "Array",
-      "value": [
-        {
-          "type": "String",
-          "value": "Author 1",
-          "line": 4,
-          "column": 12
-        }
-      ],
-      "line": 4,
-      "column": 11
-    },
-    "line": 4,
-    "column": 1,
-    "key": "authors"
-  },
-  {
-    "type": "ObjectPath",
-    "value": [
-      "dependencies"
-    ],
-    "line": 12,
-    "column": 1
-  },
-  {
-    "type": "Assign",
-    "value": {
-      "type": "String",
-      "value": "1.0.0",
-      "line": 13,
-      "column": 5
-    },
-    "line": 13,
-    "column": 1,
-    "key": "a"
-  },
-  {
-    "type": "Assign",
-    "value": {
-      "type": "InlineTable",
-      "value": [
-        {
-          "type": "InlineTableValue",
-          "value": {
-            "type": "String",
-            "value": "...git",
-            "line": 14,
-            "column": 13
-          },
-          "line": 14,
-          "column": 7,
-          "key": "git"
-        },
-        {
-          "type": "InlineTableValue",
-          "value": {
-            "type": "String",
-            "value": "weird",
-            "line": 14,
-            "column": 38
-          },
-          "line": 14,
-          "column": 25,
-          "key": "spacing"
-        }
-      ],
-      "line": 14,
-      "column": 5
-    },
-    "line": 14,
-    "column": 1,
-    "key": "b"
-  },
-  {
-    "type": "ObjectPath",
-    "value": [
-      "dependencies",
-      "c"
-    ],
-    "line": 16,
-    "column": 1
-  },
-  {
-    "type": "Assign",
-    "value": {
-      "type": "String",
-      "value": "...path",
-      "line": 17,
-      "column": 8
-    },
-    "line": 17,
-    "column": 1,
-    "key": "path"
-  },
-  {
-    "type": "ArrayPath",
-    "value": [
-      "array"
-    ],
-    "line": 19,
-    "column": 1
-  },
-  {
-    "type": "Assign",
-    "value": {
-      "type": "Integer",
-      "value": 0,
-      "line": 20,
-      "column": 9
-    },
-    "line": 20,
-    "column": 1,
-    "key": "index"
-  },
-  {
-    "type": "ArrayPath",
-    "value": [
-      "array"
-    ],
-    "line": 22,
-    "column": 1
-  },
-  {
-    "type": "Assign",
-    "value": {
-      "type": "Integer",
-      "value": 1,
-      "line": 23,
-      "column": 9
-    },
-    "line": 23,
-    "column": 1,
-    "key": "index"
+  for (const part of path.slice(1)) {
+    if (!object || !object.children) return undefined;
+    object = object.children[part];
   }
-]
+  return object;
+}
 
-*/
+export function set(object: any, path: Path, value: any) {
+  if (path.length === 1) {
+    object[path[0]] = value;
+  } else {
+    const parent = get(object, path.slice(0, -1));
+    if (!parent || !parent.children)
+      throw new Error(`Could not find path ${path} in object`);
+
+    const key = path[path.length - 1];
+    parent.children[key] = value;
+  }
+
+  return value;
+}
+
+export function push(object: any, path: Path, value: any) {
+  const array = get(object, path) || set(object, path, []);
+  array.push(value);
+}

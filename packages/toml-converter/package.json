@@ -11,9 +11,11 @@
     "build": "tsc"
   },
   "dependencies": {
+    "clone": "^1.0.4",
     "deep-diff": "^0.3.8",
     "detect-newline": "^2.1.0",
-    "toml": "^2.3.2"
+    "toml": "^2.3.2",
+    "traverse": "^0.6.6"
   },
   "devDependencies": {
     "typescript": "^2.8.1"
