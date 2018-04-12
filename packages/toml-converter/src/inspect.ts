@@ -1,129 +1,393 @@
-import { Path } from 'deep-diff';
+import { Path, Index } from 'deep-diff';
 import { graceful as detectNewline } from 'detect-newline';
 import { Change } from './diff';
+import { toLines } from './utils';
 
-const { parse: inspectToml } = require('toml/lib/parser');
-const { compile: compileToml } = require('toml/lib/compiler');
-
-export interface Node {
+// Use __internal__ parsing from toml library
+// (this should not be assumed to be stable and a specific version may need to be pinned)
+export interface ParsedNode {
   type:
     | 'ObjectPath'
     | 'ArrayPath'
     | 'Assign'
+    | 'InlineTable'
+    | 'InlineTableValue'
+    | 'Array'
     | 'String'
     | 'Float'
     | 'Integer'
     | 'Boolean'
-    | 'Array'
-    | 'InlineTable'
-    | 'InlineTableValue'
     | 'Date';
+
   line: number;
   column: number;
   value: any;
   key?: string;
 }
 
+const parseToml: (toml: string) => ParsedNode[] = require('toml/lib/parser')
+  .parse;
+
+/*
+  Approach: Arrange nodes into AST tree and add end information
+
+  Example:
+  ```toml
+    123456789
+  1 [package]
+  2 name = "value"
+  3 authors = ["a", "b"]
+  4
+  5 [dependencies.a]
+  6 git = { path = "...", tag = "v1.0.0" }
+  ```
+
+  ```js
+  {
+    package: {
+      key: {
+        start: { line: 1, column: 1 },
+        end: { line: 1, column 9 },
+        parsed: (from toml = package)
+      },
+      value: {
+        start: { line: 2, column: 1 },
+        end: { line: 4, column: 1 },
+        parsed: (from toml)
+      },
+      children: {
+        name: {
+          key: { start: { ... }, end: { ... }, parsed: (name)},
+          value: { start: { ... }, end: { ... }, parsed: (value)}
+        },
+        authors: {
+          key: { ... },
+          value: { ... },
+          children: [
+            { key: null, value: { ..., parsed: (a) } },
+            { key: null, value: { ..., parsed: (b) } }
+          ]
+        }
+      }
+    },
+    dependencies: {
+      key: null,
+      value: { start: { line: 5 }, ...},
+      children: {
+        a: {
+          key: { ... },
+          value: { ... },
+          children: {
+            git: {
+              key: { end: { line: 6, column: 3 } },
+              value: { ... },
+              children: {
+                path: {
+                  key: { ... },
+                  value: { ..., parsed: (...) }
+                },
+                tag: {
+                  key: { ... },
+                  value: { ..., parsed: (v1.0.0) }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ```
+*/
+
+export type AST = KeyedNodes;
+
+export interface KeyedNodes {
+  [key: string]: Node;
+}
+export type IndexedNodes = Node[];
+
+export interface Node {
+  key?: Value;
+  value: Value;
+  children?: KeyedNodes | IndexedNodes;
+}
+
+export interface Value {
+  start: Position;
+  end: Position;
+  parsed?: ParsedNode;
+}
+
+export interface Position {
+  line: number;
+  column: number;
+}
+
 export default function inspect(toml: string): AST {
-  const nodes: Node[] = inspectToml(toml);
-  const landmarks = toLandmarks(nodes);
-
-  // TODO
-  return {};
+  const lines = toLines(toml);
+  const nodes: ParsedNode[] = parseToml(lines.join('\n'));
+  return <KeyedNodes>walk(nodes, lines);
 }
 
-// TODO Unify landmarks and AST
+function walk(parsed: ParsedNode[], lines: string[]): KeyedNodes {
+  let nodes: KeyedNodes = {};
+  let current: KeyedNodes = nodes;
 
-export interface AST {}
+  for (const [index, node] of parsed.entries()) {
+    let { line, column } = node;
+    let key: null | Value;
+    let value: Value;
+    let children: KeyedNodes | IndexedNodes;
+    let result: Node;
 
-export type Landmarks = { [key: string]: Landmark } | Landmark[];
-export interface Landmark {
-  node: Node;
-  inline?: Node;
-  children?: Landmarks;
-}
-
-export function toLandmarks(nodes: Node[]): Landmarks | Landmark {
-  const landmarks = {};
-  let active = landmarks;
-
-  for (const node of nodes) {
-    // For inline tables and arrays, need to store some additional information
-    // store in `inline` value
-    const inline =
-      node.value.type === 'InlineTable' || node.value.type === 'Array'
-        ? node.value
-        : null;
+    let next_node: ParsedNode | undefined;
+    let end_line: number;
+    let end_of_key: number;
+    let end_of_value: number;
 
     switch (node.type) {
       case 'ObjectPath':
-        // { "value": ["package"] }
-        active = {};
-        set(landmarks, node.value, { node, children: active });
-        break;
       case 'ArrayPath':
-        // { "value": ["array"] }
-        active = {};
-        push(landmarks, node.value, { node, children: active });
+        // Parsed ArrayPath points to first line of values (not key)
+        // if (node.type === 'ArrayPath') line -= 1;
+
+        // { "value": ["package"] }
+        next_node = parsed.find(
+          (node, _index) => _index > index && isPathNode(node)
+        );
+        end_line = next_node ? next_node.line - 1 : lines.length;
+
+        // TODO something is wrong with end.column position (-> line length)
+
+        result = {
+          key: {
+            start: { line, column },
+            end: { line, column: lines[line - 1].length },
+            parsed: node
+          },
+          value: {
+            start: { line: line + 1, column: 0 },
+            end: { line: end_line, column: lines[end_line - 1].length }
+          },
+          children: {}
+        };
+
+        current = <KeyedNodes>result.children;
+
+        node.type === 'ObjectPath'
+          ? set(nodes, node.value, result)
+          : push(nodes, node.value, result);
+
         break;
+
       case 'Assign':
+        // { "key": "name", "value": { "type": "String", "value": "package-name" }
+        next_node = parsed[index + 1];
+        end_line = next_node ? next_node.line - 1 : lines.length;
+        end_of_key = findCharColumn(lines[line - 1], '=', {
+          from: column,
+          fallback: column + node.key!.length
+        });
+
+        result = {
+          key: {
+            start: { line, column },
+            end: { line, column: end_of_key },
+            parsed: node
+          },
+          value: {
+            start: { line, column: end_of_key + 1 },
+            end: { line: end_line, column: lines[end_line - 1].length },
+            parsed: node.value
+          },
+          children: toChildren(node.value, lines)
+        };
+
+        set(current, [node.key!], result);
+
+        break;
+
       case 'InlineTableValue':
         // { "key": "name", "value": { "type": "String", "value": "package-name" }
-        const children = toLandmarks([node.value]);
-        set(
-          active,
-          [node.key!],
-          inline ? { node, inline, children } : { node, children }
-        );
+        end_of_key = findCharColumn(lines[line - 1], '=', {
+          from: column,
+          fallback: column + node.key!.length
+        });
+        end_of_value = findCharColumn(lines[line - 1], [',', '}'], {
+          from: end_of_key
+        });
+
+        result = {
+          key: {
+            start: { line, column },
+            end: { line, column: end_of_key },
+            parsed: node
+          },
+          value: {
+            start: { line, column: end_of_key + 1 },
+            end: { line, column: end_of_value },
+            parsed: node.value
+          },
+          children: toChildren(node.value, lines)
+        };
+
+        set(current, [node.key!], result);
+
         break;
 
-      case 'InlineTable':
-        return toLandmarks(node.value);
-      case 'Array':
-        return node.value.map((value: any) => toLandmarks([value]));
-
-      case 'String':
-      case 'Float':
-      case 'Integer':
-      case 'Boolean':
-      case 'Date':
-        return { node };
-
       default:
-        throw new Error(`Unrecognized node landmark type "${node.type}"`);
+        throw new Error(
+          `Unrecognized/unhandled parsed node with type "${node.type}"`
+        );
     }
   }
 
-  return landmarks;
+  return nodes;
 }
 
-function get(object: any, path: Path): any {
-  if (!object) return undefined;
-  object = object[path[0]];
+function toChildren(
+  value: ParsedNode,
+  lines: string[]
+): KeyedNodes | IndexedNodes | undefined {
+  switch (value.type) {
+    case 'InlineTable':
+      return walk(value.value, lines);
+    case 'Array':
+      return <IndexedNodes>value.value.map((child: ParsedNode) => {
+        const { line, column } = child;
+        const children = toChildren(child, lines);
 
-  for (const part of path.slice(1)) {
-    if (!object || !object.children) return undefined;
-    object = object.children[part];
+        const end_line = Array.isArray(children)
+          ? children[children.length - 1].value.end.line
+          : line;
+        const search_column = Array.isArray(children)
+          ? children[children.length - 1].value.end.column
+          : column;
+        const end_of_value = findCharColumn(lines[end_line - 1], ',', {
+          from: search_column
+        });
+
+        const value: Value = {
+          start: { line, column },
+          end: { line, column: end_of_value },
+          parsed: child
+        };
+
+        return { value, children };
+      });
+    default:
+      return;
   }
-  return object;
 }
 
-export function set(object: any, path: Path, value: any) {
+export function get(ast: AST, path: Path): Node | null {
+  if (!path.length) return null;
+
+  const [root, ...nested] = path;
+  let node: Node = ast[root];
+
+  for (const part of nested) {
+    const children = node && node.children;
+    if (!children) return null;
+
+    node = Array.isArray(children)
+      ? children[<number>part]
+      : children[<string>part];
+  }
+
+  return node;
+}
+
+export function has(ast: AST, path: Path): boolean {
+  return !!get(ast, path);
+}
+
+function set(ast: AST, path: Path, node: Node): Node {
   if (path.length === 1) {
-    object[path[0]] = value;
-  } else {
-    const parent = get(object, path.slice(0, -1));
-    if (!parent || !parent.children)
-      throw new Error(`Could not find path ${path} in object`);
-
-    const key = path[path.length - 1];
-    parent.children[key] = value;
+    return (ast[path[0]] = node);
   }
 
-  return value;
+  const key: string = <string>path[path.length - 1];
+  const parent_path = path.slice(0, -1);
+  let parent = get(ast, parent_path);
+
+  if (!parent) {
+    parent = {
+      value: {
+        start: node.key!.start,
+        end: node.value.end
+      },
+      children: {}
+    };
+
+    set(ast, parent_path, parent);
+  }
+  if (!parent.children) {
+    parent.children = {};
+  }
+
+  // Each time a new value is add to parent,
+  // Ensure end location is up-to-date
+  if (node.value.end.line > parent.value.end.line) {
+    parent.value.end = node.value.end;
+  }
+
+  return ((<KeyedNodes>parent.children)[key] = node);
 }
 
-export function push(object: any, path: Path, value: any) {
-  const array = get(object, path) || set(object, path, []);
-  array.push(value);
+function push(ast: AST, path: Path, node: Node): Node {
+  let parent = get(ast, path);
+
+  if (!parent) {
+    parent = {
+      value: {
+        start: node.key!.start,
+        end: node.value.end
+      },
+      children: []
+    };
+
+    set(ast, path, parent);
+  }
+  if (!parent.children) {
+    parent.children = [];
+  }
+
+  // Each time a new value is pushed onto path,
+  // update the end position of the parent's value
+  parent.value.end = node.value.end;
+  (<IndexedNodes>parent.children!).push(node);
+
+  return node;
+}
+
+function isPathNode(node: ParsedNode): boolean {
+  return node.type === 'ObjectPath' || node.type === 'ArrayPath';
+}
+
+const QUOTE = '"';
+const ESCAPE = '\\';
+
+function findCharColumn(
+  value: string,
+  search: string | string[],
+  options?: { from?: number; fallback?: number }
+): number {
+  const { from = 1, fallback = value.length } = options || {};
+
+  if (!Array.isArray(search)) search = [search];
+  for (const check of search) {
+    let quoted = false;
+    for (let i = from; i <= value.length; i++) {
+      const char = value.charAt(i - 1);
+      if (char === check && !quoted) return i;
+
+      if (!quoted && char === QUOTE) quoted = true;
+      if (quoted && char === QUOTE && value.charAt(i - 2) !== ESCAPE)
+        quoted = false;
+    }
+  }
+
+  return fallback;
 }

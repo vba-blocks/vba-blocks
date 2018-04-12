@@ -25,7 +25,12 @@ import clone from 'clone';
 */
 
 export interface Change {
-  kind: 'N' | 'D' | 'E' | 'A' | 'R';
+  kind:
+    | 'N' // New
+    | 'D' // Deleted
+    | 'E' // Edited
+    | 'A' // Array
+    | 'R'; // Reorder
   path?: Path;
   lhs?: any;
   rhs?: any;

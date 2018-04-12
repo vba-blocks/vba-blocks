@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`convert 1`] = `""`;
-
 exports[`patch 1`] = `
 "[package]
 name = \\"package-name\\" # comment
