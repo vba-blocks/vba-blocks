@@ -1,9 +1,14 @@
 {
   "compilerOptions": {
+    "declaration": true,
     "esModuleInterop": true,
     "strict": true,
     "module": "commonjs",
     "moduleResolution": "node",
+    "outDir": "lib",
+    "rootDir": "src",
     "target": "es2017"
-  }
+  },
+  "include": ["src/**/*.ts", "typings/**/*.d.ts"],
+  "exclude": ["node_modules", "lib", "src/**/__mocks__/*"]
 }

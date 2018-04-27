@@ -1,20 +1,21 @@
 {
-  "name": "@vba-blocks/monorepo",
-  "private": true,
+  "name": "vba-blocks",
+  "version": "0.0.0",
   "repository": "https://github.com/vba-blocks/vba-blocks.git",
-  "author": "Tim Hall <tim.hall.engr@gmail.com>",
+  "author": "Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)",
   "license": "MIT",
+  "bin": "bin/vba-blocks",
+  "main": "lib/index",
+  "typings": "lib/index.d.ts",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "precommit": "lint-staged",
     "test": "jest",
     "e2e": "jest --config ./e2e.config.js --runInBand",
     "build": "yarn build:cli && yarn build:addin",
-    "build:cli": "cd packages/cli && yarn build",
+    "build:cli": "tsc",
     "build:addin": "cd addin && node scripts/build",
-    "build:bootstrap":
-      "cd addin/scripts && node ../../packages/cli/bin/vba-blocks build",
-    "build:toml": "cd packages/toml-converter && yarn build"
+    "build:bootstrap": "cd addin/scripts && node ../../bin/vba-blocks build"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["prettier --write", "git add"]
@@ -30,10 +31,33 @@
       "^.+\\.tsx?$": "ts-jest/preprocessor.js"
     }
   },
-  "workspaces": ["packages/*"],
+  "dependencies": {
+    "archiver": "^2.0.0",
+    "chalk": "^2.3.0",
+    "debug": "^3.1.0",
+    "decompress": "^4.2.0",
+    "dedent": "^0.7.0",
+    "detect-newline": "^2.1.0",
+    "dugite": "^1.39.0",
+    "fs-extra": "^4.0.2",
+    "logic-solver": "^2.0.1",
+    "mri": "^1.1.0",
+    "sanitize-filename": "^1.6.1",
+    "semver": "^5.4.1",
+    "tar": "^4.0.1",
+    "tmp": "^0.0.33",
+    "toml": "^2.3.2",
+    "v8-compile-cache": "^1.1.2",
+    "walk-sync": "^0.3.2"
+  },
   "devDependencies": {
+    "@types/archiver": "^2.0.0",
+    "@types/fs-extra": "^4.0.2",
     "@types/jest": "^20.0.8",
     "@types/node": "^8.0.25",
+    "@types/semver": "^5.4.0",
+    "@types/tar": "^4.0.0",
+    "@types/tmp": "^0.0.33",
     "cross-env": "^5.1.4",
     "dedent": "^0.7.0",
     "husky": "^0.14.3",
@@ -45,7 +69,5 @@
     "resolve-pkg": "^1.0.0",
     "ts-jest": "^20.0.10",
     "typescript": "^2.8.1"
-  },
-  "version": "0.0.0",
-  "main": "index.js"
+  }
 }

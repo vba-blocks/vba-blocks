@@ -1,14 +1,6 @@
-# Ignore compiled packages
-packages/cli/lib
-packages/cli/tests/fixtures/project/build
-
-packages/addin/build
-
-packages/desktop/src/renderer/.next
-packages/desktop/src/renderer/out
-packages/desktop/dist
-
-packages/toml-converter/lib
+lib
+tests/fixtures/project/build
+addin/build
 
 # Ignore temporary Excel files
 */~$*
