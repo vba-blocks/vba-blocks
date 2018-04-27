@@ -11,15 +11,6 @@ import { Target, parseTargets } from './target';
 
 export { Version, Source, Feature, Dependency, Reference, Target };
 
-export {
-  default as editManifest,
-  Operation,
-  addSrc,
-  removeSrc,
-  addDependency,
-  removeDependency
-} from './edit-manifest';
-
 /**
  * @example
  * ```toml
@@ -78,7 +69,8 @@ export interface Metadata {
 }
 
 export interface Manifest extends Snapshot {
-  metadata: Metadata;
+  package?: Metadata;
+  project?: Metadata;
   src: Source[];
   references: Reference[];
   targets: Target[];
@@ -87,24 +79,44 @@ export interface Manifest extends Snapshot {
   dir: string;
 }
 
-const EXAMPLE = `Example vba-block.toml:
+const EXAMPLE = `Example vba-block.toml for a package (e.g. library to be shared):
 
   [package]
   name = "my-package"
+  version = "0.0.0"
+  authors = ["..."]
+
+Example vba-block.toml for a project (e.g. workbook, document, etc.):
+
+  [project]
+  name = "my-project"
   version = "0.0.0"
   authors = ["..."]`;
 
 export function parseManifest(value: any, dir: string): Manifest {
   ok(
-    value && value.package,
-    `[package] is a required field, with name, version, and authors specified. ${EXAMPLE}`
+    value && (value.package || value.project),
+    `[package] or [project] is required, with name, version, and authors specified. ${EXAMPLE}`
   );
 
-  const { name, version, authors, publish = false } = value.package;
+  let name, version, authors, publish;
+  if (value.project) {
+    name = value.project.name;
+    version = value.project.version || '0.0.0';
+    authors = value.project.authors || [];
+    publish = false;
 
-  ok(name, `[package] name is a required field. ${EXAMPLE}`);
-  ok(version, `[package] version is a required field. ${EXAMPLE}`);
-  ok(authors, `[package] authors is a required field. ${EXAMPLE}`);
+    ok(name, `[project] name is a required field. ${EXAMPLE}`);
+  } else {
+    name = value.package.name;
+    version = value.package.version;
+    authors = value.package.authors;
+    publish = value.package.publish || false;
+
+    ok(name, `[package] name is a required field. ${EXAMPLE}`);
+    ok(version, `[package] version is a required field. ${EXAMPLE}`);
+    ok(authors, `[package] authors is a required field. ${EXAMPLE}`);
+  }
 
   const src = parseSrc(value.src || {}, dir);
   const { features, defaultFeatures } = parseFeatures(value.features || {});
@@ -112,12 +124,18 @@ export function parseManifest(value: any, dir: string): Manifest {
   const references = parseReferences(value.references || {});
   const targets = parseTargets(value.targets || [], name, dir);
 
-  const metadata = { publish, ...value.package };
+  let pkg, project;
+  if (value.project) {
+    project = { version, authors, publish, ...value.project };
+  } else {
+    pkg = { publish, ...value.package };
+  }
 
   return {
     name,
     version,
-    metadata,
+    package: pkg,
+    project,
     src,
     features,
     defaultFeatures,

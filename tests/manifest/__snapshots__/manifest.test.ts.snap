@@ -6,7 +6,8 @@ Object {
   "dependencies": Array [],
   "dir": ".",
   "features": Array [],
-  "metadata": Object {
+  "name": "package-name",
+  "package": Object {
     "authors": Array [
       "Tim Hall",
     ],
@@ -14,7 +15,7 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
-  "name": "package-name",
+  "project": undefined,
   "references": Array [
     Object {
       "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
@@ -84,7 +85,8 @@ Object {
       "src": Array [],
     },
   ],
-  "metadata": Object {
+  "name": "testing",
+  "package": Object {
     "authors": Array [
       "Tim Hall <tim.hall.engr@gmail.com>",
     ],
@@ -92,7 +94,7 @@ Object {
     "publish": true,
     "version": "0.1.0",
   },
-  "name": "testing",
+  "project": undefined,
   "references": Array [
     Object {
       "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
@@ -197,7 +199,8 @@ Object {
   ],
   "dir": ".",
   "features": Array [],
-  "metadata": Object {
+  "name": "package-name",
+  "package": Object {
     "authors": Array [
       "Tim Hall",
     ],
@@ -205,7 +208,7 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
-  "name": "package-name",
+  "project": undefined,
   "references": Array [],
   "src": Array [],
   "targets": Array [],
@@ -247,7 +250,8 @@ Object {
       "src": Array [],
     },
   ],
-  "metadata": Object {
+  "name": "package-name",
+  "package": Object {
     "authors": Array [
       "Tim Hall",
     ],
@@ -255,7 +259,7 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
-  "name": "package-name",
+  "project": undefined,
   "references": Array [],
   "src": Array [],
   "targets": Array [],
@@ -269,7 +273,8 @@ Object {
   "dependencies": Array [],
   "dir": ".",
   "features": Array [],
-  "metadata": Object {
+  "name": "package-name",
+  "package": Object {
     "authors": Array [
       "Tim Hall",
     ],
@@ -277,7 +282,7 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
-  "name": "package-name",
+  "project": undefined,
   "references": Array [],
   "src": Array [],
   "targets": Array [],
@@ -291,7 +296,8 @@ Object {
   "dependencies": Array [],
   "dir": ".",
   "features": Array [],
-  "metadata": Object {
+  "name": "package-name",
+  "package": Object {
     "authors": Array [
       "Tim Hall",
     ],
@@ -299,7 +305,7 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
-  "name": "package-name",
+  "project": undefined,
   "references": Array [],
   "src": Array [
     Object {
@@ -329,7 +335,8 @@ Object {
   "dependencies": Array [],
   "dir": ".",
   "features": Array [],
-  "metadata": Object {
+  "name": "package-name",
+  "package": Object {
     "authors": Array [
       "Tim Hall",
     ],
@@ -337,7 +344,7 @@ Object {
     "publish": false,
     "version": "1.0.0",
   },
-  "name": "package-name",
+  "project": undefined,
   "references": Array [],
   "src": Array [],
   "targets": Array [

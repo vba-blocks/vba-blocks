@@ -1,14 +1,6 @@
-import { join, basename, extname } from 'path';
+import { join, basename, extname, relative } from 'path';
 import walk from 'walk-sync';
-import {
-  Target,
-  Source,
-  Reference,
-  Operation,
-  editManifest,
-  addSrc,
-  removeSrc
-} from '../manifest';
+import { Manifest, Target, Source, Reference } from '../manifest';
 import { Project, loadManifests } from '../project';
 import {
   without,
@@ -16,6 +8,7 @@ import {
   readJson,
   copyFile,
   unixJoin,
+  unixPath,
   remove
 } from '../utils';
 
@@ -36,7 +29,7 @@ export default async function exportTarget(
 
   // Update src
   const actions: Promise<void>[] = [];
-  const operations: Operation[] = [];
+  const operations: string[] = [];
 
   for (const [file, source] of graph.src.existing) {
     actions.push(copyFile(join(staging, file), source.path));
@@ -47,11 +40,11 @@ export default async function exportTarget(
     const source: Source = { name, path };
 
     actions.push(copyFile(join(staging, file), path));
-    operations.push(addSrc(source));
+    operations.push(addSrc(project.manifest, source));
   }
   for (const source of graph.src.removed) {
     actions.push(remove(source.path));
-    operations.push(removeSrc(source));
+    operations.push(removeSrc(project.manifest, source));
   }
 
   // Update references
@@ -66,7 +59,17 @@ export default async function exportTarget(
   }
 
   await Promise.all(actions);
-  await editManifest(project.manifest, operations);
+
+  if (operations.length) {
+    const type = project.manifest.package ? 'package' : 'project';
+    console.log(
+      `The following changes are required in this ${type}'s vba-block.toml:`
+    );
+    for (const operation of operations) {
+      console.log(operation);
+    }
+  }
+
   await remove(staging);
 }
 
@@ -170,4 +173,13 @@ async function readReferences(staging: string): Promise<Reference[]> {
   if (!(await pathExists(path))) return [];
 
   return await readJson(path);
+}
+
+function addSrc(manifest: Manifest, source: Source): string {
+  const relative_path = unixPath(relative(manifest.dir, source.path));
+  return `Add \`${source.name} = "${relative_path}"\` to the [src] section`;
+}
+
+function removeSrc(manifest: Manifest, source: Source): string {
+  return `Remove \`${source.name}\` from the [src] section`;
 }
