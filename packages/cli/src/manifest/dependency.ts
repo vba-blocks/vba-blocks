@@ -84,9 +84,7 @@ export function parseDependency(
 
   ok(
     version || path || git,
-    `Invalid dependency "${name}", no version, path, or git specified. ${
-      EXAMPLE
-    }`
+    `Invalid dependency "${name}", no version, path, or git specified. ${EXAMPLE}`
   );
 
   const details = { name, defaultFeatures, features, optional };

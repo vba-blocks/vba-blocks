@@ -56,7 +56,7 @@ export async function loadConfig(): Promise<Config> {
   const file = await findConfig(env.cwd);
   const local: ConfigValue = {
     ...empty,
-    ...file ? await readConfig(file) : {}
+    ...(file ? await readConfig(file) : {})
   };
   const override = loadConfigFromEnv();
 

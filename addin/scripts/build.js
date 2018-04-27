@@ -1,8 +1,8 @@
 const { join } = require('path');
 const mock = require('mock-require');
-const { default: run } = require('vba-blocks/lib/utils/run');
+const { default: run } = require('../../packages/cli/lib/utils/run');
 
-mock('../../cli/lib/addin', {
+mock('../../packages/cli/lib/addin', {
   async importGraph(project, target, graph) {
     const file = join(project.paths.build, target.filename);
     const { src, references } = graph;
@@ -20,7 +20,7 @@ mock('../../cli/lib/addin', {
   }
 });
 
-const vba = require('vba-blocks');
+const vba = require('../../packages/cli');
 
 main().catch(err => {
   console.error(err);

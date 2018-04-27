@@ -97,9 +97,7 @@ const EXAMPLE = `Example vba-block.toml:
 export function parseManifest(value: any, dir: string): Manifest {
   ok(
     value && value.package,
-    `[package] is a required field, with name, version, and authors specified. ${
-      EXAMPLE
-    }`
+    `[package] is a required field, with name, version, and authors specified. ${EXAMPLE}`
   );
 
   const { name, version, authors, publish = false } = value.package;

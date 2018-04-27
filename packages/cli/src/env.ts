@@ -24,7 +24,7 @@ const env: Env = {
   cwd: process.cwd(),
   values: process.env,
 
-  addins: unixJoin(__dirname, '../../addin/build'),
+  addins: unixJoin(__dirname, '../../../addin/build'),
   scripts: unixJoin(__dirname, '../scripts'),
   cache,
   registry: unixJoin(cache, 'registry'),
