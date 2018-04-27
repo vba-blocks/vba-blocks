@@ -13,6 +13,5 @@ Output = "../src/Output.bas"
 installer = { path = "../VBA-Installer" }
 json = "^2"
 
-[[targets]]
-type = "xlsm"
-path = "targets/xlsm"
+[targets]
+xlsm = "targets/xlsm"

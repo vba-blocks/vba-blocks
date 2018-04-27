@@ -3,6 +3,5 @@ name = "e2e/empty"
 version = "0.0.0"
 authors = []
 
-[[targets]]
-type = "xlsm"
-path = "targets/xlsm"
+[targets]
+xlsm = "targets/xlsm"

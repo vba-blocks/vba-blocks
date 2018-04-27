@@ -12,20 +12,7 @@ Output = "./src/Output.bas"
 installer = { path = "VBA-Installer" }
 json = "^2"
 
-[[targets]]
-type = "xlsm"
-path = "targets/xlsm"
+[targets]
+xlsm = "targets/xlsm"
 
-# [[targets]]
-# type = "xlam"
-# path = "targets/xlam"
-
-# [[targets]]
-# type = "ppam"
-# path = "targets/ppam"
-
-# [[targets]]
-# type = "dotm"
-# path = "targets/dotm"
-
-# TODO Access and Outlook
+# TODO xlam, ppam, dotm, Access, and Outlook

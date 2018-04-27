@@ -45,13 +45,11 @@ export { Version, Source, Feature, Dependency, Reference, Target };
  * guid = "{420B2830-E718-11CF-893D-00A0C9054228}"
  * optional = true
  *
- * [[targets]]
- * type = "xlsm"
- * path = "targets/xlsm"
+ * [targets]
+ * xlsm = "targets/xlsm"
  *
- * [[targets]]
+ * [targets.xlam]
  * name = "custom-name"
- * type = "xlam"
  * path = "targets/xlam"
  * ```
  */
@@ -122,7 +120,7 @@ export function parseManifest(value: any, dir: string): Manifest {
   const { features, defaultFeatures } = parseFeatures(value.features || {});
   const dependencies = parseDependencies(value.dependencies || {}, dir);
   const references = parseReferences(value.references || {});
-  const targets = parseTargets(value.targets || [], name, dir);
+  const targets = parseTargets(value.targets || {}, name, dir);
 
   let pkg, project;
   if (value.project) {

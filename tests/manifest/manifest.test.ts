@@ -140,23 +140,17 @@ test('throws for invalid references', () => {
 test('loads valid targets', () => {
   const value = {
     ...BASE_MANIFEST,
-    targets: [
-      { type: 'xlsm', path: 'targets/xlsm' },
-      { name: 'addin', type: 'xlam', path: 'targets/xlam' }
-    ]
+    targets: {
+      xlsm: 'targets/xlsm',
+      xlam: { name: 'addin', path: 'targets/xlam' }
+    }
   };
 
   expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid targets', () => {
-  let value: any = { ...BASE_MANIFEST, targets: {} };
-  expect(() => parseManifest(value, FIXTURES)).toThrow();
-
-  value = { ...BASE_MANIFEST, targets: [{}] };
-  expect(() => parseManifest(value, FIXTURES)).toThrow();
-
-  value = { ...BASE_MANIFEST, targets: [{ type: 'xlsm' }] };
+  let value = { ...BASE_MANIFEST, targets: { xlsm: {} } };
   expect(() => parseManifest(value, FIXTURES)).toThrow();
 });
 
