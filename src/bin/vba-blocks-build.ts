@@ -1,5 +1,6 @@
-const dedent = require('dedent');
-const { default: build } = require('../lib/actions/build');
+import { Args } from 'mri';
+import dedent from 'dedent';
+import build from '../actions/build';
 
 const help = dedent`
   Build project from manifest.
@@ -12,7 +13,7 @@ const help = dedent`
   Options:
     --target=TYPE   Build the given target`;
 
-module.exports = async args => {
+module.exports = async (args: Args) => {
   if (args.help) {
     console.log(help);
     return;

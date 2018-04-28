@@ -1,5 +1,6 @@
-const dedent = require('dedent');
-const { default: add } = require('../lib/actions/add');
+import { Args } from 'mri';
+import dedent from 'dedent';
+import add from '../actions/add';
 
 const help = dedent`
   Add a dependency to the project.
@@ -17,7 +18,7 @@ const help = dedent`
     -E, --exact     Lock dependency to exact version
     -T, --tilde     Lock dependency to minor version`;
 
-module.exports = async args => {
+export default async (args: Args) => {
   if (args.help) {
     console.log(help);
     return;

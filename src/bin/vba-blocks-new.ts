@@ -1,5 +1,6 @@
-const dedent = require('dedent');
-const { default: create } = require('../lib/actions/create');
+import { Args } from 'mri';
+import dedent from 'dedent';
+import create from '../actions/create';
 
 const help = `
   Create new project or package with the given name in a new directory
@@ -11,7 +12,7 @@ const help = `
     --package       Create as package
     --no-git        Skip initializing git reposistory`;
 
-module.exports = async args => {
+module.exports = async (args: Args) => {
   if (args.help) {
     console.log(help);
     return;

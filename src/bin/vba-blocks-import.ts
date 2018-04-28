@@ -1,5 +1,6 @@
-const dedent = require('dedent');
-const { default: importProject } = require('../lib/actions/import-project');
+import { Args } from 'mri';
+import dedent from 'dedent';
+import importProject from '../actions/import-project';
 
 const help = dedent`
   Import src to built targets.
@@ -12,7 +13,7 @@ const help = dedent`
   Options:
     --target=TYPE   Import only the given target`;
 
-module.exports = async args => {
+module.exports = async (args: Args) => {
   if (args.help) {
     console.log(help);
     return;

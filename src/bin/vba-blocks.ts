@@ -1,13 +1,12 @@
-#!/usr/bin/env node
 require('v8-compile-cache');
 Error.stackTraceLimit = Infinity;
 
-const mri = require('mri');
-const chalk = require('chalk');
-const dedent = require('dedent');
-const { cleanError } = require('../lib/utils');
-const { unknownCommand } = require('../lib/errors');
-const { version } = require('../package.json');
+import mri from 'mri';
+import chalk from 'chalk';
+import dedent from 'dedent';
+import { has } from '../utils';
+import { CliErrorCode, CliError, unknownCommand, cleanError } from '../errors';
+const { version } = require('../../package.json');
 
 const commands = ['build', 'export', 'import'];
 const args = mri(process.argv.slice(2), {
@@ -22,7 +21,9 @@ if (args.debug) {
   if (debug === true) debug = '*';
   else if (Array.isArray(debug)) debug = debug.join(',');
 
-  const filters = debug.split(',').map(filter => `vba-blocks:${filter}`);
+  const filters = (<string>debug)
+    .split(',')
+    .map(filter => `vba-blocks:${filter}`);
   const existing = process.env.DEBUG ? process.env.DEBUG.split(',') : [];
 
   process.env.DEBUG = existing.concat(filters).join(',');
@@ -42,11 +43,11 @@ const help = dedent`
   Options:
     -h, --help      Output usage information
     -v, --version   Output the version number
-    
+
   Use "vba-blocks COMMAND --help" for help on specific commands.
   Visit https://vba-blocks.com to learn more about vba-blocks.`;
 
-process.name = 'vba-blocks';
+process.title = 'vba-blocks';
 process.on('unhandledRejection', handleError);
 
 main()
@@ -77,7 +78,11 @@ async function main() {
   await subcommand(args);
 }
 
-function handleError(err) {
+function isCliError(error: Error | CliError): error is CliError {
+  return has(error, 'underlying');
+}
+
+function handleError(err: Error | CliError) {
   const { message, stack } = cleanError(err);
 
   console.error(`${chalk.redBright('ERROR')} ${message}`);
@@ -92,7 +97,7 @@ function handleError(err) {
   // }
 
   debug(err);
-  if (err.underlying) {
+  if (isCliError(err) && err.underlying) {
     debug(err.underlying);
   }
 

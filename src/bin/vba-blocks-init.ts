@@ -1,5 +1,6 @@
-const dedent = require('dedent');
-const { default: init } = require('../lib/actions/init');
+import { Args } from 'mri';
+import dedent from 'dedent';
+import init from '../actions/init';
 
 const help = dedent`
   Initialize a vba-blocks project or package in the current directory
@@ -11,7 +12,7 @@ const help = dedent`
     --target=TYPE   Add target of type TYPE to project
     --package       Create as package`;
 
-module.exports = async args => {
+module.exports = async (args: Args) => {
   if (args.help) {
     console.log(help);
     return;

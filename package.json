@@ -4,7 +4,7 @@
   "repository": "https://github.com/vba-blocks/vba-blocks.git",
   "author": "Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)",
   "license": "MIT",
-  "bin": "bin/vba-blocks",
+  "bin": "lib/bin/vba-blocks",
   "main": "lib/index",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -59,7 +59,6 @@
     "@types/tar": "^4.0.0",
     "@types/tmp": "^0.0.33",
     "cross-env": "^5.1.4",
-    "dedent": "^0.7.0",
     "husky": "^0.14.3",
     "jest": "^21.0.0",
     "lint-staged": "^4.0.4",

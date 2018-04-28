@@ -1,4 +1,3 @@
-export { default as cleanError } from './clean-error';
 export { default as convertToToml } from './convert-to-toml';
 export { default as download } from './download';
 export { default as getStaging } from './get-staging';

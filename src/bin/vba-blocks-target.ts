@@ -1,5 +1,6 @@
-const dedent = require('dedent');
-const { add } = require('../lib/actions/target');
+import { Args } from 'mri';
+import dedent from 'dedent';
+// import { add } from '../actions/target';
 
 const help = dedent`
   Work with targets for project.
@@ -13,7 +14,7 @@ const help = dedent`
     --name=NAME   Use the given name for the target [default: project name]
     --path=PATH   Save the target at the given path [default: target/<type>]`;
 
-module.exports = async args => {
+module.exports = async (args: Args) => {
   if (args.help) {
     console.log(help);
     return;
