@@ -11,11 +11,12 @@
     "format": "prettier --write \"**/*.{ts,js,json}\"",
     "precommit": "lint-staged",
     "test": "jest",
-    "e2e": "jest --config ./e2e.config.js --runInBand",
-    "build": "yarn build:cli && yarn build:addin",
+    "e2e": "jest --config e2e.config.js --runInBand",
+    "build": "yarn build:cli && yarn build:addins",
     "build:cli": "tsc",
-    "build:addin": "cd addin && node scripts/build",
-    "build:bootstrap": "cd addin/scripts && node ../../bin/vba-blocks build"
+    "build:addins": "cd addins && node ../scripts/build",
+    "build:bootstrap":
+      "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["prettier --write", "git add"]
@@ -26,9 +27,9 @@
   "jest": {
     "testEnvironment": "node",
     "moduleFileExtensions": ["ts", "js", "json"],
-    "testRegex": "\\.test\\.(ts|js)$",
+    "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.(js|ts)$",
     "transform": {
-      "^.+\\.tsx?$": "ts-jest/preprocessor.js"
+      "^.+\\.ts?$": "ts-jest/preprocessor.js"
     }
   },
   "dependencies": {
