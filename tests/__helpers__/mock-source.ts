@@ -1,7 +1,8 @@
 import { join, relative } from 'path';
-import { Feature, Dependency } from '../../src/manifest';
-import { Source, Registration } from '../../src/sources';
-import { unixPath } from '../../src/utils';
+import { Source, Registration } from '@vba-blocks/src/sources';
+import { Dependency } from '@vba-blocks/src/manifest';
+import { sources } from '@vba-blocks/fixtures';
+import { unixPath } from '@vba-blocks/src/utils';
 
 const source = 'registry+vba-blocks#<hash>';
 const registry: { [name: string]: Registration[] } = {
@@ -138,14 +139,13 @@ const registry: { [name: string]: Registration[] } = {
   ]
 };
 
-export default class RegistrySource {
+export default class MockSource implements Source {
   resolve(dependency: Dependency) {
     const { name } = dependency;
     return registry[name];
   }
 
   fetch(registration: Registration) {
-    const sources = join(__dirname, '../__fixtures__/sources');
     const dir = join(
       registration.name,
       `v${registration.version}`.replace(/\./g, '-')

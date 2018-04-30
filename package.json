@@ -8,7 +8,7 @@
   "main": "lib/index",
   "typings": "lib/index.d.ts",
   "scripts": {
-    "format": "prettier --write \"**/*.{ts,js,json}\"",
+    "format": "prettier --write \"**/*.{ts,js}\"",
     "precommit": "lint-staged",
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
@@ -29,7 +29,12 @@
     "moduleFileExtensions": ["ts", "js", "json"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.(js|ts)$",
     "transform": {
-      "^.+\\.ts?$": "ts-jest/preprocessor.js"
+      "^.+\\.ts$": "ts-jest/preprocessor.js"
+    },
+    "moduleNameMapper": {
+      "@vba-blocks/src(.*)": "<rootDir>/src$1",
+      "@vba-blocks/helpers(.*)": "<rootDir>/tests/__helpers__$1",
+      "@vba-blocks/fixtures(.*)": "<rootDir>/tests/__fixtures__$1"
     }
   },
   "dependencies": {

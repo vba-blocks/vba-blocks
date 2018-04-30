@@ -1,6 +1,5 @@
-import { Config } from '../../src/config';
-import { PathSource, GitSource } from '../../src/sources';
-import RegistrySource from './registry-source';
+import MockSource from './mock-source';
+import { Config } from '@vba-blocks/src/config';
 
 export function getConfig(): Config {
   const registry = {
@@ -15,10 +14,10 @@ export function getConfig(): Config {
     flags: { git: true, path: true },
     sources: {
       registry: {
-        'vba-blocks': new RegistrySource()
+        'vba-blocks': new MockSource()
       },
-      path: new PathSource(),
-      git: new GitSource()
+      path: new MockSource(),
+      git: new MockSource()
     }
   };
 }

@@ -1,6 +1,6 @@
-import { Manifest } from '../../src/manifest';
-import { Workspace } from '../../src/workspace';
+import { Workspace } from '@vba-blocks/src/workspace';
+import { Manifest } from '@vba-blocks/src/manifest';
 
-export function toWorkspace(manifest: Manifest): Workspace {
+export function createWorkspace(manifest: Manifest): Workspace {
   return { root: manifest, members: [] };
 }

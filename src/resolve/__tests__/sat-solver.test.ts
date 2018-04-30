@@ -1,14 +1,13 @@
 import solve from '../sat-solver';
-import { getConfig } from '../../../tests/__helpers__/config';
 import Resolver from '../resolver';
-import { toWorkspace } from '../../../tests/__helpers__/workspace';
-import * as manifest from '../../../tests/__fixtures__/manifest';
+import { getConfig } from '@vba-blocks/helpers';
+import * as workspaces from '@vba-blocks/fixtures/workspaces';
 
 test('solves simple tree', async () => {
   const config = getConfig();
   const resolver = new Resolver(config);
 
-  const solution = await solve(toWorkspace(manifest.simple), resolver);
+  const solution = await solve(workspaces.simple, resolver);
 
   expect(solution).toMatchSnapshot();
 });
@@ -17,7 +16,7 @@ test('solves complex tree', async () => {
   const config = getConfig();
   const resolver = new Resolver(config);
 
-  const solution = await solve(toWorkspace(manifest.complex), resolver);
+  const solution = await solve(workspaces.complex, resolver);
 
   expect(solution).toMatchSnapshot();
 });
@@ -26,7 +25,7 @@ test('solves needs-sat tree', async () => {
   const config = getConfig();
   const resolver = new Resolver(config);
 
-  const solution = await solve(toWorkspace(manifest.needsSat), resolver);
+  const solution = await solve(workspaces.needsSat, resolver);
 
   expect(solution).toMatchSnapshot();
 });
@@ -36,6 +35,6 @@ test('fails to solve unresolvable tree', async () => {
   const resolver = new Resolver(config);
 
   await expect(
-    solve(toWorkspace(manifest.unresolvable), resolver)
+    solve(workspaces.unresolvable, resolver)
   ).rejects.toMatchSnapshot();
 });

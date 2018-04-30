@@ -7,8 +7,15 @@
     "moduleResolution": "node",
     "outDir": "lib",
     "rootDir": "src",
-    "target": "es2017"
+    "target": "es2017",
+    "baseUrl": "./",
+    "paths": {
+      "@vba-blocks/src*": ["src*"],
+      "@vba-blocks/helpers*": ["tests/__helpers__*"],
+      "@vba-blocks/fixtures*": ["tests/__fixtures__*"]
+    },
+    "lib": ["es2017"]
   },
   "include": ["src/**/*.ts", "typings/**/*.d.ts"],
-  "exclude": ["node_modules", "lib", "src/**/__mocks__/*"]
+  "exclude": ["node_modules", "lib", "src/**/__mocks__/*", "src/**/__tests__/*"]
 }

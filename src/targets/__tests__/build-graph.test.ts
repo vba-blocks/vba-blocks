@@ -1,11 +1,9 @@
-import { toProject } from '../../../tests/__helpers__/project';
-import { complex as manifest } from '../../../tests/__fixtures__/manifest';
-
+import { resolveProject } from '@vba-blocks/helpers';
+import { complex as project } from '@vba-blocks/fixtures/projects';
 import { createBuildGraph } from '../build-graph';
 
 test('should create build graph', async () => {
-  const project = await toProject(manifest);
-  const graph = await createBuildGraph(project, {});
-
+  const resolved = await resolveProject(project);
+  const graph = await createBuildGraph(resolved, {});
   expect(graph).toMatchSnapshot();
 });

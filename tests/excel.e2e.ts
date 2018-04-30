@@ -1,8 +1,8 @@
-const { resolve, join } = require('path');
-const { tmp, execute, check } = require('./__helpers__/execute');
-const { openExcel, closeExcel } = require('./__helpers__/addin');
-const { copyFile } = require('../lib/utils/fs');
-const { default: createTarget } = require('../lib/targets/create-target');
+import { resolve, join } from 'path';
+import { tmp, execute, check } from '@vba-blocks/helpers/execute';
+import { openExcel, closeExcel } from '@vba-blocks/helpers/addin';
+import { copyFile } from '@vba-blocks/src/utils/fs';
+import createTarget from '@vba-blocks/src/targets/create-target';
 
 jest.setTimeout(10000);
 

@@ -1,5 +1,14 @@
 module.exports = {
   testEnvironment: 'node',
-  testRegex: '\\.e2e\\.js$',
-  snapshotSerializers: ['./tests/__helpers__/execute-serializer']
+  moduleFileExtensions: ['ts', 'js', 'json'],
+  testRegex: '\\.e2e\\.ts$',
+  snapshotSerializers: ['<rootDir>/tests/__helpers__/execute-serializer'],
+  transform: {
+    '^.+\\.ts$': 'ts-jest/preprocessor.js'
+  },
+  moduleNameMapper: {
+    '@vba-blocks/src(.*)': '<rootDir>/src$1',
+    '@vba-blocks/helpers(.*)': '<rootDir>/tests/__helpers__$1',
+    '@vba-blocks/fixtures(.*)': '<rootDir>/tests/__fixtures__$1'
+  }
 };
