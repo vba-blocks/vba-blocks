@@ -4,6 +4,7 @@ export { default as getStaging } from './get-staging';
 export * from './fs';
 export * from './git';
 export { default as has } from './has';
+export { default as hash } from './hash';
 export * from './is';
 export { default as last } from './last';
 export { default as nonce } from './nonce';

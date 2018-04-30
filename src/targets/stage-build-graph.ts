@@ -1,6 +1,7 @@
 import { basename } from 'path';
+import { Project } from '../project';
 import { BuildGraph } from './build-graph';
-import { getStaging, ensureDir, copyFile, parallel, unixJoin } from '../utils';
+import { ensureDir, copyFile, parallel, unixJoin, emptyDir } from '../utils';
 import env from '../env';
 
 // To avoid "Grant File Access" prompts on Mac,
@@ -11,18 +12,21 @@ import env from '../env';
 // See: http://www.rondebruin.nl/mac/mac034.htm
 
 export default async function stageBuildGraph(
+  project: Project,
   graph: BuildGraph
-): Promise<BuildGraph> {
-  if (env.isWindows) return graph;
+): Promise<{ staged: string | null; graph: BuildGraph }> {
+  if (env.isWindows) return { staged: null, graph };
 
-  const staging = env.staging || (env.staging = await getStaging());
+  const staged = unixJoin(project.paths.staging, 'import');
+  await ensureDir(staged);
+  await emptyDir(staged);
 
   const src = await parallel(
     graph.src,
     async source => {
       const { name, path, optional } = source;
 
-      const dest = unixJoin(staging, basename(source.path));
+      const dest = unixJoin(staged, basename(source.path));
       await copyFile(source.path, dest);
 
       return { name, path: dest, optional, original: path };
@@ -30,5 +34,5 @@ export default async function stageBuildGraph(
     { progress: env.reporter.progress('Staging dependencies') }
   );
 
-  return Object.assign({}, graph, { src });
+  return { staged, graph: { ...graph, src } };
 }

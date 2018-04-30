@@ -2,7 +2,14 @@ import { join } from 'path';
 import { loadProject } from '../project';
 import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
-import { pathExists, tmpFolder, getStaging, nonce, isString } from '../utils';
+import {
+  unixJoin,
+  pathExists,
+  tmpFolder,
+  emptyDir,
+  isString,
+  ensureDir
+} from '../utils';
 import env from '../env';
 
 export interface ExportOptions {
@@ -33,10 +40,10 @@ export default async function exportProject(
 
   let staging: string;
   if (!completed) {
-    staging = env.isWindows
-      ? await tmpFolder()
-      : join(env.staging || (env.staging = await getStaging()), nonce(10));
+    staging = unixJoin(project.paths.staging, 'export');
 
+    await ensureDir(staging);
+    await emptyDir(staging);
     await exportTo(project, target, staging);
   } else {
     staging = completed;

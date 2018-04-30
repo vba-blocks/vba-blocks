@@ -1,4 +1,4 @@
-import { unixJoin } from '@vba-blocks/src/utils';
+import { unixJoin, tmpFolder } from '@vba-blocks/src/utils';
 import { Project } from '@vba-blocks/src/project';
 import { Manifest } from '@vba-blocks/src/manifest';
 import resolve from '@vba-blocks/src/resolve';
@@ -13,7 +13,8 @@ export function createProject(manifest: Manifest): Project {
     root: manifest.dir,
     dir: manifest.dir,
     build: unixJoin(manifest.dir, 'build'),
-    backup: unixJoin(manifest.dir, 'build', '.backup')
+    backup: unixJoin(manifest.dir, 'build', '.backup'),
+    staging: ''
   };
 
   return {
@@ -34,5 +35,17 @@ export async function resolveProject(project: Project) {
   return {
     ...project,
     packages
+  };
+}
+
+export async function prepareStaging(project: Project) {
+  const staging = await tmpFolder();
+
+  return {
+    ...project,
+    paths: {
+      ...project.paths,
+      staging
+    }
   };
 }

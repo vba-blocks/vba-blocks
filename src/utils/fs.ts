@@ -6,17 +6,17 @@ import {
   readFile,
   writeFile,
   ensureDir,
+  ensureDirSync,
+  emptyDir,
   move,
   remove
 } from 'fs-extra';
 import sanitizeFilename from 'sanitize-filename';
+import hash from './hash';
 
 async function checksum(file: string, algorithm = 'sha256'): Promise<string> {
-  const hash = createHash(algorithm);
   const data = await readFile(file);
-
-  hash.update(data, 'utf8');
-  return hash.digest('hex');
+  return hash(data);
 }
 
 // Use built-in node copyFile, if available
@@ -24,22 +24,36 @@ const copy: (src: string, dest: string) => Promise<void> = copyFile
   ? promisify(copyFile)
   : require('fs-extra').copy;
 
-async function tmpFile(): Promise<string> {
+export interface TmpOptions {
+  dir?: string;
+}
+
+async function tmpFile(options: TmpOptions = {}): Promise<string> {
+  const { dir } = options;
+
   return new Promise<string>((resolve, reject) => {
     // Defer requiring tmp as it adds process listeners that can cause warnings
-    require('tmp').file({ prefix: 'vba-blocks-' }, (err: any, path: string) => {
-      if (err) return reject(err);
-      resolve(path);
-    });
+    require('tmp').file(
+      { prefix: 'vba-blocks-', dir },
+      (err: any, path: string) => {
+        if (err) return reject(err);
+        resolve(path);
+      }
+    );
   });
 }
 
-async function tmpFolder(): Promise<string> {
+async function tmpFolder(options: TmpOptions = {}): Promise<string> {
+  const { dir } = options;
+
   return new Promise<string>((resolve, reject) => {
-    require('tmp').dir({ prefix: 'vba-blocks-' }, (err: any, path: string) => {
-      if (err) return reject(err);
-      resolve(path);
-    });
+    require('tmp').dir(
+      { prefix: 'vba-blocks-', dir },
+      (err: any, path: string) => {
+        if (err) return reject(err);
+        resolve(path);
+      }
+    );
   });
 }
 
@@ -56,6 +70,8 @@ export {
   checksum,
   copy as copyFile,
   ensureDir,
+  ensureDirSync,
+  emptyDir,
   move,
   pathExists,
   readFile,

@@ -5,7 +5,7 @@ import { Workspace, loadWorkspace } from './workspace';
 import { fetch, Registration } from './sources';
 import resolve, { DependencyGraph } from './resolve';
 import { readLockfile, isLockfileValid } from './lockfile';
-import { parallel, unixJoin, isString } from './utils';
+import { parallel, unixJoin, isString, tmpFolder } from './utils';
 
 export interface Project {
   manifest: Manifest;
@@ -19,6 +19,7 @@ export interface Project {
     dir: string;
     build: string;
     backup: string;
+    staging: string;
   };
   dirty_lockfile: boolean;
 }
@@ -64,7 +65,8 @@ export async function loadProject(
     root: workspace.root.dir,
     dir: manifest.dir,
     build: unixJoin(manifest.dir, 'build'),
-    backup: unixJoin(manifest.dir, 'build', '.backup')
+    backup: unixJoin(manifest.dir, 'build', '.backup'),
+    staging: await tmpFolder({ dir: env.staging })
   };
 
   return {

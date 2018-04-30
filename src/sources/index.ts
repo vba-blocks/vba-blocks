@@ -9,17 +9,9 @@ import { Registration, getSourceParts } from './registration';
 import { Source } from './source';
 import RegistrySource from './registry-source';
 import PathSource from './path-source';
-import GitSource from './git-source';
-import UnsupportedSource from './unsupported-source';
+import GitSource from '../professional/sources/git-source';
 
-export {
-  Registration,
-  Source,
-  RegistrySource,
-  PathSource,
-  GitSource,
-  UnsupportedSource
-};
+export { Registration, Source, RegistrySource, PathSource, GitSource };
 
 export interface Sources {
   registry: { [name: string]: Source };

@@ -1,21 +1,7 @@
 import { Manifest } from './manifest';
+export { loadWorkspace } from './professional/workspace';
 
 export interface Workspace {
   root: Manifest;
   members: Manifest[];
-}
-
-/**
- * Load workspace from given manifest
- *
- * - Check for [package.workspace]
- * - Check for [workspace]
- * - Search up for vba-blocks.toml with [workspace]
- */
-export async function loadWorkspace(manifest: Manifest): Promise<Workspace> {
-  // TODO Load workspace
-  return {
-    root: manifest,
-    members: []
-  };
 }

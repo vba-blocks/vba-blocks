@@ -1,5 +1,6 @@
 import { Project } from '../project';
 import { Target } from '../manifest';
+import { remove } from '../utils';
 import { importGraph } from '../addin';
 import { BuildOptions } from './build-target';
 import { BuildGraph } from './build-graph';
@@ -12,7 +13,11 @@ export default async function importTarget(
   options: BuildOptions
 ) {
   const graph = await createBuildGraph(project, options);
-  const staged = await stageBuildGraph(graph);
+  const { staged, graph: staged_graph } = await stageBuildGraph(project, graph);
 
-  await importGraph(project, target, staged);
+  await importGraph(project, target, staged_graph);
+
+  if (staged) {
+    await remove(staged);
+  }
 }

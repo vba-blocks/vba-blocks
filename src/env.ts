@@ -1,5 +1,6 @@
 import { homedir } from 'os';
 import unixJoin from './utils/unix-join';
+import getStaging from './utils/get-staging';
 import { Reporter, reporter } from './reporter';
 
 export interface Env {
@@ -13,7 +14,7 @@ export interface Env {
   registry: string;
   packages: string;
   sources: string;
-  staging: string | null;
+  staging: string;
 
   reporter: Reporter;
 }
@@ -30,7 +31,7 @@ const env: Env = {
   registry: unixJoin(cache, 'registry'),
   packages: unixJoin(cache, 'packages'),
   sources: unixJoin(cache, 'sources'),
-  staging: null,
+  staging: getStaging(cache),
 
   reporter
 };

@@ -14,10 +14,7 @@ export type Registry =
   | {}
   | { [name: string]: { index: string; packages: string } };
 
-export interface Flags {
-  git?: boolean;
-  path?: boolean;
-}
+export interface Flags {}
 
 export interface Config {
   registry: Registry;
@@ -38,26 +35,28 @@ const defaults: ConfigValue = {
       packages: 'https://packages.vba-blocks.com'
     }
   },
-  flags: { git: true, path: true }
+  flags: {}
 };
 
 /**
  * Load config, from local, user, and environment values
  *
- * - Search for .vba-blocks/config.toml up from cwd
- * - Load ~/.vba-blocks/config.toml
- * - Load VBA_BLOCKS_* from environment
+ * - Load ~/.vba-blocks/config.toml (user)
+ * - Search for .vba-blocks/config.toml up from cwd (local)
+ * - Load VBA_BLOCKS_* from environment (override)
  */
 export async function loadConfig(): Promise<Config> {
   const user: ConfigValue = {
     ...empty,
     ...((await readConfig(env.cache)) || {})
   };
-  const file = await findConfig(env.cwd);
+
+  const dir = await findConfig(env.cwd);
   const local: ConfigValue = {
     ...empty,
-    ...(file ? await readConfig(file) : {})
+    ...(dir ? await readConfig(dir) : {})
   };
+
   const override = loadConfigFromEnv();
 
   const registry: Registry = {
@@ -75,8 +74,8 @@ export async function loadConfig(): Promise<Config> {
 
   const sources: Sources = {
     registry: {},
-    git: flags.git ? new GitSource() : new UnsupportedSource('git'),
-    path: flags.path ? new PathSource() : new UnsupportedSource('path')
+    git: new GitSource(),
+    path: new PathSource()
   };
 
   for (const [name, { index, packages }] of Object.entries(registry)) {
@@ -106,7 +105,7 @@ export async function readConfig(
 // Find config up from and including given dir
 // (looking for .vba-blocks/config.toml)
 export async function findConfig(dir: string): Promise<string | undefined> {
-  // TODO Search from .vba-blocks/config.toml starting at cwd
+  // TODO Search for .vba-blocks/config.toml starting at cwd
   return;
 }
 
