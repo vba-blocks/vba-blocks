@@ -3,9 +3,9 @@
     "declaration": true,
     "esModuleInterop": true,
     "strict": true,
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
-    "outDir": "lib",
+    "outDir": "typings",
     "rootDir": "src",
     "target": "es2018",
     "baseUrl": "./",
@@ -15,6 +15,6 @@
     },
     "lib": ["es2017"]
   },
-  "include": ["src/**/*.ts", "typings/**/*.d.ts"],
-  "exclude": ["node_modules", "lib", "src/**/__mocks__/*", "src/**/__tests__/*"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "typings", "src/**/__mocks__/*", "src/**/__tests__/*"]
 }

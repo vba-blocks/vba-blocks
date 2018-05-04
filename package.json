@@ -6,7 +6,7 @@
   "license": "MIT",
   "bin": "lib/bin/vba-blocks",
   "main": "lib/index",
-  "typings": "lib/index.d.ts",
+  "typings": "typings/index.d.ts",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js}\"",
     "precommit": "lint-staged",
@@ -14,19 +14,26 @@
     "e2e": "jest --config e2e.config.js --runInBand",
     "build": "yarn build:cli && yarn build:addins",
     "build:cli": "tsc",
+    "build:bundle": "rollup -c",
     "build:addins": "cd addins && node ../scripts/build",
-    "build:bootstrap":
-      "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
+    "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
   },
   "lint-staged": {
-    "**/*.{ts,js,json}": ["prettier --write", "git add"]
+    "**/*.{ts,js,json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "prettier": {
     "singleQuote": true
   },
   "jest": {
     "testEnvironment": "node",
-    "moduleFileExtensions": ["ts", "js", "json"],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.(js|ts)$",
     "transform": {
       "^.+\\.ts$": "ts-jest/preprocessor.js"
@@ -71,6 +78,9 @@
     "prettier": "^1.6.1",
     "resolve-from": "^4.0.0",
     "resolve-pkg": "^1.0.0",
+    "rollup": "^0.58.2",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-replace": "^2.0.0",
     "ts-jest": "^20.0.10",
     "typescript": "^2.8.1"
   }
