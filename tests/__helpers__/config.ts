@@ -1,5 +1,5 @@
 import MockSource from './mock-source';
-import { Config } from '@vba-blocks/src/config';
+import { Config } from '../../src/config';
 
 export function getConfig(): Config {
   const registry = {

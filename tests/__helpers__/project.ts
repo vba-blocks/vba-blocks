@@ -1,7 +1,7 @@
-import { unixJoin, tmpFolder } from '@vba-blocks/src/utils';
-import { Project } from '@vba-blocks/src/project';
-import { Manifest } from '@vba-blocks/src/manifest';
-import resolve from '@vba-blocks/src/resolve';
+import { unixJoin, tmpFolder } from '../../src/utils';
+import { Project } from '../../src/project';
+import { Manifest } from '../../src/manifest';
+import resolve from '../../src/resolve';
 import { getConfig } from './config';
 import { createWorkspace } from './workspace';
 

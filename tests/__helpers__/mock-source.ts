@@ -1,8 +1,8 @@
 import { join, relative } from 'path';
-import { Source, Registration } from '@vba-blocks/src/sources';
-import { Dependency } from '@vba-blocks/src/manifest';
+import { Source, Registration } from '../../src/sources';
+import { Dependency } from '../../src/manifest';
 import { sources } from '@vba-blocks/fixtures';
-import { unixPath } from '@vba-blocks/src/utils';
+import { unixPath } from '../../src/utils';
 
 const source = 'registry+vba-blocks#<hash>';
 const registry: { [name: string]: Registration[] } = {

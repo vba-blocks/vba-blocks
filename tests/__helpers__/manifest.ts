@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { Manifest, Dependency } from '@vba-blocks/src/manifest';
+import { Manifest, Dependency } from '../../src/manifest';
 import { dir as FIXTURES } from '@vba-blocks/fixtures';
 
 export function createManifest(options: any): Manifest {

@@ -1,12 +1,9 @@
-require('v8-compile-cache');
-Error.stackTraceLimit = Infinity;
-
 import mri from 'mri';
 import chalk from 'chalk';
 import dedent from 'dedent';
 import { has } from '../utils';
 import { CliErrorCode, CliError, unknownCommand, cleanError } from '../errors';
-const { version } = require('../../package.json');
+const version = 'VERSION';
 
 const commands = ['build', 'export', 'import'];
 const args = mri(process.argv.slice(2), {

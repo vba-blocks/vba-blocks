@@ -1,12 +1,11 @@
 import { Project } from '../project';
 import { Target } from '../manifest';
-import { getBackup, getFile } from './';
-import { pathExists, ensureDir, remove, move } from '../utils';
+import { pathExists, ensureDir, remove, move, unixJoin } from '../utils';
 import { targetIsOpen } from '../errors';
 
 export default async function backupTarget(project: Project, target: Target) {
-  const backup = getBackup(project, target);
-  const file = getFile(project, target);
+  const backup = unixJoin(project.paths.backup, target.filename);
+  const file = unixJoin(project.paths.build, target.filename);
 
   if (await pathExists(backup)) await remove(backup);
   if (await pathExists(file)) {

@@ -1,12 +1,11 @@
 import { ensureDir } from '../utils/fs';
 import { Project } from '../project';
 import { Target } from '../manifest';
-import { zip } from '../utils';
-import { getFile } from './';
+import { zip, unixJoin } from '../utils';
 import { targetCreateFailed } from '../errors';
 
 export default async function createTarget(project: Project, target: Target) {
-  const file = getFile(project, target);
+  const file = unixJoin(project.paths.build, target.filename);
 
   // Zip directory to create target
   try {

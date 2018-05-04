@@ -6,8 +6,7 @@ import {
   Sources,
   RegistrySource,
   PathSource,
-  GitSource,
-  UnsupportedSource
+  GitSource
 } from './sources';
 
 export type Registry =

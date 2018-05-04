@@ -7,10 +7,9 @@
     "moduleResolution": "node",
     "outDir": "lib",
     "rootDir": "src",
-    "target": "es2017",
+    "target": "es2018",
     "baseUrl": "./",
     "paths": {
-      "@vba-blocks/src*": ["src*"],
       "@vba-blocks/helpers*": ["tests/__helpers__*"],
       "@vba-blocks/fixtures*": ["tests/__fixtures__*"]
     },

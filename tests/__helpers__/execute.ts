@@ -2,7 +2,7 @@ import { promisify } from 'util';
 import { resolve } from 'path';
 import { copy, remove } from 'fs-extra';
 import walkSync from 'walk-sync';
-import { checksum, tmpFolder } from '@vba-blocks/src/utils';
+import { checksum, tmpFolder } from '../../src/utils';
 
 const exec = promisify(require('child_process').exec);
 const isBackup = /\.backup/g;

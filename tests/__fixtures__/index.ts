@@ -1,4 +1,4 @@
-import { unixPath, unixJoin } from '@vba-blocks/src/utils';
+import { unixPath, unixJoin } from '../../src/utils';
 
 export const dir = unixPath(__dirname);
 export const empty = unixJoin(__dirname, './empty');
