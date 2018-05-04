@@ -4,8 +4,8 @@
   "repository": "https://github.com/vba-blocks/vba-blocks.git",
   "author": "Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)",
   "license": "MIT",
-  "bin": "lib/bin/vba-blocks",
-  "main": "lib/index",
+  "bin": "lib/bin/vba-blocks.js",
+  "main": "lib/index.js",
   "typings": "typings/index.d.ts",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js}\"",
@@ -13,10 +13,21 @@
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
     "build": "run-s build:cli build:addins",
-    "build:cli": "tsc && rollup -c",
+    "build:cli": "run-s build:compile build:bundle build:pkg",
+    "build:compile": "tsc",
+    "build:bundle": "rollup -c",
+    "build:pkg": "run-p build:pkg:win-x86 build:pkg:win-x64 build:pkg:mac",
+    "build:pkg:win-x86":
+      "pkg --targets node8-win-x86 -o dist/vba-blocks-x86.exe  .",
+    "build:pkg:win-x64":
+      "pkg --targets node8-win-x64 -o dist/vba-blocks.exe  .",
+    "build:pkg:mac": "pkg --targets node8-mac-x64 -o dist/vba-blocks  .",
     "build:addins": "cd addins && node ../scripts/build",
     "build:bootstrap":
       "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
+  },
+  "pkg": {
+    "scripts": "lib/**/*.js"
   },
   "lint-staged": {
     "**/*.{ts,js,json}": ["prettier --write", "git add"]
@@ -68,6 +79,7 @@
     "jest": "^21.0.0",
     "lint-staged": "^4.0.4",
     "npm-run-all": "^4.1.2",
+    "pkg": "^4.3.1",
     "prettier": "^1.6.1",
     "resolve-from": "^4.0.0",
     "resolve-pkg": "^1.0.0",

@@ -1,5 +1,6 @@
 typings
 lib
+dist
 tests/__fixtures__/project/build
 addins/build
 
