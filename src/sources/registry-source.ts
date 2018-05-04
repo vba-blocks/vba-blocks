@@ -21,6 +21,8 @@ import {
 import { Source } from './source';
 import { dependencyNotFound, dependencyInvalidChecksum } from '../errors';
 
+const debug = require('debug')('vba-blocks:registry-source');
+
 export interface RegistryOptions {
   name: string;
   index: string;
@@ -43,6 +45,7 @@ export default class RegistrySource implements Source {
     this.remote = { index, packages };
     this.sources = unixJoin(env.sources, name);
 
+    debug(`pulling ${this.remote.index} to ${this.local.index}`);
     this.pulling = pullIndex(this.local.index, this.remote.index);
   }
 

@@ -9,6 +9,19 @@ main().catch(err => {
 async function main() {
   await copy(
     join(__dirname, '../node_modules/dugite/git'),
-    join(__dirname, '../dist/git')
+    join(__dirname, '../dist/git'),
+    { overwrite: false }
+  );
+
+  await copy(
+    join(__dirname, '../run-scripts'),
+    join(__dirname, '../dist/run-scripts'),
+    { overwrite: true }
+  );
+
+  await copy(
+    join(__dirname, '../addins/build'),
+    join(__dirname, '../dist/addins'),
+    { overwrite: true }
   );
 }

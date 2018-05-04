@@ -5,7 +5,7 @@ import isPackaged from './is-packaged';
 if (isPackaged()) {
   // For packaged, git is included with .exe (not bundled)
   // Pass to dugite with environment variable
-  process.env.LOCAL_GIT_DIRECTORY = join(dirname(process.execPath), 'git');
+  process.env.LOCAL_GIT_DIRECTORY = join(dirname(process.execPath), '../git');
 }
 
 export interface ExecResult extends IGitResult {}

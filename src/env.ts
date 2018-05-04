@@ -1,6 +1,7 @@
 import { homedir } from 'os';
 import unixJoin from './utils/unix-join';
 import getStaging from './utils/get-staging';
+import isPackaged from './utils/is-packaged';
 import { Reporter, reporter } from './reporter';
 
 export interface Env {
@@ -25,8 +26,12 @@ const env: Env = {
   cwd: process.cwd(),
   values: process.env,
 
-  addins: unixJoin(__dirname, '../addins/build'),
-  scripts: unixJoin(__dirname, '../run-scripts'),
+  addins: isPackaged()
+    ? unixJoin(process.execPath, '../../addins')
+    : unixJoin(__dirname, '../addins/build'),
+  scripts: isPackaged()
+    ? unixJoin(process.execPath, '../../run-scripts')
+    : unixJoin(__dirname, '../run-scripts'),
   cache,
   registry: unixJoin(cache, 'registry'),
   packages: unixJoin(cache, 'packages'),

@@ -8,7 +8,7 @@ import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution, ResolutionGraph } from './resolver';
 import { has, unique } from '../utils';
 
-export default async function solve(
+export async function solve(
   workspace: Workspace,
   resolver: Resolver
 ): Promise<DependencyGraph> {

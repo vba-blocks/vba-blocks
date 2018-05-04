@@ -2,7 +2,7 @@
 name = "bootstrap"
 version = "0.0.0"
 dependencies = [
-  "installer 0.0.0 path+../VBA-Installer",
+  "installer 0.0.0 path+../../addins/VBA-Installer",
   "json 2.2.3 registry+vba-blocks#75694d68d6163bfa01a7311e9174b15d28397f613cfa9a6fc3723199da6395b0",
 ]
 
@@ -16,16 +16,16 @@ dependencies = [
 [[packages]]
 name = "filesystem"
 version = "0.0.0"
-source = "path+../VBA-FileSystem"
+source = "path+../../addins/VBA-FileSystem"
 dependencies = [
 ]
 
 [[packages]]
 name = "installer"
 version = "0.0.0"
-source = "path+../VBA-Installer"
+source = "path+../../addins/VBA-Installer"
 dependencies = [
-  "filesystem 0.0.0 path+../VBA-FileSystem",
+  "filesystem 0.0.0 path+../../addins/VBA-FileSystem",
 ]
 
 [[packages]]
