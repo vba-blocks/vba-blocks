@@ -13,21 +13,18 @@ import {
 import env from '../env';
 
 export interface ExportOptions {
+  target: string;
   completed?: string;
-  _: string[];
+  addin?: string;
 }
 
-export default async function exportProject(
-  options: ExportOptions = { _: [] }
-) {
-  const {
-    completed,
-    _: [command, target_type]
-  } = options;
-
-  if (!target_type) {
+export default async function exportProject(options: ExportOptions) {
+  if (!options || !options.target) {
+    // TODO official error
     throw new Error('target required for export');
   }
+
+  const { target: target_type, completed } = options;
 
   const project = await loadProject({ manifests: true });
   const target = project.manifest.targets.find(
@@ -44,7 +41,7 @@ export default async function exportProject(
 
     await ensureDir(staging);
     await emptyDir(staging);
-    await exportTo(project, target, staging);
+    await exportTo(project, target, staging, options);
   } else {
     staging = completed;
   }

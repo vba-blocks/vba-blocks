@@ -19,5 +19,6 @@ module.exports = async (args: Args) => {
     return;
   }
 
-  await build(args);
+  const addin = <string | undefined>args.addin;
+  await build({ addin });
 };

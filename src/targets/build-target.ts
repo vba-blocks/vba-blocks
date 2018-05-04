@@ -8,7 +8,9 @@ import createTarget from './create-target';
 import importTarget from './import-target';
 import restoreTarget from './restore-target';
 
-export interface BuildOptions {}
+export interface BuildOptions {
+  addin?: string;
+}
 
 export default async function buildTarget(
   project: Project,

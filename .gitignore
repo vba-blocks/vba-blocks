@@ -1,7 +1,7 @@
 typings
 lib
-tests/fixtures/project/build
-addin/build
+tests/__fixtures__/project/build
+addins/build
 
 # Ignore temporary Excel files
 */~$*

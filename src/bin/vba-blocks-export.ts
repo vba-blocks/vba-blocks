@@ -13,5 +13,9 @@ module.exports = async (args: Args) => {
     return;
   }
 
-  await exportProject(args);
+  const [_, target] = args._;
+  const completed = <string | undefined>args.completed;
+  const addin = <string | undefined>args.addin;
+
+  await exportProject({ target, completed, addin });
 };

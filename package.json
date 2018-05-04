@@ -12,28 +12,21 @@
     "precommit": "lint-staged",
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
-    "build": "yarn build:cli && yarn build:addins",
-    "build:cli": "tsc",
-    "build:bundle": "rollup -c",
+    "build": "run-s build:cli build:addins",
+    "build:cli": "tsc && rollup -c",
     "build:addins": "cd addins && node ../scripts/build",
-    "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
+    "build:bootstrap":
+      "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
   },
   "lint-staged": {
-    "**/*.{ts,js,json}": [
-      "prettier --write",
-      "git add"
-    ]
+    "**/*.{ts,js,json}": ["prettier --write", "git add"]
   },
   "prettier": {
     "singleQuote": true
   },
   "jest": {
     "testEnvironment": "node",
-    "moduleFileExtensions": [
-      "ts",
-      "js",
-      "json"
-    ],
+    "moduleFileExtensions": ["ts", "js", "json"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.(js|ts)$",
     "transform": {
       "^.+\\.ts$": "ts-jest/preprocessor.js"
@@ -74,7 +67,7 @@
     "husky": "^0.14.3",
     "jest": "^21.0.0",
     "lint-staged": "^4.0.4",
-    "mock-require": "^2.0.2",
+    "npm-run-all": "^4.1.2",
     "prettier": "^1.6.1",
     "resolve-from": "^4.0.0",
     "resolve-pkg": "^1.0.0",

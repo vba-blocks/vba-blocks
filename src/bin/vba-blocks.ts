@@ -5,7 +5,7 @@ import { has } from '../utils';
 import { CliErrorCode, CliError, unknownCommand, cleanError } from '../errors';
 const version = 'VERSION';
 
-const commands = ['build', 'export', 'import'];
+const commands = ['build', 'export'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -35,7 +35,6 @@ const help = dedent`
   Commands
     - build         Build project from manifest
     - export        Export src from built target
-    - import        Import src to built targets
 
   Options:
     -h, --help      Output usage information

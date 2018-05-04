@@ -6,6 +6,10 @@ import { run, unixJoin } from './utils';
 export type Application = string;
 export type Addin = string;
 
+export interface AddinOptions {
+  addin?: string;
+}
+
 export const extensions: { [application: string]: string[] } = {
   excel: ['xlsx', 'xlsm', 'xlam']
 };
@@ -26,12 +30,13 @@ for (const [application, values] of Object.entries(extensions)) {
 export async function importGraph(
   project: Project,
   target: Target,
-  graph: { src: Source[]; references: Reference[] }
+  graph: { src: Source[]; references: Reference[] },
+  options: AddinOptions = {}
 ): Promise<void> {
   const { application, addin, file } = getTargetInfo(project, target);
   const { src, references } = graph;
 
-  await run(application, addin, 'Build.ImportGraph', {
+  await run(application, options.addin || addin, 'Build.ImportGraph', {
     file,
     src,
     references
@@ -44,14 +49,20 @@ export async function importGraph(
 export async function exportTo(
   project: Project,
   target: Target,
-  staging: string
+  staging: string,
+  options: AddinOptions = {}
 ): Promise<void> {
   const { application, addin, file } = getTargetInfo(project, target);
 
-  const result = await run(application, addin, 'Build.ExportTo', {
-    file,
-    staging
-  });
+  const result = await run(
+    application,
+    options.addin || addin,
+    'Build.ExportTo',
+    {
+      file,
+      staging
+    }
+  );
 }
 
 /**

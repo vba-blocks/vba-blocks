@@ -1,26 +1,5 @@
 const { join } = require('path');
-const mock = require('mock-require');
-const { default: run } = require('../../lib/utils/run');
-
-mock('../../lib/addin', {
-  async importGraph(project, target, graph) {
-    const file = join(project.paths.build, target.filename);
-    const { src, references } = graph;
-
-    const result = await run(
-      'excel',
-      join(__dirname, 'bootstrap/build/bootstrap.xlsm'),
-      'Build.ImportGraph',
-      {
-        file,
-        src,
-        references
-      }
-    );
-  }
-});
-
-const vba = require('../../');
+const vba = require('../lib/index');
 
 main().catch(err => {
   console.error(err);
@@ -28,5 +7,5 @@ main().catch(err => {
 });
 
 async function main() {
-  await vba.build();
+  await vba.build({ addin: join(__dirname, 'bootstrap/build/bootstrap.xlsm') });
 }

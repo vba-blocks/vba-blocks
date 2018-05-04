@@ -10,12 +10,12 @@ import stageBuildGraph from './stage-build-graph';
 export default async function importTarget(
   project: Project,
   target: Target,
-  options: BuildOptions
+  options: BuildOptions = {}
 ) {
   const graph = await createBuildGraph(project, options);
   const { staged, graph: staged_graph } = await stageBuildGraph(project, graph);
 
-  await importGraph(project, target, staged_graph);
+  await importGraph(project, target, staged_graph, options);
 
   if (staged) {
     await remove(staged);
