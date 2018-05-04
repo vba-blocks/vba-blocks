@@ -5,7 +5,7 @@ import { has } from '../utils';
 import { CliErrorCode, CliError, unknownCommand, cleanError } from '../errors';
 const version = 'VERSION';
 
-const commands = ['build', 'export'];
+const commands = ['build', 'export', 'healthcheck'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
