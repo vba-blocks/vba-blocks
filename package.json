@@ -13,33 +13,39 @@
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
     "build": "run-s build:cli build:addins",
-    "build:cli":
-      "run-s build:compile build:bundle build:pkg:win-x64 build:copy",
+    "build:cli": "run-s build:compile build:bundle build:pkg:win-x64 build:copy",
     "build:compile": "tsc",
     "build:bundle": "rollup -c",
     "build:pkg": "run-p build:pkg:win-x86 build:pkg:win-x64 build:pkg:mac",
-    "build:pkg:win-x86":
-      "pkg --targets node8-win-x86 -o dist/bin/vba-blocks-x86.exe  .",
-    "build:pkg:win-x64":
-      "pkg --targets node8-win-x64 -o dist/bin/vba-blocks.exe  .",
+    "build:pkg:win-x86": "pkg --targets node8-win-x86 -o dist/bin/vba-blocks-x86.exe  .",
+    "build:pkg:win-x64": "pkg --targets node8-win-x64 -o dist/bin/vba-blocks.exe  .",
     "build:pkg:mac": "pkg --targets node8-mac-x64 -o dist/bin/vba-blocks  .",
     "build:copy": "node scripts/copy",
     "build:addins": "cd addins && node ../scripts/build",
-    "build:bootstrap":
-      "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
+    "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
   },
   "pkg": {
-    "scripts": ["lib/bin/*.js", "lib/sat-solver.js"]
+    "scripts": [
+      "lib/bin/*.js",
+      "lib/sat-solver.js"
+    ]
   },
   "lint-staged": {
-    "**/*.{ts,js,json}": ["prettier --write", "git add"]
+    "**/*.{ts,js,json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "prettier": {
     "singleQuote": true
   },
   "jest": {
     "testEnvironment": "node",
-    "moduleFileExtensions": ["ts", "js", "json"],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.(js|ts)$",
     "transform": {
       "^.+\\.ts$": "ts-jest/preprocessor.js"
@@ -57,7 +63,7 @@
     "dedent": "^0.7.0",
     "detect-newline": "^2.1.0",
     "dugite": "^1.39.0",
-    "fs-extra": "^4.0.2",
+    "fs-extra": "^6.0.0",
     "logic-solver": "^2.0.1",
     "mri": "^1.1.0",
     "sanitize-filename": "^1.6.1",
@@ -70,7 +76,7 @@
   },
   "devDependencies": {
     "@types/archiver": "^2.0.0",
-    "@types/fs-extra": "^4.0.2",
+    "@types/fs-extra": "^5.0.2",
     "@types/jest": "^20.0.8",
     "@types/node": "^8.0.25",
     "@types/semver": "^5.4.0",

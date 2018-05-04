@@ -1,4 +1,4 @@
-const { join } = require('path');
+const { join, dirname } = require('path');
 const { copy } = require('fs-extra');
 
 main().catch(err => {
@@ -8,7 +8,7 @@ main().catch(err => {
 
 async function main() {
   await copy(
-    join(__dirname, '../node_modules/dugite/git'),
+    join(resolveModule('dugite'), 'git'),
     join(__dirname, '../dist/git'),
     { overwrite: false }
   );
@@ -22,6 +22,16 @@ async function main() {
   await copy(
     join(__dirname, '../addins/build'),
     join(__dirname, '../dist/addins'),
-    { overwrite: true }
+    {
+      overwrite: true,
+      filter(src, dest) {
+        return !src.includes('.backup');
+      }
+    }
   );
+}
+
+function resolveModule(name) {
+  const [root] = require.resolve(name).split('node_modules', 1);
+  return join(root, 'node_modules', name);
 }

@@ -45,6 +45,7 @@ const help = dedent`
 
 process.title = 'vba-blocks';
 process.on('unhandledRejection', handleError);
+process.on('uncaughtException', handleError);
 
 main()
   .then(() => process.exit(0))
@@ -65,6 +66,7 @@ async function main() {
 
   let subcommand;
   try {
+    debug(`loading "./vba-blocks-${command}.js"`)
     subcommand = require(`./vba-blocks-${command}.js`);
   } catch (err) {
     throw new Error(`Failed to load command "${command}".\n${err.stack}`);
