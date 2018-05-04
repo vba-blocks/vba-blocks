@@ -65,7 +65,7 @@ async function main() {
 
   let subcommand;
   try {
-    subcommand = require(`./vba-blocks-${command}`);
+    subcommand = require(`./vba-blocks-${command}.js`);
   } catch (err) {
     throw new Error(`Failed to load command "${command}".\n${err.stack}`);
   }

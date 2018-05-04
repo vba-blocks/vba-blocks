@@ -1,5 +1,3 @@
-import { join } from 'path';
-import { readFileSync } from 'fs';
 import resolve from 'rollup-plugin-node-resolve';
 import replace from 'rollup-plugin-replace';
 
