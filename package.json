@@ -17,9 +17,9 @@
     "build:compile": "tsc",
     "build:bundle": "rollup -c",
     "build:pkg": "run-p build:pkg:win-x86 build:pkg:win-x64 build:pkg:mac",
-    "build:pkg:win-x86": "pkg --targets node8-win-x86 -o dist/bin/vba-blocks-x86.exe  .",
-    "build:pkg:win-x64": "pkg --targets node8-win-x64 -o dist/bin/vba-blocks.exe  .",
-    "build:pkg:mac": "pkg --targets node8-mac-x64 -o dist/bin/vba-blocks  .",
+    "build:pkg:win-x86": "pkg --targets node8-win-x86 -o dist/bin/vba-blocks-x86.exe .",
+    "build:pkg:win-x64": "pkg --targets node8-win-x64 -o dist/bin/vba-blocks.exe .",
+    "build:pkg:mac": "pkg --targets node8-mac-x64 -o dist/bin/vba-blocks .",
     "build:copy": "node scripts/copy",
     "build:addins": "cd addins && node ../scripts/build",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
