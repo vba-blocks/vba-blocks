@@ -11,5 +11,6 @@ addins/build
 # OS and other
 .DS_Store
 node_modules
+package-lock.json
 *.log
 .vscode

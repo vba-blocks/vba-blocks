@@ -12,40 +12,33 @@
     "precommit": "lint-staged",
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
-    "build": "run-s build:cli build:addins",
-    "build:cli": "run-s build:compile build:bundle build:pkg:win-x64 build:copy",
+    "build": "run-s build:compile build:addins build:cli",
+    "build:cli": "run-s build:bundle build:pkg build:copy",
     "build:compile": "tsc",
     "build:bundle": "rollup -c",
     "build:pkg": "run-p build:pkg:win-x86 build:pkg:win-x64 build:pkg:mac",
-    "build:pkg:win-x86": "pkg --targets node8-win-x86 -o dist/bin/vba-blocks-x86.exe .",
-    "build:pkg:win-x64": "pkg --targets node8-win-x64 -o dist/bin/vba-blocks.exe .",
+    "build:pkg:win-x86":
+      "pkg --targets node8-win-x86 -o dist/bin/vba-blocks-x86.exe .",
+    "build:pkg:win-x64":
+      "pkg --targets node8-win-x64 -o dist/bin/vba-blocks.exe .",
     "build:pkg:mac": "pkg --targets node8-mac-x64 -o dist/bin/vba-blocks .",
     "build:copy": "node scripts/copy",
     "build:addins": "cd addins && node ../scripts/build",
-    "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
+    "build:bootstrap":
+      "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
   },
   "pkg": {
-    "scripts": [
-      "lib/bin/*.js",
-      "lib/sat-solver.js"
-    ]
+    "scripts": ["lib/bin/*.js", "lib/sat-solver.js"]
   },
   "lint-staged": {
-    "**/*.{ts,js,json}": [
-      "prettier --write",
-      "git add"
-    ]
+    "**/*.{ts,js,json}": ["prettier --write", "git add"]
   },
   "prettier": {
     "singleQuote": true
   },
   "jest": {
     "testEnvironment": "node",
-    "moduleFileExtensions": [
-      "ts",
-      "js",
-      "json"
-    ],
+    "moduleFileExtensions": ["ts", "js", "json"],
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.(js|ts)$",
     "transform": {
       "^.+\\.ts$": "ts-jest/preprocessor.js"

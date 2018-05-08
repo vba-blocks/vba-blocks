@@ -1,4 +1,4 @@
-import solve from '../sat-solver';
+import { solve } from '../sat-solver';
 import Resolver from '../resolver';
 import { getConfig } from '@vba-blocks/helpers';
 import * as workspaces from '@vba-blocks/fixtures/workspaces';
