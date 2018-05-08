@@ -15,8 +15,7 @@ on run argv
 		set args to (item 4 of argv)
 		
 		if appname is "excel" then
-			-- TODO
-			set workbook_name to "bootstrap.xlsm"
+      set workbook_name to name of (info for addin)
 
 			tell application "Microsoft Excel"
 				activate
