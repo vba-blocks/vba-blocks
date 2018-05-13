@@ -36,14 +36,13 @@ export default [
     output: {
       format: 'cjs',
       file: 'lib/bin/vba-blocks.js',
-      preferBuiltins: true,
-      intro: `require('v8-compile-cache');\nError.stackTraceLimit = Infinity;`
+      preferBuiltins: true
     },
     external,
     plugins: [
       resolve(),
       replace({
-        VERSION: version
+        '%VERSION%': version
       })
     ],
     treeshake: { pureExternalModules: true }

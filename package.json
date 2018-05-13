@@ -51,7 +51,6 @@
     "debug": "^3.1.0",
     "decompress": "^4.2.0",
     "dedent": "^0.7.0",
-    "detect-newline": "^2.1.0",
     "dugite": "^1.39.0",
     "fs-extra": "^6.0.0",
     "logic-solver": "^2.0.1",
@@ -61,7 +60,6 @@
     "tar": "^4.0.1",
     "tmp": "^0.0.33",
     "toml": "^2.3.2",
-    "v8-compile-cache": "^1.1.2",
     "walk-sync": "^0.3.2"
   },
   "devDependencies": {
@@ -80,8 +78,6 @@
     "npm-run-all": "^4.1.2",
     "pkg": "^4.3.1",
     "prettier": "^1.6.1",
-    "resolve-from": "^4.0.0",
-    "resolve-pkg": "^1.0.0",
     "rollup": "^0.58.2",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",

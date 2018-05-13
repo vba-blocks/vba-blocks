@@ -3,7 +3,9 @@ import chalk from 'chalk';
 import dedent from 'dedent';
 import { has } from '../utils';
 import { CliErrorCode, CliError, unknownCommand, cleanError } from '../errors';
-const version = 'VERSION';
+
+Error.stackTraceLimit = Infinity;
+const version = '%VERSION%';
 
 const commands = ['build', 'export', 'healthcheck'];
 const args = mri(process.argv.slice(2), {
@@ -66,7 +68,7 @@ async function main() {
 
   let subcommand;
   try {
-    debug(`loading "./vba-blocks-${command}.js"`)
+    debug(`loading "./vba-blocks-${command}.js"`);
     subcommand = require(`./vba-blocks-${command}.js`);
   } catch (err) {
     throw new Error(`Failed to load command "${command}".\n${err.stack}`);
