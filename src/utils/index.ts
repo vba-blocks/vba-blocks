@@ -11,7 +11,7 @@ export { default as last } from './last';
 export { default as nonce } from './nonce';
 export { default as optionList } from './option-list';
 export { default as parallel } from './parallel';
-export { default as run, escape } from './run';
+export { default as run, escape, RunResult } from './run';
 export { default as unique } from './unique';
 export { default as unixJoin } from './unix-join';
 export { default as unixPath } from './unix-path';

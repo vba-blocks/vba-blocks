@@ -1,4 +1,4 @@
-import { join, basename, extname, relative } from 'path';
+import { join, basename, extname, relative, dirname } from 'path';
 import walk from 'walk-sync';
 import { Manifest, Target, Source, Reference, Dependency } from '../manifest';
 import { Project } from '../project';
@@ -6,10 +6,11 @@ import {
   without,
   pathExists,
   readJson,
-  copyFile,
+  copyFile as _copyFile,
   unixJoin,
   unixPath,
-  remove
+  remove,
+  ensureDir
 } from '../utils';
 import { ProjectInfo } from './build-target';
 
@@ -80,6 +81,11 @@ export default async function exportTarget(
   }
 
   await remove(staging);
+}
+
+async function copyFile(src: string, dest: string) {
+  await ensureDir(dirname(dest));
+  await _copyFile(src, dest);
 }
 
 interface ExportGraph {

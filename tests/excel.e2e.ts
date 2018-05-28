@@ -15,7 +15,7 @@ test('build', async () => {
   });
 });
 
-test.skip('export', async () => {
+test('export', async () => {
   await setup(empty, 'export-empty', async cwd => {
     await setup(standard, 'export-standard', async built => {
       // 1. Build standard project
