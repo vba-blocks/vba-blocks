@@ -18,7 +18,7 @@ Function Run(App, Addin, Command, Args)
   Select Case App
   Case "excel"
     Set Instance = New Excel
-    Result = Instance.Run Addin, Command, Args
+    Result = Instance.Run(Addin, Command, Args)
   Case Else
     Fail "Unsupported App: " & App
   End Select
@@ -49,7 +49,7 @@ Class Excel
     If Err.Number <> 0 Then
       Fail "Failed to run command: " & Err.Description
     End If
-  End Sub
+  End Function
 
   Private Sub OpenExcel()
     On Error Resume Next
@@ -73,7 +73,7 @@ Class Excel
 
     If Err.Number <> 0 Then
       Err.Clear
-      Set Workbook = Excel.Workbooks.Open(Path)
+      Set Workbook = App.Workbooks.Open(Path)
 
       If Err.Number <> 0 Then
         Fail "Failed to open workbook: " & Err.Description
