@@ -1,7 +1,7 @@
 import { join, basename, extname, relative } from 'path';
 import walk from 'walk-sync';
-import { Manifest, Target, Source, Reference } from '../manifest';
-import { Project, loadManifests } from '../project';
+import { Manifest, Target, Source, Reference, Dependency } from '../manifest';
+import { Project } from '../project';
 import {
   without,
   pathExists,
@@ -11,12 +11,15 @@ import {
   unixPath,
   remove
 } from '../utils';
+import { ProjectInfo } from './build-target';
 
 export default async function exportTarget(
-  project: Project,
   target: Target,
+  info: ProjectInfo,
   staging: string
 ) {
+  const { project, dependencies } = info;
+
   // Load src and references from staging
   const files = without(
     walk(staging, { directories: false }),
@@ -25,7 +28,13 @@ export default async function exportTarget(
   const references = await readReferences(staging);
 
   // Extract export graph from manifest, target, and files/references
-  const graph = await createExportGraph(project, target, files, references);
+  const graph = await createExportGraph(
+    project,
+    dependencies,
+    target,
+    files,
+    references
+  );
 
   // Update src
   const actions: Promise<void>[] = [];
@@ -93,6 +102,7 @@ interface Details {
 
 async function createExportGraph(
   project: Project,
+  dependencies: Manifest[],
   target: Target,
   files: string[],
   exported_references: Reference[]
@@ -108,54 +118,56 @@ async function createExportGraph(
     removed: new Set()
   };
 
-  if (!project.manifests) {
-    project.manifests = await loadManifests(project);
-  }
+  const manifests = [project.manifest, ...dependencies];
 
   // Load src and references
-  const local: Details = { src: new Map(), references: new Set() };
-  const dependencies: Details = { src: new Map(), references: new Set() };
+  //
+  // 1. Sort based on from project/package or dependencies
+  // 2. Check if source file is in exported files
+  // 3. Find added files / references
+  const from_project: Details = { src: new Map(), references: new Set() };
+  const from_dependencies: Details = { src: new Map(), references: new Set() };
 
-  for (const manifest of project.manifests) {
-    const is_local = manifest === project.manifest;
+  for (const manifest of manifests) {
+    const is_from_project = manifest === project.manifest;
     for (const source of manifest.src) {
       const name = basename(source.path);
-      if (is_local) {
+      if (is_from_project) {
         if (!files.includes(name)) {
           src.removed.add(source);
         } else {
-          local.src.set(name, source);
+          from_project.src.set(name, source);
         }
       } else {
-        dependencies.src.set(name, source);
+        from_dependencies.src.set(name, source);
       }
     }
     for (const reference of manifest.references) {
-      if (is_local) {
+      if (is_from_project) {
         if (!exported_references.includes(reference)) {
           references.removed.add(reference);
         } else {
-          local.references.add(reference);
+          from_project.references.add(reference);
         }
       } else {
-        dependencies.references.add(reference);
+        from_dependencies.references.add(reference);
       }
     }
   }
 
   for (const file of files) {
-    if (dependencies.src.has(file)) {
+    if (from_dependencies.src.has(file)) {
       continue;
-    } else if (local.src.has(file)) {
-      src.existing.set(file, local.src.get(file));
+    } else if (from_project.src.has(file)) {
+      src.existing.set(file, from_project.src.get(file));
     } else {
       src.added.add(file);
     }
   }
   for (const reference of exported_references) {
-    if (dependencies.references.has(reference)) {
+    if (from_dependencies.references.has(reference)) {
       continue;
-    } else if (local.references.has(reference)) {
+    } else if (from_project.references.has(reference)) {
       references.existing.add(reference);
     } else {
       references.added.add(reference);

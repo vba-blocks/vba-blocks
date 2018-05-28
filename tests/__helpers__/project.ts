@@ -23,13 +23,11 @@ export function createProject(manifest: Manifest): Project {
     packages: [],
     config,
     paths,
-    manifests: null,
-    dirty_lockfile: false
+    has_dirty_lockfile: false
   };
 }
 
 export async function resolveProject(project: Project) {
-  // TODO maybe load manifests too
   const packages = await resolve(project.config, project.workspace);
 
   return {

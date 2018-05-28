@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { loadProject } from '../project';
+import { loadProject, fetchDependencies } from '../project';
 import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
 import {
@@ -26,7 +26,8 @@ export default async function exportProject(options: ExportOptions) {
 
   const { target: target_type, completed } = options;
 
-  const project = await loadProject({ manifests: true });
+  const project = await loadProject();
+  const dependencies = await fetchDependencies(project);
   const target = project.manifest.targets.find(
     target => target.type === target_type
   );
@@ -46,5 +47,5 @@ export default async function exportProject(options: ExportOptions) {
     staging = completed;
   }
 
-  await exportTarget(project, target, staging);
+  await exportTarget(target, { project, dependencies }, staging);
 }

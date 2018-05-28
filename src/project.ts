@@ -11,7 +11,6 @@ export interface Project {
   manifest: Manifest;
   workspace: Workspace;
   packages: DependencyGraph;
-  manifests: null | Manifest[];
 
   config: Config;
   paths: {
@@ -21,7 +20,7 @@ export interface Project {
     backup: string;
     staging: string;
   };
-  dirty_lockfile: boolean;
+  has_dirty_lockfile: boolean;
 }
 
 export interface LoadOptions {
@@ -52,14 +51,13 @@ export async function loadProject(
 
   const config = await loadConfig();
   const lockfile = await readLockfile(workspace.root.dir);
-  const dirty_lockfile = !lockfile || !isLockfileValid(lockfile, workspace);
+  const has_dirty_lockfile = !lockfile || !isLockfileValid(lockfile, workspace);
+
+  // Resolve packages from lockfile or from sources
   const packages =
-    lockfile && !dirty_lockfile
+    lockfile && !has_dirty_lockfile
       ? lockfile.packages
       : await resolve(config, workspace, lockfile ? lockfile.packages : []);
-  const manifests = include_manifest
-    ? await loadManifests({ manifest, packages, config })
-    : null;
 
   const paths = {
     root: workspace.root.dir,
@@ -73,10 +71,9 @@ export async function loadProject(
     manifest,
     workspace,
     packages,
-    manifests,
     config,
     paths,
-    dirty_lockfile
+    has_dirty_lockfile
   };
 }
 
@@ -84,15 +81,6 @@ export interface FetchProject {
   manifest: Manifest;
   packages: DependencyGraph;
   config: Config;
-}
-
-/**
- * Load all manifests for project (including project's)
- */
-export async function loadManifests(
-  project: FetchProject
-): Promise<Manifest[]> {
-  return [project.manifest, ...(await fetchDependencies(project))];
 }
 
 /**

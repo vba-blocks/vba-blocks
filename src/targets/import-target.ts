@@ -6,13 +6,15 @@ import { BuildOptions } from './build-target';
 import { BuildGraph } from './build-graph';
 import { createBuildGraph } from './build-graph';
 import stageBuildGraph from './stage-build-graph';
+import { ProjectInfo } from './build-target';
 
 export default async function importTarget(
-  project: Project,
   target: Target,
+  info: ProjectInfo,
   options: BuildOptions = {}
 ) {
-  const graph = await createBuildGraph(project, options);
+  const { project, dependencies } = info;
+  const graph = await createBuildGraph(project, dependencies, options);
   const { staged, graph: staged_graph } = await stageBuildGraph(project, graph);
 
   await importGraph(project, target, staged_graph, options);

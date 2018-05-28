@@ -5,14 +5,16 @@ import { resolveProject, prepareStaging } from '@vba-blocks/helpers';
 import { simple as project } from '@vba-blocks/fixtures/projects';
 
 import stageBuildGraph from '../stage-build-graph';
+import { fetchDependencies } from '../../project';
 
 test('should stage build graph for Mac', async () => {
   env.isWindows = false;
 
   const resolved = await resolveProject(project);
   const prepared = await prepareStaging(resolved);
+  const dependencies = await fetchDependencies(prepared);
 
-  const graph = await createBuildGraph(prepared, {});
+  const graph = await createBuildGraph(prepared, dependencies, {});
   const { staged, graph: staged_graph } = await stageBuildGraph(
     prepared,
     graph
