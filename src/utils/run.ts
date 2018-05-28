@@ -1,7 +1,6 @@
 import { promisify } from 'util';
 const exec = promisify(require('child_process').exec);
 import env from '../env';
-import { isString } from './is';
 import { pathExists } from './fs';
 import unixJoin from './unix-join';
 import { Config } from '../config';
@@ -31,50 +30,23 @@ export default async function run(
   application: string,
   file: string,
   macro: string,
-  args: object
+  args: object = {}
 ): Promise<RunResult> {
   const script = unixJoin(
     env.scripts,
     env.isWindows ? 'run.vbs' : 'run.applescript'
   );
 
-  return execute(script, [application, file, macro, JSON.stringify(args)]);
-}
-
-export async function open(
-  application: string,
-  file: string
-): Promise<RunResult> {
-  const script = unixJoin(
-    env.scripts,
-    env.isWindows ? 'open.vbs' : 'open.applescript'
-  );
-
-  return execute(script, [application, file]);
-}
-
-export async function close(
-  application: string,
-  file: string
-): Promise<RunResult> {
-  const script = unixJoin(
-    env.scripts,
-    env.isWindows ? 'close.vbs' : 'close.applescript'
-  );
-
-  return execute(script, [application, file]);
-}
-
-async function execute(script: string, args: string[]): Promise<RunResult> {
   if (!(await pathExists(script))) {
     throw runScriptNotFound(script);
   }
 
+  const parts = [application, file, macro, JSON.stringify(args)];
   const command = env.isWindows
-    ? `cscript //Nologo ${script} ${args
+    ? `cscript //Nologo ${script} ${parts
         .map(part => `"${escape(part)}"`)
         .join(' ')}`
-    : `osascript ${script}  ${args.map(part => `'${part}'`).join(' ')}`;
+    : `osascript ${script}  ${parts.map(part => `'${part}'`).join(' ')}`;
 
   let result;
   try {

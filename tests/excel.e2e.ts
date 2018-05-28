@@ -1,78 +1,43 @@
-import { resolve, join } from 'path';
-import { tmp, execute, check } from '@vba-blocks/helpers/execute';
-import { openExcel, closeExcel } from '@vba-blocks/helpers/addin';
-import { copyFile } from '../../src/utils/fs';
-import createTarget from '../../src/targets/create-target';
+import { join } from 'path';
+import { copy } from 'fs-extra';
+import { run, setup, execute, readdir } from '@vba-blocks/helpers/execute';
+import { standard, empty } from '@vba-blocks/fixtures';
 
 jest.setTimeout(10000);
 
-beforeAll(openExcel);
-afterAll(closeExcel);
-
 test('build', async () => {
-  const dir = resolve(__dirname, `./__fixtures__/standard`);
-  const { path: cwd, cleanup } = await tmp(dir);
-
-  try {
+  await setup(standard, 'build', async cwd => {
     await execute(cwd, 'build');
 
-    const result = await check(cwd);
+    // const result = await validateBuild(cwd);
+    const result = await validateBuild(cwd);
     expect(result).toMatchSnapshot();
-  } finally {
-    await cleanup();
-  }
-});
-
-test('import', async () => {
-  const dir = resolve(__dirname, `./__fixtures__/standard`);
-  const { path: cwd, cleanup } = await tmp(dir);
-
-  try {
-    const project = {
-      paths: { build: join(cwd, 'build') }
-    };
-    const target = {
-      name: 'e2e-standard',
-      path: join(cwd, 'targets/xlsm'),
-      filename: 'e2e-standard.xlsm'
-    };
-
-    await createTarget(project, target);
-    await execute(cwd, 'import');
-
-    const result = await check(cwd);
-    expect(result).toMatchSnapshot();
-  } finally {
-    await cleanup();
-  }
+  });
 });
 
 test.skip('export', async () => {
-  const empty = resolve(__dirname, './__fixtures__/empty');
-  const std = resolve(__dirname, './__fixtures__/standard');
+  await setup(empty, 'export-empty', async cwd => {
+    await setup(standard, 'export-standard', async built => {
+      // 1. Build standard project
+      await execute(built, 'build');
 
-  const [
-    { path: cwdEmpty, cleanup: cleanupEmpty },
-    { path: cwdStd, cleanup: cleanupStd }
-  ] = await Promise.all([tmp(empty), tmp(std)]);
+      // 2. Copy standard built into empty
+      await copy(
+        join(built, 'build/e2e-standard.xlsm'),
+        join(cwd, 'build/e2e-empty.xlsm')
+      );
 
-  try {
-    // First, build projects
-    await execute(cwdEmpty, 'build');
-    await execute(cwdStd, 'build');
+      // 3. Export "empty" project
+      await execute(cwd, 'export xlsm');
 
-    // Move standard to empty (new things to export)
-    // TODO only checks add, need to check change and remove
-    await copyFile(
-      join(cwdStd, 'build/e2e-standard.xlsm'),
-      join(cwdEmpty, 'build/e2e-empty.xlsm')
-    );
-
-    await execute(cwdEmpty, 'export xlsm');
-
-    const result = await check(cwdEmpty);
-    expect(result).toMatchSnapshot();
-  } finally {
-    await Promise.all([cleanupEmpty(), cleanupStd()]);
-  }
+      const result = await readdir(cwd);
+      expect(result).toMatchSnapshot();
+    });
+  });
 });
+
+interface Result {}
+
+async function validateBuild(cwd): Promise<Result> {
+  return { TODO: true };
+}

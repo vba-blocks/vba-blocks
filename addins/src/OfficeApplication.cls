@@ -35,12 +35,12 @@ Public Function GetDocument(Path As String) As Object
         Set GetDocument = Documents(Path)("Document")
         Exit Function
     End If
-    
+
     Dim AppType As String
     Dim Doc As Object
-    
+
     AppType = GetType(Path)
-    
+
     Select Case AppType
     Case "excel"
         WasOpen = OpenWorkbook(Path, Doc)
@@ -53,17 +53,17 @@ Public Function GetDocument(Path As String) As Object
     Case "outlook"
         ' ...
     End Select
-    
+
     If Doc Is Nothing Then
         Err.Raise 10201, Description:="Failed to open document (" & Path & ")"
     End If
-    
+
     Dim Instance As New Dictionary
     Instance("Type") = AppType
     Instance("WasOpen") = WasOpen
     Set Instance("Document") = Doc
     Set Documents(Path) = Instance
-    
+
     Set GetDocument = Doc
 End Function
 
@@ -75,7 +75,7 @@ End Function
 Public Sub Unload()
     Dim i As Long
     Dim Instance As Dictionary
-    
+
     For i = 0 To UBound(Documents.Items)
         Set Instance = Documents.Items(i)
         If Not Instance("WasOpen") Then
@@ -93,7 +93,7 @@ Public Sub Unload()
             End Select
         End If
     Next i
-    
+
     Set Documents = New Dictionary
 End Sub
 
@@ -104,15 +104,15 @@ End Sub
 Private Function OpenWorkbook(Path As String, ByRef WB As Object) As Boolean
     On Error Resume Next
     Set WB = Application.Workbooks(FileSystem.GetBase(Path))
-    
+
     If WB Is Nothing Or Err.Number <> 0 Then
         Err.Clear
-        
+
         Set WB = Application.Workbooks.Open(Path)
         If Err.Number <> 0 Then
             Output.Warnings.Add "Failed to open workbook: " & Err.Description
         End If
-        
+
         OpenWorkbook = False
     Else
         OpenWorkbook = True

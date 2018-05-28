@@ -2,7 +2,6 @@ module.exports = {
   testEnvironment: 'node',
   moduleFileExtensions: ['ts', 'js', 'json'],
   testRegex: '\\.e2e\\.ts$',
-  snapshotSerializers: ['<rootDir>/tests/__helpers__/execute-serializer'],
   transform: {
     '^.+\\.ts$': 'ts-jest/preprocessor.js'
   },

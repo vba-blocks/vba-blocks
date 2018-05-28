@@ -14,7 +14,7 @@ export const extensions: { [application: string]: string[] } = {
   excel: ['xlsx', 'xlsm', 'xlam']
 };
 export const addins: { [application: string]: string } = {
-  excel: 'vba-blocks.xlsm' // TEMP vba-blocks.xlam
+  excel: unixJoin(env.addins, 'vba-blocks.xlsm') // TEMP vba-blocks.xlam
 };
 
 const byExtension: { [extension: string]: string } = {};
@@ -75,7 +75,7 @@ export function getTargetInfo(
   const application = byExtension[target.type];
   if (!application) throw new Error(`Unsupported target type "${target.type}"`);
 
-  const addin = unixJoin(env.addins, addins[application]);
+  const addin = addins[application];
   const file = unixJoin(project.paths.build, target.filename);
 
   return { application, addin, file };

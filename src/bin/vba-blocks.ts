@@ -5,7 +5,7 @@ import { has } from '../utils';
 import { CliErrorCode, CliError, unknownCommand, cleanError } from '../errors';
 
 Error.stackTraceLimit = Infinity;
-const version = '%VERSION%';
+const version = 'VERSION';
 
 const commands = ['build', 'export', 'healthcheck'];
 const args = mri(process.argv.slice(2), {

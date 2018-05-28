@@ -28,10 +28,10 @@ const env: Env = {
 
   addins: isPackaged()
     ? unixJoin(process.execPath, '../../addins')
-    : unixJoin(__dirname, '../addins/build'),
+    : unixJoin(__dirname, 'DIR-ADDINS'),
   scripts: isPackaged()
     ? unixJoin(process.execPath, '../../run-scripts')
-    : unixJoin(__dirname, '../run-scripts'),
+    : unixJoin(__dirname, 'DIR-RUN-SCRIPTS'),
   cache,
   registry: unixJoin(cache, 'registry'),
   packages: unixJoin(cache, 'packages'),

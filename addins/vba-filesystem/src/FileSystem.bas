@@ -52,7 +52,7 @@ End Sub
 Public Function GetExtension(FilePath As String) As String
     Dim Parts() As String
     Parts = VBA.Split(GetBase(FilePath), ".")
-    
+
     If UBound(Parts) = 0 Then
         GetExtension = ""
     ElseIf Parts(LBound(Parts)) = "" Then
@@ -72,7 +72,7 @@ End Function
 Public Function GetBase(FilePath As String) As String
     Dim Parts() As String
     Parts = VBA.Split(NormalizePath(FilePath), Separator)
-    
+
     If UBound(Parts) = 0 Then
         GetBase = ""
     Else
@@ -90,7 +90,7 @@ End Function
 Public Function GetDir(FilePath As String) As String
     Dim Parts() As String
     Parts = VBA.Split(NormalizePath(FilePath), Separator)
-    
+
     If UBound(Parts) = 0 Then
         GetDir = ""
     Else
@@ -119,12 +119,12 @@ Public Function NormalizePath(FilePath As String) As String
     NormalizePath = VBA.Replace(NormalizePath, ":", "[SEP]")
     NormalizePath = VBA.Replace(NormalizePath, "/", "[SEP]")
     NormalizePath = VBA.Replace(NormalizePath, "[DRIVE]", ":\")
-    
+
     ' Remove empty sections
     Dim Parts() As String
     Dim i As Long
     Parts = VBA.Split(NormalizePath, "[SEP]")
-    
+
     NormalizePath = Parts(0)
     For i = 1 To UBound(Parts)
         If Parts(i) <> "" Then
@@ -142,11 +142,11 @@ End Function
 Public Function JoinPath(ParamArray Parts()) As String
     Dim Path As String
     Path = Parts(LBound(Parts))
-    
+
     Dim i As Long
     For i = LBound(Parts) + 1 To UBound(Parts)
         Path = Path & Separator & Parts(i)
     Next i
-    
+
     JoinPath = NormalizePath(Path)
 End Function

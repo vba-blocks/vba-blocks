@@ -2,7 +2,6 @@ Dim App
 Dim Addin
 Dim Command
 Dim Args
-Dim Result
 
 App = WScript.Arguments(0)
 Addin = Unescape(WScript.Arguments(1))
@@ -13,104 +12,88 @@ Run App, Addin, Command, Args
 WScript.Quit 0
 
 Function Run(App, Addin, Command, Args)
+  Dim Instance
+  Dim Result
+
   Select Case App
   Case "excel"
-    RunExcel Addin, Command, Args
+    Set Instance = New Excel
+    Result = Instance.Run Addin, Command, Args
   Case Else
-    WScript.Echo "Unsupported App: " & App
+    Fail "Unsupported App: " & App
   End Select
+
+  PrintLn Result
 End Function
 
 ' Excel
 ' -----
 
-Sub RunExcel(Addin, Command, Args)
-  Dim Excel
-  Dim ExcelWasOpen
-  Dim Workbook
-  Dim WorkbookWasOpen
+Class Excel
+  Private App
+  Private ExcelWasOpen
+  Private Workbook
+  Private WorkbookWasOpen
 
-  On Error Resume Next
+  Private Sub Class_Initialize
+    OpenExcel
+    App.Visible = True
+  End Sub
 
-  Set Excel = Nothing
-  ExcelWasOpen = OpenExcel(Excel)
-  If Excel Is Nothing Then
-    PrintErr "Error #1: Failed to open Excel"
-    PrintErr IIf(Err.Number <> 0, Err.Description, "Unknown Error")
+  Public Function Run(Addin, Command, Args)
+    On Error Resume Next
 
-    WScript.Quit 1
-  End If
+    OpenWorkbook(Addin)
+    Run = App.Run("'" & Workbook.Name & "'!" & Command, Args)
 
-  Set Workbook = Nothing
-  WorkbookWasOpen = OpenWorkbook(Excel, Addin, Workbook)
-  If Workbook Is Nothing Then
-    PrintErr "Error #2: Failed to open workbook"
-    PrintErr IIf(Err.Number <> 0, Err.Description, "Unknown Error")
-    
-    CloseExcel Excel, ExcelWasOpen
-    WScript.Quit 1
-  End if
+    If Err.Number <> 0 Then
+      Fail "Failed to run command: " & Err.Description
+    End If
+  End Sub
 
-  Result = Excel.Run("'" & Workbook.Name & "'!" & Command, Args)
+  Private Sub OpenExcel()
+    On Error Resume Next
+    Set App = GetObject(, "Excel.Application")
 
-  If Err.Number <> 0 Then
-    PrintErr "Error #3: Failed to run command."
-    PrintErr Err.Description
+    If Err.Number <> 0 Then
+      Err.Clear
+      Set App = CreateObject("Excel.Application")
 
-    CloseWorkbook Workbook, WorkbookWasOpen
-    CloseExcel Excel, ExcelWasOpen
-    WScript.Quit 1
-  End If
+      If Err.Number <> 0 Then
+        Fail "Failed to open Excel: " & Err.Description
+      End If
+    Else
+      ExcelWasOpen = True
+    End If
+  End Sub
 
-  PrintLn Result
+  Private Sub OpenWorkbook(Path)
+    On Error Resume Next
+    Set Workbook = App.Workbooks(GetFilename(Path))
 
-  CloseWorkbook Workbook, WorkbookWasOpen
-  CloseExcel Excel, ExcelWasOpen
-End Sub
+    If Err.Number <> 0 Then
+      Err.Clear
+      Set Workbook = Excel.Workbooks.Open(Path)
 
-Function OpenExcel(ByRef Excel)
-  On Error Resume Next
-  Set Excel = GetObject(, "Excel.Application")
+      If Err.Number <> 0 Then
+        Fail "Failed to open workbook: " & Err.Description
+      End If
+    Else
+      WorkbookWasOpen = True
+    End If
+  End Sub
 
-  If Excel Is Nothing Or Err.Number <> 0 Then
-    Err.Clear
-
-    Set Excel = CreateObject("Excel.Application")
-    Excel.Visible = True
-    OpenExcel = False
-  Else
-    OpenExcel = True
-  End If
-End Function
-
-Sub CloseExcel(ByRef Excel, KeepExcelOpen)
-  If Not KeepExcelOpen And Not Excel Is Nothing Then
-    Excel.Quit
-  End If
-End Sub
-
-Function OpenWorkbook(Excel, Path, ByRef Workbook)
-  On Error Resume Next
-
-  Set Workbook = Excel.Workbooks(GetFilename(Path))
-
-  If Workbook Is Nothing Or Err.Number <> 0 Then
-    Err.Clear
-
-    Set Workbook = Excel.Workbooks.Open(Path)
-    OpenWorkbook = False
-  Else
-    OpenWorkbook = True
-  End If
-End Function
-
-Sub CloseWorkbook(ByRef Workbook, KeepWorkbookOpen)
-  If Not KeepWorkbookOpen And Not Workbook Is Nothing Then
-    Workbook.Close True
-  End If
-
-  Set Workbook = Nothing
-End Sub
+  Private Sub Class_Terminate
+    If Not WorkbookWasOpen And Not Workbook Is Nothing Then
+      Workbook.Close True
+      Set Workbook = Nothing
+    End If
+    If Not ExcelWasOpen And Not App Is Nothing Then
+      App.Quit
+      Set App = Nothing
+    End If
+  End Sub
+End Class
 
 ' General
 ' -------
@@ -126,12 +109,17 @@ Function GetFilename(Path)
   GetFilename = Parts(UBound(Parts))
 End Function
 
-Sub Print(Message)		
-  WScript.StdOut.Write Message		
+Sub Fail(Message)
+  PrintLn "{""success"":false,""errors"":[""" & Message &  """]}"
+  WScript.Quit 1
 End Sub
- 		
-Sub PrintLn(Message)		
-  WScript.Echo Message		
+
+Sub Print(Message)
+  WScript.StdOut.Write Message
+End Sub
+
+Sub PrintLn(Message)
+  WScript.Echo Message
 End Sub
 
 Sub PrintErr(Message)

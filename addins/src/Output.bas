@@ -9,7 +9,7 @@ Public Property Get Result() As String
     Parts.Add "warnings", Warnings
     Parts.Add "errors", Errors
     Parts.Add "success", Errors.Count = 0
-    
+
     Result = JsonConverter.ConvertToJson(Parts)
 End Property
 

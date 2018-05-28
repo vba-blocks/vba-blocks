@@ -2,6 +2,7 @@ typings
 lib
 dist
 tests/__fixtures__/project/build
+tests/.tmp
 addins/build
 
 # Ignore temporary Excel files

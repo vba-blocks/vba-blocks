@@ -26,34 +26,30 @@ const copy: (src: string, dest: string) => Promise<void> = copyFile
 
 export interface TmpOptions {
   dir?: string;
+  prefix?: string;
+  template?: string;
 }
 
 async function tmpFile(options: TmpOptions = {}): Promise<string> {
-  const { dir } = options;
+  const { dir, prefix = 'vba-blocks-', template } = options;
 
   return new Promise<string>((resolve, reject) => {
     // Defer requiring tmp as it adds process listeners that can cause warnings
-    require('tmp').file(
-      { prefix: 'vba-blocks-', dir },
-      (err: any, path: string) => {
-        if (err) return reject(err);
-        resolve(path);
-      }
-    );
+    require('tmp').file({ prefix, dir, template }, (err: any, path: string) => {
+      if (err) return reject(err);
+      resolve(path);
+    });
   });
 }
 
 async function tmpFolder(options: TmpOptions = {}): Promise<string> {
-  const { dir } = options;
+  const { dir, prefix = 'vba-blocks-', template } = options;
 
   return new Promise<string>((resolve, reject) => {
-    require('tmp').dir(
-      { prefix: 'vba-blocks-', dir },
-      (err: any, path: string) => {
-        if (err) return reject(err);
-        resolve(path);
-      }
-    );
+    require('tmp').dir({ prefix, dir, template }, (err: any, path: string) => {
+      if (err) return reject(err);
+      resolve(path);
+    });
   });
 }
 

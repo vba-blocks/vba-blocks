@@ -13,7 +13,7 @@ Public Function ImportGraph(Graph As Variant) As String
 
     Set Values = JsonConverter.ParseJson(Graph)
     Set Document = App.GetDocument(Values("file"))
-    
+
     Dim Src As Dictionary
     For Each Src In Values("src")
         Output.Messages.Add "src: " & Src("name") & ", " & Src("path")
@@ -34,7 +34,7 @@ Public Function ImportGraph(Graph As Variant) As String
 
     ImportGraph = Output.Result
     Exit Function
-    
+
 ErrorHandling:
 
     Output.Errors.Add Err.Number & ": " & Err.Description
@@ -66,10 +66,10 @@ Public Function ExportTo(Info As Variant) As String
         Case vbext_ct_Document
             Extension = ".cls"
         End Select
-    
+
         Dim Path As String
         Path = FileSystem.JoinPath(Staging, Component.Name & Extension)
-    
+
         Installer.Export Document.VBProject, Component.Name, Path, Overwrite:=True
     Next Component
 

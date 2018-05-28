@@ -42,7 +42,9 @@ export default [
     plugins: [
       resolve(),
       replace({
-        '%VERSION%': version
+        VERSION: version,
+        'DIR-ADDINS': '../../addins/build',
+        'DIR-RUN-SCRIPTS': '../../run-scripts'
       })
     ],
     treeshake: { pureExternalModules: true }
@@ -57,7 +59,13 @@ export default [
         preferBuiltins: true
       },
       external,
-      plugins: [resolve()],
+      plugins: [
+        resolve(),
+        replace({
+          'DIR-ADDINS': '../addins/build',
+          'DIR-RUN-SCRIPTS': '../run-scripts'
+        })
+      ],
       treeshake: { pureExternalModules: true }
     };
   }),
@@ -74,7 +82,9 @@ export default [
       plugins: [
         resolve(),
         replace({
-          'sat-solver': '../sat-solver'
+          'sat-solver': '../sat-solver',
+          'DIR-ADDINS': '../../addins/build',
+          'DIR-RUN-SCRIPTS': '../../run-scripts'
         })
       ],
       treeshake: { pureExternalModules: true }
