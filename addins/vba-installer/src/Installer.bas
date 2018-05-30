@@ -57,6 +57,22 @@ Public Sub Import(Project As Object, ComponentName As String, FullPath As String
                 "Existing component found. A module with the name """ & ModuleName & """ is already part of the project. " & _
                 "Use `Installer.Import(Project, ComponentName, FullPath, Overwrite:=True)` to overwrite an existing module."
         Else
+            ' vbext_ct_Document = 100
+            If ExistingComponent.Type = 100 Then
+                ' For ThisWorkbook and Sheets, can't remove and then import
+                ' Instead, overwrite with imported module
+                Dim ImportedComponent As Object
+                Set ImportedComponent = Project.VBComponents.Import(FullPath)
+                
+                ExistingComponent.CodeModule.DeleteLines 1, ExistingComponent.CodeModule.CountOfLines
+                If ImportedComponent.CodeModule.CountOfLines > 0 Then
+                    ExistingComponent.CodeModule.AddFromString ImportedComponent.CodeModule.Lines(1, ImportedComponent.CodeModule.CountOfLines)
+                End If
+                
+                Project.VBComponents.Remove ImportedComponent
+                Exit Sub
+            End If
+        
             Remove Project, ComponentName
         End If
     End If
@@ -227,7 +243,7 @@ End Sub
 
 ' (VBProject)
 Private Function VbaIsUnlocked(Project As Object) As Boolean
-    ' 0 = vbext_ProjectProtection.vbext_pp_none
+    ' vbext_ProjectProtection.vbext_pp_none = 0
     If Project.Protection = 0 Then
         VbaIsUnlocked = True
     End If
