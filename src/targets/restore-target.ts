@@ -1,6 +1,6 @@
 import { Project } from '../project';
 import { Target } from '../manifest';
-import { pathExists, copyFile, unixJoin } from '../utils';
+import { pathExists, copy, unixJoin } from '../utils';
 import { targetRestoreFailed } from '../errors';
 
 export default async function restoreTarget(project: Project, target: Target) {
@@ -10,7 +10,7 @@ export default async function restoreTarget(project: Project, target: Target) {
   if (!(await pathExists(backup))) return;
 
   try {
-    await copyFile(backup, file);
+    await copy(backup, file);
   } catch (err) {
     throw targetRestoreFailed(backup, file, err);
   }

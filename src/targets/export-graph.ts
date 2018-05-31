@@ -2,7 +2,7 @@ import { basename, extname, join } from 'path';
 import walk from 'walk-sync';
 import { Project } from '../project';
 import { Manifest, Source, Reference, Target } from '../manifest';
-import { pathExists, readJson, without } from '../utils';
+import { pathExists, readJson, unixJoin } from '../utils';
 
 const binary_extensions = ['.frx'];
 
@@ -35,6 +35,9 @@ export interface ExportGraph {
     added: Map<string, Reference>;
     removed: Set<Reference>;
   };
+
+  // path[]
+  target: string;
 }
 
 interface Details {
@@ -72,7 +75,9 @@ export async function createExportGraph(
   };
 
   // Load src and references from staging
-  const files = without(walk(staging, { directories: false }), 'project.json');
+  const files = walk(staging, { directories: false }).filter(file => {
+    return file !== 'project.json' && !file.startsWith('targets');
+  });
   const details = await readDetails(staging);
 
   // Load src, binaries, and references
@@ -178,7 +183,8 @@ export async function createExportGraph(
     name: details.name,
     src,
     binaries,
-    references
+    references,
+    target: unixJoin(staging, 'targets', target.type)
   };
 }
 

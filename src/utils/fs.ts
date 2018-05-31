@@ -1,5 +1,4 @@
 import { promisify } from 'util';
-import { copyFile } from 'fs';
 import { createHash } from 'crypto';
 import {
   pathExists,
@@ -9,7 +8,8 @@ import {
   ensureDirSync,
   emptyDir,
   move,
-  remove
+  remove,
+  copy
 } from 'fs-extra';
 import sanitizeFilename from 'sanitize-filename';
 import hash from './hash';
@@ -18,11 +18,6 @@ async function checksum(file: string, algorithm = 'sha256'): Promise<string> {
   const data = await readFile(file);
   return hash(data);
 }
-
-// Use built-in node copyFile, if available
-const copy: (src: string, dest: string) => Promise<void> = copyFile
-  ? promisify(copyFile)
-  : require('fs-extra').copy;
 
 export interface TmpOptions {
   dir?: string;
@@ -64,7 +59,7 @@ function sanitize(name: string): string {
 
 export {
   checksum,
-  copy as copyFile,
+  copy,
   ensureDir,
   ensureDirSync,
   emptyDir,

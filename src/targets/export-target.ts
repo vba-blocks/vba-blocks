@@ -1,12 +1,16 @@
 import { join, basename, extname, relative, dirname } from 'path';
 import dedent from 'dedent';
+import walk from 'walk-sync';
 import { Manifest, Target, Source } from '../manifest';
+import { Project } from '../project';
 import {
-  copyFile as _copyFile,
+  copy,
   unixJoin,
   unixPath,
   remove,
-  ensureDir
+  ensureDir,
+  unzip,
+  pathExists
 } from '../utils';
 import { ProjectInfo } from './build-target';
 import { Binary, createExportGraph, getName } from './export-graph';
@@ -20,16 +24,23 @@ export default async function exportTarget(
 ) {
   const { project, dependencies } = info;
 
+  // Extract target to staging directory
+  await extractTarget(project, target, staging);
+
   // Extract export graph from manifest, target, and files/references
   const graph = await createExportGraph(project, dependencies, target, staging);
+
+  const actions: Promise<void>[] = [];
+  const operations: string[] = [];
+
+  // Update target
+  await remove(target.path);
+  await copy(graph.target, target.path);
 
   // Update name
   // TODO
 
   // Update src
-  const actions: Promise<void>[] = [];
-  const operations: string[] = [];
-
   for (const [file, source] of graph.src.existing) {
     actions.push(copyFile(join(staging, file), source.path));
   }
@@ -100,9 +111,37 @@ export default async function exportTarget(
   await remove(staging);
 }
 
+export async function extractTarget(
+  project: Project,
+  target: Target,
+  staging: string
+) {
+  const src = join(project.paths.build, target.filename);
+  const dest = join(staging, 'targets', target.type);
+
+  if (!(await pathExists(src))) {
+    throw new Error(
+      `Could not find built target for type "${
+        target.type
+      }".\n(checked "${src}")`
+    );
+  }
+
+  await ensureDir(dest);
+  await unzip(src, dest);
+
+  // Remove compiled VBA from dest
+  const extracted = walk(dest, { directories: false });
+  const compiled = extracted
+    .filter(file => extname(file) === '.bin')
+    .map(file => join(dest, file));
+
+  await Promise.all(compiled.map(async file => await remove(file)));
+}
+
 async function copyFile(src: string, dest: string) {
   await ensureDir(dirname(dest));
-  await _copyFile(src, dest);
+  await copy(src, dest);
 }
 
 //
