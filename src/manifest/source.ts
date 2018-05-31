@@ -4,6 +4,7 @@ import { isString, unixJoin } from '../utils';
 export interface Source {
   name: string;
   path: string;
+  binary?: string;
   optional?: boolean;
   original?: string;
 }
@@ -27,10 +28,10 @@ export function parseSource(
   dir: string
 ): Source {
   if (isString(value)) value = { path: value };
-  const { path: relativePath, optional = false } = value;
+  const { path: relativePath, binary, optional = false } = value;
 
   ok(relativePath, `src "${name}" is missing path. ${EXAMPLE}`);
   const path = unixJoin(dir, relativePath);
 
-  return { name, path, optional };
+  return { name, path, binary, optional };
 }

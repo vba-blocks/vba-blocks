@@ -1,11 +1,7 @@
 import { join, basename, extname, relative, dirname } from 'path';
-import walk from 'walk-sync';
-import { Manifest, Target, Source, Reference, Dependency } from '../manifest';
-import { Project } from '../project';
+import dedent from 'dedent';
+import { Manifest, Target, Source } from '../manifest';
 import {
-  without,
-  pathExists,
-  readJson,
   copyFile as _copyFile,
   unixJoin,
   unixPath,
@@ -13,6 +9,9 @@ import {
   ensureDir
 } from '../utils';
 import { ProjectInfo } from './build-target';
+import { Binary, createExportGraph, getName } from './export-graph';
+
+const default_project_name = 'VBAProject';
 
 export default async function exportTarget(
   target: Target,
@@ -21,21 +20,11 @@ export default async function exportTarget(
 ) {
   const { project, dependencies } = info;
 
-  // Load src and references from staging
-  const files = without(
-    walk(staging, { directories: false }),
-    'references.json'
-  );
-  const references = await readReferences(staging);
-
   // Extract export graph from manifest, target, and files/references
-  const graph = await createExportGraph(
-    project,
-    dependencies,
-    target,
-    files,
-    references
-  );
+  const graph = await createExportGraph(project, dependencies, target, staging);
+
+  // Update name
+  // TODO
 
   // Update src
   const actions: Promise<void>[] = [];
@@ -50,11 +39,39 @@ export default async function exportTarget(
     const source: Source = { name, path };
 
     actions.push(copyFile(join(staging, file), path));
-    operations.push(addSrc(project.manifest, source));
+    operations.push(
+      addSrc(project.manifest, source, graph.binaries.added.get(source.name))
+    );
   }
   for (const source of graph.src.removed) {
     actions.push(remove(source.path));
     operations.push(removeSrc(project.manifest, source));
+  }
+
+  // Update binaries
+  for (const [file, binary] of graph.binaries.existing) {
+    const source = project.manifest.src.find(
+      source => source.name === binary.source.name
+    )!;
+    actions.push(copyFile(join(staging, file), source.binary!));
+  }
+  for (const [source_name, file] of graph.binaries.added) {
+    const path = unixJoin(project.manifest.dir, 'src', file);
+    actions.push(copyFile(join(staging, file), path));
+
+    const source_added = Array.from(graph.src.added).some(
+      source_path => getName(source_path) === source_name
+    );
+    if (!source_added) {
+      operations.push(addBinary(project.manifest, source_name, path));
+    }
+  }
+  for (const binary of graph.binaries.removed) {
+    actions.push(remove(binary.path));
+
+    if (!graph.src.removed.has(binary.source)) {
+      operations.push(removeBinary(project.manifest, binary));
+    }
   }
 
   // Update references
@@ -76,7 +93,7 @@ export default async function exportTarget(
       `The following changes are required in this ${type}'s vba-block.toml:`
     );
     for (const operation of operations) {
-      console.log(operation);
+      console.log(`\n${operation}`);
     }
   }
 
@@ -88,116 +105,43 @@ async function copyFile(src: string, dest: string) {
   await _copyFile(src, dest);
 }
 
-interface ExportGraph {
-  src: {
-    existing: Map<string, Source>;
-    added: Set<string>;
-    removed: Set<Source>;
-  };
-  references: {
-    existing: Set<Reference>;
-    added: Set<Reference>;
-    removed: Set<Reference>;
-  };
-}
+//
+// Operations
+//
 
-interface Details {
-  src: Map<string, Source>;
-  references: Set<Reference>;
-}
-
-async function createExportGraph(
-  project: Project,
-  dependencies: Manifest[],
-  target: Target,
-  files: string[],
-  exported_references: Reference[]
-): Promise<ExportGraph> {
-  const src = {
-    existing: new Map(),
-    added: new Set(),
-    removed: new Set()
-  };
-  const references = {
-    existing: new Set(),
-    added: new Set(),
-    removed: new Set()
-  };
-
-  const manifests = [project.manifest, ...dependencies];
-
-  // Load src and references
-  //
-  // 1. Sort based on from project/package or dependencies
-  // 2. Check if source file is in exported files
-  // 3. Find added files / references
-  const from_project: Details = { src: new Map(), references: new Set() };
-  const from_dependencies: Details = { src: new Map(), references: new Set() };
-
-  for (const manifest of manifests) {
-    const is_from_project = manifest === project.manifest;
-    for (const source of manifest.src) {
-      const name = basename(source.path);
-      if (is_from_project) {
-        if (!files.includes(name)) {
-          src.removed.add(source);
-        } else {
-          from_project.src.set(name, source);
-        }
-      } else {
-        from_dependencies.src.set(name, source);
-      }
-    }
-    for (const reference of manifest.references) {
-      if (is_from_project) {
-        if (!exported_references.includes(reference)) {
-          references.removed.add(reference);
-        } else {
-          from_project.references.add(reference);
-        }
-      } else {
-        from_dependencies.references.add(reference);
-      }
-    }
-  }
-
-  for (const file of files) {
-    if (from_dependencies.src.has(file)) {
-      continue;
-    } else if (from_project.src.has(file)) {
-      src.existing.set(file, from_project.src.get(file));
-    } else {
-      src.added.add(file);
-    }
-  }
-  for (const reference of exported_references) {
-    if (from_dependencies.references.has(reference)) {
-      continue;
-    } else if (from_project.references.has(reference)) {
-      references.existing.add(reference);
-    } else {
-      references.added.add(reference);
-    }
-  }
-
-  return {
-    src,
-    references
-  };
-}
-
-async function readReferences(staging: string): Promise<Reference[]> {
-  const path = join(staging, 'references.json');
-  if (!(await pathExists(path))) return [];
-
-  return await readJson(path);
-}
-
-function addSrc(manifest: Manifest, source: Source): string {
+function addSrc(manifest: Manifest, source: Source, binary?: string): string {
   const relative_path = unixPath(relative(manifest.dir, source.path));
-  return `Add \`${source.name} = "${relative_path}"\` to the [src] section`;
+  const binary_path =
+    binary &&
+    unixPath(relative(manifest.dir, join(manifest.dir, 'src', binary)));
+  const details = binary
+    ? `{ path = "${relative_path}", binary = "${binary_path}" }`
+    : `"${relative_path}"`;
+
+  return dedent`
+    Add the following to the [src] section:
+    ${source.name} = ${details}`;
 }
 
 function removeSrc(manifest: Manifest, source: Source): string {
   return `Remove \`${source.name}\` from the [src] section`;
+}
+
+function addBinary(manifest: Manifest, source: string, binary: string): string {
+  const relative_path = unixPath(relative(manifest.dir, binary));
+  return dedent`
+    Add the following to "${source}" in src:
+    binary = ${relative_path}
+    
+    Example:
+
+    a = "src/a.frm"
+    # becomes
+    a = { path = "src/a.frm", binary = "src/a.frx" }`;
+}
+
+function removeBinary(manifest: Manifest, binary: Binary): string {
+  return `Remove \`binary = ${binary.path}\` from "${
+    binary.source.name
+  }" in src`;
 }

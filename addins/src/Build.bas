@@ -41,6 +41,15 @@ ErrorHandling:
     ImportGraph = Output.Result
 End Function
 
+''
+' Export given file to the given staging directory
+'
+' @method ExportTo
+' @param {String} Info json value for file and staging
+' @param {String} Info.file absolute file path to document to export
+' @param {String} Info.staging absolute path to "staging" directory to export to
+' @return {String} json result value
+''
 Public Function ExportTo(Info As Variant) As String
     On Error GoTo ErrorHandling
 
@@ -53,25 +62,61 @@ Public Function ExportTo(Info As Variant) As String
     Set Document = App.GetDocument(Values("file"))
     Staging = Values("staging")
 
-    Dim Component As Object
+    ' Iterate through all components in document and export directly to staging
+    Dim Component As Object ' VBComponent
+    Dim Path As String
     For Each Component In Document.VBProject.VBComponents
         Dim Extension As String
         Select Case Component.Type
         Case vbext_ct_StdModule
             Extension = ".bas"
-        Case vbext_ct_ClassModule
+        Case vbext_ct_ClassModule, vbext_ct_Document
             Extension = ".cls"
         Case vbext_ct_MSForm
             Extension = ".frm"
-        Case vbext_ct_Document
-            Extension = ".cls"
+        Case Else
+            ' The only other component type for Excel is vbext_ct_ActiveXDesigner = 11
+            ' I'm not sure when this could occur, so just warn for now
+            Output.Warnings.Add "Unknown component type: " & Component.Type
         End Select
-
-        Dim Path As String
-        Path = FileSystem.JoinPath(Staging, Component.Name & Extension)
-
-        Installer.Export Document.VBProject, Component.Name, Path, Overwrite:=True
+        
+        If Extension <> "" Then
+            Path = FileSystem.JoinPath(Staging, Component.Name & Extension)
+            Installer.Export Document.VBProject, Component.Name, Path, Overwrite:=True
+        End If
     Next Component
+    
+    ' For "indirect" values (VBA project name and references)
+    ' export to project.json for post-processing by vba-blocks
+    Dim Project As New Dictionary
+    
+    Project("name") = Document.VBProject.Name
+    Set Project("references") = New Collection
+    
+    Dim Ref As Object ' Reference
+    Dim RefInfo As Dictionary
+    For Each Ref In Document.VBProject.References
+        If Not Ref.BuiltIn Then
+            Set RefInfo = New Dictionary
+            RefInfo("name") = Ref.Name
+            RefInfo("version") = Ref.Major & "." & Ref.Minor
+            RefInfo("guid") = Ref.Guid
+            RefInfo("major") = Ref.Major
+            RefInfo("minor") = Ref.Minor
+        
+            Project("references").Add RefInfo
+        End If
+    Next Ref
+    
+    Dim ProjectPath As String
+    Dim ProjectJson As String
+    
+    ProjectPath = FileSystem.JoinPath(Staging, "project.json")
+    ProjectJson = JsonConverter.ConvertToJson(Project)
+    
+    Open ProjectPath For Output As #1
+    Print #1, ProjectJson
+    Close #1
 
     ExportTo = Output.Result
     Exit Function
