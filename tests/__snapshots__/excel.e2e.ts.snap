@@ -2,27 +2,65 @@
 
 exports[`build 1`] = `
 Object {
-  "TODO": true,
+  "errors": Array [],
+  "messages": Array [],
+  "stderr": "",
+  "stdout": "{\\"success\\":true,\\"errors\\":[]}
+",
+  "success": true,
+  "warnings": Array [],
 }
 `;
 
 exports[`export 1`] = `
 Object {
   "build/e2e-empty.xlsm": "<TODO>",
-  "src/A.bas": "7530e3fbdb802143df3c9302dbf6a74b4542b30cd0fd0634796b8a65fddba45f",
-  "src/B.cls": "04f1372b93222974d1a64dc571241589fa3e09ec628506d647a22562bfa2d7f6",
-  "src/Sheet1.cls": "53279ec0e31ca2ec31267d871654588dcbda97343d3e2e6b2487fedda858c0ba",
-  "src/ThisWorkbook.cls": "ffc5d3e2a71c29a2c69fc82c77d3d11b2dbc3cc6111e3e0074b6af7e7e689639",
-  "targets/xlsm/[Content_Types].xml": "1201ce9d35181763181e983a4fc7a947695e8c8659eff83e0d47d39aef2f2d49",
+  "src/Class1.cls": "97a28c67ac87d519a8fe94c861c9cc3b9a0b64ca82c712b56a1f7f6bfe2bf97e",
+  "src/Sheet1.cls": "e5b1e411d21a1c90dfa698ec1758fc093db24cfa12676ee8336c8eb5c7e0c61a",
+  "src/Sheet2.cls": "d1b4d2a0ddf050f65b1b13c00101592df05cf1764cb4ce00d1908e2f3c430ac6",
+  "src/Sheet3.cls": "8142eb459170d258ae3cd18bc794db1cbc77864c5155cad0334005d7a7760a06",
+  "src/ThisWorkbook.cls": "2045d7fbf355365f35e2a81cde9c61cf0a23fa7023e82d6549231a592027517a",
+  "src/UserForm1.frm": "bdea1912fcb7ea513862954c50ef972a00498b093136209ec1da4cc31a7eb156",
+  "src/UserForm1.frx": "4c455414fbb252abd02766b973030323ce8b26c9cf026444c251c10a390ab47f",
+  "src/Validation.bas": "8821960b232abeacd6ac1d52dc8af880a81ea46f02fa02ad62ae88dacce13707",
+  "targets/xlsm/[Content_Types].xml": "482267b8dffa9fab0f6f8e6b7ba5ad8c72c447e5542d58c3c7bb6eabfc82de50",
   "targets/xlsm/_rels/.rels": "73e5a29f48d5ab979eeda062493bc7e679265c1344ef936978b8becec5549497",
-  "targets/xlsm/docProps/app.xml": "487796376309f7eed5ba21ce8a9f55395787862d8121c85cdb7258b128baa0f8",
-  "targets/xlsm/docProps/core.xml": "1d4e563a25803684e1973d771cc8393b0fb15ed7bbbd547a97daf6e5f3924e58",
-  "targets/xlsm/xl/_rels/workbook.xml.rels": "353383fbe90f202be596bdf0a86439c704d7024f4f8c19ebc9d06b42a341dba1",
-  "targets/xlsm/xl/sharedStrings.xml": "3dbe932e2d7a4c57b784cccc469ebd14b0a80e6efc8fa71bf2dfb498c746ed5e",
-  "targets/xlsm/xl/styles.xml": "f2608cf432cf5939abe03f4fc8545f59c8632dd50d2255ae89525652ab6cda07",
+  "targets/xlsm/docProps/app.xml": "59bcc1cc502614c92d24ce534d4bc82b40fe4c3e8b08f6401651b6c469e7b06f",
+  "targets/xlsm/docProps/core.xml": "fc27c4c2a069d2e775e910d8c726b673f69bc7f0ccb2a8a9d8aa20a0777398e1",
+  "targets/xlsm/xl/_rels/workbook.xml.rels": "008a27ccbdcbbafe369cac207fac4d78db36ee12d9c7fdef1d39a8f0526cc7fb",
+  "targets/xlsm/xl/sharedStrings.xml": "f101b4e8685b29eb94e82872dbfd30a4f821467c0aa45d5d5c41e9a5aa3a4017",
+  "targets/xlsm/xl/styles.xml": "02e6380738d05fcaa8da0b4f78a2fe96d15560970a37e96e5768e94fde516e09",
   "targets/xlsm/xl/theme/theme1.xml": "b16106f4229f6ece6d74426b3e73ff6a677df2908d2a06f76ef0329fa27c0282",
-  "targets/xlsm/xl/workbook.xml": "8e72e019326a2b3348c6865e66c248c751f99945dea6bdb53bca29366a3e0fa6",
-  "targets/xlsm/xl/worksheets/sheet1.xml": "4e256f9a068483eec8facf4a640938e507905642b5248a22d487b491786fa93f",
-  "vba-block.toml": "431281e01b25c7b649b7907d0c8fbce54819d089f77a716bef0c7d2de9490085",
+  "targets/xlsm/xl/workbook.xml": "fda03615d79fcf1f3e296d1a7adafbddeb73351ab233d0b6a9f4533e2457dcb7",
+  "targets/xlsm/xl/worksheets/sheet1.xml": "b8c9fc0fefb498523aa14ede2cdd0888b9df176b7290badcc70b593643c7da5b",
+  "targets/xlsm/xl/worksheets/sheet2.xml": "733ed91f69cf6d298ecb72560824878f666dd982e67069ee9ca3d3f2ed7d7582",
+  "targets/xlsm/xl/worksheets/sheet3.xml": "96c1a594b74004450943fc8789caa6593f4e80342e0240b5b7aeffa84d69dea2",
+  "vba-block.toml": "cf5d74923885f0741872bb1b7ededc2bd94f825c1f27715307e7c6389f26b4b5",
 }
+`;
+
+exports[`export 2`] = `
+"The following changes are required in this project's vba-block.toml:
+
+Add the following to the [src] section:
+Class1 = \\"src/Class1.cls\\"
+
+Add the following to the [src] section:
+Sheet1 = \\"src/Sheet1.cls\\"
+
+Add the following to the [src] section:
+Sheet2 = \\"src/Sheet2.cls\\"
+
+Add the following to the [src] section:
+Sheet3 = \\"src/Sheet3.cls\\"
+
+Add the following to the [src] section:
+ThisWorkbook = \\"src/ThisWorkbook.cls\\"
+
+Add the following to the [src] section:
+UserForm1 = { path = \\"src/UserForm1.frm\\", binary = \\"src/UserForm1.frx\\" }
+
+Add the following to the [src] section:
+Validation = \\"src/Validation.bas\\"
+"
 `;

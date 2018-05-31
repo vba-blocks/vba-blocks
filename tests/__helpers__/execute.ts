@@ -2,7 +2,8 @@ import { promisify } from 'util';
 import { join, resolve } from 'path';
 import { copy, remove, ensureDirSync } from 'fs-extra';
 import walkSync from 'walk-sync';
-import { checksum, tmpFolder, run as _run, RunResult } from '../../src/utils';
+import { checksum, tmpFolder, RunResult } from '../../src/utils';
+import { run as _run } from '../../';
 const exec = promisify(require('child_process').exec);
 
 const tmp_dir = join(__dirname, '../.tmp');
@@ -23,15 +24,17 @@ export async function setup(
   }
 }
 
-export async function execute(cwd: string, command: string) {
+export async function execute(
+  cwd: string,
+  command: string
+): Promise<{ stdout: string; stderr: string }> {
   const bin = resolve(__dirname, '../../dist/bin/vba-blocks');
-  const { stdout, stderr } = await exec(`${bin} ${command}`, { cwd });
-
-  if (stdout) console.log(stdout);
-  if (stderr) console.error(stderr);
+  const result = await exec(`${bin} ${command}`, { cwd });
 
   // Give Office time to clean up
   await wait();
+
+  return result;
 }
 
 const isBackup = /\.backup/g;
@@ -56,6 +59,8 @@ export async function readdir(
 
   return details;
 }
+
+export { RunResult } from '../../src/utils';
 
 export async function run(
   application: string,

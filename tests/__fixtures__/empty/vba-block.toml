@@ -1,7 +1,5 @@
-[package]
+[project]
 name = "e2e/empty"
-version = "0.0.0"
-authors = []
 
 [targets]
 xlsm = "targets/xlsm"

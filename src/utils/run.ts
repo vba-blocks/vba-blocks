@@ -51,7 +51,6 @@ export default async function run(
   let result;
   try {
     const { stdout, stderr } = await exec(command);
-
     result = toResult(stdout, stderr);
   } catch (err) {
     result = toResult(err.stdout, err.stderr, err);
@@ -78,18 +77,15 @@ export function toResult(
   try {
     info = JSON.parse(stdout);
   } catch (err) {
-    info = {
-      success: false,
-      messages: [],
-      warnings: [],
-      errors: []
-    };
+    info = { success: false };
   }
+
+  let { success, messages = [], warnings = [], errors = [] } = info;
 
   if (err) {
-    info.success = false;
-    info.errors.push(err.message);
+    success = false;
+    errors.push(err.message);
   }
 
-  return { ...info, stdout, stderr };
+  return { success, messages, warnings, errors, stdout, stderr };
 }

@@ -1,6 +1,12 @@
 import { join } from 'path';
 import { copy } from 'fs-extra';
-import { run, setup, execute, readdir } from '@vba-blocks/helpers/execute';
+import {
+  run,
+  RunResult,
+  setup,
+  execute,
+  readdir
+} from '@vba-blocks/helpers/execute';
 import { standard, empty } from '@vba-blocks/fixtures';
 
 jest.setTimeout(10000);
@@ -9,8 +15,7 @@ test('build', async () => {
   await setup(standard, 'build', async cwd => {
     await execute(cwd, 'build');
 
-    // const result = await validateBuild(cwd);
-    const result = await validateBuild(cwd);
+    const result = await validateBuild(cwd, 'e2e-standard.xlsm');
     expect(result).toMatchSnapshot();
   });
 });
@@ -28,16 +33,16 @@ test('export', async () => {
       );
 
       // 3. Export "empty" project
-      await execute(cwd, 'export xlsm');
+      const { stdout } = await execute(cwd, 'export xlsm');
 
       const result = await readdir(cwd);
       expect(result).toMatchSnapshot();
+      expect(stdout).toMatchSnapshot();
     });
   });
 });
 
-interface Result {}
-
-async function validateBuild(cwd): Promise<Result> {
-  return { TODO: true };
+async function validateBuild(cwd: string, target: string): Promise<RunResult> {
+  const file = join(cwd, 'build', target);
+  return await run('excel', file, 'Validation.Validate');
 }
