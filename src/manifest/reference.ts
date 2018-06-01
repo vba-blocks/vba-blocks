@@ -1,5 +1,5 @@
-import * as assert from 'assert';
 import { isString } from '../utils';
+import { manifestOk } from '../errors';
 
 export interface Reference {
   name: string;
@@ -32,11 +32,11 @@ export function parseReferences(value: any): Reference[] {
 export function parseReference(name: string, value: any): Reference {
   const { version, guid, optional = false } = value;
 
-  assert.ok(
+  manifestOk(
     isVersion(version),
     `Reference "${name}" has an invalid version "${version}". ${EXAMPLE}.`
   );
-  assert.ok(
+  manifestOk(
     isGuid(guid),
     `Reference "${name}" has an invalid guid "${guid}". ${EXAMPLE}'`
   );

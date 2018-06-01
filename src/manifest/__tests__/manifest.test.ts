@@ -50,30 +50,32 @@ test('throws for invalid sources', () => {
   expect(() => parseManifest(value, FIXTURES)).toThrow();
 });
 
-test('loads valid features', () => {
-  const value = {
-    ...BASE_MANIFEST,
-    features: {
-      default: ['a', 'b'],
-      a: { src: ['A'] },
-      b: { dependencies: ['B'] },
-      c: { references: ['C'] }
-    }
-  };
+// TODO #features
+// test('loads valid features', () => {
+//   const value = {
+//     ...BASE_MANIFEST,
+//     features: {
+//       default: ['a', 'b'],
+//       a: { src: ['A'] },
+//       b: { dependencies: ['B'] },
+//       c: { references: ['C'] }
+//     }
+//   };
 
-  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
-});
+//   expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
+// });
 
-test('throws for invalid features', () => {
-  let value: any = { ...BASE_MANIFEST, features: { a: { src: 'A' } } };
-  expect(() => parseManifest(value, FIXTURES)).toThrow();
+// TODO #features
+// test('throws for invalid features', () => {
+//   let value: any = { ...BASE_MANIFEST, features: { a: { src: 'A' } } };
+//   expect(() => parseManifest(value, FIXTURES)).toThrow();
 
-  value = { ...BASE_MANIFEST, features: { b: { dependencies: 'B' } } };
-  expect(() => parseManifest(value, FIXTURES)).toThrow();
+//   value = { ...BASE_MANIFEST, features: { b: { dependencies: 'B' } } };
+//   expect(() => parseManifest(value, FIXTURES)).toThrow();
 
-  value = { ...BASE_MANIFEST, features: { c: { references: 'C' } } };
-  expect(() => parseManifest(value, FIXTURES)).toThrow();
-});
+//   value = { ...BASE_MANIFEST, features: { c: { references: 'C' } } };
+//   expect(() => parseManifest(value, FIXTURES)).toThrow();
+// });
 
 test('loads valid dependencies', () => {
   const value = {

@@ -1,15 +1,25 @@
 import { join } from 'path';
-import { ok } from 'assert';
 import { parse as parseToml } from 'toml';
 import { pathExists, readFile, unixPath } from '../utils';
+import { manifestNotFound } from '../errors';
 import { Version } from './version';
 import { Source, parseSrc } from './source';
-import { Feature, parseFeatures } from './feature';
+// TODO #features
+// import { Feature, parseFeatures } from './feature';
 import { Dependency, parseDependencies } from './dependency';
 import { Reference, parseReferences } from './reference';
 import { Target, parseTargets } from './target';
+import { manifestOk } from '../errors';
 
-export { Version, Source, Feature, Dependency, Reference, Target };
+export {
+  Version,
+  Source,
+  // TODO #features
+  // Feature,
+  Dependency,
+  Reference,
+  Target
+};
 
 /**
  * @example
@@ -24,26 +34,18 @@ export { Version, Source, Feature, Dependency, Reference, Target };
  * B = { path = "src/b.cls" }
  * C = { path = "src/c.frm", optional = true }
  *
- * [features]
- * default = ["a"]
- *
- * a = { src = ["C"] }
- * b = { dependencies = ["dictionary"] }
- * c = { references = ["Scripting"] }
- *
  * [dependencies]
  * dictionary = "v1.4.1"
- * with-features = { version = "1.0.0", default-features = false, features = ["other"] }
+ * with-properties = { version = "1.0.0" }
  * from-path = { path = "packages/from-path" }
  * from-git-master = { git = "https://github.com/VBA-tools/VBA-Web.git" }
  * from-git-branch = { git = "https://github.com/VBA-tools/VBA-Web.git", branch = "beta" }
  * from-git-tag = { git = "https://github.com/VBA-tools/VBA-Web.git", tag = "v1.0.0" }
  * from-git-rev = { git = "https://github.com/VBA-tools/VBA-Web.git", rev = "a1b2c3d4" }
  *
- * [references.Scripting]
- * version = "1.0"
- * guid = "{420B2830-E718-11CF-893D-00A0C9054228}"
- * optional = true
+ * # [references.Scripting]
+ * # version = "1.0"
+ * # guid = "{420B2830-E718-11CF-893D-00A0C9054228}"
  *
  * [targets]
  * xlsm = "targets/xlsm"
@@ -72,9 +74,11 @@ export interface Manifest extends Snapshot {
   src: Source[];
   references: Reference[];
   targets: Target[];
-  features: Feature[];
-  defaultFeatures: string[];
   dir: string;
+
+  // TODO #features
+  // features: Feature[];
+  // defaultFeatures: string[];
 }
 
 const EXAMPLE = `Example vba-block.toml for a package (e.g. library to be shared):
@@ -84,7 +88,7 @@ const EXAMPLE = `Example vba-block.toml for a package (e.g. library to be shared
   version = "0.0.0"
   authors = ["..."]
 
-Example vba-block.toml for a project (e.g. workbook, document, etc.):
+Example vba-block.toml for a project (e.g. workbomanifestOk, document, etc.):
 
   [project]
   name = "my-project"
@@ -92,7 +96,7 @@ Example vba-block.toml for a project (e.g. workbook, document, etc.):
   authors = ["..."]`;
 
 export function parseManifest(value: any, dir: string): Manifest {
-  ok(
+  manifestOk(
     value && (value.package || value.project),
     `[package] or [project] is required, with name, version, and authors specified. ${EXAMPLE}`
   );
@@ -104,23 +108,25 @@ export function parseManifest(value: any, dir: string): Manifest {
     authors = value.project.authors || [];
     publish = false;
 
-    ok(name, `[project] name is a required field. ${EXAMPLE}`);
+    manifestOk(name, `[project] name is a required field. ${EXAMPLE}`);
   } else {
     name = value.package.name;
     version = value.package.version;
     authors = value.package.authors;
     publish = value.package.publish || false;
 
-    ok(name, `[package] name is a required field. ${EXAMPLE}`);
-    ok(version, `[package] version is a required field. ${EXAMPLE}`);
-    ok(authors, `[package] authors is a required field. ${EXAMPLE}`);
+    manifestOk(name, `[package] name is a required field. ${EXAMPLE}`);
+    manifestOk(version, `[package] version is a required field. ${EXAMPLE}`);
+    manifestOk(authors, `[package] authors is a required field. ${EXAMPLE}`);
   }
 
   const src = parseSrc(value.src || {}, dir);
-  const { features, defaultFeatures } = parseFeatures(value.features || {});
   const dependencies = parseDependencies(value.dependencies || {}, dir);
   const references = parseReferences(value.references || {});
   const targets = parseTargets(value.targets || {}, name, dir);
+
+  // TODO #features
+  // const { features, defaultFeatures } = parseFeatures(value.features || {});
 
   let pkg, project;
   if (value.project) {
@@ -135,19 +141,21 @@ export function parseManifest(value: any, dir: string): Manifest {
     package: pkg,
     project,
     src,
-    features,
-    defaultFeatures,
     dependencies,
     references,
     targets,
     dir
+
+    // TODO #features
+    // features,
+    // defaultFeatures,
   };
 }
 
 export async function loadManifest(dir: string): Promise<Manifest> {
   const file = join(dir, 'vba-block.toml');
   if (!(await pathExists(file))) {
-    throw new Error(`vba-blocks.toml not found in "${dir}"`);
+    throw manifestNotFound(dir);
   }
 
   const raw = await readFile(file);

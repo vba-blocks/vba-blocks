@@ -4,9 +4,12 @@ import { Registration } from './sources';
 
 export interface ErrorMessages {
   'unknown-command': { command: string };
+  'manifest-not-found': { dir: string };
+  'manifest-invalid': { message: string };
   'unsupported-source': { type: string };
   'dependency-not-found': { dependency: string; registry: string };
   'dependency-invalid-checksum': { registration: Registration };
+  'lockfile-write-failed': { file: string };
   'target-not-found': { target: Target };
   'target-is-open': { target: Target; path: string };
   'target-create-failed': { target: Target };
@@ -47,6 +50,14 @@ export const reporter: Reporter = {
 
         Try "vba-blocks --help" for a list of commands.`,
 
+      'manifest-not-found': ({ dir }) => dedent`
+        vba-blocks.toml not found in "${dir}".`,
+
+      'manifest-invalid': ({ message }) => dedent`
+        vba-blocks.toml is invalid:
+        
+        ${message}`,
+
       'unsupported-source': ({ type }) => dedent`
         ${type} dependencies are not supported.
 
@@ -61,6 +72,9 @@ export const reporter: Reporter = {
         The downloaded file signature for ${
           registration.id
         } does not match the signature in the registry.`,
+
+      'lockfile-write-failed': ({ file }) => dedent`
+        Failed to write lockfile to "${file}".`,
 
       'target-not-found': ({ target }) => dedent`
         Target "${target.name}" not found at "${target.path}"`,

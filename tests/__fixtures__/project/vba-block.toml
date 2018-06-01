@@ -12,21 +12,12 @@ b = { path = "src/b.cls", optional = true }
 path = "src/c.bas"
 optional = false
 
-[features]
-default = ["a", "b"]
-
-a = { src = ["b"] }
-b = { dependencies = ["dictionary"] }
-c = { references = ["scripting"] }
-
 [dependencies]
 dictionary = { version = "1.4.1", optional = true }
 
 [dependencies.web]
 git = "https://github.com/VBA-tools/VBA-Web"
 tag = "v4.1.3"
-default-features = false
-features = ["dictionary-scripting"]
 
 [references.Scripting]
 version = "1.0"

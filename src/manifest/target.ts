@@ -1,4 +1,4 @@
-import { ok } from 'assert';
+import { manifestOk } from '../errors';
 import { has, unixJoin, sanitize, isString } from '../utils';
 
 export type TargetType = 'xlsx' | 'xlsm' | 'xlam';
@@ -39,7 +39,10 @@ export function parseTarget(
   if (!has(value, 'name')) value = { name: pkgName, ...value };
   const { name, path: relativePath } = value;
 
-  ok(relativePath, `target of type "${type}" is missing path. ${EXAMPLE}`);
+  manifestOk(
+    relativePath,
+    `target of type "${type}" is missing path. ${EXAMPLE}`
+  );
 
   const path = unixJoin(dir, relativePath);
   const filename = `${sanitize(name)}.${type}`;

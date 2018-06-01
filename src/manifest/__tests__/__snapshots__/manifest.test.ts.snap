@@ -2,10 +2,8 @@
 
 exports[`load valid references 1`] = `
 Object {
-  "defaultFeatures": Array [],
   "dependencies": Array [],
   "dir": ".",
-  "features": Array [],
   "name": "package-name",
   "package": Object {
     "authors": Array [
@@ -34,57 +32,19 @@ Object {
 
 exports[`loads and parses manifest 1`] = `
 Object {
-  "defaultFeatures": Array [
-    "a",
-    "b",
-  ],
   "dependencies": Array [
     Object {
-      "defaultFeatures": true,
-      "features": Array [],
       "name": "dictionary",
-      "optional": true,
       "registry": "vba-blocks",
       "version": "1.4.1",
     },
     Object {
-      "defaultFeatures": false,
-      "features": Array [
-        "dictionary-scripting",
-      ],
       "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "web",
-      "optional": false,
       "tag": "v4.1.3",
     },
   ],
   "dir": ".",
-  "features": Array [
-    Object {
-      "dependencies": Array [],
-      "name": "a",
-      "references": Array [],
-      "src": Array [
-        "b",
-      ],
-    },
-    Object {
-      "dependencies": Array [
-        "dictionary",
-      ],
-      "name": "b",
-      "references": Array [],
-      "src": Array [],
-    },
-    Object {
-      "dependencies": Array [],
-      "name": "c",
-      "references": Array [
-        "scripting",
-      ],
-      "src": Array [],
-    },
-  ],
   "name": "testing",
   "package": Object {
     "authors": Array [
@@ -136,120 +96,43 @@ Object {
 
 exports[`loads valid dependencies 1`] = `
 Object {
-  "defaultFeatures": Array [],
   "dependencies": Array [
     Object {
-      "defaultFeatures": true,
-      "features": Array [],
       "name": "a",
-      "optional": false,
       "registry": "vba-blocks",
       "version": "^1.0.0",
     },
     Object {
-      "defaultFeatures": false,
-      "features": Array [
-        "a",
-        "b",
-      ],
       "name": "b",
-      "optional": true,
       "registry": "vba-blocks",
       "version": "^2.0.0",
     },
     Object {
-      "defaultFeatures": true,
-      "features": Array [],
       "name": "c",
-      "optional": false,
       "path": "packages/c",
     },
     Object {
       "branch": "master",
-      "defaultFeatures": true,
-      "features": Array [],
       "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "d",
-      "optional": false,
     },
     Object {
       "branch": "next",
-      "defaultFeatures": true,
-      "features": Array [],
       "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "e",
-      "optional": false,
     },
     Object {
-      "defaultFeatures": true,
-      "features": Array [],
       "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "f",
-      "optional": false,
       "tag": "v1.0.0",
     },
     Object {
-      "defaultFeatures": true,
-      "features": Array [],
       "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "g",
-      "optional": false,
       "rev": "a1b2c3d4",
     },
   ],
   "dir": ".",
-  "features": Array [],
-  "name": "package-name",
-  "package": Object {
-    "authors": Array [
-      "Tim Hall",
-    ],
-    "name": "package-name",
-    "publish": false,
-    "version": "1.0.0",
-  },
-  "project": undefined,
-  "references": Array [],
-  "src": Array [],
-  "targets": Array [],
-  "version": "1.0.0",
-}
-`;
-
-exports[`loads valid features 1`] = `
-Object {
-  "defaultFeatures": Array [
-    "a",
-    "b",
-  ],
-  "dependencies": Array [],
-  "dir": ".",
-  "features": Array [
-    Object {
-      "dependencies": Array [],
-      "name": "a",
-      "references": Array [],
-      "src": Array [
-        "A",
-      ],
-    },
-    Object {
-      "dependencies": Array [
-        "B",
-      ],
-      "name": "b",
-      "references": Array [],
-      "src": Array [],
-    },
-    Object {
-      "dependencies": Array [],
-      "name": "c",
-      "references": Array [
-        "C",
-      ],
-      "src": Array [],
-    },
-  ],
   "name": "package-name",
   "package": Object {
     "authors": Array [
@@ -269,10 +152,8 @@ Object {
 
 exports[`loads valid package metadata 1`] = `
 Object {
-  "defaultFeatures": Array [],
   "dependencies": Array [],
   "dir": ".",
-  "features": Array [],
   "name": "package-name",
   "package": Object {
     "authors": Array [
@@ -292,10 +173,8 @@ Object {
 
 exports[`loads valid sources 1`] = `
 Object {
-  "defaultFeatures": Array [],
   "dependencies": Array [],
   "dir": ".",
-  "features": Array [],
   "name": "package-name",
   "package": Object {
     "authors": Array [
@@ -331,10 +210,8 @@ Object {
 
 exports[`loads valid targets 1`] = `
 Object {
-  "defaultFeatures": Array [],
   "dependencies": Array [],
   "dir": ".",
-  "features": Array [],
   "name": "package-name",
   "package": Object {
     "authors": Array [

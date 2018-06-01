@@ -9,9 +9,11 @@ export function createManifest(options: any): Manifest {
     src = [],
     references = [],
     targets = [],
-    defaultFeatures = [],
-    features = [],
     dir = FIXTURES
+
+    // TODO #features
+    // defaultFeatures = [],
+    // features = [],
   } = options;
 
   const { name = 'testing', version = '0.0.0', authors = [], publish = false } =
@@ -27,12 +29,14 @@ export function createManifest(options: any): Manifest {
     package: pkg && { name, version, authors, publish },
     project: project && { name, version, authors, publish },
     src,
-    features,
-    defaultFeatures,
     dependencies,
     references,
     targets,
     dir
+
+    // TODO #features
+    // features,
+    // defaultFeatures,
   };
 }
 

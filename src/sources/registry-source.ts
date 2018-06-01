@@ -11,7 +11,7 @@ import {
   tmpFile
 } from '../utils/fs';
 import { clone, pull } from '../utils/git';
-import { Feature, Version } from '../manifest';
+import { Version } from '../manifest';
 import { Dependency, RegistryDependency } from '../manifest/dependency';
 import {
   Registration,

@@ -1,18 +1,37 @@
 import { loadProject, fetchDependencies } from '../project';
-import { BuildOptions, createBuildGraph, buildTarget } from '../targets';
+import { BuildOptions, buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
 
+/**
+ * Build
+ *
+ * 1. Load Project
+ *    a. Load Manifest
+ *    b. Load Workspace
+ *    c. Load Lockfile
+ *    d. Resolve Dependencies
+ * 2. Fetch Dependenices
+ * 3. Build targets
+ *    a. Create ProjectGraph
+ *    b. Transform ProjectGraph
+ *    c. Create binary
+ *    d. Stage ProjectGraph
+ *    e. Import ProjectGraph
+ * 4. Write Lockfile
+ */
 export default async function build(options: BuildOptions = {}) {
-  // Load and fetch project
+  // 1
   const project = await loadProject();
+
+  // 2
   const dependencies = await fetchDependencies(project);
 
-  // Create and build targets (sequentially to avoid contention issues)
+  // 3 (sequentially to avoid contention issues)
   for (const target of project.manifest.targets) {
     await buildTarget(target, { project, dependencies }, options);
   }
 
-  // On success, write lockfile (if necessary)
+  // 4 (if necessary)
   if (project.has_dirty_lockfile) {
     await writeLockfile(project.workspace.root.dir, project);
   }

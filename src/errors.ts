@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import { ok } from 'assert';
 import env from './env';
 import { isString, isObject } from './utils/is';
 
@@ -33,6 +34,15 @@ export class CliError extends Error {
 export const unknownCommand = (command: string) =>
   generateError('unknown-command', { command });
 
+export const manifestNotFound = (dir: string) =>
+  generateError('manifest-not-found', { dir });
+
+export const manifestInvalid = (message: string) =>
+  generateError('manifest-invalid', { message });
+
+export const manifestOk = (value: any, message: string) =>
+  ok(value, manifestInvalid(message));
+
 export const unsupportedSource = (type: string) =>
   generateError('unsupported-source', { type });
 
@@ -41,6 +51,9 @@ export const dependencyNotFound = (dependency: string, registry: string) =>
 
 export const dependencyInvalidChecksum = (registration: Registration) =>
   generateError('dependency-invalid-checksum', { registration });
+
+export const lockfileWriteFailed = (file: string, underlying: Error) =>
+  generateError('lockfile-write-failed', { file }, underlying);
 
 export const targetNotFound = (target: Target) =>
   generateError('target-not-found', { target });

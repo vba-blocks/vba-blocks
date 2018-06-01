@@ -1,4 +1,4 @@
-import { ok } from 'assert';
+import { manifestOk } from '../errors';
 import { isString, unixJoin } from '../utils';
 
 export interface Source {
@@ -30,8 +30,11 @@ export function parseSource(
   if (isString(value)) value = { path: value };
   const { path: relativePath, binary, optional = false } = value;
 
-  ok(relativePath, `src "${name}" is missing path. ${EXAMPLE}`);
+  manifestOk(relativePath, `src "${name}" is missing path. ${EXAMPLE}`);
   const path = unixJoin(dir, relativePath);
 
-  return { name, path, binary, optional };
+  const source: Source = { name, path, optional };
+  if (binary) source.binary = binary;
+
+  return source;
 }

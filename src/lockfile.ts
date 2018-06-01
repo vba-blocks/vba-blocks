@@ -14,6 +14,9 @@ import {
   toDependency
 } from './sources/registration';
 import { DependencyGraph, getRegistration } from './resolve';
+import { lockfileWriteFailed } from './errors';
+
+const debug = require('debug')('vba-blocks:lockfile');
 
 export interface Lockfile {
   workspace: {
@@ -37,7 +40,8 @@ export async function readLockfile(dir: string): Promise<Lockfile | null> {
     const toml = await readFile(file, 'utf8');
     return fromToml(toml, dir);
   } catch (err) {
-    // TODO Log error
+    debug('Error reading/parsing lockfile');
+    debug(err);
 
     return null;
   }
@@ -45,15 +49,21 @@ export async function readLockfile(dir: string): Promise<Lockfile | null> {
 
 /**
  * Write lockfile for project to given dir
+ *
+ * @throws lockfile-write-failed
  */
 export async function writeLockfile(
   dir: string,
   lockfile: Lockfile
 ): Promise<void> {
   const file = join(dir, 'vba-block.lock');
-  const toml = toToml(lockfile, dir);
 
-  return writeFile(file, toml);
+  try {
+    const toml = toToml(lockfile, dir);
+    await writeFile(file, toml);
+  } catch (err) {
+    throw lockfileWriteFailed(file, err);
+  }
 }
 
 // Check if lockfile is still valid for loaded workspace
@@ -62,10 +72,7 @@ export function isLockfileValid(
   lockfile: Lockfile,
   workspace: Workspace
 ): boolean {
-  // TODO Check features of project (specifically name and version)
-
-  if (!compareDependencies(workspace.root, lockfile.workspace.root))
-    return false;
+  if (!compareManifests(workspace.root, lockfile.workspace.root)) return false;
 
   if (lockfile.workspace.members.length !== workspace.members.length)
     return false;
@@ -76,7 +83,7 @@ export function isLockfileValid(
   for (const member of lockfile.workspace.members) {
     const currentMember = byName[member.name];
     if (!currentMember) return false;
-    if (!compareDependencies(currentMember, member)) return false;
+    if (!compareManifests(currentMember, member)) return false;
   }
 
   return true;
@@ -245,6 +252,20 @@ function getDependency(id: string, byName: DependencyByName): Dependency {
   ok(dependency, `Package not found in lockfile, "${id}"`);
 
   return dependency!;
+}
+
+/**
+ * Compare features between current user manifest and lockfile manifest
+ *
+ * - name
+ * - version
+ * - dependencies
+ */
+function compareManifests(current: Snapshot, locked: Snapshot): boolean {
+  if (current.name !== locked.name) return false;
+  if (current.version !== locked.version) return false;
+
+  return compareDependencies(current, locked);
 }
 
 // Compare dependencies between current user manifest and lockfile manifest

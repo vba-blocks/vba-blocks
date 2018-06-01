@@ -8,7 +8,6 @@ import {
 const snapshot = {
   name: 'a',
   version: '1.0.0',
-  features: [],
   dependencies: []
 };
 

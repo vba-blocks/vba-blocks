@@ -23,41 +23,26 @@ export interface Project {
   has_dirty_lockfile: boolean;
 }
 
-export interface LoadOptions {
-  manifests?: boolean;
-}
-
 /**
- * Load project, starting at given dir
+ * Load project from given directory / cwd
  *
- * - Loads manifest at given dir
- * - Loads workspace from that manifest
- * - Loads config
- * - Loads packages (with lockfile)
+ * 1. Load manifest in dir
+ * 2. Load workspace from manifest
+ * 3. Load lockfile
+ * 4. Resolve dependencies
  */
-export async function loadProject(options?: LoadOptions): Promise<Project>;
-export async function loadProject(
-  dir?: string | object,
-  options?: LoadOptions
-): Promise<Project> {
-  if (!isString(dir)) {
-    options = dir;
-    dir = env.cwd;
-  }
-  const include_manifest = options ? !!options.manifests : false;
-
+export async function loadProject(dir: string = env.cwd): Promise<Project> {
   const manifest = await loadManifest(dir);
-  const workspace = await loadWorkspace(manifest);
 
   const config = await loadConfig();
+  const workspace = await loadWorkspace(manifest);
   const lockfile = await readLockfile(workspace.root.dir);
-  const has_dirty_lockfile = !lockfile || !isLockfileValid(lockfile, workspace);
 
   // Resolve packages from lockfile or from sources
-  const packages =
-    lockfile && !has_dirty_lockfile
-      ? lockfile.packages
-      : await resolve(config, workspace, lockfile ? lockfile.packages : []);
+  const has_dirty_lockfile = !lockfile || !isLockfileValid(lockfile, workspace);
+  const packages = !has_dirty_lockfile
+    ? lockfile!.packages
+    : await resolve(config, workspace, lockfile ? lockfile.packages : []);
 
   const paths = {
     root: workspace.root.dir,

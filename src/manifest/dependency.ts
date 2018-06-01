@@ -1,14 +1,16 @@
-import { ok } from 'assert';
 import { satisfies as satisfiesSemver } from 'semver';
 import { Version } from './version';
 import { isString, has, unixJoin } from '../utils';
 import { Registration } from '../sources';
+import { manifestOk } from '../errors';
 
 export interface DependencyDetails {
   name: string;
-  defaultFeatures?: boolean;
-  features?: string[];
-  optional?: boolean;
+
+  // TODO #features
+  // defaultFeatures?: boolean;
+  // features?: string[];
+  // optional?: boolean;
 }
 
 export interface RegistryDependency extends DependencyDetails {
@@ -41,9 +43,7 @@ const EXAMPLE = `Example vba-block.toml:
   g = { git = "https://github.com/author/g", rev = "a1b2c3d4" }
 
   [dependencies.h]
-  version = "^2.0.0"
-  default-features = false
-  features ["a", "b"]`;
+  version = "^2.0.0"`;
 
 export function parseDependencies(value: any, dir: string): Dependency[] {
   return Object.entries(value).map(([name, value]) =>
@@ -59,9 +59,10 @@ export function parseDependency(
   if (isString(value)) value = { version: value };
 
   const {
-    features = [],
-    'default-features': defaultFeatures = true,
-    optional = false,
+    // TODO #features
+    // features = [],
+    // 'default-features': defaultFeatures = true,
+    // optional = false,
     registry = 'vba-blocks',
     version,
     path,
@@ -70,24 +71,25 @@ export function parseDependency(
     branch = 'master',
     rev
   }: {
-    features?: string[];
-    'default-features'?: boolean;
-    optional?: boolean;
+    // TODO #features
+    // features?: string[];
+    // 'default-features'?: boolean;
+    // optional?: boolean;
     registry?: string;
     version?: string;
     path?: string;
     git?: string;
     tag?: string;
     branch?: string;
-    rev: string;
+    rev?: string;
   } = value;
 
-  ok(
+  manifestOk(
     version || path || git,
     `Invalid dependency "${name}", no version, path, or git specified. ${EXAMPLE}`
   );
 
-  const details = { name, defaultFeatures, features, optional };
+  const details = { name };
 
   if (version) {
     return { ...details, registry, version };
