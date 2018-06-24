@@ -1,0 +1,298 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should diff build graph 1`] = `
+Object {
+  "components": Object {
+    "added": Array [
+      Component {
+        "binary": undefined,
+        "code": "Attribute VB_Name = \\"added\\"
+' added
+",
+        "metadata": Object {
+          "manifest": undefined,
+          "source": Object {
+            "name": "added",
+            "path": "added.bas",
+          },
+        },
+        "type": "module",
+      },
+    ],
+    "dependencies": Array [
+      Component {
+        "binary": undefined,
+        "code": "Attribute VB_Name = \\"a\\"
+' a
+",
+        "metadata": Object {
+          "manifest": Object {
+            "dependencies": Array [
+              Object {
+                "name": "d",
+                "registry": "vba-blocks",
+                "version": "^2.0.0",
+              },
+            ],
+            "dir": "tests/__fixtures__/sources/a/v1-2-0",
+            "name": "a",
+            "package": Object {
+              "authors": Array [],
+              "name": "a",
+              "publish": false,
+              "version": "1.2.0",
+            },
+            "project": undefined,
+            "references": Array [],
+            "src": Array [
+              Object {
+                "name": "a",
+                "optional": false,
+                "path": "tests/__fixtures__/sources/a/a.bas",
+              },
+            ],
+            "targets": Array [],
+            "version": "1.2.0",
+          },
+          "source": Object {
+            "name": "a",
+            "optional": false,
+            "path": "tests/__fixtures__/sources/a/a.bas",
+          },
+        },
+        "type": "module",
+      },
+      Component {
+        "binary": undefined,
+        "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"b\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+' b
+",
+        "metadata": Object {
+          "manifest": Object {
+            "dependencies": Array [
+              Object {
+                "name": "c",
+                "registry": "vba-blocks",
+                "version": "^0.1.5",
+              },
+            ],
+            "dir": "tests/__fixtures__/sources/b/v1-1-0",
+            "name": "b",
+            "package": Object {
+              "authors": Array [],
+              "name": "b",
+              "publish": false,
+              "version": "1.1.0",
+            },
+            "project": undefined,
+            "references": Array [],
+            "src": Array [
+              Object {
+                "name": "b",
+                "optional": false,
+                "path": "tests/__fixtures__/sources/b/b.cls",
+              },
+            ],
+            "targets": Array [],
+            "version": "1.1.0",
+          },
+          "source": Object {
+            "name": "b",
+            "optional": false,
+            "path": "tests/__fixtures__/sources/b/b.cls",
+          },
+        },
+        "type": "class",
+      },
+      Component {
+        "binary": undefined,
+        "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"d\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+' d
+",
+        "metadata": Object {
+          "manifest": Object {
+            "dependencies": Array [
+              Object {
+                "name": "f",
+                "registry": "vba-blocks",
+                "version": "^2",
+              },
+            ],
+            "dir": "tests/__fixtures__/sources/d/v2-0-0",
+            "name": "d",
+            "package": Object {
+              "authors": Array [],
+              "name": "d",
+              "publish": false,
+              "version": "2.0.0",
+            },
+            "project": undefined,
+            "references": Array [],
+            "src": Array [
+              Object {
+                "name": "d",
+                "optional": false,
+                "path": "tests/__fixtures__/sources/d/d.cls",
+              },
+            ],
+            "targets": Array [],
+            "version": "2.0.0",
+          },
+          "source": Object {
+            "name": "d",
+            "optional": false,
+            "path": "tests/__fixtures__/sources/d/d.cls",
+          },
+        },
+        "type": "class",
+      },
+      Component {
+        "binary": undefined,
+        "code": "Attribute VB_Name = \\"f\\"
+' f
+",
+        "metadata": Object {
+          "manifest": Object {
+            "dependencies": Array [
+              Object {
+                "name": "g",
+                "registry": "vba-blocks",
+                "version": "^1",
+              },
+            ],
+            "dir": "tests/__fixtures__/sources/f/v2-0-0",
+            "name": "f",
+            "package": Object {
+              "authors": Array [],
+              "name": "f",
+              "publish": false,
+              "version": "2.0.0",
+            },
+            "project": undefined,
+            "references": Array [],
+            "src": Array [
+              Object {
+                "name": "f",
+                "optional": false,
+                "path": "tests/__fixtures__/sources/f/f.bas",
+              },
+            ],
+            "targets": Array [],
+            "version": "2.0.0",
+          },
+          "source": Object {
+            "name": "f",
+            "optional": false,
+            "path": "tests/__fixtures__/sources/f/f.bas",
+          },
+        },
+        "type": "module",
+      },
+      Component {
+        "binary": undefined,
+        "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"g\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed = True
+' g
+",
+        "metadata": Object {
+          "manifest": Object {
+            "dependencies": Array [],
+            "dir": "tests/__fixtures__/sources/g/v1-0-0",
+            "name": "g",
+            "package": Object {
+              "authors": Array [],
+              "name": "g",
+              "publish": false,
+              "version": "1.0.0",
+            },
+            "project": undefined,
+            "references": Array [],
+            "src": Array [
+              Object {
+                "name": "g",
+                "optional": false,
+                "path": "tests/__fixtures__/sources/g/g.cls",
+              },
+            ],
+            "targets": Array [],
+            "version": "1.0.0",
+          },
+          "source": Object {
+            "name": "g",
+            "optional": false,
+            "path": "tests/__fixtures__/sources/g/g.cls",
+          },
+        },
+        "type": "class",
+      },
+      Component {
+        "binary": undefined,
+        "code": "Attribute VB_Name = \\"c\\"
+' c
+",
+        "metadata": Object {
+          "manifest": Object {
+            "dependencies": Array [],
+            "dir": "tests/__fixtures__/sources/c/v0-1-6",
+            "name": "c",
+            "package": Object {
+              "authors": Array [],
+              "name": "c",
+              "publish": false,
+              "version": "0.1.6",
+            },
+            "project": undefined,
+            "references": Array [],
+            "src": Array [
+              Object {
+                "name": "c",
+                "optional": false,
+                "path": "tests/__fixtures__/sources/c/c.bas",
+              },
+            ],
+            "targets": Array [],
+            "version": "0.1.6",
+          },
+          "source": Object {
+            "name": "c",
+            "optional": false,
+            "path": "tests/__fixtures__/sources/c/c.bas",
+          },
+        },
+        "type": "module",
+      },
+    ],
+    "existing": Array [],
+    "removed": Array [],
+  },
+  "references": Object {
+    "added": Array [],
+    "dependencies": Array [],
+    "existing": Array [],
+    "removed": Array [],
+  },
+}
+`;

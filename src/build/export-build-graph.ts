@@ -1,8 +1,10 @@
-import { Manifest } from '../manifest';
+import dedent from 'dedent';
+import { join, relative } from 'path';
+import { Manifest, Source } from '../manifest';
 import { Project } from '../project';
 import { BuildGraph } from './build-graph';
 import { diffBuildGraph, Changeset } from './diff-build-graph';
-import { parallel, writeFile, remove } from '../utils';
+import { parallel, writeFile, remove, unixPath } from '../utils';
 import env from '../env';
 import { Component } from './component';
 
@@ -12,6 +14,7 @@ export default async function exportBuildGraph(
   graph: BuildGraph
 ) {
   const changeset = diffBuildGraph(project, dependencies, graph);
+  const operations: string[] = [];
 
   // TODO update name in manifest
 
@@ -24,7 +27,7 @@ export default async function exportBuildGraph(
     async component => {
       await writeComponent(component);
 
-      // TODO add to manifest
+      operations.push(addSrc(project.manifest, component));
     },
     {
       progress: env.reporter.progress('Add src')
@@ -36,7 +39,7 @@ export default async function exportBuildGraph(
     async source => {
       await remove(source.path);
 
-      // TODO remove from manifest
+      operations.push(removeSrc(project.manifest, source));
     },
     {
       progress: env.reporter.progress('Remove src')
@@ -52,6 +55,16 @@ export default async function exportBuildGraph(
   for (const reference of changeset.references.removed) {
     // TODO remove from manifest
   }
+
+  if (operations.length) {
+    const type = project.manifest.package ? 'package' : 'project';
+    console.log(
+      `The following changes are required in this ${type}'s vba-block.toml:`
+    );
+    for (const operation of operations) {
+      console.log(`\n${operation}`);
+    }
+  }
 }
 
 async function writeComponent(component: Component) {
@@ -61,4 +74,25 @@ async function writeComponent(component: Component) {
   if (component.binary_path) {
     await writeFile(component.binary_path, component.binary);
   }
+}
+
+function addSrc(manifest: Manifest, component: Component): string {
+  const source = component.metadata.source!;
+  const relative_path = unixPath(relative(manifest.dir, source.path));
+  const binary_path =
+    component.binary_path &&
+    unixPath(
+      relative(manifest.dir, join(manifest.dir, 'src', component.binary_path))
+    );
+  const details = binary_path
+    ? `{ path = ${relative_path}", binary = "${binary_path}" }`
+    : `"${relative_path}"`;
+
+  return dedent`
+    Add the following to the [src] section:
+    ${component.name} = ${details}`;
+}
+
+function removeSrc(manifest: Manifest, source: Source): string {
+  return `Remove \`${source.name}\` from the [src] section`;
 }
