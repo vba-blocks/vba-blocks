@@ -1,8 +1,8 @@
 import resolve from '../';
 import { Manifest } from '../../manifest';
 import { Workspace } from '../../workspace';
-import { getConfig } from '@vba-blocks/helpers';
-import * as workspaces from '@vba-blocks/fixtures/workspaces';
+import { getConfig } from '../../../tests/__helpers__';
+import * as workspaces from '../../../tests/__fixtures__/workspaces';
 
 test('solves simple tree', async () => {
   const config = getConfig();

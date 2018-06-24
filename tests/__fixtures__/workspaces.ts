@@ -1,4 +1,4 @@
-import { createWorkspace } from '@vba-blocks/helpers';
+import { createWorkspace } from '../__helpers__';
 import * as manifests from './manifests';
 
 export const simple = createWorkspace(manifests.simple);

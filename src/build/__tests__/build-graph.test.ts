@@ -1,5 +1,5 @@
-import { resolveProject } from '@vba-blocks/helpers';
-import { complex as project } from '@vba-blocks/fixtures/projects';
+import { resolveProject } from '../../../tests/__helpers__';
+import { complex as project } from '../../../tests/__fixtures__/projects';
 import { loadBuildGraph } from '../build-graph';
 import { fetchDependencies } from '../../project';
 

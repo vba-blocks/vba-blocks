@@ -1,13 +1,7 @@
 import { join } from 'path';
 import { copy } from 'fs-extra';
-import {
-  run,
-  RunResult,
-  setup,
-  execute,
-  readdir
-} from '@vba-blocks/helpers/execute';
-import { standard, empty } from '@vba-blocks/fixtures';
+import { run, RunResult, setup, execute, readdir } from './__helpers__/execute';
+import { standard, empty } from './__fixtures__';
 
 jest.setTimeout(20000);
 

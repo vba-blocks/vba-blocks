@@ -1,7 +1,7 @@
 import env from '../../env';
 import { loadBuildGraph } from '../build-graph';
-import { resolveProject, prepareStaging } from '@vba-blocks/helpers';
-import { simple as project } from '@vba-blocks/fixtures/projects';
+import { resolveProject, prepareStaging } from '../../../tests/__helpers__';
+import { simple as project } from '../../../tests/__fixtures__/projects';
 
 import { stageBuildGraph, ImportGraph } from '../stage-build-graph';
 import { fetchDependencies } from '../../project';

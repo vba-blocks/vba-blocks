@@ -2,8 +2,8 @@ import { join, relative } from 'path';
 import { unixPath } from '../../utils';
 import { Manifest, parseManifest, loadManifest } from '../';
 import { isPathDependency } from '../dependency';
-import { dir as FIXTURES } from '@vba-blocks/fixtures';
-import { toThrow } from '@vba-blocks/helpers';
+import { dir as FIXTURES } from '../../../tests/__fixtures__';
+import { toThrow } from '../../../tests/__helpers__';
 
 const BASE_MANIFEST = {
   package: { name: 'package-name', version: '1.0.0', authors: ['Tim Hall'] }

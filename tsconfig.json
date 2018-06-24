@@ -9,12 +9,13 @@
     "rootDir": "src",
     "target": "es2018",
     "baseUrl": "./",
-    "paths": {
-      "@vba-blocks/helpers*": ["tests/__helpers__*"],
-      "@vba-blocks/fixtures*": ["tests/__fixtures__*"]
-    },
     "lib": ["es2017"]
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "typings", "src/**/__mocks__/*", "src/**/__tests__/*"]
+  "exclude": [
+    "node_modules",
+    "typings",
+    "src/**/__mocks__/*",
+    "src/**/__tests__/*"
+  ]
 }

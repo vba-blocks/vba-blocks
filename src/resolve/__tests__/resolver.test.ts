@@ -1,4 +1,4 @@
-import { getConfig } from '@vba-blocks/helpers';
+import { getConfig } from '../../../tests/__helpers__';
 import Resolver from '../resolver';
 
 const dependency = {

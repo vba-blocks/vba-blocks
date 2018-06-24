@@ -1,7 +1,7 @@
 import { join, relative } from 'path';
 import { Source, Registration } from '../../src/sources';
 import { Dependency } from '../../src/manifest';
-import { sources } from '@vba-blocks/fixtures';
+import { sources } from '../__fixtures__';
 import { unixPath } from '../../src/utils';
 
 const source = 'registry+vba-blocks#<hash>';

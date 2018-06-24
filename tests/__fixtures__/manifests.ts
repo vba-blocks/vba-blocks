@@ -1,4 +1,4 @@
-import { createManifest } from '@vba-blocks/helpers';
+import { createManifest } from '../__helpers__';
 
 export const simple = createManifest({
   project: { name: 'simple-manifest' },
