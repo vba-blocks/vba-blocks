@@ -12,9 +12,9 @@ import { writeLockfile } from '../lockfile';
  *    d. Resolve Dependencies
  * 2. Fetch Dependenices
  * 3. Build targets
- *    a. Create ProjectGraph
- *    b. Transform ProjectGraph
- *    c. Create binary
+ *    a. Create binary
+ *    b. Create ProjectGraph
+ *    c. Transform ProjectGraph
  *    d. Stage ProjectGraph
  *    e. Import ProjectGraph
  * 4. Write Lockfile

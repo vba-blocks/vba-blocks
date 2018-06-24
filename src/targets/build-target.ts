@@ -1,12 +1,24 @@
-import { pathExists } from '../utils/fs';
 import { Project } from '../project';
 import { Manifest, Target } from '../manifest';
-import { targetNotFound, targetImportFailed } from '../errors';
-import { BuildGraph } from './build-graph';
-import backupTarget from './backup-target';
-import createTarget from './create-target';
-import importTarget from './import-target';
-import restoreTarget from './restore-target';
+import {
+  targetNotFound,
+  targetImportFailed,
+  targetIsOpen,
+  targetCreateFailed,
+  targetRestoreFailed
+} from '../errors';
+import { importGraph } from '../addin';
+import { loadBuildGraph, stageBuildGraph } from '../build';
+import {
+  pathExists,
+  ensureDir,
+  remove,
+  move,
+  unixJoin,
+  emptyDir,
+  copy,
+  zip
+} from '../utils';
 
 export interface BuildOptions {
   addin?: string;
@@ -17,6 +29,14 @@ export interface ProjectInfo {
   dependencies: Manifest[];
 }
 
+/**
+ * Build target:
+ *
+ * 1. Create fresh target in staging
+ * 2. Import project
+ * 3. Backup previously built target
+ * 4. Move built target to build
+ */
 export default async function buildTarget(
   target: Target,
   info: ProjectInfo,
@@ -28,13 +48,108 @@ export default async function buildTarget(
     throw targetNotFound(target);
   }
 
-  await backupTarget(project, target);
-  await createTarget(project, target);
+  // Build fresh target in staging directory
+  const staged = await createTarget(project, target);
+  await importTarget(target, info, staged, options);
 
+  // Backup and move from staging to build directory
   try {
-    await importTarget(target, info, options);
+    await backupTarget(project, target);
+
+    const dest = unixJoin(project.paths.build, target.filename);
+    await move(staged, dest);
   } catch (err) {
     await restoreTarget(project, target);
+    throw err;
+  } finally {
+    await remove(staged);
+  }
+}
+
+/**
+ * Create target binary
+ */
+export async function createTarget(
+  project: Project,
+  target: Target
+): Promise<string> {
+  const file = unixJoin(project.paths.staging, target.filename);
+
+  try {
+    await ensureDir(project.paths.staging);
+    await zip(target.path, file);
+  } catch (err) {
+    throw targetCreateFailed(target, err);
+  }
+
+  return file;
+}
+
+/**
+ * Import project into target
+ *
+ * 1. Create "import" staging directory
+ * 2. Load build graph for project
+ * 3. Stage build graph
+ * 4. Import staged build graph
+ */
+export async function importTarget(
+  target: Target,
+  info: ProjectInfo,
+  file: string,
+  options: BuildOptions = {}
+) {
+  const { project, dependencies } = info;
+
+  const staging = unixJoin(project.paths.staging, 'import');
+  await ensureDir(staging);
+  await emptyDir(staging);
+
+  const build_graph = await loadBuildGraph(project, dependencies);
+  const import_graph = await stageBuildGraph(build_graph, staging);
+
+  try {
+    await importGraph(project, target, import_graph, file, options);
+  } catch (err) {
+    await remove(staging);
     throw targetImportFailed(target, err);
+  }
+}
+
+/**
+ * Backup previously built target (if available)
+ *
+ * - Removes previous backup (if found)
+ * - Attempts move, if that fails, it is assumed that the file is open
+ */
+export async function backupTarget(project: Project, target: Target) {
+  const backup = unixJoin(project.paths.backup, target.filename);
+  const file = unixJoin(project.paths.build, target.filename);
+
+  if (await pathExists(backup)) await remove(backup);
+  if (await pathExists(file)) {
+    await ensureDir(project.paths.backup);
+
+    try {
+      await move(file, backup);
+    } catch (err) {
+      throw targetIsOpen(target, file);
+    }
+  }
+}
+
+/**
+ * Restore previously built target (if available)
+ */
+export async function restoreTarget(project: Project, target: Target) {
+  const backup = unixJoin(project.paths.backup, target.filename);
+  const file = unixJoin(project.paths.build, target.filename);
+
+  if (!(await pathExists(backup))) return;
+
+  try {
+    await copy(backup, file);
+  } catch (err) {
+    throw targetRestoreFailed(backup, file, err);
   }
 }

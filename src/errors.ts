@@ -52,6 +52,9 @@ export const dependencyNotFound = (dependency: string, registry: string) =>
 export const dependencyInvalidChecksum = (registration: Registration) =>
   generateError('dependency-invalid-checksum', { registration });
 
+export const buildInvalid = (message: string) =>
+  generateError('build-invalid', { message });
+
 export const lockfileWriteFailed = (file: string, underlying: Error) =>
   generateError('lockfile-write-failed', { file }, underlying);
 
@@ -83,6 +86,9 @@ export const resolveFailed = (details?: string) => {
 
   return new CliError(formatted, { code });
 };
+
+export const unrecognizedComponent = (path: string) =>
+  generateError('unrecognized-component', { path });
 
 export const runScriptNotFound = (path: string) =>
   generateError('run-script-not-found', { path });

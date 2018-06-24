@@ -9,9 +9,9 @@ import {
 } from '@vba-blocks/helpers/execute';
 import { standard, empty } from '@vba-blocks/fixtures';
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
-test('build', async () => {
+test.only('build', async () => {
   await setup(standard, 'build', async cwd => {
     await execute(cwd, 'build');
 

@@ -13,7 +13,7 @@ import {
   pathExists
 } from '../utils';
 import { ProjectInfo } from './build-target';
-import { Binary, createExportGraph, getName } from './export-graph';
+import { Binary, createExportGraph, getName } from '../build/export-graph';
 
 const default_project_name = 'VBAProject';
 

@@ -36,7 +36,7 @@ export async function resolveProject(project: Project) {
   };
 }
 
-export async function prepareStaging(project: Project) {
+export async function prepareStaging(project: Project): Promise<Project> {
   const staging = await tmpFolder();
 
   return {

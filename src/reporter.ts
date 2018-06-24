@@ -1,3 +1,4 @@
+import { extname } from 'path';
 import dedent from 'dedent';
 import { Target } from './manifest';
 import { Registration } from './sources';
@@ -9,6 +10,7 @@ export interface ErrorMessages {
   'unsupported-source': { type: string };
   'dependency-not-found': { dependency: string; registry: string };
   'dependency-invalid-checksum': { registration: Registration };
+  'build-invalid': { message: string };
   'lockfile-write-failed': { file: string };
   'target-not-found': { target: Target };
   'target-is-open': { target: Target; path: string };
@@ -16,6 +18,7 @@ export interface ErrorMessages {
   'target-import-failed': { target: Target };
   'target-restore-failed': { backup: string; file: string };
   'resolve-failed': { details?: string };
+  'unrecognized-component': { path: string };
   'run-script-not-found': { path: string };
 }
 
@@ -73,6 +76,11 @@ export const reporter: Reporter = {
           registration.id
         } does not match the signature in the registry.`,
 
+      'build-invalid': ({ message }) => dedent`
+        Invalid build:
+        
+        ${message}.`,
+
       'lockfile-write-failed': ({ file }) => dedent`
         Failed to write lockfile to "${file}".`,
 
@@ -99,6 +107,9 @@ export const reporter: Reporter = {
         Unable to resolve dependency graph for project.
 
         There are dependencies that cannot be satisfied.`,
+
+      'unrecognized-component': ({ path }) => dedent`
+        Unrecognized component extension "${extname(path)}" (at "${path}").`,
 
       'run-script-not-found': ({ path }) => dedent`
         Bridge script not found at "${path}".

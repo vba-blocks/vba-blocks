@@ -64,3 +64,29 @@ Add the following to the [src] section:
 Validation = \\"src/Validation.bas\\"
 "
 `;
+
+exports[`export 3`] = `
+"The following changes are required in this project's vba-block.toml:
+
+Add the following to the [src] section:
+Class1 = \\"src/Class1.cls\\"
+
+Add the following to the [src] section:
+Sheet1 = \\"src/Sheet1.cls\\"
+
+Add the following to the [src] section:
+Sheet2 = \\"src/Sheet2.cls\\"
+
+Add the following to the [src] section:
+Sheet3 = \\"src/Sheet3.cls\\"
+
+Add the following to the [src] section:
+ThisWorkbook = \\"src/ThisWorkbook.cls\\"
+
+Add the following to the [src] section:
+UserForm1 = { path = \\"src/UserForm1.frm\\", binary = \\"src/UserForm1.frx\\" }
+
+Add the following to the [src] section:
+Validation = \\"src/Validation.bas\\"
+"
+`;

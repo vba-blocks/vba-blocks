@@ -1,6 +1,7 @@
 import env from './env';
 import { Project } from './project';
 import { Target, Source, Reference } from './manifest';
+import { ImportGraph } from './build';
 import { run, unixJoin } from './utils';
 
 export type Application = string;
@@ -30,15 +31,17 @@ for (const [application, values] of Object.entries(extensions)) {
 export async function importGraph(
   project: Project,
   target: Target,
-  graph: { src: Source[]; references: Reference[] },
+  graph: ImportGraph,
+  file: string,
   options: AddinOptions = {}
 ): Promise<void> {
-  const { application, addin, file } = getTargetInfo(project, target);
-  const { src, references } = graph;
+  const { application, addin } = getTargetInfo(project, target);
+  const { name, components, references } = graph;
 
   await run(application, options.addin || addin, 'Build.ImportGraph', {
     file,
-    src,
+    name,
+    src: components,
     references
   });
 }

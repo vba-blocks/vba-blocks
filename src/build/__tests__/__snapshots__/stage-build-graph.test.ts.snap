@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should stage build graph for Mac 1`] = `
+Object {
+  "components": Array [
+    Object {
+      "name": "a",
+      "path": "staging\\\\a.bas",
+    },
+    Object {
+      "name": "d",
+      "path": "staging\\\\d.cls",
+    },
+    Object {
+      "name": "f",
+      "path": "staging\\\\f.bas",
+    },
+    Object {
+      "name": "g",
+      "path": "staging\\\\g.cls",
+    },
+  ],
+  "name": "VBAProject",
+  "references": Array [],
+}
+`;
