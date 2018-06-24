@@ -164,7 +164,9 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   try {
     parsed = parseToml(raw.toString());
   } catch (err) {
-    const message = `Syntax Error: ${err.message} (${err.line}:${err.column})`;
+    const message = `Syntax Error: ${file} (${err.line}:${err.column})\n\n${
+      err.message
+    }`;
     throw manifestInvalid(message);
   }
 

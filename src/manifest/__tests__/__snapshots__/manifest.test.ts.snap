@@ -245,5 +245,7 @@ Object {
 exports[`throws for invalid syntax 1`] = `
 [Error: vba-blocks.toml is invalid:
 
-Syntax Error: Expected "=", [ \\t] or [A-Za-z0-9_\\-] but ":" found. (2:5)]
+Syntax Error: C:\\dev\\vba-blocks\\tests\\__fixtures__\\manifests\\invalid-syntax\\vba-block.toml (2:5)
+
+Expected "=", [ \\t] or [A-Za-z0-9_\\-] but ":" found.]
 `;
