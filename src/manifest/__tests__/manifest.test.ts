@@ -3,6 +3,7 @@ import { unixPath } from '../../utils';
 import { Manifest, parseManifest, loadManifest } from '../';
 import { isPathDependency } from '../dependency';
 import { dir as FIXTURES } from '@vba-blocks/fixtures';
+import { toThrow } from '@vba-blocks/helpers';
 
 const BASE_MANIFEST = {
   package: { name: 'package-name', version: '1.0.0', authors: ['Tim Hall'] }
@@ -11,6 +12,13 @@ const BASE_MANIFEST = {
 test('loads valid package metadata', () => {
   expect(normalize(parseManifest(BASE_MANIFEST, FIXTURES))).toMatchSnapshot();
 });
+
+test(
+  'throws for invalid syntax',
+  toThrow(async () => {
+    await loadManifest(join(FIXTURES, 'manifests/invalid-syntax'));
+  })
+);
 
 test('throws for invalid package metadata', () => {
   expect(() => parseManifest({}, FIXTURES)).toThrow();

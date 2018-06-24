@@ -9,7 +9,7 @@ import { Source, parseSrc } from './source';
 import { Dependency, parseDependencies } from './dependency';
 import { Reference, parseReferences } from './reference';
 import { Target, parseTargets } from './target';
-import { manifestOk } from '../errors';
+import { manifestOk, manifestInvalid } from '../errors';
 
 export {
   Version,
@@ -159,7 +159,15 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   }
 
   const raw = await readFile(file);
-  const parsed = parseToml(raw.toString());
+
+  let parsed;
+  try {
+    parsed = parseToml(raw.toString());
+  } catch (err) {
+    const message = `Syntax Error: ${err.message} (${err.line}:${err.column})`;
+    throw manifestInvalid(message);
+  }
+
   const manifest = parseManifest(parsed, unixPath(dir));
 
   return manifest;

@@ -241,3 +241,9 @@ Object {
   "version": "1.0.0",
 }
 `;
+
+exports[`throws for invalid syntax 1`] = `
+[Error: vba-blocks.toml is invalid:
+
+Syntax Error: Expected "=", [ \\t] or [A-Za-z0-9_\\-] but ":" found. (2:5)]
+`;
