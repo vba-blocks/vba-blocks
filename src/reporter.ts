@@ -7,9 +7,12 @@ export interface ErrorMessages {
   'unknown-command': { command: string };
   'manifest-not-found': { dir: string };
   'manifest-invalid': { message: string };
-  'unsupported-source': { type: string };
+  'source-unsupported': { type: string };
+  'source-misconfigured-registry': { registry: string };
+  'source-non-matching': { type: string; source: string };
   'dependency-not-found': { dependency: string; registry: string };
   'dependency-invalid-checksum': { registration: Registration };
+  'dependency-unknown-source': { dependency: string };
   'build-invalid': { message: string };
   'lockfile-write-failed': { file: string };
   'target-not-found': { target: Target };
@@ -61,10 +64,16 @@ export const reporter: Reporter = {
         
         ${message}`,
 
-      'unsupported-source': ({ type }) => dedent`
+      'source-unsupported': ({ type }) => dedent`
         ${type} dependencies are not supported.
 
         Upgrade to Professional Edition for ${type} dependencies and more`,
+
+      'source-misconfigured-registry': ({ registry }) => dedent`
+        No matching registry configured for "${registry}"`,
+
+      'source-non-matching': ({ type, source }) => dedent`
+        No source matches given registration type "${type}" (source = "${source}")`,
 
       'dependency-not-found': ({ dependency, registry }) => dedent`
         Dependency "${dependency}" not found in registry "${registry}"`,
@@ -75,6 +84,9 @@ export const reporter: Reporter = {
         The downloaded file signature for ${
           registration.id
         } does not match the signature in the registry.`,
+
+      'dependency-unknown-source': ({ dependency }) => dedent`
+        No source matches dependency "${dependency}"`,
 
       'build-invalid': ({ message }) => dedent`
         Invalid build:

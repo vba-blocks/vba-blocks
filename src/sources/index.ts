@@ -10,6 +10,11 @@ import { Source } from './source';
 import RegistrySource from './registry-source';
 import PathSource from './path-source';
 import GitSource from '../professional/sources/git-source';
+import {
+  sourceMisconfiguredRegistry,
+  dependencyUnknownSource,
+  sourceNoneMatching
+} from '../errors';
 
 export { Registration, Source, RegistrySource, PathSource, GitSource };
 
@@ -26,7 +31,7 @@ export async function resolve(
   if (isRegistryDependency(dependency)) {
     const { registry } = dependency;
     const source = sources.registry[registry];
-    ok(source, `No matching registry configured for "${registry}"`);
+    ok(source, sourceMisconfiguredRegistry(registry));
 
     return source.resolve(dependency);
   } else if (isPathDependency(dependency)) {
@@ -35,7 +40,7 @@ export async function resolve(
     return sources.git.resolve(dependency);
   }
 
-  throw new Error('No source matches given dependency');
+  throw dependencyUnknownSource((<Dependency>dependency).name);
 }
 
 export async function fetch(
@@ -46,7 +51,7 @@ export async function fetch(
 
   if (type === 'registry') {
     const source = sources.registry[value];
-    ok(source, `No matching registry configured for "${value}"`);
+    ok(source, sourceMisconfiguredRegistry(value));
 
     return sources.registry[value].fetch(registration);
   } else if (type === 'path') {
@@ -55,9 +60,5 @@ export async function fetch(
     return sources.git.fetch(registration);
   }
 
-  throw new Error(
-    `No source matches given registration type "${type}" (source = "${
-      registration.source
-    }")`
-  );
+  throw sourceNoneMatching(type, registration.source);
 }

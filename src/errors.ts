@@ -43,14 +43,23 @@ export const manifestInvalid = (message: string) =>
 export const manifestOk = (value: any, message: string) =>
   ok(value, manifestInvalid(message));
 
-export const unsupportedSource = (type: string) =>
-  generateError('unsupported-source', { type });
+export const sourceUnsupported = (type: string) =>
+  generateError('source-unsupported', { type });
+
+export const sourceMisconfiguredRegistry = (registry: string) =>
+  generateError('source-misconfigured-registry', { registry });
+
+export const sourceNoneMatching = (type: string, source: string) =>
+  generateError('source-non-matching', { type, source });
 
 export const dependencyNotFound = (dependency: string, registry: string) =>
   generateError('dependency-not-found', { dependency, registry });
 
 export const dependencyInvalidChecksum = (registration: Registration) =>
   generateError('dependency-invalid-checksum', { registration });
+
+export const dependencyUnknownSource = (dependency: string) =>
+  generateError('dependency-unknown-source', { dependency });
 
 export const buildInvalid = (message: string) =>
   generateError('build-invalid', { message });

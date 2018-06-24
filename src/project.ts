@@ -2,10 +2,10 @@ import env from './env';
 import { Config, loadConfig } from './config';
 import { Manifest, loadManifest } from './manifest';
 import { Workspace, loadWorkspace } from './workspace';
-import { fetch, Registration } from './sources';
+import { fetch } from './sources';
 import resolve, { DependencyGraph } from './resolve';
 import { readLockfile, isLockfileValid } from './lockfile';
-import { parallel, unixJoin, isString, tmpFolder } from './utils';
+import { parallel, unixJoin, tmpFolder } from './utils';
 
 export interface Project {
   manifest: Manifest;
