@@ -10,6 +10,7 @@ export interface ErrorMessages {
   'source-unsupported': { type: string };
   'source-misconfigured-registry': { registry: string };
   'source-no-matching': { type: string; source: string };
+  'source-download-failed': { source: string };
   'dependency-not-found': { dependency: string; registry: string };
   'dependency-invalid-checksum': { registration: Registration };
   'dependency-unknown-source': { dependency: string };
@@ -74,6 +75,9 @@ export const reporter: Reporter = {
 
       'source-no-matching': ({ type, source }) => dedent`
         No source matches given registration type "${type}" (source = "${source}")`,
+
+      'source-download-failed': ({ source }) => dedent`
+        Failed to download "${source}"`,
 
       'dependency-not-found': ({ dependency, registry }) => dedent`
         Dependency "${dependency}" not found in registry "${registry}"`,

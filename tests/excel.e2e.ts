@@ -9,7 +9,7 @@ test.only('build', async () => {
   await setup(standard, 'build', async cwd => {
     await execute(cwd, 'build');
 
-    const result = await validateBuild(cwd, 'e2e-standard.xlsm');
+    const result = await validateBuild(cwd, 'standard.xlsm');
     expect(result).toMatchSnapshot();
   });
 });
@@ -22,8 +22,8 @@ test('export', async () => {
 
       // 2. Copy standard built into empty
       await copy(
-        join(built, 'build/e2e-standard.xlsm'),
-        join(cwd, 'build/e2e-empty.xlsm')
+        join(built, 'build/standard.xlsm'),
+        join(cwd, 'build/empty.xlsm')
       );
 
       // 3. Export "empty" project

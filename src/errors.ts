@@ -52,6 +52,9 @@ export const sourceMisconfiguredRegistry = (registry: string) =>
 export const sourceNoneMatching = (type: string, source: string) =>
   generateError('source-no-matching', { type, source });
 
+export const sourceDownloadFailed = (source: string, underlying: Error) =>
+  generateError('source-download-failed', { source }, underlying);
+
 export const dependencyNotFound = (dependency: string, registry: string) =>
   generateError('dependency-not-found', { dependency, registry });
 

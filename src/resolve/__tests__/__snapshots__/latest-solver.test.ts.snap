@@ -4,7 +4,7 @@ exports[`fails to solve needs-sat tree 1`] = `[Error: Unable to resolve dependen
 
 exports[`fails to solve unresolvable tree 1`] = `[Error: Unable to resolve dependency graph for given manifest]`;
 
-exports[`solves standard tree 1`] = `
+exports[`solves complex tree 1`] = `
 Array [
   Object {
     "dependencies": Array [
@@ -19,6 +19,31 @@ Array [
     "source": "registry+vba-blocks#56c0bfaa84be448b39c65aa83f1c7530db0635a6b2b6ee8589a18feea29e37e9",
     "version": "4.1.5",
   },
+  Object {
+    "dependencies": Array [
+      Object {
+        "name": "dictionary",
+        "registry": "vba-blocks",
+        "version": "^1",
+      },
+    ],
+    "id": "json@2.3.0",
+    "name": "json",
+    "source": "registry+vba-blocks#3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
+    "version": "2.3.0",
+  },
+  Object {
+    "dependencies": Array [],
+    "id": "dictionary@1.4.1",
+    "name": "dictionary",
+    "source": "registry+vba-blocks#b241062bcd7ffd68c9063e3980a5df4c6781df29d96763a020d291e52454f6a5",
+    "version": "1.4.1",
+  },
+]
+`;
+
+exports[`solves standard tree 1`] = `
+Array [
   Object {
     "dependencies": Array [
       Object {

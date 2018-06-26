@@ -1,5 +1,5 @@
 [project]
-name = "standard"
+name = "complex"
 version = "0.0.0"
 authors = ["Tim Hall"]
 
@@ -13,7 +13,7 @@ Validation = "src/Validation.bas"
 Class1 = "src/Class1.cls"
 
 [dependencies]
-json = "^2"
+web = "^4"
 
 [targets]
 xlsm = "targets/xlsm"

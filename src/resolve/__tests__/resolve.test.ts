@@ -1,11 +1,22 @@
 import resolve from '../';
 import { setupWorkspace, reset } from '../../../tests/__helpers__/project';
-import { standard, needsSat, unresolvable } from '../../../tests/__fixtures__';
+import {
+  standard,
+  complex,
+  needsSat,
+  unresolvable
+} from '../../../tests/__fixtures__';
 
 afterEach(reset);
 
 test('solves standard tree', async () => {
   const { config, workspace } = await setupWorkspace(standard);
+  const solution = await resolve(config, workspace);
+  expect(solution).toMatchSnapshot();
+});
+
+test('solves complex tree', async () => {
+  const { config, workspace } = await setupWorkspace(complex);
   const solution = await resolve(config, workspace);
   expect(solution).toMatchSnapshot();
 });

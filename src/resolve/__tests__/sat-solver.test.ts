@@ -1,12 +1,25 @@
 import { solve } from '../sat-solver';
 import Resolver from '../resolver';
 import { setupWorkspace, reset } from '../../../tests/__helpers__/project';
-import { standard, needsSat, unresolvable } from '../../../tests/__fixtures__';
+import {
+  standard,
+  complex,
+  needsSat,
+  unresolvable
+} from '../../../tests/__fixtures__';
 
 afterEach(reset);
 
 test('solves standard tree', async () => {
   const { config, workspace } = await setupWorkspace(standard);
+  const resolver = new Resolver(config);
+
+  const solution = await solve(workspace, resolver);
+  expect(solution).toMatchSnapshot();
+});
+
+test('solves complex tree', async () => {
+  const { config, workspace } = await setupWorkspace(complex);
   const resolver = new Resolver(config);
 
   const solution = await solve(workspace, resolver);

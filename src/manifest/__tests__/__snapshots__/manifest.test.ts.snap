@@ -34,9 +34,9 @@ exports[`loads and parses manifest 1`] = `
 Object {
   "dependencies": Array [
     Object {
-      "name": "web",
+      "name": "json",
       "registry": "vba-blocks",
-      "version": "^4",
+      "version": "^2",
     },
   ],
   "dir": ".",

@@ -4,8 +4,8 @@ Public Function Validate(Args As Variant) As String
 
     Dim Errors As New Collection
 
-    If ThisWorkbook.VBProject.VBComponents.Count <> 9 Then
-        Errors.Add "Found " & ThisWorkbook.VBProject.VBComponents.Count & " components (expected 9)"
+    If ThisWorkbook.VBProject.VBComponents.Count <> 7 Then
+        Errors.Add "Only found " & ThisWorkbook.VBProject.VBComponents.Count & " components (expected 7)"
     End If
 
     Dim ComponentNames() As Variant

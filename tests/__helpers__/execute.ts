@@ -3,8 +3,10 @@ import { copy, remove, ensureDirSync } from 'fs-extra';
 import walkSync from 'walk-sync';
 import { join, resolve } from '../../src/utils/path';
 import { checksum, tmpFolder } from '../../src/utils/fs';
-import { default as _run, RunResult } from '../../src/utils/run';
+import { RunResult } from '../../src/utils/run';
 const exec = promisify(require('child_process').exec);
+
+import { run as _run } from '../../';
 
 export { RunResult };
 
@@ -68,10 +70,15 @@ export async function run(
   macro: string,
   args: object = {}
 ): Promise<RunResult> {
-  const result = await _run(application, file, macro, args);
+  let result;
+  try {
+    result = await _run(application, file, macro, args);
 
-  // Give Office time to clean up
-  await wait();
+    // Give Office time to clean up
+    await wait();
+  } catch (err) {
+    result = err.result;
+  }
 
   return result;
 }

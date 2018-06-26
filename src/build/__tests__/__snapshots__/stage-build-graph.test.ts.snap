@@ -32,26 +32,6 @@ Object {
       "path": "staging/Class1.cls",
     },
     Object {
-      "name": "WebClient",
-      "path": "staging/WebClient.cls",
-    },
-    Object {
-      "name": "WebRequest",
-      "path": "staging/WebRequest.cls",
-    },
-    Object {
-      "name": "WebResponse",
-      "path": "staging/WebResponse.cls",
-    },
-    Object {
-      "name": "WebHelpers",
-      "path": "staging/WebHelpers.bas",
-    },
-    Object {
-      "name": "IWebAuthenticator",
-      "path": "staging/IWebAuthenticator.cls",
-    },
-    Object {
       "name": "JsonConverter",
       "path": "staging/JsonConverter.bas",
     },

@@ -18,7 +18,11 @@ import {
   getRegistrationSource
 } from './registration';
 import { Source } from './source';
-import { dependencyNotFound, dependencyInvalidChecksum } from '../errors';
+import {
+  dependencyNotFound,
+  dependencyInvalidChecksum,
+  sourceDownloadFailed
+} from '../errors';
 
 const debug = require('debug')('vba-blocks:registry-source');
 
@@ -76,7 +80,11 @@ export default class RegistrySource implements Source {
 
     if (!(await pathExists(file))) {
       const unverifiedFile = await tmpFile();
-      await download(url, unverifiedFile);
+      try {
+        await download(url, unverifiedFile);
+      } catch (err) {
+        throw sourceDownloadFailed(registration.source, err);
+      }
 
       const comparison = await getChecksum(unverifiedFile);
       if (comparison !== checksum) {
