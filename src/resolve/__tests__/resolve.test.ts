@@ -1,30 +1,22 @@
 import resolve from '../';
-import { Manifest } from '../../manifest';
-import { Workspace } from '../../workspace';
-import { getConfig } from '../../../tests/__helpers__';
-import * as workspaces from '../../../tests/__fixtures__/workspaces';
+import { setupWorkspace, reset } from '../../../tests/__helpers__/project';
+import { standard, needsSat, unresolvable } from '../../../tests/__fixtures__';
 
-test('solves simple tree', async () => {
-  const config = getConfig();
-  const solution = await resolve(config, workspaces.simple);
-  expect(solution).toMatchSnapshot();
-});
+afterEach(reset);
 
-test('solves complex tree', async () => {
-  const config = getConfig();
-  const solution = await resolve(config, workspaces.complex);
+test('solves standard tree', async () => {
+  const { config, workspace } = await setupWorkspace(standard);
+  const solution = await resolve(config, workspace);
   expect(solution).toMatchSnapshot();
 });
 
 test('solves needs-sat tree', async () => {
-  const config = getConfig();
-  const solution = await resolve(config, workspaces.needsSat);
+  const { config, workspace } = await setupWorkspace(needsSat);
+  const solution = await resolve(config, workspace);
   expect(solution).toMatchSnapshot();
 });
 
 test('fails to solve unresolvable tree', async () => {
-  const config = getConfig();
-  await expect(
-    resolve(config, workspaces.unresolvable)
-  ).rejects.toMatchSnapshot();
+  const { config, workspace } = await setupWorkspace(unresolvable);
+  await expect(resolve(config, workspace)).rejects.toMatchSnapshot();
 });

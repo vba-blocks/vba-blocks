@@ -2,6 +2,7 @@ typings
 lib
 dist
 tests/__fixtures__/project/build
+tests/__fixtures__/filesystem.ts
 tests/.tmp
 addins/build
 

@@ -1,9 +1,11 @@
-import { join, relative } from 'path';
-import { unixPath } from '../../utils';
 import { Manifest, parseManifest, loadManifest } from '../';
-import { isPathDependency } from '../dependency';
-import { dir as FIXTURES } from '../../../tests/__fixtures__';
-import { toThrow } from '../../../tests/__helpers__';
+import { isPathDependency, isRegistryDependency } from '../dependency';
+import { join, relative } from '../../utils/path';
+import {
+  dir as FIXTURES,
+  standard,
+  invalidManifest
+} from '../../../tests/__fixtures__';
 
 const BASE_MANIFEST = {
   package: { name: 'package-name', version: '1.0.0', authors: ['Tim Hall'] }
@@ -12,13 +14,6 @@ const BASE_MANIFEST = {
 test('loads valid package metadata', () => {
   expect(normalize(parseManifest(BASE_MANIFEST, FIXTURES))).toMatchSnapshot();
 });
-
-test(
-  'throws for invalid syntax',
-  toThrow(async () => {
-    await loadManifest(join(FIXTURES, 'manifests/invalid-syntax'));
-  })
-);
 
 test('throws for invalid package metadata', () => {
   expect(() => parseManifest({}, FIXTURES)).toThrow();
@@ -164,8 +159,18 @@ test('throws for invalid targets', () => {
 });
 
 test('loads and parses manifest', async () => {
-  const manifest = await loadManifest(join(FIXTURES, 'project'));
-  expect(normalize(manifest, join(FIXTURES, 'project'))).toMatchSnapshot();
+  const manifest = await loadManifest(standard);
+  expect(normalize(manifest, standard)).toMatchSnapshot();
+});
+
+test('throws for invalid syntax', async () => {
+  expect.assertions(1);
+
+  try {
+    await loadManifest(invalidManifest);
+  } catch (err) {
+    expect(err.message.replace(FIXTURES, 'fixtures')).toMatchSnapshot();
+  }
 });
 
 function normalize(
@@ -176,6 +181,10 @@ function normalize(
 
   for (const src of manifest.src) {
     src.path = normalizePath(src.path, relativeTo);
+
+    if (src.binary) {
+      src.binary = normalizePath(src.binary, relativeTo);
+    }
   }
   for (const target of manifest.targets) {
     target.path = normalizePath(target.path, relativeTo);
@@ -190,5 +199,5 @@ function normalize(
 }
 
 function normalizePath(path: string, relativeTo: string = FIXTURES): string {
-  return unixPath(relative(relativeTo, path));
+  return relative(relativeTo, path);
 }

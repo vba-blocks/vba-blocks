@@ -4,7 +4,7 @@ import { Dependency } from '../manifest';
 import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution } from './resolver';
-import { unique } from '../utils';
+import unique from '../utils/unique';
 
 export default async function solve(
   workspace: Workspace,

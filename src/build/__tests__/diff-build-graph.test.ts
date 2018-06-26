@@ -1,15 +1,17 @@
-import { resolveProject } from '../../../tests/__helpers__';
-import { complex as project } from '../../../tests/__fixtures__/projects';
+import { setup, reset } from '../../../tests/__helpers__/project';
+import { standard } from '../../../tests/__fixtures__';
 import { loadBuildGraph } from '../build-graph';
-import { diffBuildGraph } from '../diff-build-graph';
+import { diffBuildGraph, Changeset } from '../diff-build-graph';
 import { Component } from '../component';
-import { fetchDependencies } from '../../project';
+import { Source, Reference } from '../../manifest';
+import { truncate, toComponent } from './build-graph.test';
+
+afterEach(reset);
 
 test('should diff build graph', async () => {
-  const resolved = await resolveProject(project);
-  const dependencies = await fetchDependencies(resolved);
+  const { project, dependencies } = await setup(standard);
 
-  const graph = await loadBuildGraph(resolved, dependencies);
+  const graph = await loadBuildGraph(project, dependencies);
 
   // Add, update, and remove component
   graph.components.push(
@@ -20,7 +22,35 @@ test('should diff build graph', async () => {
     })
   );
 
-  // TODO add src to complex project to test update and remove
+  const update = graph.components.find(
+    component => component.name === 'ThisWorkbook'
+  );
+  update.code = `' (updated)`;
 
-  expect(diffBuildGraph(resolved, dependencies, graph)).toMatchSnapshot();
+  const remove = graph.components.findIndex(
+    component => component.name === 'Validation'
+  );
+  graph.components.splice(remove, 1);
+
+  expect(
+    normalizeChanges(diffBuildGraph(project, dependencies, graph))
+  ).toMatchSnapshot();
 });
+
+interface Changes {
+  components: Changeset<Component, Source>;
+  references: Changeset<Reference, Reference>;
+}
+
+function normalizeChanges(changes: Changes) {
+  const { components, references } = changes;
+
+  return {
+    components: {
+      existing: components.existing.map(toComponent),
+      added: components.added.map(toComponent),
+      removed: components.removed
+    },
+    references
+  };
+}

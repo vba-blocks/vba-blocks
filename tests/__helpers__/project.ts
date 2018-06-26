@@ -1,49 +1,55 @@
-import { unixJoin, tmpFolder } from '../../src/utils';
-import { Project } from '../../src/project';
-import { Manifest } from '../../src/manifest';
-import resolve from '../../src/resolve';
-import { getConfig } from './config';
-import { createWorkspace } from './workspace';
+import env from '../../src/env';
+import { reset as resetFs } from '../../src/utils/fs';
+import { join } from '../../src/utils/path';
+import { loadConfig } from '../../src/config';
+import { loadProject, fetchDependencies } from '../../src/project';
+import { loadManifest } from '../../src/manifest';
+import { loadWorkspace } from '../../src/workspace';
+import { cache } from '../__fixtures__';
 
-export function createProject(manifest: Manifest): Project {
-  const config = getConfig();
-  const workspace = createWorkspace(manifest);
+jest.mock('../../src/utils/fs');
+jest.mock('../../src/utils/git');
 
-  const paths = {
-    root: manifest.dir,
-    dir: manifest.dir,
-    build: unixJoin(manifest.dir, 'build'),
-    backup: unixJoin(manifest.dir, 'build', '.backup'),
-    staging: ''
-  };
+const original_cwd = process.cwd();
+const original_env = { ...env };
+
+export async function setup(cwd: string) {
+  env.cwd = cwd;
+  env.cache = cache;
+  env.registry = join(cache, 'registry');
+  env.packages = join(cache, 'packages');
+  env.sources = join(cache, 'sources');
+
+  const project = await loadProject();
+  const dependencies = await fetchDependencies(project);
+
+  return { project, dependencies };
+}
+
+export async function setupWorkspace(cwd: string) {
+  env.cwd = cwd;
+  env.cache = cache;
+  env.registry = join(cache, 'registry');
+  env.packages = join(cache, 'packages');
+  env.sources = join(cache, 'sources');
+
+  const manifest = await loadManifest(cwd);
+  const config = await loadConfig();
+  const workspace = await loadWorkspace(manifest);
 
   return {
     manifest,
     workspace,
-    packages: [],
-    config,
-    paths,
-    has_dirty_lockfile: false
+    config
   };
 }
 
-export async function resolveProject(project: Project) {
-  const packages = await resolve(project.config, project.workspace);
+export function reset() {
+  resetFs();
 
-  return {
-    ...project,
-    packages
-  };
-}
-
-export async function prepareStaging(project: Project): Promise<Project> {
-  const staging = await tmpFolder();
-
-  return {
-    ...project,
-    paths: {
-      ...project.paths,
-      staging
-    }
-  };
+  env.cwd = original_env.cwd;
+  env.cache = original_env.cache;
+  env.registry = original_env.registry;
+  env.packages = original_env.packages;
+  env.sources = original_env.sources;
 }

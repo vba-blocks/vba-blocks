@@ -1,22 +1,21 @@
-import { promisify } from 'util';
-import { createHash } from 'crypto';
 import {
-  pathExists,
-  readFile,
-  writeFile,
+  copy,
+  emptyDir,
   ensureDir,
   ensureDirSync,
-  emptyDir,
   move,
+  pathExists,
+  readFile,
+  readJson,
   remove,
-  copy
+  writeFile
 } from 'fs-extra';
-import sanitizeFilename from 'sanitize-filename';
+
 import hash from './hash';
 
 async function checksum(file: string, algorithm = 'sha256'): Promise<string> {
   const data = await readFile(file);
-  return hash(data);
+  return hash(data, { algorithm });
 }
 
 export interface TmpOptions {
@@ -48,27 +47,21 @@ async function tmpFolder(options: TmpOptions = {}): Promise<string> {
   });
 }
 
-async function readJson(path: string): Promise<any> {
-  const raw = await readFile(path);
-  return JSON.parse(raw.toString());
-}
-
-function sanitize(name: string): string {
-  return sanitizeFilename(name, { replacement: '-' });
-}
+// (for mocking only)
+function reset() {}
 
 export {
   checksum,
   copy,
+  emptyDir,
   ensureDir,
   ensureDirSync,
-  emptyDir,
   move,
   pathExists,
   readFile,
   readJson,
   remove,
-  sanitize,
+  reset,
   tmpFile,
   tmpFolder,
   writeFile

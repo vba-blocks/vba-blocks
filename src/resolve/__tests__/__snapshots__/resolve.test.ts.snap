@@ -6,195 +6,78 @@ exports[`fails to solve unresolvable tree 1`] = `
 There are dependencies that cannot be satisfied.]
 `;
 
-exports[`solves complex tree 1`] = `
-Array [
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "d",
-        "registry": "vba-blocks",
-        "version": "^2",
-      },
-    ],
-    "id": "a@1.2.0",
-    "name": "a",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.2.0",
-  },
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "c",
-        "registry": "vba-blocks",
-        "version": "^0.1.5",
-      },
-    ],
-    "id": "b@1.1.0",
-    "name": "b",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.1.0",
-  },
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "f",
-        "registry": "vba-blocks",
-        "version": "^2",
-      },
-    ],
-    "id": "d@2.0.0",
-    "name": "d",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "2.0.0",
-  },
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "g",
-        "registry": "vba-blocks",
-        "version": "^1",
-      },
-    ],
-    "id": "f@2.0.0",
-    "name": "f",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "2.0.0",
-  },
-  Object {
-    "dependencies": Array [],
-    "id": "g@1.0.0",
-    "name": "g",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.0.0",
-  },
-  Object {
-    "dependencies": Array [],
-    "id": "c@0.1.6",
-    "name": "c",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "0.1.6",
-  },
-]
-`;
-
 exports[`solves needs-sat tree 1`] = `
 Array [
   Object {
-    "dependencies": Array [
-      Object {
-        "name": "d",
-        "registry": "vba-blocks",
-        "version": "^1.2.0",
-      },
-    ],
-    "id": "a@1.1.0",
-    "name": "a",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.1.0",
-  },
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "c",
-        "registry": "vba-blocks",
-        "version": "^0.1.0",
-      },
-    ],
-    "id": "b@1.0.0",
-    "name": "b",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.0.0",
-  },
-  Object {
     "dependencies": Array [],
-    "id": "c@0.1.0",
-    "name": "c",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "0.1.0",
+    "id": "dictionary@1.4.1",
+    "name": "dictionary",
+    "source": "registry+vba-blocks#b241062bcd7ffd68c9063e3980a5df4c6781df29d96763a020d291e52454f6a5",
+    "version": "1.4.1",
   },
   Object {
     "dependencies": Array [
       Object {
-        "name": "f",
+        "name": "dictionary",
         "registry": "vba-blocks",
         "version": "^1",
       },
     ],
-    "id": "d@1.2.0",
-    "name": "d",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.2.0",
+    "id": "json@2.1.0",
+    "name": "json",
+    "source": "registry+vba-blocks#c00e834ea96c4a6968d167b6616b2fa44a13fb672ff690b60a13326ca18de711",
+    "version": "2.1.0",
   },
   Object {
     "dependencies": Array [
       Object {
-        "name": "g",
+        "name": "json",
         "registry": "vba-blocks",
-        "version": "^1",
+        "version": "^2",
       },
     ],
-    "id": "f@1.0.0",
-    "name": "f",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.0.0",
-  },
-  Object {
-    "dependencies": Array [],
-    "id": "g@1.0.0",
-    "name": "g",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.0.0",
+    "id": "web@4.0.22",
+    "name": "web",
+    "source": "registry+vba-blocks#253052084974af810a115b031e782b4b3a23fdf55d77594ee5f9e2d76a2d396d",
+    "version": "4.0.22",
   },
 ]
 `;
 
-exports[`solves simple tree 1`] = `
+exports[`solves standard tree 1`] = `
 Array [
   Object {
     "dependencies": Array [
       Object {
-        "name": "d",
+        "name": "json",
         "registry": "vba-blocks",
-        "version": "^2",
+        "version": "^2.3.0",
       },
     ],
-    "id": "a@1.2.0",
-    "name": "a",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.2.0",
+    "id": "web@4.1.5",
+    "name": "web",
+    "source": "registry+vba-blocks#56c0bfaa84be448b39c65aa83f1c7530db0635a6b2b6ee8589a18feea29e37e9",
+    "version": "4.1.5",
   },
   Object {
     "dependencies": Array [
       Object {
-        "name": "f",
-        "registry": "vba-blocks",
-        "version": "^2",
-      },
-    ],
-    "id": "d@2.0.0",
-    "name": "d",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "2.0.0",
-  },
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "g",
+        "name": "dictionary",
         "registry": "vba-blocks",
         "version": "^1",
       },
     ],
-    "id": "f@2.0.0",
-    "name": "f",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "2.0.0",
+    "id": "json@2.3.0",
+    "name": "json",
+    "source": "registry+vba-blocks#3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
+    "version": "2.3.0",
   },
   Object {
     "dependencies": Array [],
-    "id": "g@1.0.0",
-    "name": "g",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.0.0",
+    "id": "dictionary@1.4.1",
+    "name": "dictionary",
+    "source": "registry+vba-blocks#b241062bcd7ffd68c9063e3980a5df4c6781df29d96763a020d291e52454f6a5",
+    "version": "1.4.1",
   },
 ]
 `;

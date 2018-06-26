@@ -1,10 +1,12 @@
 import { promisify } from 'util';
-import { join, resolve } from 'path';
 import { copy, remove, ensureDirSync } from 'fs-extra';
 import walkSync from 'walk-sync';
-import { checksum, tmpFolder, RunResult } from '../../src/utils';
-import { run as _run } from '../../';
+import { join, resolve } from '../../src/utils/path';
+import { checksum, tmpFolder } from '../../src/utils/fs';
+import { default as _run, RunResult } from '../../src/utils/run';
 const exec = promisify(require('child_process').exec);
+
+export { RunResult };
 
 const tmp_dir = join(__dirname, '../.tmp');
 ensureDirSync(tmp_dir);
@@ -44,7 +46,7 @@ export async function readdir(
   cwd: string
 ): Promise<{ [path: string]: string }> {
   const files = walkSync(cwd, { directories: false });
-  const details = {};
+  const details: { [file: string]: string } = {};
   const checking = files.map(async file => {
     if (isBackup.test(file)) return;
 
@@ -59,8 +61,6 @@ export async function readdir(
 
   return details;
 }
-
-export { RunResult } from '../../src/utils';
 
 export async function run(
   application: string,

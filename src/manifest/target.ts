@@ -1,5 +1,7 @@
 import { manifestOk } from '../errors';
-import { has, unixJoin, sanitize, isString } from '../utils';
+import has from '../utils/has';
+import { isString } from '../utils/is';
+import { join, sanitize } from '../utils/path';
 
 export type TargetType = 'xlsx' | 'xlsm' | 'xlam';
 
@@ -44,7 +46,7 @@ export function parseTarget(
     `target of type "${type}" is missing path. ${EXAMPLE}`
   );
 
-  const path = unixJoin(dir, relativePath);
+  const path = join(dir, relativePath);
   const filename = `${sanitize(name)}.${type}`;
 
   return { name, type, path, filename };

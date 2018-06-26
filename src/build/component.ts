@@ -1,6 +1,6 @@
-import { extname } from 'path';
+import { extname } from '../utils/path';
+import { readFile } from '../utils/fs';
 import { Manifest, Source } from '../manifest';
-import { readFile } from '../utils';
 import { unrecognizedComponent } from '../errors';
 
 export type ComponentType = 'module' | 'class' | 'form' | 'document';
@@ -53,8 +53,9 @@ export class Component {
     }
 
     const code = await readFile(source.path);
-    const binary = <Buffer | undefined>(source.binary &&
-      (await readFile(source.binary)));
+    const binary = <Buffer | undefined>(
+      (source.binary && (await readFile(source.binary)))
+    );
 
     return new Component({ code, type, binary, manifest, source });
   }

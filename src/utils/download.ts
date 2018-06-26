@@ -1,5 +1,5 @@
 import { get as httpsGet } from 'https';
-import { dirname } from 'path';
+import { dirname } from './path';
 import { createWriteStream } from 'fs';
 import { ensureDir } from './fs';
 

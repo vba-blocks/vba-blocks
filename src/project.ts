@@ -1,11 +1,13 @@
 import env from './env';
+import { join } from './utils/path';
+import { tmpFolder } from './utils/fs';
+import parallel from './utils/parallel';
 import { Config, loadConfig } from './config';
 import { Manifest, loadManifest } from './manifest';
 import { Workspace, loadWorkspace } from './workspace';
 import { fetch } from './sources';
 import resolve, { DependencyGraph } from './resolve';
 import { readLockfile, isLockfileValid } from './lockfile';
-import { parallel, unixJoin, tmpFolder } from './utils';
 
 export interface Project {
   manifest: Manifest;
@@ -47,8 +49,8 @@ export async function loadProject(dir: string = env.cwd): Promise<Project> {
   const paths = {
     root: workspace.root.dir,
     dir: manifest.dir,
-    build: unixJoin(manifest.dir, 'build'),
-    backup: unixJoin(manifest.dir, 'build', '.backup'),
+    build: join(manifest.dir, 'build'),
+    backup: join(manifest.dir, 'build', '.backup'),
     staging: await tmpFolder({ dir: env.staging })
   };
 

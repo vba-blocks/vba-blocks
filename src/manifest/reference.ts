@@ -1,4 +1,3 @@
-import { isString } from '../utils';
 import { manifestOk } from '../errors';
 
 export interface Reference {

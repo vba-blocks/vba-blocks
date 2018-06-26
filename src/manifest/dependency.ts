@@ -1,7 +1,8 @@
 import { satisfies as satisfiesSemver } from 'semver';
 import { Version } from './version';
-import { isString, has, unixJoin } from '../utils';
-import { Registration } from '../sources';
+import { join } from '../utils/path';
+import { isString } from '../utils/is';
+import has from '../utils/has';
 import { manifestOk } from '../errors';
 
 export interface DependencyDetails {
@@ -94,7 +95,7 @@ export function parseDependency(
   if (version) {
     return { ...details, registry, version };
   } else if (path) {
-    return { ...details, path: unixJoin(dir, path) };
+    return { ...details, path: join(dir, path) };
   } else {
     if (rev) return { ...details, git: git!, rev };
     else if (tag) return { ...details, git: git!, tag };

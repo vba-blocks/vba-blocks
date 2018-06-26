@@ -1,20 +1,16 @@
-import env from '../../env';
 import { loadBuildGraph } from '../build-graph';
-import { resolveProject, prepareStaging } from '../../../tests/__helpers__';
-import { simple as project } from '../../../tests/__fixtures__/projects';
+import { setup, reset } from '../../../tests/__helpers__/project';
+import { standard } from '../../../tests/__fixtures__';
 
 import { stageBuildGraph, ImportGraph } from '../stage-build-graph';
-import { fetchDependencies } from '../../project';
 
-test('should stage build graph for Mac', async () => {
-  env.isWindows = false;
+afterEach(reset);
 
-  const resolved = await resolveProject(project);
-  const prepared = await prepareStaging(resolved);
-  const staging = prepared.paths.staging;
-  const dependencies = await fetchDependencies(prepared);
+test('should stage build graph', async () => {
+  const { project, dependencies } = await setup(standard);
+  const staging = project.paths.staging;
 
-  const graph = await loadBuildGraph(prepared, dependencies);
+  const graph = await loadBuildGraph(project, dependencies);
   const import_graph = await stageBuildGraph(graph, staging);
 
   expect(normalizeGraph(import_graph, staging)).toMatchSnapshot();

@@ -1,9 +1,9 @@
 import { ok } from 'assert';
-import { join, relative } from 'path';
-import { parse as parseToml } from 'toml';
-import { has, convertToToml, unixPath } from './utils';
+import { join, relative } from './utils/path';
 import { pathExists, readFile, writeFile } from './utils/fs';
-import { Snapshot, Manifest } from './manifest';
+import { convert as convertToToml, parse as parseToml } from './utils/toml';
+import has from './utils/has';
+import { Snapshot } from './manifest';
 import { Dependency, satisfies } from './manifest/dependency';
 import { Workspace } from './workspace';
 import {
@@ -207,7 +207,7 @@ function prepareSource(source: string, dir: string): string {
   const { type, value, details } = getSourceParts(source);
   if (type !== 'path') return source;
 
-  const relativePath = unixPath(relative(dir, value));
+  const relativePath = relative(dir, value);
   return getRegistrationSource(type, relativePath, details);
 }
 
@@ -237,7 +237,7 @@ function toDependencyId(
   const { type, value, details } = getSourceParts(source);
 
   if (type === 'path') {
-    const relativePath = unixPath(relative(dir, value));
+    const relativePath = relative(dir, value);
     source = getRegistrationSource(type, relativePath, details);
   }
 

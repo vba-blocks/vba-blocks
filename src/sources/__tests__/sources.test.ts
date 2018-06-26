@@ -1,5 +1,4 @@
-import { isString, has } from '../../utils';
-import { resolve, fetch, Sources, Source, Registration } from '../';
+import { resolve, fetch, Sources, Registration } from '../';
 import {
   RegistryDependency,
   PathDependency,
@@ -18,7 +17,7 @@ const gitRegistration: Registration = {
   source: 'git+<repo>#<rev>'
 };
 
-const registryDependency = {
+const registryDependency: RegistryDependency = {
   name: 'b',
   version: '1.0.0',
   registry: 'vba-blocks'
@@ -31,7 +30,7 @@ const registryRegistration: Registration = {
   source: 'registry+vba-blocks#<hash>'
 };
 
-const pathDependency = {
+const pathDependency: PathDependency = {
   name: 'c',
   path: './c'
 };
@@ -43,7 +42,7 @@ const pathRegistration: Registration = {
   source: 'path+c'
 };
 
-const unknownDependency = {
+const unknownDependency: RegistryDependency = {
   name: 'unknown',
   version: '1.0.0',
   registry: 'unknown-registry'

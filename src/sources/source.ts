@@ -1,4 +1,3 @@
-import { Config } from '../config';
 import { Dependency } from '../manifest';
 import { Registration } from './registration';
 

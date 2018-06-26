@@ -8,7 +8,6 @@
     "outDir": "typings",
     "rootDir": "src",
     "target": "es2018",
-    "baseUrl": "./",
     "lib": ["es2017"]
   },
   "include": ["src/**/*.ts"],

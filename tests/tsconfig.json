@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "target": "es2018",
+    "lib": ["es2017"]
+  },
+  "include": ["**/*.ts", "../src/**/*.ts"],
+  "exclude": [
+    "../node_modules",
+    "../typings",
+    "../src/**/__mocks__/*",
+    "../src/**/__tests__/*"
+  ]
+}

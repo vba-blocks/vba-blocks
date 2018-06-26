@@ -9,16 +9,16 @@ import {
 } from '../errors';
 import { importGraph } from '../addin';
 import { loadBuildGraph, stageBuildGraph } from '../build';
+import { join } from '../utils/path';
 import {
   pathExists,
   ensureDir,
   remove,
   move,
-  unixJoin,
   emptyDir,
-  copy,
-  zip
-} from '../utils';
+  copy
+} from '../utils/fs';
+import { zip } from '../utils/zip';
 
 export interface BuildOptions {
   addin?: string;
@@ -56,7 +56,7 @@ export default async function buildTarget(
   try {
     await backupTarget(project, target);
 
-    const dest = unixJoin(project.paths.build, target.filename);
+    const dest = join(project.paths.build, target.filename);
     await move(staged, dest);
   } catch (err) {
     await restoreTarget(project, target);
@@ -73,7 +73,7 @@ export async function createTarget(
   project: Project,
   target: Target
 ): Promise<string> {
-  const file = unixJoin(project.paths.staging, target.filename);
+  const file = join(project.paths.staging, target.filename);
 
   try {
     await ensureDir(project.paths.staging);
@@ -101,7 +101,7 @@ export async function importTarget(
 ) {
   const { project, dependencies } = info;
 
-  const staging = unixJoin(project.paths.staging, 'import');
+  const staging = join(project.paths.staging, 'import');
   await ensureDir(staging);
   await emptyDir(staging);
 
@@ -123,8 +123,8 @@ export async function importTarget(
  * - Attempts move, if that fails, it is assumed that the file is open
  */
 export async function backupTarget(project: Project, target: Target) {
-  const backup = unixJoin(project.paths.backup, target.filename);
-  const file = unixJoin(project.paths.build, target.filename);
+  const backup = join(project.paths.backup, target.filename);
+  const file = join(project.paths.build, target.filename);
 
   if (await pathExists(backup)) await remove(backup);
   if (await pathExists(file)) {
@@ -142,8 +142,8 @@ export async function backupTarget(project: Project, target: Target) {
  * Restore previously built target (if available)
  */
 export async function restoreTarget(project: Project, target: Target) {
-  const backup = unixJoin(project.paths.backup, target.filename);
-  const file = unixJoin(project.paths.build, target.filename);
+  const backup = join(project.paths.backup, target.filename);
+  const file = join(project.paths.build, target.filename);
 
   if (!(await pathExists(backup))) return;
 

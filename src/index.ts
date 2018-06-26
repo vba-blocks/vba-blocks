@@ -1,5 +1,6 @@
 export { default as env } from './env';
 export { loadConfig } from './config';
+export { checksum } from './utils/fs';
 export { parseManifest } from './manifest';
 export { loadProject, fetchDependencies } from './project';
 export { loadWorkspace } from './workspace';
@@ -9,7 +10,7 @@ export {
   resolve as resolveDependency,
   fetch as fetchDependency
 } from './sources';
-export { run } from './utils';
+export { default as run } from './utils/run';
 export { addins } from './addin';
 
 export { default as build } from './actions/build';

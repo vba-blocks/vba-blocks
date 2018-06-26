@@ -1,0 +1,9 @@
+[project]
+name = "needs-sat"
+
+[dependencies]
+web = "^4"
+json = "2.1.0" # pin json to non-latest version
+
+[targets]
+xlsm = "targets/xlsm"

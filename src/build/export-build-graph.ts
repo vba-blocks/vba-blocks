@@ -1,10 +1,11 @@
 import dedent from 'dedent';
-import { join, relative } from 'path';
 import { Manifest, Source } from '../manifest';
 import { Project } from '../project';
 import { BuildGraph } from './build-graph';
-import { diffBuildGraph, Changeset } from './diff-build-graph';
-import { parallel, writeFile, remove, unixPath } from '../utils';
+import { diffBuildGraph } from './diff-build-graph';
+import { join, relative } from '../utils/path';
+import parallel from '../utils/parallel';
+import { writeFile, remove } from '../utils/fs';
 import env from '../env';
 import { Component } from './component';
 
@@ -78,12 +79,10 @@ async function writeComponent(component: Component) {
 
 function addSrc(manifest: Manifest, component: Component): string {
   const source = component.metadata.source!;
-  const relative_path = unixPath(relative(manifest.dir, source.path));
+  const relative_path = relative(manifest.dir, source.path);
   const binary_path =
     component.binary_path &&
-    unixPath(
-      relative(manifest.dir, join(manifest.dir, 'src', component.binary_path))
-    );
+    relative(manifest.dir, join(manifest.dir, 'src', component.binary_path));
   const details = binary_path
     ? `{ path = ${relative_path}", binary = "${binary_path}" }`
     : `"${relative_path}"`;

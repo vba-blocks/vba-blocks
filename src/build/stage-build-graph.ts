@@ -1,7 +1,8 @@
-import { join, basename } from 'path';
 import { Source, Reference } from '../manifest';
 import { BuildGraph } from './build-graph';
-import { parallel, writeFile, copy } from '../utils';
+import { join, basename } from '../utils/path';
+import { writeFile } from '../utils/fs';
+import parallel from '../utils/parallel';
 import env from '../env';
 
 export interface ImportGraph {

@@ -2,7 +2,6 @@ import { Config } from '../config';
 import { Dependency, isRegistryDependency } from '../manifest/dependency';
 import { Registration, resolve } from '../sources';
 import { DependencyGraph } from './dependency-graph';
-import { has } from '../utils';
 
 export interface Resolution {
   name: string;

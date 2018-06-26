@@ -1,4 +1,4 @@
-import { join, dirname } from 'path';
+import { join, dirname } from './path';
 import { IGitResult, GitProcess } from 'dugite';
 import isPackaged from './is-packaged';
 

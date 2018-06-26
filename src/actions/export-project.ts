@@ -1,16 +1,8 @@
-import { join } from 'path';
 import { loadProject, fetchDependencies } from '../project';
 import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
-import {
-  unixJoin,
-  pathExists,
-  tmpFolder,
-  emptyDir,
-  isString,
-  ensureDir
-} from '../utils';
-import env from '../env';
+import { join } from '../utils/path';
+import { emptyDir, ensureDir } from '../utils/fs';
 
 export interface ExportOptions {
   target: string;
@@ -38,7 +30,7 @@ export default async function exportProject(options: ExportOptions) {
 
   let staging: string;
   if (!completed) {
-    staging = unixJoin(project.paths.staging, 'export');
+    staging = join(project.paths.staging, 'export');
 
     await ensureDir(staging);
     await emptyDir(staging);

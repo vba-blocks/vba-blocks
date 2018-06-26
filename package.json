@@ -21,21 +21,29 @@
     "build:pkg:mac": "pkg --targets node8-mac-x64 -o dist/bin/vba-blocks .",
     "build:copy": "node scripts/copy",
     "build:addins": "cd addins && node ../scripts/build",
-    "build:bootstrap":
-      "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
+    "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
   },
   "pkg": {
-    "scripts": ["lib/bin/*.js", "lib/sat-solver.js"]
+    "scripts": [
+      "lib/bin/*.js",
+      "lib/sat-solver.js"
+    ]
   },
   "lint-staged": {
-    "**/*.{ts,js,json}": ["prettier --write", "git add"]
+    "**/*.{ts,js,json}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "prettier": {
     "singleQuote": true
   },
   "jest": {
-    "testEnvironment": "node",
-    "moduleFileExtensions": ["ts", "js", "json"],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.(js|ts)$",
     "transform": {
       "^.+\\.ts$": "ts-jest/preprocessor.js"
@@ -53,7 +61,6 @@
     "mri": "^1.1.0",
     "sanitize-filename": "^1.6.1",
     "semver": "^5.4.1",
-    "tar": "^4.0.1",
     "tmp": "^0.0.33",
     "toml": "^2.3.2",
     "walk-sync": "^0.3.2"
@@ -70,6 +77,7 @@
     "cross-env": "^5.1.4",
     "husky": "^0.14.3",
     "jest": "^23.1.0",
+    "jest-environment-node": "^23.1.0",
     "lint-staged": "^4.0.4",
     "npm-run-all": "^4.1.2",
     "opn": "^5.3.0",

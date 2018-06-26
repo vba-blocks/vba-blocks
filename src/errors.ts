@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { ok } from 'assert';
 import env from './env';
-import { isString, isObject } from './utils/is';
+import { isString } from './utils/is';
 
 import { Target } from './manifest';
 import { Registration } from './sources';
@@ -50,7 +50,7 @@ export const sourceMisconfiguredRegistry = (registry: string) =>
   generateError('source-misconfigured-registry', { registry });
 
 export const sourceNoneMatching = (type: string, source: string) =>
-  generateError('source-non-matching', { type, source });
+  generateError('source-no-matching', { type, source });
 
 export const dependencyNotFound = (dependency: string, registry: string) =>
   generateError('dependency-not-found', { dependency, registry });
@@ -97,7 +97,7 @@ export const resolveFailed = (details?: string) => {
 };
 
 export const unrecognizedComponent = (path: string) =>
-  generateError('unrecognized-component', { path });
+  generateError('component-unrecognized', { path });
 
 export const runScriptNotFound = (path: string) =>
   generateError('run-script-not-found', { path });

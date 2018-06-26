@@ -1,8 +1,9 @@
+import { join } from './utils/path';
+import run from './utils/run';
 import env from './env';
 import { Project } from './project';
-import { Target, Source, Reference } from './manifest';
+import { Target } from './manifest';
 import { ImportGraph } from './build';
-import { run, unixJoin } from './utils';
 
 export type Application = string;
 export type Addin = string;
@@ -15,7 +16,7 @@ export const extensions: { [application: string]: string[] } = {
   excel: ['xlsx', 'xlsm', 'xlam']
 };
 export const addins: { [application: string]: string } = {
-  excel: unixJoin(env.addins, 'vba-blocks.xlsm') // TEMP vba-blocks.xlam
+  excel: join(env.addins, 'vba-blocks.xlsm') // TEMP vba-blocks.xlam
 };
 
 const byExtension: { [extension: string]: string } = {};
@@ -79,7 +80,7 @@ export function getTargetInfo(
   if (!application) throw new Error(`Unsupported target type "${target.type}"`);
 
   const addin = addins[application];
-  const file = unixJoin(project.paths.build, target.filename);
+  const file = join(project.paths.build, target.filename);
 
   return { application, addin, file };
 }

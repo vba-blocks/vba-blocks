@@ -2,56 +2,75 @@
 
 exports[`should get dependency from clean state 1`] = `
 Object {
-  "name": "a",
+  "name": "json",
   "range": Array [
-    "^1.0.0",
+    "^2",
   ],
   "registered": Array [
     Object {
-      "dependencies": Array [],
-      "id": "a@0.1.0",
-      "name": "a",
-      "source": "registry+vba-blocks#<hash>",
-      "version": "0.1.0",
+      "dependencies": Array [
+        Object {
+          "name": "dictionary",
+          "registry": "vba-blocks",
+          "version": "^1",
+        },
+      ],
+      "id": "json@1.0.3",
+      "name": "json",
+      "source": "registry+vba-blocks#bfa82d85e9964ac5fd9dbb014319b84eed127b93fca5495fab0256ce22b28b38",
+      "version": "1.0.3",
     },
     Object {
       "dependencies": Array [
         Object {
-          "name": "d",
+          "name": "dictionary",
           "registry": "vba-blocks",
-          "version": "^1.0.0",
+          "version": "^1",
         },
       ],
-      "id": "a@1.0.0",
-      "name": "a",
-      "source": "registry+vba-blocks#<hash>",
-      "version": "1.0.0",
+      "id": "json@2.0.1",
+      "name": "json",
+      "source": "registry+vba-blocks#88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e",
+      "version": "2.0.1",
     },
     Object {
       "dependencies": Array [
         Object {
-          "name": "d",
+          "name": "dictionary",
           "registry": "vba-blocks",
-          "version": "^1.2.0",
+          "version": "^1",
         },
       ],
-      "id": "a@1.1.0",
-      "name": "a",
-      "source": "registry+vba-blocks#<hash>",
-      "version": "1.1.0",
+      "id": "json@2.1.0",
+      "name": "json",
+      "source": "registry+vba-blocks#c00e834ea96c4a6968d167b6616b2fa44a13fb672ff690b60a13326ca18de711",
+      "version": "2.1.0",
     },
     Object {
       "dependencies": Array [
         Object {
-          "name": "d",
+          "name": "dictionary",
           "registry": "vba-blocks",
-          "version": "^2",
+          "version": "^1",
         },
       ],
-      "id": "a@1.2.0",
-      "name": "a",
-      "source": "registry+vba-blocks#<hash>",
-      "version": "1.2.0",
+      "id": "json@2.2.4",
+      "name": "json",
+      "source": "registry+vba-blocks#d788c54fff7e78fe95ced0684ebda35a17150751d9f629c45d2e705d6d9b6a62",
+      "version": "2.2.4",
+    },
+    Object {
+      "dependencies": Array [
+        Object {
+          "name": "dictionary",
+          "registry": "vba-blocks",
+          "version": "^1",
+        },
+      ],
+      "id": "json@2.3.0",
+      "name": "json",
+      "source": "registry+vba-blocks#3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
+      "version": "2.3.0",
     },
   ],
 }
@@ -59,9 +78,9 @@ Object {
 
 exports[`should get dependency with existing 1`] = `
 Object {
-  "name": "a",
+  "name": "json",
   "range": Array [
-    "^1.0.0",
+    "^2",
   ],
   "registered": Array [],
 }
@@ -71,83 +90,102 @@ exports[`should get registration 1`] = `
 Object {
   "dependencies": Array [
     Object {
-      "name": "d",
+      "name": "dictionary",
       "registry": "vba-blocks",
-      "version": "^1.0.0",
+      "version": "^1",
     },
   ],
-  "id": "a@1.0.0",
-  "name": "a",
-  "source": "registry+vba-blocks#<hash>",
-  "version": "1.0.0",
+  "id": "json@2.0.1",
+  "name": "json",
+  "source": "registry+vba-blocks#88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e",
+  "version": "2.0.1",
 }
 `;
 
 exports[`should include preferred with resolved 1`] = `
 Object {
-  "name": "a",
+  "name": "json",
   "preferred": Object {
     "dependencies": Array [
       Object {
-        "name": "d",
+        "name": "dictionary",
         "registry": "vba-blocks",
-        "version": "^1.0.0",
+        "version": "^1",
       },
     ],
-    "id": "a@1.0.0",
-    "name": "a",
+    "id": "json@2.0.1",
+    "name": "json",
     "source": "registry+vba-blocks#<hash>",
-    "version": "1.0.0",
+    "version": "2.0.1",
   },
   "range": Array [
-    "^1.0.0",
+    "^2",
   ],
   "registered": Array [
     Object {
-      "dependencies": Array [],
-      "id": "a@0.1.0",
-      "name": "a",
-      "source": "registry+vba-blocks#<hash>",
-      "version": "0.1.0",
+      "dependencies": Array [
+        Object {
+          "name": "dictionary",
+          "registry": "vba-blocks",
+          "version": "^1",
+        },
+      ],
+      "id": "json@1.0.3",
+      "name": "json",
+      "source": "registry+vba-blocks#bfa82d85e9964ac5fd9dbb014319b84eed127b93fca5495fab0256ce22b28b38",
+      "version": "1.0.3",
     },
     Object {
       "dependencies": Array [
         Object {
-          "name": "d",
+          "name": "dictionary",
           "registry": "vba-blocks",
-          "version": "^1.0.0",
+          "version": "^1",
         },
       ],
-      "id": "a@1.0.0",
-      "name": "a",
-      "source": "registry+vba-blocks#<hash>",
-      "version": "1.0.0",
+      "id": "json@2.0.1",
+      "name": "json",
+      "source": "registry+vba-blocks#88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e",
+      "version": "2.0.1",
     },
     Object {
       "dependencies": Array [
         Object {
-          "name": "d",
+          "name": "dictionary",
           "registry": "vba-blocks",
-          "version": "^1.2.0",
+          "version": "^1",
         },
       ],
-      "id": "a@1.1.0",
-      "name": "a",
-      "source": "registry+vba-blocks#<hash>",
-      "version": "1.1.0",
+      "id": "json@2.1.0",
+      "name": "json",
+      "source": "registry+vba-blocks#c00e834ea96c4a6968d167b6616b2fa44a13fb672ff690b60a13326ca18de711",
+      "version": "2.1.0",
     },
     Object {
       "dependencies": Array [
         Object {
-          "name": "d",
+          "name": "dictionary",
           "registry": "vba-blocks",
-          "version": "^2",
+          "version": "^1",
         },
       ],
-      "id": "a@1.2.0",
-      "name": "a",
-      "source": "registry+vba-blocks#<hash>",
-      "version": "1.2.0",
+      "id": "json@2.2.4",
+      "name": "json",
+      "source": "registry+vba-blocks#d788c54fff7e78fe95ced0684ebda35a17150751d9f629c45d2e705d6d9b6a62",
+      "version": "2.2.4",
+    },
+    Object {
+      "dependencies": Array [
+        Object {
+          "name": "dictionary",
+          "registry": "vba-blocks",
+          "version": "^1",
+        },
+      ],
+      "id": "json@2.3.0",
+      "name": "json",
+      "source": "registry+vba-blocks#3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
+      "version": "2.3.0",
     },
   ],
 }
@@ -156,58 +194,77 @@ Object {
 exports[`should iterate through graph entries 1`] = `
 Array [
   Array [
-    "a",
+    "json",
     Object {
-      "name": "a",
+      "name": "json",
       "range": Array [
-        "^1.0.0",
+        "^2",
       ],
       "registered": Array [
         Object {
-          "dependencies": Array [],
-          "id": "a@0.1.0",
-          "name": "a",
-          "source": "registry+vba-blocks#<hash>",
-          "version": "0.1.0",
+          "dependencies": Array [
+            Object {
+              "name": "dictionary",
+              "registry": "vba-blocks",
+              "version": "^1",
+            },
+          ],
+          "id": "json@1.0.3",
+          "name": "json",
+          "source": "registry+vba-blocks#bfa82d85e9964ac5fd9dbb014319b84eed127b93fca5495fab0256ce22b28b38",
+          "version": "1.0.3",
         },
         Object {
           "dependencies": Array [
             Object {
-              "name": "d",
+              "name": "dictionary",
               "registry": "vba-blocks",
-              "version": "^1.0.0",
+              "version": "^1",
             },
           ],
-          "id": "a@1.0.0",
-          "name": "a",
-          "source": "registry+vba-blocks#<hash>",
-          "version": "1.0.0",
+          "id": "json@2.0.1",
+          "name": "json",
+          "source": "registry+vba-blocks#88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e",
+          "version": "2.0.1",
         },
         Object {
           "dependencies": Array [
             Object {
-              "name": "d",
+              "name": "dictionary",
               "registry": "vba-blocks",
-              "version": "^1.2.0",
+              "version": "^1",
             },
           ],
-          "id": "a@1.1.0",
-          "name": "a",
-          "source": "registry+vba-blocks#<hash>",
-          "version": "1.1.0",
+          "id": "json@2.1.0",
+          "name": "json",
+          "source": "registry+vba-blocks#c00e834ea96c4a6968d167b6616b2fa44a13fb672ff690b60a13326ca18de711",
+          "version": "2.1.0",
         },
         Object {
           "dependencies": Array [
             Object {
-              "name": "d",
+              "name": "dictionary",
               "registry": "vba-blocks",
-              "version": "^2",
+              "version": "^1",
             },
           ],
-          "id": "a@1.2.0",
-          "name": "a",
-          "source": "registry+vba-blocks#<hash>",
-          "version": "1.2.0",
+          "id": "json@2.2.4",
+          "name": "json",
+          "source": "registry+vba-blocks#d788c54fff7e78fe95ced0684ebda35a17150751d9f629c45d2e705d6d9b6a62",
+          "version": "2.2.4",
+        },
+        Object {
+          "dependencies": Array [
+            Object {
+              "name": "dictionary",
+              "registry": "vba-blocks",
+              "version": "^1",
+            },
+          ],
+          "id": "json@2.3.0",
+          "name": "json",
+          "source": "registry+vba-blocks#3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
+          "version": "2.3.0",
         },
       ],
     },

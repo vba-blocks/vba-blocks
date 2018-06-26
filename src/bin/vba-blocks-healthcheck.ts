@@ -1,5 +1,5 @@
 import env from '../env';
-import { pathExists } from '../utils';
+import { pathExists } from '../utils/fs';
 
 module.exports = async () => {
   // Checklist:

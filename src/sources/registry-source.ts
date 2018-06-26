@@ -1,7 +1,6 @@
-import { dirname, basename } from 'path';
-import { extract } from 'tar';
 import env from '../env';
-import { download, has, isString, unixJoin } from '../utils';
+import { join, dirname, basename, sanitize } from '../utils/path';
+import download from '../utils/download';
 import {
   checksum as getChecksum,
   ensureDir,
@@ -11,7 +10,7 @@ import {
   tmpFile
 } from '../utils/fs';
 import { clone, pull } from '../utils/git';
-import { Version } from '../manifest';
+import { unzip } from '../utils/zip';
 import { Dependency, RegistryDependency } from '../manifest/dependency';
 import {
   Registration,
@@ -39,11 +38,11 @@ export default class RegistrySource implements Source {
   constructor({ name, index, packages }: RegistryOptions) {
     this.name = name;
     this.local = {
-      index: unixJoin(env.registry, name),
-      packages: unixJoin(env.packages, name)
+      index: join(env.registry, name),
+      packages: join(env.packages, name)
     };
     this.remote = { index, packages };
-    this.sources = unixJoin(env.sources, name);
+    this.sources = join(env.sources, name);
 
     debug(`pulling ${this.remote.index} to ${this.local.index}`);
     this.pulling = pullIndex(this.local.index, this.remote.index);
@@ -89,7 +88,7 @@ export default class RegistrySource implements Source {
 
     const src = getSource(this.sources, registration);
     await ensureDir(src);
-    await extract({ file, cwd: src });
+    await unzip(file, src);
 
     return src;
   }
@@ -128,36 +127,31 @@ export function parseRegistration(registry: string, value: any): Registration {
   };
 }
 
-function getPath(index: string, name: string): string {
-  let parts;
-  if (name.length === 1) {
-    parts = ['1', name];
-  } else if (name.length === 2) {
-    parts = ['2', name];
-  } else if (name.length === 3) {
-    parts = ['3', name.substring(0, 1)];
-  } else {
-    parts = [name.substring(0, 2), name.substring(2, 4)];
-  }
-
-  return unixJoin(index, ...parts, name);
+export function sanitizePackageName(name: string): string {
+  return sanitize(name.replace('/', '--'));
 }
 
-function getRemotePackage(
+function getPath(index: string, name: string): string {
+  return join(index, sanitizePackageName(name));
+}
+
+export function getRemotePackage(
   packages: string,
   registration: Registration
 ): string {
   const { name, version } = registration;
-  return `${packages}/${name}/v${version}.block`;
+  return `${packages}/${sanitizePackageName(name)}-v${version}.block`;
 }
 
-function getLocalPackage(packages: string, registration: Registration): string {
+export function getLocalPackage(
+  packages: string,
+  registration: Registration
+): string {
   const { name, version } = registration;
-  return unixJoin(packages, name, `v${version}.block`);
+  return join(packages, `${sanitizePackageName(name)}-v${version}.block`);
 }
 
-function getSource(sources: string, registration: Registration): string {
+export function getSource(sources: string, registration: Registration): string {
   const { name, version } = registration;
-  const file = `v${version}`.replace(/\./g, '-');
-  return unixJoin(sources, name, file);
+  return join(sources, `${sanitizePackageName(name)}-v${version}`);
 }

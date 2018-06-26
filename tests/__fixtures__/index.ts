@@ -1,10 +1,13 @@
-import { unixPath, unixJoin } from '../../src/utils';
+import { normalize, join } from '../../src/utils/path';
 
-export const dir = unixPath(__dirname);
-export const empty = unixJoin(__dirname, './empty');
+export const dir = normalize(__dirname);
 
-// TODO merge these into standard = "kitchen sink"
-export const project = unixJoin(__dirname, './project');
-export const standard = unixJoin(__dirname, './standard');
+export const cache = join(dir, '.vba-blocks');
+export const sources = join(cache, 'sources');
 
-export const sources = unixJoin(__dirname, './sources');
+export const projects = join(dir, 'projects');
+export const empty = join(projects, 'empty');
+export const standard = join(projects, './standard');
+export const needsSat = join(projects, 'needs-sat');
+export const invalidManifest = join(projects, 'invalid-manifest');
+export const unresolvable = join(projects, 'unresolvable');

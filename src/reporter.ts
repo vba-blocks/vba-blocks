@@ -1,4 +1,4 @@
-import { extname } from 'path';
+import { extname } from './utils/path';
 import dedent from 'dedent';
 import { Target } from './manifest';
 import { Registration } from './sources';
@@ -9,7 +9,7 @@ export interface ErrorMessages {
   'manifest-invalid': { message: string };
   'source-unsupported': { type: string };
   'source-misconfigured-registry': { registry: string };
-  'source-non-matching': { type: string; source: string };
+  'source-no-matching': { type: string; source: string };
   'dependency-not-found': { dependency: string; registry: string };
   'dependency-invalid-checksum': { registration: Registration };
   'dependency-unknown-source': { dependency: string };
@@ -21,7 +21,7 @@ export interface ErrorMessages {
   'target-import-failed': { target: Target };
   'target-restore-failed': { backup: string; file: string };
   'resolve-failed': { details?: string };
-  'unrecognized-component': { path: string };
+  'component-unrecognized': { path: string };
   'run-script-not-found': { path: string };
 }
 
@@ -72,7 +72,7 @@ export const reporter: Reporter = {
       'source-misconfigured-registry': ({ registry }) => dedent`
         No matching registry configured for "${registry}"`,
 
-      'source-non-matching': ({ type, source }) => dedent`
+      'source-no-matching': ({ type, source }) => dedent`
         No source matches given registration type "${type}" (source = "${source}")`,
 
       'dependency-not-found': ({ dependency, registry }) => dedent`
@@ -120,7 +120,7 @@ export const reporter: Reporter = {
 
         There are dependencies that cannot be satisfied.`,
 
-      'unrecognized-component': ({ path }) => dedent`
+      'component-unrecognized': ({ path }) => dedent`
         Unrecognized component extension "${extname(path)}" (at "${path}").`,
 
       'run-script-not-found': ({ path }) => dedent`

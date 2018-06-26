@@ -1,0 +1,5 @@
+{"name":"json","vers":"1.0.3","deps":[{"name":"dictionary","req":"^1"}],"cksum":"bfa82d85e9964ac5fd9dbb014319b84eed127b93fca5495fab0256ce22b28b38"}
+{"name":"json","vers":"2.0.1","deps":[{"name":"dictionary","req":"^1"}],"cksum":"88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e"}
+{"name":"json","vers":"2.1.0","deps":[{"name":"dictionary","req":"^1"}],"cksum":"c00e834ea96c4a6968d167b6616b2fa44a13fb672ff690b60a13326ca18de711"}
+{"name":"json","vers":"2.2.4","deps":[{"name":"dictionary","req":"^1"}],"cksum":"d788c54fff7e78fe95ced0684ebda35a17150751d9f629c45d2e705d6d9b6a62"}
+{"name":"json","vers":"2.3.0","deps":[{"name":"dictionary","req":"^1"}],"cksum":"3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799"}

@@ -1,8 +1,8 @@
 import mri from 'mri';
 import chalk from 'chalk';
 import dedent from 'dedent';
-import { has } from '../utils';
-import { CliErrorCode, CliError, unknownCommand, cleanError } from '../errors';
+import has from '../utils/has';
+import { CliError, unknownCommand, cleanError } from '../errors';
 
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';

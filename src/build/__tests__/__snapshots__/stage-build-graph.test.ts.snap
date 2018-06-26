@@ -1,23 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should stage build graph for Mac 1`] = `
+exports[`should stage build graph 1`] = `
 Object {
   "components": Array [
     Object {
-      "name": "a",
-      "path": "staging\\\\a.bas",
+      "name": "ThisWorkbook",
+      "path": "staging/ThisWorkbook.cls",
     },
     Object {
-      "name": "d",
-      "path": "staging\\\\d.cls",
+      "name": "Sheet1",
+      "path": "staging/Sheet1.cls",
     },
     Object {
-      "name": "f",
-      "path": "staging\\\\f.bas",
+      "name": "Sheet2",
+      "path": "staging/Sheet2.cls",
     },
     Object {
-      "name": "g",
-      "path": "staging\\\\g.cls",
+      "name": "Sheet3",
+      "path": "staging/Sheet3.cls",
+    },
+    Object {
+      "name": "UserForm1",
+      "path": "staging/UserForm1.frm",
+    },
+    Object {
+      "name": "Validation",
+      "path": "staging/Validation.bas",
+    },
+    Object {
+      "name": "Class1",
+      "path": "staging/Class1.cls",
+    },
+    Object {
+      "name": "WebClient",
+      "path": "staging/WebClient.cls",
+    },
+    Object {
+      "name": "WebRequest",
+      "path": "staging/WebRequest.cls",
+    },
+    Object {
+      "name": "WebResponse",
+      "path": "staging/WebResponse.cls",
+    },
+    Object {
+      "name": "WebHelpers",
+      "path": "staging/WebHelpers.bas",
+    },
+    Object {
+      "name": "IWebAuthenticator",
+      "path": "staging/IWebAuthenticator.cls",
+    },
+    Object {
+      "name": "JsonConverter",
+      "path": "staging/JsonConverter.bas",
+    },
+    Object {
+      "name": "Dictionary",
+      "path": "staging/Dictionary.cls",
     },
   ],
   "name": "VBAProject",

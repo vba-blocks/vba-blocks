@@ -6,7 +6,7 @@ import { Dependency, isRegistryDependency } from '../manifest/dependency';
 import { Registration } from '../sources';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution, ResolutionGraph } from './resolver';
-import { has, unique } from '../utils';
+import unique from '../utils/unique';
 
 export async function solve(
   workspace: Workspace,

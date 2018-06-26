@@ -1,0 +1,6 @@
+[project]
+name = "unresolvable"
+
+[dependencies]
+web = "^4"
+json = "^1" # web needs json@^2

@@ -4,124 +4,40 @@ exports[`fails to solve needs-sat tree 1`] = `[Error: Unable to resolve dependen
 
 exports[`fails to solve unresolvable tree 1`] = `[Error: Unable to resolve dependency graph for given manifest]`;
 
-exports[`solves complex tree 1`] = `
+exports[`solves standard tree 1`] = `
 Array [
   Object {
     "dependencies": Array [
       Object {
-        "name": "d",
+        "name": "json",
         "registry": "vba-blocks",
-        "version": "^2",
+        "version": "^2.3.0",
       },
     ],
-    "id": "a@1.2.0",
-    "name": "a",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.2.0",
+    "id": "web@4.1.5",
+    "name": "web",
+    "source": "registry+vba-blocks#56c0bfaa84be448b39c65aa83f1c7530db0635a6b2b6ee8589a18feea29e37e9",
+    "version": "4.1.5",
   },
   Object {
     "dependencies": Array [
       Object {
-        "name": "c",
-        "registry": "vba-blocks",
-        "version": "^0.1.5",
-      },
-    ],
-    "id": "b@1.1.0",
-    "name": "b",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.1.0",
-  },
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "f",
-        "registry": "vba-blocks",
-        "version": "^2",
-      },
-    ],
-    "id": "d@2.0.0",
-    "name": "d",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "2.0.0",
-  },
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "g",
+        "name": "dictionary",
         "registry": "vba-blocks",
         "version": "^1",
       },
     ],
-    "id": "f@2.0.0",
-    "name": "f",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "2.0.0",
+    "id": "json@2.3.0",
+    "name": "json",
+    "source": "registry+vba-blocks#3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
+    "version": "2.3.0",
   },
   Object {
     "dependencies": Array [],
-    "id": "g@1.0.0",
-    "name": "g",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.0.0",
-  },
-  Object {
-    "dependencies": Array [],
-    "id": "c@0.1.6",
-    "name": "c",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "0.1.6",
-  },
-]
-`;
-
-exports[`solves simple tree 1`] = `
-Array [
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "d",
-        "registry": "vba-blocks",
-        "version": "^2",
-      },
-    ],
-    "id": "a@1.2.0",
-    "name": "a",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.2.0",
-  },
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "f",
-        "registry": "vba-blocks",
-        "version": "^2",
-      },
-    ],
-    "id": "d@2.0.0",
-    "name": "d",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "2.0.0",
-  },
-  Object {
-    "dependencies": Array [
-      Object {
-        "name": "g",
-        "registry": "vba-blocks",
-        "version": "^1",
-      },
-    ],
-    "id": "f@2.0.0",
-    "name": "f",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "2.0.0",
-  },
-  Object {
-    "dependencies": Array [],
-    "id": "g@1.0.0",
-    "name": "g",
-    "source": "registry+vba-blocks#<hash>",
-    "version": "1.0.0",
+    "id": "dictionary@1.4.1",
+    "name": "dictionary",
+    "source": "registry+vba-blocks#b241062bcd7ffd68c9063e3980a5df4c6781df29d96763a020d291e52454f6a5",
+    "version": "1.4.1",
   },
 ]
 `;

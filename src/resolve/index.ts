@@ -1,7 +1,6 @@
-import { join } from 'path';
+import { join } from '../utils/path';
 import { Config } from '../config';
 import { Workspace } from '../workspace';
-import { Project } from '../project';
 import { DependencyGraph, getRegistration } from './dependency-graph';
 import Resolver from './resolver';
 import solveLatest from './latest-solver';
@@ -24,6 +23,7 @@ export default async function resolve(
   try {
     return await solveLatest(workspace, resolver);
   } catch (err) {
+    // console.log('solveLatest', err);
     debug(`solveLatest failed with ${err}`);
     // TODO extract conflicts from latest solver error
   }
@@ -33,6 +33,7 @@ export default async function resolve(
     const { solve: solveSat } = require(join(__dirname, 'sat-solver'));
     return await solveSat(workspace, resolver);
   } catch (err) {
+    // console.log('solveSat', err);
     debug(`solveSat failed with ${err}`);
     // No useful information from SAT solver failure, ignore
   }

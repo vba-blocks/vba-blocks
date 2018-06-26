@@ -7,7 +7,7 @@ import {
 import { loadManifest } from '../manifest';
 import { Dependency, PathDependency } from '../manifest/dependency';
 import { Source } from './source';
-import { pathExists, readFile } from '../utils/fs';
+import { pathExists } from '../utils/fs';
 
 export default class PathSource implements Source {
   async resolve(dependency: Dependency): Promise<Registration[]> {

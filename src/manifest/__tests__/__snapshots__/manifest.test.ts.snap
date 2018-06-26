@@ -34,63 +34,70 @@ exports[`loads and parses manifest 1`] = `
 Object {
   "dependencies": Array [
     Object {
-      "name": "dictionary",
-      "registry": "vba-blocks",
-      "version": "1.4.1",
-    },
-    Object {
-      "git": "https://github.com/VBA-tools/VBA-Web",
       "name": "web",
-      "tag": "v4.1.3",
+      "registry": "vba-blocks",
+      "version": "^4",
     },
   ],
   "dir": ".",
-  "name": "testing",
-  "package": Object {
+  "name": "standard",
+  "package": undefined,
+  "project": Object {
     "authors": Array [
-      "Tim Hall <tim.hall.engr@gmail.com>",
+      "Tim Hall",
     ],
-    "name": "testing",
-    "publish": true,
-    "version": "0.1.0",
+    "name": "standard",
+    "publish": false,
+    "version": "0.0.0",
   },
-  "project": undefined,
-  "references": Array [
-    Object {
-      "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
-      "major": 1,
-      "minor": 0,
-      "name": "Scripting",
-      "optional": true,
-      "version": "1.0",
-    },
-  ],
+  "references": Array [],
   "src": Array [
     Object {
-      "name": "a",
+      "name": "ThisWorkbook",
       "optional": false,
-      "path": "src/a.bas",
+      "path": "src/ThisWorkbook.cls",
     },
     Object {
-      "name": "b",
-      "optional": true,
-      "path": "src/b.cls",
+      "name": "Sheet1",
+      "optional": false,
+      "path": "src/Sheet1.cls",
     },
     Object {
-      "name": "c",
+      "name": "Sheet2",
       "optional": false,
-      "path": "src/c.bas",
+      "path": "src/Sheet2.cls",
+    },
+    Object {
+      "name": "Sheet3",
+      "optional": false,
+      "path": "src/Sheet3.cls",
+    },
+    Object {
+      "binary": "src/UserForm1.frx",
+      "name": "UserForm1",
+      "optional": false,
+      "path": "src/UserForm1.frm",
+    },
+    Object {
+      "name": "Validation",
+      "optional": false,
+      "path": "src/Validation.bas",
+    },
+    Object {
+      "name": "Class1",
+      "optional": false,
+      "path": "src/Class1.cls",
     },
   ],
   "targets": Array [
     Object {
-      "filename": "testing.xlsm",
-      "name": "testing",
+      "filename": "standard.xlsm",
+      "name": "standard",
       "path": "targets/xlsm",
       "type": "xlsm",
     },
   ],
-  "version": "0.1.0",
+  "version": "0.0.0",
 }
 `;
 
@@ -243,9 +250,9 @@ Object {
 `;
 
 exports[`throws for invalid syntax 1`] = `
-[Error: vba-blocks.toml is invalid:
+"vba-blocks.toml is invalid:
 
-Syntax Error: C:\\dev\\vba-blocks\\tests\\__fixtures__\\manifests\\invalid-syntax\\vba-block.toml (2:5)
+Syntax Error: fixtures/projects/invalid-manifest/vba-block.toml (2:5)
 
-Expected "=", [ \\t] or [A-Za-z0-9_\\-] but ":" found.]
+Expected \\"=\\", [ \\\\t] or [A-Za-z0-9_\\\\-] but \\":\\" found."
 `;

@@ -1,6 +1,7 @@
 import { parse as parseQuerystring } from 'querystring';
-import { Snapshot, Manifest, Dependency } from '../manifest';
-import { has, isString } from '../utils';
+import { Snapshot, Dependency } from '../manifest';
+import has from '../utils/has';
+import { isString } from '../utils/is';
 
 export interface Registration extends Snapshot {
   id: string;

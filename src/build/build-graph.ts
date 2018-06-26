@@ -1,7 +1,7 @@
 import { Manifest, Reference } from '../manifest';
 import { Project } from '../project';
 import { buildInvalid } from '../errors';
-import { commaSeparated } from '../utils';
+import joinCommas from '../utils/join-commas';
 import { Component } from './component';
 
 export interface BuildGraph {
@@ -66,9 +66,7 @@ function validate(graph: BuildGraph) {
     if (manifests.length > 1) {
       const names = manifests.map(manifest => `"${manifest.name}"`);
       conflicts.push(
-        `Source "${name}" is present in manifests named ${commaSeparated(
-          names
-        )}`
+        `Source "${name}" is present in manifests named ${joinCommas(names)}`
       );
     }
   }
@@ -76,7 +74,7 @@ function validate(graph: BuildGraph) {
     if (references.length > 1) {
       const versions = references.map(reference => reference.version);
       conflicts.push(
-        `Reference "${name}" has multiple versions: ${commaSeparated(versions)}`
+        `Reference "${name}" has multiple versions: ${joinCommas(versions)}`
       );
     }
   }

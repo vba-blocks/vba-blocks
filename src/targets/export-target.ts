@@ -1,8 +1,9 @@
-import { join, basename, extname, relative, dirname } from 'path';
 import walk from 'walk-sync';
-import { Manifest, Target, Source } from '../manifest';
+import { Target } from '../manifest';
 import { Project } from '../project';
-import { copy, remove, ensureDir, unzip, pathExists } from '../utils';
+import { join, extname } from '../utils/path';
+import { copy, remove, ensureDir, pathExists } from '../utils/fs';
+import { unzip } from '../utils/zip';
 import { ProjectInfo } from './build-target';
 import { readBuildGraph } from '../build';
 import exportBuildGraph from '../build/export-build-graph';

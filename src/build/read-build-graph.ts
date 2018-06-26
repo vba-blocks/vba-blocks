@@ -1,9 +1,10 @@
-import { join, extname, basename } from 'path';
 import walk from 'walk-sync';
 import { Reference, Source } from '../manifest';
 import { BuildGraph } from './build-graph';
 import { Component, extensionToType } from './component';
-import { pathExists, readJson, readFile, parallel } from '../utils';
+import { join, extname, basename } from '../utils/path';
+import { pathExists, readJson, readFile } from '../utils/fs';
+import parallel from '../utils/parallel';
 import env from '../env';
 import { unrecognizedComponent } from '../errors';
 
@@ -39,8 +40,9 @@ export async function readBuildGraph(staging: string): Promise<BuildGraph> {
       }
 
       const source: Source = { name, path: file, binary: binaries[name] };
-      const binary = <Buffer | undefined>(source.binary &&
-        (await readFile(source.binary)));
+      const binary = <Buffer | undefined>(
+        (source.binary && (await readFile(source.binary)))
+      );
 
       return new Component({ code, type, binary, source });
     },

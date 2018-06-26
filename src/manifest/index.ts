@@ -1,6 +1,6 @@
-import { join } from 'path';
-import { parse as parseToml } from 'toml';
-import { pathExists, readFile, unixPath } from '../utils';
+import { join, normalize } from '../utils/path';
+import { parse as parseToml } from '../utils/toml';
+import { pathExists, readFile } from '../utils/fs';
 import { manifestNotFound } from '../errors';
 import { Version } from './version';
 import { Source, parseSrc } from './source';
@@ -154,6 +154,7 @@ export function parseManifest(value: any, dir: string): Manifest {
 
 export async function loadManifest(dir: string): Promise<Manifest> {
   const file = join(dir, 'vba-block.toml');
+
   if (!(await pathExists(file))) {
     throw manifestNotFound(dir);
   }
@@ -170,7 +171,7 @@ export async function loadManifest(dir: string): Promise<Manifest> {
     throw manifestInvalid(message);
   }
 
-  const manifest = parseManifest(parsed, unixPath(dir));
+  const manifest = parseManifest(parsed, normalize(dir));
 
   return manifest;
 }

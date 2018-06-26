@@ -1,0 +1,15 @@
+[package]
+name = "web"
+version = "4.1.5"
+authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
+license = "MIT"
+
+[src]
+WebClient = "src/WebClient.cls"
+WebRequest = "src/WebRequest.cls"
+WebResponse = "src/WebResponse.cls"
+WebHelpers = "src/WebHelpers.bas"
+IWebAuthenticator = "src/IWebAuthenticator.cls"
+
+[dependencies]
+json = "^2"

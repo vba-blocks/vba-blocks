@@ -1,13 +1,8 @@
-import { join } from 'path';
-import { parse as parseToml } from 'toml';
+import { join } from './utils/path';
+import { pathExists, readFile } from './utils/fs';
+import { parse as parseToml } from './utils/toml';
 import env from './env';
-import { pathExists, readFile } from './utils';
-import {
-  Sources,
-  RegistrySource,
-  PathSource,
-  GitSource
-} from './sources';
+import { Sources, RegistrySource, PathSource, GitSource } from './sources';
 
 export type Registry =
   | {}
