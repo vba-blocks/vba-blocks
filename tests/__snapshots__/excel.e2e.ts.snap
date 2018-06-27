@@ -22,8 +22,6 @@ Object {
   "src/Sheet2.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Sheet2\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
   "src/Sheet3.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Sheet3\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
   "src/ThisWorkbook.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"ThisWorkbook\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{...",
-  "src/UserForm1.frm": "VERSION 5.00{CR}{LF}Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 {CR}{LF}   Caption         =   \\"UserForm1\\"{CR}{LF}   ClientHeight    =   3015{CR}{LF}   ClientLeft      =   120{CR}{LF}   Cli...",
-  "src/UserForm1.frx": "<TODO>",
   "src/Validation.bas": "Attribute VB_Name = \\"Validation\\"{CR}{LF}Public Function Validate(Args As Variant) As String{CR}{LF}    On Error GoTo ErrorHandling{CR}{LF}{CR}{LF}    Dim Errors As New Collection{CR}{LF}{CR}{LF}    If...",
   "targets/xlsm/[Content_Types].xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Types xmlns=\\"http://schemas.openxmlformats.org/package/2006/content-types\\"><Default Extension=\\"bin\\" ContentType=\\"application/vnd.ms-offi...",
   "targets/xlsm/_rels/.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
@@ -65,9 +63,6 @@ Sheet3 = \\"src/Sheet3.cls\\"
 
 Add the following to the [src] section:
 ThisWorkbook = \\"src/ThisWorkbook.cls\\"
-
-Add the following to the [src] section:
-UserForm1 = { path = \\"src/UserForm1.frm\\", binary = \\"src/UserForm1.frx\\" }
 
 Add the following to the [src] section:
 Validation = \\"src/Validation.bas\\"

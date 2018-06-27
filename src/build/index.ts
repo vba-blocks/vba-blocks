@@ -9,3 +9,4 @@ export {
   Changeset
 } from './compare-build-graphs';
 export { default as applyChangeset } from './apply-changeset';
+export { toCompiled, toSrc } from './transform-build-graph';

@@ -9,7 +9,8 @@ import {
   loadFromProject,
   loadFromExport,
   compareBuildGraphs,
-  applyChangeset
+  applyChangeset,
+  toSrc
 } from '../build';
 
 /**
@@ -31,9 +32,14 @@ export default async function exportTarget(
   const extracted = await extractTarget(project, target, staging);
 
   // Compare project and exported and apply changes to project
-  const before = await loadFromProject(project, dependencies);
-  const after = await loadFromExport(staging);
-  const changeset = compareBuildGraphs(before, after);
+  const project_build_graph = await loadFromProject(project, dependencies);
+  const exported_build_graph = await loadFromExport(staging);
+  const transformed_build_graph = await toSrc(exported_build_graph);
+
+  const changeset = compareBuildGraphs(
+    project_build_graph,
+    transformed_build_graph
+  );
   await applyChangeset(project, changeset);
 
   // Move target to dest

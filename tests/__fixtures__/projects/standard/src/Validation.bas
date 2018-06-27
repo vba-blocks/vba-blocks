@@ -4,8 +4,8 @@ Public Function Validate(Args As Variant) As String
 
     Dim Errors As New Collection
 
-    If ThisWorkbook.VBProject.VBComponents.Count <> 9 Then
-        Errors.Add "Found " & ThisWorkbook.VBProject.VBComponents.Count & " components (expected 9)"
+    If ThisWorkbook.VBProject.VBComponents.Count <> 8 Then
+        Errors.Add "Found " & ThisWorkbook.VBProject.VBComponents.Count & " components (expected 8)"
     End If
 
     Dim ComponentNames() As Variant
@@ -13,8 +13,8 @@ Public Function Validate(Args As Variant) As String
     Dim Index As Long
     Dim Component As Object
     
-    ComponentNames = Array("Sheet1", "Sheet2", "Sheet3", "ThisWorkbook", "UserForm1", "Class1")
-    Components = Array(Sheet1, Sheet2, Sheet3, ThisWorkbook, UserForm1, New Class1)
+    ComponentNames = Array("Sheet1", "Sheet2", "Sheet3", "ThisWorkbook", "Class1")
+    Components = Array(Sheet1, Sheet2, Sheet3, ThisWorkbook, New Class1)
     
     For Index = 0 To UBound(Components)
         Set Component = Components(Index)
