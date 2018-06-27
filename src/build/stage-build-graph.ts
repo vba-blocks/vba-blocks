@@ -11,7 +11,7 @@ export interface ImportGraph {
   references: Reference[];
 }
 
-export async function stageBuildGraph(
+export default async function stageBuildGraph(
   graph: BuildGraph,
   staging: string
 ): Promise<ImportGraph> {

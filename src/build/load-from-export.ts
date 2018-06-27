@@ -10,10 +10,14 @@ import { unrecognizedComponent } from '../errors';
 
 const binary_extensions = ['.frx'];
 
-export async function loadFromExport(staging: string): Promise<BuildGraph> {
-  const files = walk(staging, { directories: false }).filter(file => {
-    return file !== 'project.json' && !file.startsWith('targets');
-  });
+export default async function loadFromExport(
+  staging: string
+): Promise<BuildGraph> {
+  const files = walk(staging, { directories: false })
+    .filter(file => {
+      return file !== 'project.json' && !file.startsWith('targets');
+    })
+    .map(file => join(staging, file));
   const { name, references } = await readInfo(staging);
 
   const binaries: { [name: string]: string } = {};

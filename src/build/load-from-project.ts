@@ -5,7 +5,7 @@ import { BuildGraph } from './build-graph';
 import joinCommas from '../utils/join-commas';
 import { buildInvalid } from '../errors';
 
-export async function loadFromProject(
+export default async function loadFromProject(
   project: Project,
   dependencies: Manifest[]
 ): Promise<BuildGraph> {

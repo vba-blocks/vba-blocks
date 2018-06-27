@@ -5,8 +5,12 @@ import { join, extname } from '../utils/path';
 import { copy, remove, ensureDir, pathExists } from '../utils/fs';
 import { unzip } from '../utils/zip';
 import { ProjectInfo } from './build-target';
-import { readBuildGraph } from '../build';
-import exportBuildGraph from '../build/export-build-graph';
+import {
+  loadFromProject,
+  loadFromExport,
+  compareBuildGraphs,
+  applyChangeset
+} from '../build';
 
 /**
  * Export target (with staging directory)
@@ -26,9 +30,11 @@ export default async function exportTarget(
   // Extract target to staging
   const extracted = await extractTarget(project, target, staging);
 
-  // Read build graph from staging, then export
-  const graph = await readBuildGraph(staging);
-  await exportBuildGraph(project, dependencies, graph);
+  // Compare project and exported and apply changes to project
+  const before = await loadFromProject(project, dependencies);
+  const after = await loadFromExport(staging);
+  const changeset = compareBuildGraphs(before, after);
+  await applyChangeset(project, changeset);
 
   // Move target to dest
   await remove(target.path);

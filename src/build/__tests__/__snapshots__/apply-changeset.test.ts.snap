@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should apply changeset for project 1`] = `
+Array [
+  Array [
+    "The following changes are required in this project's vba-block.toml:",
+  ],
+  Array [
+    "
+Add the following to the [src] section:
+Added = \\"src/Added.bas\\"",
+  ],
+  Array [
+    "
+Remove \`Validation\` from the [src] section",
+  ],
+]
+`;
+
+exports[`should apply changeset for project 2`] = `
+Array [
+  Array [
+    "C:/dev/vba-blocks/tests/__fixtures__/projects/standard/src/ThisWorkbook.cls",
+    "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"ThisWorkbook\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+' (changed)
+",
+  ],
+  Array [
+    "C:/dev/vba-blocks/tests/__fixtures__/projects/standard/src/Added.bas",
+    "Attribute VB_Name = \\"Added\\"
+' (added)
+",
+  ],
+]
+`;

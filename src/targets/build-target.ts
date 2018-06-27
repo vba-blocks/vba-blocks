@@ -8,7 +8,7 @@ import {
   targetRestoreFailed
 } from '../errors';
 import { importGraph } from '../addin';
-import { loadBuildGraph, stageBuildGraph } from '../build';
+import { loadFromProject, stageBuildGraph } from '../build';
 import { join } from '../utils/path';
 import {
   pathExists,
@@ -105,7 +105,7 @@ export async function importTarget(
   await ensureDir(staging);
   await emptyDir(staging);
 
-  const build_graph = await loadBuildGraph(project, dependencies);
+  const build_graph = await loadFromProject(project, dependencies);
   const import_graph = await stageBuildGraph(build_graph, staging);
 
   try {

@@ -1,30 +1,21 @@
-import { loadBuildGraph } from '../build-graph';
 import { setup, reset } from '../../../tests/__helpers__/project';
-import { standard } from '../../../tests/__fixtures__';
-
-import { stageBuildGraph, ImportGraph } from '../stage-build-graph';
+import { standard, standardImport } from '../../../tests/__fixtures__';
+import { pathExists } from '../../utils/fs';
+import loadFromProject from '../load-from-project';
+import stageBuildGraph from '../stage-build-graph';
 
 afterEach(reset);
 
-test('should stage build graph', async () => {
+test('should stage BuildGraph', async () => {
+  expect.assertions(10);
+
   const { project, dependencies } = await setup(standard);
-  const staging = project.paths.staging;
+  const graph = await loadFromProject(project, dependencies);
 
-  const graph = await loadBuildGraph(project, dependencies);
-  const import_graph = await stageBuildGraph(graph, staging);
+  const import_graph = await stageBuildGraph(graph, standardImport);
+  expect(import_graph).toMatchSnapshot();
 
-  expect(normalizeGraph(import_graph, staging)).toMatchSnapshot();
+  for (const source of import_graph.components) {
+    expect(await pathExists(source.path)).toEqual(true);
+  }
 });
-
-function normalizeGraph(graph: ImportGraph, staging: string): ImportGraph {
-  const { name, components, references } = graph;
-
-  return {
-    name,
-    components: components.map(component => {
-      const { name, path } = component;
-      return { name, path: path.replace(staging, 'staging') };
-    }),
-    references
-  };
-}

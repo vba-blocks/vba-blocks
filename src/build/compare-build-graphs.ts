@@ -15,7 +15,7 @@ export interface Changeset {
   };
 }
 
-export function compareBuildGraphs(
+export default function compareBuildGraphs(
   before: BuildGraph,
   after: BuildGraph
 ): Changeset {

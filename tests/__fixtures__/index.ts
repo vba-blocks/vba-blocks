@@ -12,3 +12,12 @@ export const complex = join(projects, 'complex');
 export const needsSat = join(projects, 'needs-sat');
 export const invalidManifest = join(projects, 'invalid-manifest');
 export const unresolvable = join(projects, 'unresolvable');
+
+export const staging = join(cache, 'staging');
+export const standardImport = join(staging, 'standard', 'import');
+export const standardExport = join(staging, 'standard', 'export');
+export const standardChangesExport = join(
+  staging,
+  'standard-changes',
+  'export'
+);

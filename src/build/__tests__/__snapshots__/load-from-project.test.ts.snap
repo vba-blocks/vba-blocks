@@ -1,6 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should create build graph 1`] = `
+exports[`should load BuildGraph from empty project 1`] = `
+Object {
+  "components": Array [],
+  "name": "VBAProject",
+  "references": Array [],
+}
+`;
+
+exports[`should load BuildGraph from standard project 1`] = `
 Object {
   "components": Array [
     Object {
@@ -14,6 +22,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attr...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/ThisWorkbook.cls",
+      },
       "filename": "ThisWorkbook.cls",
       "name": "ThisWorkbook",
       "type": "class",
@@ -29,6 +41,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute ...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Sheet1.cls",
+      },
       "filename": "Sheet1.cls",
       "name": "Sheet1",
       "type": "class",
@@ -44,6 +60,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute ...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Sheet2.cls",
+      },
       "filename": "Sheet2.cls",
       "name": "Sheet2",
       "type": "class",
@@ -59,12 +79,16 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute ...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Sheet3.cls",
+      },
       "filename": "Sheet3.cls",
       "name": "Sheet3",
       "type": "class",
     },
     Object {
-      "binary_path": "C:/dev/vba-blocks/tests/__fixtures__/projects/standard/src/UserForm1.frx",
+      "binary_path": "UserForm1.frx",
       "code": "VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 
    Caption         =   \\"UserForm1\\"
@@ -72,6 +96,10 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1
    ClientLeft      =   110
    ClientTop       =   450
    Clien...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/UserForm1.frm",
+      },
       "filename": "UserForm1.frm",
       "name": "UserForm1",
       "type": "form",
@@ -85,6 +113,10 @@ Public Function Validate(Args As Variant) As String
     Dim Errors As New Collection
 
     If ThisWorkbook.VBProject.VBComponents...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Validation.bas",
+      },
       "filename": "Validation.bas",
       "name": "Validation",
       "type": "module",
@@ -100,6 +132,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Class1.cls",
+      },
       "filename": "Class1.cls",
       "name": "Class1",
       "type": "class",
@@ -117,6 +153,10 @@ Attribute...",
 ' 10001 - JSON parse error
 '
 ' @class J...",
+      "details": Object {
+        "dependency": "json",
+        "path": ".vba-blocks/sources/vba-blocks/json-v2.3.0/JsonConverter.bas",
+      },
       "filename": "JsonConverter.bas",
       "name": "JsonConverter",
       "type": "module",
@@ -132,6 +172,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attri...",
+      "details": Object {
+        "dependency": "dictionary",
+        "path": ".vba-blocks/sources/vba-blocks/dictionary-v1.4.1/Dictionary.cls",
+      },
       "filename": "Dictionary.cls",
       "name": "Dictionary",
       "type": "class",

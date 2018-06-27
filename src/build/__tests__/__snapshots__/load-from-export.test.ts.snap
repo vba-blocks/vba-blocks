@@ -1,0 +1,387 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should load BuildGraph from empty project 1`] = `
+Object {
+  "components": Array [],
+  "name": "VBAProject",
+  "references": Array [],
+}
+`;
+
+exports[`should load BuildGraph from exported project 1`] = `
+Object {
+  "components": Array [
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Class1\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute...",
+      "details": Object {
+        "dependency": undefined,
+        "path": undefined,
+      },
+      "filename": "Class1.cls",
+      "name": "Class1",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Dictionary\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attri...",
+      "details": Object {
+        "dependency": undefined,
+        "path": undefined,
+      },
+      "filename": "Dictionary.cls",
+      "name": "Dictionary",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "Attribute VB_Name = \\"JsonConverter\\"
+''
+' VBA-JSON v2.3.0
+' (c) Tim Hall - https://github.com/VBA-tools/VBA-JSON
+'
+' JSON Converter for VBA
+'
+' Errors:
+' 10001 - JSON parse error
+'
+' @class J...",
+      "details": Object {
+        "dependency": undefined,
+        "path": undefined,
+      },
+      "filename": "JsonConverter.bas",
+      "name": "JsonConverter",
+      "type": "module",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Sheet1\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute ...",
+      "details": Object {
+        "dependency": undefined,
+        "path": undefined,
+      },
+      "filename": "Sheet1.cls",
+      "name": "Sheet1",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Sheet2\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute ...",
+      "details": Object {
+        "dependency": undefined,
+        "path": undefined,
+      },
+      "filename": "Sheet2.cls",
+      "name": "Sheet2",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Sheet3\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute ...",
+      "details": Object {
+        "dependency": undefined,
+        "path": undefined,
+      },
+      "filename": "Sheet3.cls",
+      "name": "Sheet3",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"ThisWorkbook\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attr...",
+      "details": Object {
+        "dependency": undefined,
+        "path": undefined,
+      },
+      "filename": "ThisWorkbook.cls",
+      "name": "ThisWorkbook",
+      "type": "class",
+    },
+    Object {
+      "binary_path": "UserForm1.frx",
+      "code": "VERSION 5.00
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 
+   Caption         =   \\"UserForm1\\"
+   ClientHeight    =   3040
+   ClientLeft      =   110
+   ClientTop       =   450
+   Clien...",
+      "details": Object {
+        "dependency": undefined,
+        "path": undefined,
+      },
+      "filename": "UserForm1.frm",
+      "name": "UserForm1",
+      "type": "form",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "Attribute VB_Name = \\"Validation\\"
+Public Function Validate(Args As Variant) As String
+    On Error GoTo ErrorHandling
+
+    Dim Errors As New Collection
+
+    If ThisWorkbook.VBProject.VBComponents...",
+      "details": Object {
+        "dependency": undefined,
+        "path": undefined,
+      },
+      "filename": "Validation.bas",
+      "name": "Validation",
+      "type": "module",
+    },
+  ],
+  "name": "VBAProject",
+  "references": Array [
+    Object {
+      "guid": "{00020430-0000-0000-C000-000000000046}",
+      "major": 2,
+      "minor": 0,
+      "name": "stdole",
+      "version": "2.0",
+    },
+    Object {
+      "guid": "{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}",
+      "major": 2,
+      "minor": 8,
+      "name": "Office",
+      "version": "2.8",
+    },
+    Object {
+      "guid": "{0D452EE1-E08F-101A-852E-02608C4D0BB4}",
+      "major": 2,
+      "minor": 0,
+      "name": "MSForms",
+      "version": "2.0",
+    },
+  ],
+}
+`;
+
+exports[`should load BuildGraph from standard project 1`] = `
+Object {
+  "components": Array [
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"ThisWorkbook\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attr...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/ThisWorkbook.cls",
+      },
+      "filename": "ThisWorkbook.cls",
+      "name": "ThisWorkbook",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Sheet1\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute ...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Sheet1.cls",
+      },
+      "filename": "Sheet1.cls",
+      "name": "Sheet1",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Sheet2\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute ...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Sheet2.cls",
+      },
+      "filename": "Sheet2.cls",
+      "name": "Sheet2",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Sheet3\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute ...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Sheet3.cls",
+      },
+      "filename": "Sheet3.cls",
+      "name": "Sheet3",
+      "type": "class",
+    },
+    Object {
+      "binary_path": "UserForm1.frx",
+      "code": "VERSION 5.00
+Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 
+   Caption         =   \\"UserForm1\\"
+   ClientHeight    =   3040
+   ClientLeft      =   110
+   ClientTop       =   450
+   Clien...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/UserForm1.frm",
+      },
+      "filename": "UserForm1.frm",
+      "name": "UserForm1",
+      "type": "form",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "Attribute VB_Name = \\"Validation\\"
+Public Function Validate(Args As Variant) As String
+    On Error GoTo ErrorHandling
+
+    Dim Errors As New Collection
+
+    If ThisWorkbook.VBProject.VBComponents...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Validation.bas",
+      },
+      "filename": "Validation.bas",
+      "name": "Validation",
+      "type": "module",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Class1\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute...",
+      "details": Object {
+        "dependency": undefined,
+        "path": "projects/standard/src/Class1.cls",
+      },
+      "filename": "Class1.cls",
+      "name": "Class1",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "Attribute VB_Name = \\"JsonConverter\\"
+''
+' VBA-JSON v2.3.0
+' (c) Tim Hall - https://github.com/VBA-tools/VBA-JSON
+'
+' JSON Converter for VBA
+'
+' Errors:
+' 10001 - JSON parse error
+'
+' @class J...",
+      "details": Object {
+        "dependency": "json",
+        "path": ".vba-blocks/sources/vba-blocks/json-v2.3.0/JsonConverter.bas",
+      },
+      "filename": "JsonConverter.bas",
+      "name": "JsonConverter",
+      "type": "module",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"Dictionary\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attri...",
+      "details": Object {
+        "dependency": "dictionary",
+        "path": ".vba-blocks/sources/vba-blocks/dictionary-v1.4.1/Dictionary.cls",
+      },
+      "filename": "Dictionary.cls",
+      "name": "Dictionary",
+      "type": "class",
+    },
+  ],
+  "name": "VBAProject",
+  "references": Array [],
+}
+`;

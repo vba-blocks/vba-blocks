@@ -10,15 +10,18 @@ import { cache } from '../__fixtures__';
 jest.mock('../../src/utils/fs');
 jest.mock('../../src/utils/git');
 
-const original_cwd = process.cwd();
 const original_env = { ...env };
 
-export async function setup(cwd: string) {
+export function setupEnvironment(cwd: string) {
   env.cwd = cwd;
   env.cache = cache;
   env.registry = join(cache, 'registry');
   env.packages = join(cache, 'packages');
   env.sources = join(cache, 'sources');
+}
+
+export async function setup(cwd: string) {
+  setupEnvironment(cwd);
 
   const project = await loadProject();
   const dependencies = await fetchDependencies(project);
@@ -27,11 +30,7 @@ export async function setup(cwd: string) {
 }
 
 export async function setupWorkspace(cwd: string) {
-  env.cwd = cwd;
-  env.cache = cache;
-  env.registry = join(cache, 'registry');
-  env.packages = join(cache, 'packages');
-  env.sources = join(cache, 'sources');
+  setupEnvironment(cwd);
 
   const manifest = await loadManifest(cwd);
   const config = await loadConfig();

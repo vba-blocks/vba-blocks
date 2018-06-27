@@ -7,7 +7,7 @@ import {
   unresolvable
 } from '../../../tests/__fixtures__';
 
-afterEach(reset);
+afterAll(reset);
 
 test('solves standard tree', async () => {
   const { config, workspace } = await setupWorkspace(standard);

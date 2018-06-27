@@ -1,43 +1,43 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should stage build graph 1`] = `
+exports[`should stage BuildGraph 1`] = `
 Object {
   "components": Array [
     Object {
       "name": "ThisWorkbook",
-      "path": "staging/ThisWorkbook.cls",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/ThisWorkbook.cls",
     },
     Object {
       "name": "Sheet1",
-      "path": "staging/Sheet1.cls",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Sheet1.cls",
     },
     Object {
       "name": "Sheet2",
-      "path": "staging/Sheet2.cls",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Sheet2.cls",
     },
     Object {
       "name": "Sheet3",
-      "path": "staging/Sheet3.cls",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Sheet3.cls",
     },
     Object {
       "name": "UserForm1",
-      "path": "staging/UserForm1.frm",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/UserForm1.frm",
     },
     Object {
       "name": "Validation",
-      "path": "staging/Validation.bas",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Validation.bas",
     },
     Object {
       "name": "Class1",
-      "path": "staging/Class1.cls",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Class1.cls",
     },
     Object {
       "name": "JsonConverter",
-      "path": "staging/JsonConverter.bas",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/JsonConverter.bas",
     },
     Object {
       "name": "Dictionary",
-      "path": "staging/Dictionary.cls",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Dictionary.cls",
     },
   ],
   "name": "VBAProject",
