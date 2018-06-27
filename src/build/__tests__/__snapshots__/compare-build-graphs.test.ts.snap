@@ -29,7 +29,7 @@ Attribute VB_Name = \\"ThisWorkbook\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
-Attr...",
+Attribute VB_Exposed...",
         "details": Object {
           "dependency": undefined,
           "path": "projects/complex/src/ThisWorkbook.cls",
@@ -48,7 +48,7 @@ Public Function Validate(Args As Variant) As String
 
     Dim Errors As New Collection
 
-    If ThisWorkbook.VBProject.VBComponents...",
+    If ThisWorkbook.VBProject.VBComponents.Count <> 9 ...",
         "details": Object {
           "dependency": undefined,
           "path": "projects/complex/src/Validation.bas",

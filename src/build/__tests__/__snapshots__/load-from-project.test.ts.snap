@@ -21,7 +21,7 @@ Attribute VB_Name = \\"Class1\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attribute...",
+Attribute VB_Exposed = Fa...",
       "details": Object {
         "dependency": undefined,
         "path": "projects/complex/src/Class1.cls",
@@ -40,7 +40,7 @@ Attribute VB_Name = \\"Dictionary\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attri...",
+Attribute VB_Exposed ...",
       "details": Object {
         "dependency": "dictionary",
         "path": ".vba-blocks/sources/vba-blocks/dictionary-v1.4.1/Dictionary.cls",
@@ -58,7 +58,8 @@ END
 Attribute VB_Name = \\"IWebAuthenticator\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False...",
+Attribute VB_PredeclaredId = False
+Attribute VB_E...",
       "details": Object {
         "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/IWebAuthenticator.cls",
@@ -79,7 +80,8 @@ Attribute VB_PredeclaredId = False...",
 ' Errors:
 ' 10001 - JSON parse error
 '
-' @class J...",
+' @class JsonConverter
+' @autho...",
       "details": Object {
         "dependency": "json",
         "path": ".vba-blocks/sources/vba-blocks/json-v2.3.0/JsonConverter.bas",
@@ -98,7 +100,7 @@ Attribute VB_Name = \\"Sheet1\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
-Attribute ...",
+Attribute VB_Exposed = Tru...",
       "details": Object {
         "dependency": undefined,
         "path": "projects/complex/src/Sheet1.cls",
@@ -117,7 +119,7 @@ Attribute VB_Name = \\"Sheet2\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
-Attribute ...",
+Attribute VB_Exposed = Tru...",
       "details": Object {
         "dependency": undefined,
         "path": "projects/complex/src/Sheet2.cls",
@@ -136,7 +138,7 @@ Attribute VB_Name = \\"Sheet3\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
-Attribute ...",
+Attribute VB_Exposed = Tru...",
       "details": Object {
         "dependency": undefined,
         "path": "projects/complex/src/Sheet3.cls",
@@ -155,7 +157,7 @@ Attribute VB_Name = \\"ThisWorkbook\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
-Attr...",
+Attribute VB_Exposed...",
       "details": Object {
         "dependency": undefined,
         "path": "projects/complex/src/ThisWorkbook.cls",
@@ -172,7 +174,7 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1
    ClientHeight    =   3015
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth...",
+   ClientWidth     =...",
       "details": Object {
         "dependency": undefined,
         "path": "projects/complex/src/UserForm1.frm",
@@ -189,7 +191,7 @@ Public Function Validate(Args As Variant) As String
 
     Dim Errors As New Collection
 
-    If ThisWorkbook.VBProject.VBComponents...",
+    If ThisWorkbook.VBProject.VBComponents.Count <> 9 ...",
       "details": Object {
         "dependency": undefined,
         "path": "projects/complex/src/Validation.bas",
@@ -208,7 +210,7 @@ Attribute VB_Name = \\"WebClient\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attrib...",
+Attribute VB_Exposed =...",
       "details": Object {
         "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebClient.cls",
@@ -226,7 +228,8 @@ Attrib...",
 '
 ' Contains general-purpose helpers that are used throughout VBA-Web. Includes:
 '
-...",
+' - Logging
+' -...",
       "details": Object {
         "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebHelpers.bas",
@@ -245,7 +248,7 @@ Attribute VB_Name = \\"WebRequest\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attri...",
+Attribute VB_Exposed ...",
       "details": Object {
         "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebRequest.cls",
@@ -264,7 +267,7 @@ Attribute VB_Name = \\"WebResponse\\"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
-Attr...",
+Attribute VB_Exposed...",
       "details": Object {
         "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebResponse.cls",
