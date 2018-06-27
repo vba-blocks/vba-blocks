@@ -1,7 +1,7 @@
 import walk from 'walk-sync';
 import { Reference, Source } from '../manifest';
 import { BuildGraph } from './build-graph';
-import { Component, extensionToType } from './component';
+import { Component, extension_to_type } from './component';
 import { join, extname, basename } from '../utils/path';
 import { pathExists, readJson, readFile } from '../utils/fs';
 import parallel from '../utils/parallel';
@@ -10,7 +10,7 @@ import { unrecognizedComponent } from '../errors';
 
 const binary_extensions = ['.frx'];
 
-export async function readBuildGraph(staging: string): Promise<BuildGraph> {
+export async function loadFromExport(staging: string): Promise<BuildGraph> {
   const files = walk(staging, { directories: false }).filter(file => {
     return file !== 'project.json' && !file.startsWith('targets');
   });
@@ -32,19 +32,21 @@ export async function readBuildGraph(staging: string): Promise<BuildGraph> {
     to_components,
     async file => {
       const name = getName(file);
+      const type = extension_to_type[extname(file)];
       const code = await readFile(file);
-      const type = extensionToType(extname(file));
+      const binary = <Buffer | undefined>(
+        (binaries[name] && (await readFile(binaries[name])))
+      );
+
+      // TODO There should be a way to encode this,
+      // but for now just rely on project's BuildGraph
+      const dependency = undefined;
 
       if (!type) {
         throw unrecognizedComponent(file);
       }
 
-      const source: Source = { name, path: file, binary: binaries[name] };
-      const binary = <Buffer | undefined>(
-        (source.binary && (await readFile(source.binary)))
-      );
-
-      return new Component({ code, type, binary, source });
+      return new Component(type, code, { dependency, binary });
     },
     { progress: env.reporter.progress('Load exported components') }
   );

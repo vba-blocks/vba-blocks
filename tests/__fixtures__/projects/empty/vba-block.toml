@@ -1,5 +1,5 @@
 [project]
-name = "e2e/empty"
+name = "empty"
 
 [targets]
 xlsm = "targets/xlsm"

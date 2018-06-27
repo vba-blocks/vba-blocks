@@ -1,81 +1,86 @@
-import { extname } from '../utils/path';
+import { extname, relative } from '../utils/path';
 import { readFile } from '../utils/fs';
-import { Manifest, Source } from '../manifest';
 import { unrecognizedComponent } from '../errors';
 
 export type ComponentType = 'module' | 'class' | 'form' | 'document';
 
-export interface ComponentMetadata {
-  manifest?: Manifest;
-  source?: Source;
+export interface ComponentDetails {
+  path?: string;
+  dependency?: string;
+  binary?: Buffer;
 }
 
 export class Component {
-  code: string;
   type: ComponentType;
-  binary: Buffer | undefined;
-  metadata: ComponentMetadata;
+  code: string;
+  details: ComponentDetails;
 
-  constructor(options: {
-    code: Buffer | string;
-    type: ComponentType;
-    binary?: Buffer;
-    manifest?: Manifest;
-    source?: Source;
-  }) {
-    const { code, type, binary, manifest, source } = options;
-
-    this.code = code && Buffer.isBuffer(code) ? code.toString() : code;
+  constructor(
+    type: ComponentType,
+    code: Buffer | string,
+    details: ComponentDetails = {}
+  ) {
     this.type = type;
-    this.binary = binary;
-    this.metadata = { manifest, source };
+    this.code = code && Buffer.isBuffer(code) ? code.toString() : code;
+    this.details = details;
   }
 
   get name(): string {
-    // TODO Load from code
-    return this.metadata.source!.name;
+    const line = findLine(this.code, 'Attribute VB_Name');
+    if (!line) throw new Error('No attribute VB_Name found in component');
+
+    const [key, value] = line.split('=');
+    return JSON.parse(value);
   }
 
   get binary_path(): string | undefined {
-    // TODO Load from code
-    return this.metadata.source!.binary;
+    const line = findLine(this.code, 'OleObjectBlob');
+    if (!line) return;
+
+    const [key, value] = line.split('=', 2);
+    const [path, offset] = value.split(':', 2);
+    return JSON.parse(path);
   }
 
   get filename(): string {
-    const extension = typeToExtension(this.type);
+    const extension = type_to_extension[this.type];
     return `${this.name}${extension}`;
   }
 
-  static async load(manifest: Manifest, source: Source): Promise<Component> {
-    const type = extensionToType(extname(source.path));
+  static async load(
+    path: string,
+    details: { dependency?: string; binary_path?: string } = {}
+  ): Promise<Component> {
+    const { dependency, binary_path } = details;
+
+    const type = extension_to_type[extname(path)];
     if (!type) {
-      throw unrecognizedComponent(source.path);
+      throw unrecognizedComponent(path);
     }
 
-    const code = await readFile(source.path);
+    const code = await readFile(path);
     const binary = <Buffer | undefined>(
-      (source.binary && (await readFile(source.binary)))
+      (binary_path && (await readFile(binary_path)))
     );
 
-    return new Component({ code, type, binary, manifest, source });
+    return new Component(type, code, { path, dependency, binary });
   }
 }
 
-const extension_to_type: { [extension: string]: ComponentType } = {
+export const extension_to_type: { [extension: string]: ComponentType } = {
   '.bas': 'module',
   '.cls': 'class',
   '.frm': 'form'
 };
-const type_to_extension: { [type: string]: string } = {
+export const type_to_extension: { [type: string]: string } = {
   module: '.bas',
   class: '.cls',
   form: '.frm'
 };
 
-export function extensionToType(extension: string): ComponentType | undefined {
-  return extension_to_type[extension];
-}
+const BY_LINE = /(?:\r\n|\r|\n)/g;
 
-export function typeToExtension(type: ComponentType): string | undefined {
-  return type_to_extension[type];
+function findLine(code: string, search: string): string | undefined {
+  const lines = code.split(BY_LINE).map(line => line.trim());
+  return lines.find(line => line.startsWith(search));
 }

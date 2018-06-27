@@ -5,7 +5,7 @@ import { standard, empty } from './__fixtures__';
 
 jest.setTimeout(20000);
 
-test.only('build', async () => {
+test('build', async () => {
   await setup(standard, 'build', async cwd => {
     await execute(cwd, 'build');
 

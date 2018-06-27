@@ -23,7 +23,7 @@ export async function stageBuildGraph(
 
       if (component.binary_path) {
         const binary_path = join(staging, basename(component.binary_path));
-        await writeFile(binary_path, component.binary);
+        await writeFile(binary_path, component.details.binary);
       }
 
       return { name: component.name, path };
