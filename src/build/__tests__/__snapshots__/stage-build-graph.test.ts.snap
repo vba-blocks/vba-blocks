@@ -4,8 +4,16 @@ exports[`should stage BuildGraph 1`] = `
 Object {
   "components": Array [
     Object {
-      "name": "ThisWorkbook",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/ThisWorkbook.cls",
+      "name": "Class1",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Class1.cls",
+    },
+    Object {
+      "name": "Dictionary",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Dictionary.cls",
+    },
+    Object {
+      "name": "JsonConverter",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/JsonConverter.bas",
     },
     Object {
       "name": "Sheet1",
@@ -20,24 +28,16 @@ Object {
       "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Sheet3.cls",
     },
     Object {
+      "name": "ThisWorkbook",
+      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/ThisWorkbook.cls",
+    },
+    Object {
       "name": "UserForm1",
       "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/UserForm1.frm",
     },
     Object {
       "name": "Validation",
       "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Validation.bas",
-    },
-    Object {
-      "name": "Class1",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Class1.cls",
-    },
-    Object {
-      "name": "JsonConverter",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/JsonConverter.bas",
-    },
-    Object {
-      "name": "Dictionary",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Dictionary.cls",
     },
   ],
   "name": "VBAProject",

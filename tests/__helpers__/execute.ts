@@ -1,7 +1,7 @@
 import { promisify } from 'util';
-import { copy, remove, ensureDirSync } from 'fs-extra';
+import { copy, remove, ensureDirSync, readFile } from 'fs-extra';
 import walkSync from 'walk-sync';
-import { join, resolve } from '../../src/utils/path';
+import { join, resolve, extname } from '../../src/utils/path';
 import { checksum, tmpFolder } from '../../src/utils/fs';
 import { RunResult } from '../../src/utils/run';
 const exec = promisify(require('child_process').exec);
@@ -24,7 +24,7 @@ export async function setup(
   try {
     await action(path);
   } finally {
-    await remove(path);
+    // await remove(path);
   }
 }
 
@@ -42,7 +42,7 @@ export async function execute(
 }
 
 const isBackup = /\.backup/g;
-const isBinary = /\.xlsm/g;
+const isBinary = (file: string) => ['.xlsm', '.frx'].includes(extname(file));
 
 export async function readdir(
   cwd: string
@@ -53,10 +53,11 @@ export async function readdir(
     if (isBackup.test(file)) return;
 
     // TEMP Need reproducible builds to compare binary results
-    if (isBinary.test(file)) {
+    if (isBinary(file)) {
       details[file] = '<TODO>';
     } else {
-      details[file] = await checksum(resolve(cwd, file));
+      const data = await readFile(resolve(cwd, file), 'utf8');
+      details[file] = truncate(normalize(data));
     }
   });
   await Promise.all(checking);
@@ -87,4 +88,15 @@ async function wait(ms = 500) {
   return new Promise(resolve => {
     setTimeout(() => resolve(), ms);
   });
+}
+
+function normalize(value: string): string {
+  return value
+    .replace(/\r/g, '{CR}')
+    .replace(/\n/g, '{LF}')
+    .replace(/\t/g, '{tab}');
+}
+
+function truncate(value: string): string {
+  return value.length < 200 ? value : `${value.slice(0, 200)}...`;
 }

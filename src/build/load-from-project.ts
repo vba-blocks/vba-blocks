@@ -1,6 +1,6 @@
 import { Manifest, Reference } from '../manifest';
 import { Project } from '../project';
-import { Component } from './component';
+import { Component, byComponentName } from './component';
 import { BuildGraph } from './build-graph';
 import joinCommas from '../utils/join-commas';
 import { buildInvalid } from '../errors';
@@ -33,7 +33,9 @@ export default async function loadFromProject(
     }
   }
 
-  const components = await Promise.all(loading_components);
+  const components = (await Promise.all(loading_components)).sort(
+    byComponentName
+  );
   const graph = { name: 'VBAProject', components, references };
 
   validateGraph(project, graph);

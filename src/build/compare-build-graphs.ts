@@ -1,6 +1,6 @@
 import { Reference } from '../manifest';
 import { BuildGraph } from './build-graph';
-import { Component } from './component';
+import { Component, byComponentName } from './component';
 
 export interface Changeset {
   components: {
@@ -66,6 +66,10 @@ export default function compareBuildGraphs(
   for (const component of by_name.components.values()) {
     changeset.components.removed.push(component);
   }
+
+  changeset.components.added.sort(byComponentName);
+  changeset.components.changed.sort(byComponentName);
+  changeset.components.removed.sort(byComponentName);
 
   // Determine reference changes
   for (const reference of after.references) {

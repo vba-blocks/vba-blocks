@@ -1,7 +1,7 @@
 import walk from 'walk-sync';
-import { Reference, Source } from '../manifest';
+import { Reference } from '../manifest';
 import { BuildGraph } from './build-graph';
-import { Component, extension_to_type } from './component';
+import { Component, extension_to_type, byComponentName } from './component';
 import { join, extname, basename } from '../utils/path';
 import { pathExists, readJson, readFile } from '../utils/fs';
 import parallel from '../utils/parallel';
@@ -54,6 +54,7 @@ export default async function loadFromExport(
     },
     { progress: env.reporter.progress('Load exported components') }
   );
+  components.sort(byComponentName);
 
   return {
     name,

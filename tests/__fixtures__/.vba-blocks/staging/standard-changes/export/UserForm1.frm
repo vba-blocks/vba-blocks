@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 
    Caption         =   "UserForm1"
-   ClientHeight    =   3040
-   ClientLeft      =   110
-   ClientTop       =   450
-   ClientWidth     =   4580
+   ClientHeight    =   3015
+   ClientLeft      =   120
+   ClientTop       =   465
+   ClientWidth     =   4560
    OleObjectBlob   =   "UserForm1.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,8 +13,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Public Property Get IsValid()
-    If Me.Image1.Picture.Width = 11289 Then
+Public Property Get IsValid() As Boolean
+    If Me.Label.Caption = "vba-blocks" Then
         IsValid = True
     End If
 End Property

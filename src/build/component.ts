@@ -84,3 +84,9 @@ function findLine(code: string, search: string): string | undefined {
   const lines = code.split(BY_LINE).map(line => line.trim());
   return lines.find(line => line.startsWith(search));
 }
+
+export function byComponentName(a: Component, b: Component): number {
+  if (a.name < b.name) return -1;
+  if (a.name > b.name) return 1;
+  return 0;
+}

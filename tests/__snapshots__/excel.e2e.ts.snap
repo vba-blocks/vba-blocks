@@ -14,28 +14,31 @@ Object {
 
 exports[`export 1`] = `
 Object {
-  "build/e2e-empty.xlsm": "<TODO>",
-  "src/Class1.cls": "97a28c67ac87d519a8fe94c861c9cc3b9a0b64ca82c712b56a1f7f6bfe2bf97e",
-  "src/Sheet1.cls": "e5b1e411d21a1c90dfa698ec1758fc093db24cfa12676ee8336c8eb5c7e0c61a",
-  "src/Sheet2.cls": "d1b4d2a0ddf050f65b1b13c00101592df05cf1764cb4ce00d1908e2f3c430ac6",
-  "src/Sheet3.cls": "8142eb459170d258ae3cd18bc794db1cbc77864c5155cad0334005d7a7760a06",
-  "src/ThisWorkbook.cls": "2045d7fbf355365f35e2a81cde9c61cf0a23fa7023e82d6549231a592027517a",
-  "src/UserForm1.frm": "bdea1912fcb7ea513862954c50ef972a00498b093136209ec1da4cc31a7eb156",
-  "src/UserForm1.frx": "4c455414fbb252abd02766b973030323ce8b26c9cf026444c251c10a390ab47f",
-  "src/Validation.bas": "8821960b232abeacd6ac1d52dc8af880a81ea46f02fa02ad62ae88dacce13707",
-  "targets/xlsm/[Content_Types].xml": "482267b8dffa9fab0f6f8e6b7ba5ad8c72c447e5542d58c3c7bb6eabfc82de50",
-  "targets/xlsm/_rels/.rels": "73e5a29f48d5ab979eeda062493bc7e679265c1344ef936978b8becec5549497",
-  "targets/xlsm/docProps/app.xml": "59bcc1cc502614c92d24ce534d4bc82b40fe4c3e8b08f6401651b6c469e7b06f",
-  "targets/xlsm/docProps/core.xml": "fc27c4c2a069d2e775e910d8c726b673f69bc7f0ccb2a8a9d8aa20a0777398e1",
-  "targets/xlsm/xl/_rels/workbook.xml.rels": "008a27ccbdcbbafe369cac207fac4d78db36ee12d9c7fdef1d39a8f0526cc7fb",
-  "targets/xlsm/xl/sharedStrings.xml": "f101b4e8685b29eb94e82872dbfd30a4f821467c0aa45d5d5c41e9a5aa3a4017",
-  "targets/xlsm/xl/styles.xml": "02e6380738d05fcaa8da0b4f78a2fe96d15560970a37e96e5768e94fde516e09",
-  "targets/xlsm/xl/theme/theme1.xml": "b16106f4229f6ece6d74426b3e73ff6a677df2908d2a06f76ef0329fa27c0282",
-  "targets/xlsm/xl/workbook.xml": "fda03615d79fcf1f3e296d1a7adafbddeb73351ab233d0b6a9f4533e2457dcb7",
-  "targets/xlsm/xl/worksheets/sheet1.xml": "b8c9fc0fefb498523aa14ede2cdd0888b9df176b7290badcc70b593643c7da5b",
-  "targets/xlsm/xl/worksheets/sheet2.xml": "733ed91f69cf6d298ecb72560824878f666dd982e67069ee9ca3d3f2ed7d7582",
-  "targets/xlsm/xl/worksheets/sheet3.xml": "96c1a594b74004450943fc8789caa6593f4e80342e0240b5b7aeffa84d69dea2",
-  "vba-block.toml": "cf5d74923885f0741872bb1b7ededc2bd94f825c1f27715307e7c6389f26b4b5",
+  "build/empty.xlsm": "<TODO>",
+  "src/Class1.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Class1\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
+  "src/Dictionary.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Dictionary\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF...",
+  "src/JsonConverter.bas": "Attribute VB_Name = \\"JsonConverter\\"{CR}{LF}''{CR}{LF}' VBA-JSON v2.3.0{CR}{LF}' (c) Tim Hall - https://github.com/VBA-tools/VBA-JSON{CR}{LF}'{CR}{LF}' JSON Converter for VBA{CR}{LF}'{CR}{LF}' Errors:{...",
+  "src/Sheet1.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Sheet1\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
+  "src/Sheet2.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Sheet2\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
+  "src/Sheet3.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Sheet3\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
+  "src/ThisWorkbook.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"ThisWorkbook\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{...",
+  "src/UserForm1.frm": "VERSION 5.00{CR}{LF}Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 {CR}{LF}   Caption         =   \\"UserForm1\\"{CR}{LF}   ClientHeight    =   3015{CR}{LF}   ClientLeft      =   120{CR}{LF}   Cli...",
+  "src/UserForm1.frx": "<TODO>",
+  "src/Validation.bas": "Attribute VB_Name = \\"Validation\\"{CR}{LF}Public Function Validate(Args As Variant) As String{CR}{LF}    On Error GoTo ErrorHandling{CR}{LF}{CR}{LF}    Dim Errors As New Collection{CR}{LF}{CR}{LF}    If...",
+  "targets/xlsm/[Content_Types].xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Types xmlns=\\"http://schemas.openxmlformats.org/package/2006/content-types\\"><Default Extension=\\"bin\\" ContentType=\\"application/vnd.ms-offi...",
+  "targets/xlsm/_rels/.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
+  "targets/xlsm/docProps/app.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Properties xmlns=\\"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties\\" xmlns:vt=\\"http://schemas.openxmlformats.org...",
+  "targets/xlsm/docProps/core.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<cp:coreProperties xmlns:cp=\\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\\" xmlns:dc=\\"http://purl.org/dc/elemen...",
+  "targets/xlsm/xl/_rels/workbook.xml.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
+  "targets/xlsm/xl/sharedStrings.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<sst xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" count=\\"3\\" uniqueCount=\\"3\\"><si><t>A1</t></si><si><t>B2</t></si><si>...",
+  "targets/xlsm/xl/styles.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<styleSheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:mc=\\"http://schemas.openxmlformats.org/markup-compatib...",
+  "targets/xlsm/xl/theme/theme1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<a:theme xmlns:a=\\"http://schemas.openxmlformats.org/drawingml/2006/main\\" name=\\"Office Theme\\"><a:themeElements><a:clrScheme name=\\"Office\\">...",
+  "targets/xlsm/xl/workbook.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<workbook xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/200...",
+  "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
+  "targets/xlsm/xl/worksheets/sheet2.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
+  "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
+  "vba-block.lock": "[root]{LF}name = \\"empty\\"{LF}version = \\"0.0.0\\"{LF}dependencies = [{LF}]{LF}{LF}",
+  "vba-block.toml": "[project]{LF}name = \\"empty\\"{LF}{LF}[targets]{LF}xlsm = \\"targets/xlsm\\"{LF}",
 }
 `;
 
@@ -46,30 +49,10 @@ Add the following to the [src] section:
 Class1 = \\"src/Class1.cls\\"
 
 Add the following to the [src] section:
-Sheet1 = \\"src/Sheet1.cls\\"
+Dictionary = \\"src/Dictionary.cls\\"
 
 Add the following to the [src] section:
-Sheet2 = \\"src/Sheet2.cls\\"
-
-Add the following to the [src] section:
-Sheet3 = \\"src/Sheet3.cls\\"
-
-Add the following to the [src] section:
-ThisWorkbook = \\"src/ThisWorkbook.cls\\"
-
-Add the following to the [src] section:
-UserForm1 = { path = \\"src/UserForm1.frm\\", binary = \\"src/UserForm1.frx\\" }
-
-Add the following to the [src] section:
-Validation = \\"src/Validation.bas\\"
-"
-`;
-
-exports[`export 3`] = `
-"The following changes are required in this project's vba-block.toml:
-
-Add the following to the [src] section:
-Class1 = \\"src/Class1.cls\\"
+JsonConverter = \\"src/JsonConverter.bas\\"
 
 Add the following to the [src] section:
 Sheet1 = \\"src/Sheet1.cls\\"

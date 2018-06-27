@@ -4,7 +4,7 @@ import { Project } from '../project';
 import { Changeset } from './compare-build-graphs';
 import { Component } from './component';
 import { Manifest } from '../manifest';
-import { writeFile, remove } from '../utils/fs';
+import { writeFile, remove, ensureDir } from '../utils/fs';
 import { join, dirname, relative } from '../utils/path';
 import parallel from '../utils/parallel';
 
@@ -63,13 +63,12 @@ async function updateManifest(project: Project, changeset: Changeset) {
 }
 
 async function writeComponent(path: string, component: Component) {
+  const dir = dirname(path);
+  await ensureDir(dir);
   await writeFile(path, component.code);
 
   if (component.binary_path) {
-    await writeFile(
-      join(dirname(path), component.binary_path),
-      component.details.binary
-    );
+    await writeFile(join(dir, component.binary_path), component.details.binary);
   }
 }
 
@@ -83,7 +82,7 @@ function addSrc(manifest: Manifest, component: Component): string {
     binary_path && relative(manifest.dir, binary_path);
 
   const details = relative_binary_path
-    ? `{ path = ${relative_path}", binary = "${relative_binary_path}" }`
+    ? `{ path = "${relative_path}", binary = "${relative_binary_path}" }`
     : `"${relative_path}"`;
 
   return dedent`
