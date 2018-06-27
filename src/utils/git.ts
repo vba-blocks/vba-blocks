@@ -19,6 +19,5 @@ export async function clone(
 }
 
 export async function pull(local: string): Promise<ExecResult> {
-  console.log('pull');
   return GitProcess.exec(['pull'], local);
 }

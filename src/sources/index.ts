@@ -11,6 +11,7 @@ import RegistrySource from './registry-source';
 import PathSource from './path-source';
 import GitSource from '../professional/sources/git-source';
 import {
+  AssertOk,
   sourceMisconfiguredRegistry,
   dependencyUnknownSource,
   sourceNoneMatching
@@ -31,7 +32,7 @@ export async function resolve(
   if (isRegistryDependency(dependency)) {
     const { registry } = dependency;
     const source = sources.registry[registry];
-    ok(source, sourceMisconfiguredRegistry(registry));
+    (<AssertOk>ok)(source, sourceMisconfiguredRegistry(registry));
 
     return source.resolve(dependency);
   } else if (isPathDependency(dependency)) {
@@ -51,7 +52,7 @@ export async function fetch(
 
   if (type === 'registry') {
     const source = sources.registry[value];
-    ok(source, sourceMisconfiguredRegistry(value));
+    (<AssertOk>ok)(source, sourceMisconfiguredRegistry(value));
 
     return sources.registry[value].fetch(registration);
   } else if (type === 'path') {
