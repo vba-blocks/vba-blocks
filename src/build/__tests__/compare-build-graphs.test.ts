@@ -1,10 +1,11 @@
 import { setup, reset } from '../../../tests/__helpers__/project';
 import {
-  standard,
+  dir,
+  complex,
   standardExport,
   standardChangesExport
 } from '../../../tests/__fixtures__';
-import { normalizeComponent } from './load-from-project.test';
+import { normalizeComponent } from '../component';
 import loadFromProject from '../load-from-project';
 import loadFromExport from '../load-from-export';
 import compareBuildGraphs, { Changeset } from '../compare-build-graphs';
@@ -12,7 +13,7 @@ import compareBuildGraphs, { Changeset } from '../compare-build-graphs';
 afterAll(reset);
 
 test('should find no changes between build graphs', async () => {
-  const { project, dependencies } = await setup(standard);
+  const { project, dependencies } = await setup(complex);
 
   const before = await loadFromProject(project, dependencies);
   const after = await loadFromExport(standardExport);
@@ -25,7 +26,7 @@ test('should find no changes between build graphs', async () => {
 });
 
 test('should find added, changed, and removed between build graphs', async () => {
-  const { project, dependencies } = await setup(standard);
+  const { project, dependencies } = await setup(complex);
 
   const before = await loadFromProject(project, dependencies);
   const after = await loadFromExport(standardChangesExport);
@@ -39,9 +40,15 @@ test('should find added, changed, and removed between build graphs', async () =>
 export function normalizeChangeset(changeset: Changeset): Changeset {
   const { components, references } = changeset;
 
-  const added = components.added.map(normalizeComponent);
-  const changed = components.changed.map(normalizeComponent);
-  const removed = components.removed.map(normalizeComponent);
+  const added = components.added.map(component =>
+    normalizeComponent(component, dir)
+  );
+  const changed = components.changed.map(component =>
+    normalizeComponent(component, dir)
+  );
+  const removed = components.removed.map(component =>
+    normalizeComponent(component, dir)
+  );
 
   return {
     components: { added, changed, removed },

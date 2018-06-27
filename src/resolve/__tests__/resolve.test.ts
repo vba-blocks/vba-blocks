@@ -1,4 +1,3 @@
-import resolve from '../';
 import { setupWorkspace, reset } from '../../../tests/__helpers__/project';
 import {
   standard,
@@ -6,6 +5,7 @@ import {
   needsSat,
   unresolvable
 } from '../../../tests/__fixtures__';
+import resolve from '../';
 
 afterAll(reset);
 

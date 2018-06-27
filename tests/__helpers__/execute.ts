@@ -2,8 +2,9 @@ import { promisify } from 'util';
 import { copy, remove, ensureDirSync, readFile } from 'fs-extra';
 import walkSync from 'walk-sync';
 import { join, resolve, extname } from '../../src/utils/path';
-import { checksum, tmpFolder } from '../../src/utils/fs';
+import { tmpFolder } from '../../src/utils/fs';
 import { RunResult } from '../../src/utils/run';
+import truncate from '../../src/utils/truncate';
 const exec = promisify(require('child_process').exec);
 
 import { run as _run } from '../../';
@@ -57,7 +58,7 @@ export async function readdir(
       details[file] = '<TODO>';
     } else {
       const data = await readFile(resolve(cwd, file), 'utf8');
-      details[file] = truncate(normalize(data));
+      details[file] = truncate(normalize(data), 200);
     }
   });
   await Promise.all(checking);
@@ -95,8 +96,4 @@ function normalize(value: string): string {
     .replace(/\r/g, '{CR}')
     .replace(/\n/g, '{LF}')
     .replace(/\t/g, '{tab}');
-}
-
-function truncate(value: string): string {
-  return value.length < 200 ? value : `${value.slice(0, 200)}...`;
 }

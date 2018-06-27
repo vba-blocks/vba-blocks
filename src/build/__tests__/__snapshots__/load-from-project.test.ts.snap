@@ -24,7 +24,7 @@ Attribute VB_PredeclaredId = False
 Attribute...",
       "details": Object {
         "dependency": undefined,
-        "path": "projects/standard/src/Class1.cls",
+        "path": "projects/complex/src/Class1.cls",
       },
       "filename": "Class1.cls",
       "name": "Class1",
@@ -47,6 +47,24 @@ Attri...",
       },
       "filename": "Dictionary.cls",
       "name": "Dictionary",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"IWebAuthenticator\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False...",
+      "details": Object {
+        "dependency": "web",
+        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/IWebAuthenticator.cls",
+      },
+      "filename": "IWebAuthenticator.cls",
+      "name": "IWebAuthenticator",
       "type": "class",
     },
     Object {
@@ -83,7 +101,7 @@ Attribute VB_PredeclaredId = True
 Attribute ...",
       "details": Object {
         "dependency": undefined,
-        "path": "projects/standard/src/Sheet1.cls",
+        "path": "projects/complex/src/Sheet1.cls",
       },
       "filename": "Sheet1.cls",
       "name": "Sheet1",
@@ -102,7 +120,7 @@ Attribute VB_PredeclaredId = True
 Attribute ...",
       "details": Object {
         "dependency": undefined,
-        "path": "projects/standard/src/Sheet2.cls",
+        "path": "projects/complex/src/Sheet2.cls",
       },
       "filename": "Sheet2.cls",
       "name": "Sheet2",
@@ -121,7 +139,7 @@ Attribute VB_PredeclaredId = True
 Attribute ...",
       "details": Object {
         "dependency": undefined,
-        "path": "projects/standard/src/Sheet3.cls",
+        "path": "projects/complex/src/Sheet3.cls",
       },
       "filename": "Sheet3.cls",
       "name": "Sheet3",
@@ -140,7 +158,7 @@ Attribute VB_PredeclaredId = True
 Attr...",
       "details": Object {
         "dependency": undefined,
-        "path": "projects/standard/src/ThisWorkbook.cls",
+        "path": "projects/complex/src/ThisWorkbook.cls",
       },
       "filename": "ThisWorkbook.cls",
       "name": "ThisWorkbook",
@@ -154,10 +172,10 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1
    ClientHeight    =   3015
    ClientLeft      =   120
    ClientTop       =   465
-   Clien...",
+   ClientWidth...",
       "details": Object {
         "dependency": undefined,
-        "path": "projects/standard/src/UserForm1.frm",
+        "path": "projects/complex/src/UserForm1.frm",
       },
       "filename": "UserForm1.frm",
       "name": "UserForm1",
@@ -174,11 +192,86 @@ Public Function Validate(Args As Variant) As String
     If ThisWorkbook.VBProject.VBComponents...",
       "details": Object {
         "dependency": undefined,
-        "path": "projects/standard/src/Validation.bas",
+        "path": "projects/complex/src/Validation.bas",
       },
       "filename": "Validation.bas",
       "name": "Validation",
       "type": "module",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"WebClient\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attrib...",
+      "details": Object {
+        "dependency": "web",
+        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebClient.cls",
+      },
+      "filename": "WebClient.cls",
+      "name": "WebClient",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "Attribute VB_Name = \\"WebHelpers\\"
+''
+' WebHelpers v4.1.5
+' (c) Tim Hall - https://github.com/VBA-tools/VBA-Web
+'
+' Contains general-purpose helpers that are used throughout VBA-Web. Includes:
+'
+...",
+      "details": Object {
+        "dependency": "web",
+        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebHelpers.bas",
+      },
+      "filename": "WebHelpers.bas",
+      "name": "WebHelpers",
+      "type": "module",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"WebRequest\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attri...",
+      "details": Object {
+        "dependency": "web",
+        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebRequest.cls",
+      },
+      "filename": "WebRequest.cls",
+      "name": "WebRequest",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"WebResponse\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attr...",
+      "details": Object {
+        "dependency": "web",
+        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebResponse.cls",
+      },
+      "filename": "WebResponse.cls",
+      "name": "WebResponse",
+      "type": "class",
     },
   ],
   "name": "VBAProject",

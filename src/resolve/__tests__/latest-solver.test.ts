@@ -1,5 +1,3 @@
-import solve from '../latest-solver';
-import Resolver from '../resolver';
 import { setupWorkspace, reset } from '../../../tests/__helpers__/project';
 import {
   standard,
@@ -7,6 +5,8 @@ import {
   needsSat,
   unresolvable
 } from '../../../tests/__fixtures__';
+import solve from '../latest-solver';
+import Resolver from '../resolver';
 
 afterAll(reset);
 

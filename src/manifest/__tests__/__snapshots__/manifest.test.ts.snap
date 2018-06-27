@@ -73,12 +73,6 @@ Object {
       "path": "src/Sheet3.cls",
     },
     Object {
-      "binary": "src/UserForm1.frx",
-      "name": "UserForm1",
-      "optional": false,
-      "path": "src/UserForm1.frm",
-    },
-    Object {
       "name": "Validation",
       "optional": false,
       "path": "src/Validation.bas",

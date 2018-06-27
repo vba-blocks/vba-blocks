@@ -20,7 +20,7 @@ Remove \`Validation\` from the [src] section",
 exports[`should apply changeset for project 2`] = `
 Array [
   Array [
-    "C:/dev/vba-blocks/tests/__fixtures__/projects/standard/src/ThisWorkbook.cls",
+    "projects/complex/src/ThisWorkbook.cls",
     "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -34,7 +34,7 @@ Attribute VB_Exposed = True
 ",
   ],
   Array [
-    "C:/dev/vba-blocks/tests/__fixtures__/projects/standard/src/Added.bas",
+    "projects/complex/src/Added.bas",
     "Attribute VB_Name = \\"Added\\"
 ' (added)
 ",

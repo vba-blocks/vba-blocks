@@ -1,5 +1,6 @@
 import env from '../../src/env';
 import { reset as resetFs } from '../../src/utils/fs';
+import { pull } from '../../src/utils/git';
 import { join } from '../../src/utils/path';
 import { loadConfig } from '../../src/config';
 import { loadProject, fetchDependencies } from '../../src/project';

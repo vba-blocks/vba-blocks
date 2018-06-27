@@ -1,5 +1,10 @@
 import { setup, reset } from '../../../tests/__helpers__/project';
-import { standard, standardChangesExport } from '../../../tests/__fixtures__';
+import {
+  dir,
+  complex,
+  standardChangesExport
+} from '../../../tests/__fixtures__';
+import { relative } from '../../utils/path';
 import { writeFile } from '../../utils/fs';
 import loadFromProject from '../load-from-project';
 import loadFromExport from '../load-from-export';
@@ -9,7 +14,7 @@ import applyChangeset from '../apply-changeset';
 afterEach(reset);
 
 test('should apply changeset for project', async () => {
-  const { project, dependencies } = await setup(standard);
+  const { project, dependencies } = await setup(complex);
 
   const before = await loadFromProject(project, dependencies);
   const after = await loadFromExport(standardChangesExport);
@@ -19,7 +24,7 @@ test('should apply changeset for project', async () => {
   await applyChangeset(project, changeset);
 
   expect(mock(console.log).calls).toMatchSnapshot();
-  expect(mock(writeFile).calls).toMatchSnapshot();
+  expect(mock(writeFile).calls.map(normalizeWrite)).toMatchSnapshot();
 
   mock(console.log).restore();
 });
@@ -38,4 +43,9 @@ function mock(value: any): Mock {
       return value.mockRestore();
     }
   };
+}
+
+function normalizeWrite(write_call) {
+  const [path, data] = write_call;
+  return [relative(dir, path), data];
 }

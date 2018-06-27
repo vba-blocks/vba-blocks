@@ -5,39 +5,59 @@ Object {
   "components": Array [
     Object {
       "name": "Class1",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Class1.cls",
+      "path": ".vba-blocks/staging/standard/import/Class1.cls",
     },
     Object {
       "name": "Dictionary",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Dictionary.cls",
+      "path": ".vba-blocks/staging/standard/import/Dictionary.cls",
+    },
+    Object {
+      "name": "IWebAuthenticator",
+      "path": ".vba-blocks/staging/standard/import/IWebAuthenticator.cls",
     },
     Object {
       "name": "JsonConverter",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/JsonConverter.bas",
+      "path": ".vba-blocks/staging/standard/import/JsonConverter.bas",
     },
     Object {
       "name": "Sheet1",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Sheet1.cls",
+      "path": ".vba-blocks/staging/standard/import/Sheet1.cls",
     },
     Object {
       "name": "Sheet2",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Sheet2.cls",
+      "path": ".vba-blocks/staging/standard/import/Sheet2.cls",
     },
     Object {
       "name": "Sheet3",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Sheet3.cls",
+      "path": ".vba-blocks/staging/standard/import/Sheet3.cls",
     },
     Object {
       "name": "ThisWorkbook",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/ThisWorkbook.cls",
+      "path": ".vba-blocks/staging/standard/import/ThisWorkbook.cls",
     },
     Object {
       "name": "UserForm1",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/UserForm1.frm",
+      "path": ".vba-blocks/staging/standard/import/UserForm1.frm",
     },
     Object {
       "name": "Validation",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/.vba-blocks/staging/standard/import/Validation.bas",
+      "path": ".vba-blocks/staging/standard/import/Validation.bas",
+    },
+    Object {
+      "name": "WebClient",
+      "path": ".vba-blocks/staging/standard/import/WebClient.cls",
+    },
+    Object {
+      "name": "WebHelpers",
+      "path": ".vba-blocks/staging/standard/import/WebHelpers.bas",
+    },
+    Object {
+      "name": "WebRequest",
+      "path": ".vba-blocks/staging/standard/import/WebRequest.cls",
+    },
+    Object {
+      "name": "WebResponse",
+      "path": ".vba-blocks/staging/standard/import/WebResponse.cls",
     },
   ],
   "name": "VBAProject",

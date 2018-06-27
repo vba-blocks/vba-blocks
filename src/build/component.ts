@@ -1,5 +1,6 @@
 import { extname, relative } from '../utils/path';
 import { readFile } from '../utils/fs';
+import truncate from '../utils/truncate';
 import { unrecognizedComponent } from '../errors';
 
 export type ComponentType = 'module' | 'class' | 'form' | 'document';
@@ -59,9 +60,8 @@ export class Component {
     }
 
     const code = await readFile(path);
-    const binary = <Buffer | undefined>(
-      (binary_path && (await readFile(binary_path)))
-    );
+    const binary = <Buffer | undefined>(binary_path &&
+      (await readFile(binary_path)));
 
     return new Component(type, code, { path, dependency, binary });
   }
@@ -89,4 +89,21 @@ export function byComponentName(a: Component, b: Component): number {
   if (a.name < b.name) return -1;
   if (a.name > b.name) return 1;
   return 0;
+}
+
+export function normalizeComponent(
+  component: Component,
+  dir: string
+): Component {
+  return {
+    type: component.type,
+    name: component.name,
+    code: truncate(component.code, 200),
+    details: {
+      path: component.details.path && relative(dir, component.details.path),
+      dependency: component.details.dependency
+    },
+    binary_path: component.binary_path,
+    filename: component.filename
+  };
 }
