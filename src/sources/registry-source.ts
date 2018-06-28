@@ -37,7 +37,8 @@ export default class RegistrySource implements Source {
   local: { index: string; packages: string };
   remote: { index: string; packages: string };
   sources: string;
-  pulling: Promise<void>;
+  pulling?: Promise<void>;
+  up_to_date: boolean;
 
   constructor({ name, index, packages }: RegistryOptions) {
     this.name = name;
@@ -47,16 +48,15 @@ export default class RegistrySource implements Source {
     };
     this.remote = { index, packages };
     this.sources = join(env.sources, name);
-
-    debug(`pulling ${this.remote.index} to ${this.local.index}`);
-    this.pulling = pullIndex(this.local.index, this.remote.index);
+    this.up_to_date = false;
   }
 
   async resolve(dependency: Dependency): Promise<Registration[]> {
+    if (!this.up_to_date) await this.pull();
+
     const { name } = <RegistryDependency>dependency;
     const path = getPath(this.local.index, name);
 
-    await this.pulling;
     if (!(await pathExists(path))) {
       throw dependencyNotFound(name, this.name);
     }
@@ -99,6 +99,16 @@ export default class RegistrySource implements Source {
     await unzip(file, src);
 
     return src;
+  }
+
+  async pull() {
+    if (this.pulling) return this.pulling;
+
+    this.pulling = pullIndex(this.local.index, this.remote.index);
+    await this.pulling;
+
+    this.up_to_date = true;
+    this.pulling = undefined;
   }
 }
 
