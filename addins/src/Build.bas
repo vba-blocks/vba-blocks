@@ -126,3 +126,31 @@ ErrorHandling:
     Output.Errors.Add Err.Number & ": " & Err.Description
     ExportTo = Output.Result
 End Function
+
+''
+' Create a blank document at path
+'
+' @method CreateDocument
+' @param {String} Info
+' @param {String} Info.path
+' @return {String} json result value
+''
+Public Function CreateDocument(Info As Variant) As String
+    On Error GoTo ErrorHandling
+
+    Dim Values As Dictionary
+    Dim DocumentPath As String
+    Dim Document As Object
+    Dim App As New OfficeApplication
+
+    Set Values = JsonConverter.ParseJson(Info)
+    App.CreateDocument Values("path")
+
+    CreateDocument = Output.Result
+    Exit Function
+
+ErrorHandling:
+
+    Output.Errors.Add Err.Number & ": " & Err.Description
+    CreateDocument = Output.Result
+End Function

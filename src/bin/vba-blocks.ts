@@ -7,7 +7,7 @@ import { CliError, unknownCommand, cleanError } from '../errors';
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
 
-const commands = ['build', 'export', 'healthcheck'];
+const commands = ['build', 'export', 'new', 'healthcheck'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',

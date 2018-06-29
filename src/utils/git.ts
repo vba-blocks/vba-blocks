@@ -21,3 +21,7 @@ export async function clone(
 export async function pull(local: string): Promise<ExecResult> {
   return GitProcess.exec(['pull'], local);
 }
+
+export async function init(dir?: string): Promise<ExecResult> {
+  return GitProcess.exec(['init'], dir || process.cwd());
+}

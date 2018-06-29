@@ -1,5 +1,5 @@
 import env from './env';
-import { join } from './utils/path';
+import { join, normalize } from './utils/path';
 import { tmpFolder } from './utils/fs';
 import parallel from './utils/parallel';
 import { Config, loadConfig } from './config';
@@ -91,4 +91,67 @@ export async function fetchDependencies(
   );
 
   return manifests;
+}
+
+export interface ProjectOptions {
+  type?: 'project' | 'package';
+}
+
+/**
+ * Initialize new project
+ *
+ * Minimum requirements: name and dir
+ */
+export async function initProject(
+  name: string,
+  dir: string,
+  options: ProjectOptions = {}
+): Promise<Project> {
+  dir = normalize(dir);
+  const { type = 'project' } = options;
+
+  const config = await loadConfig();
+
+  // TODO load defaults from config
+  const version = '1.0.0';
+  const authors: string[] = [];
+  const license = 'MIT';
+
+  // Manually generate manifest and project
+  // (may be included in project in the future)
+  const manifest: Manifest = {
+    name,
+    version,
+    [type]: {
+      name,
+      version,
+      authors,
+      publish: type === 'package',
+      license
+    },
+    dependencies: [],
+    src: [],
+    references: [],
+    targets: [],
+    dir
+  };
+
+  const workspace = await loadWorkspace(manifest);
+
+  const project: Project = {
+    manifest,
+    workspace,
+    packages: [],
+    config,
+    paths: {
+      root: workspace.root.dir,
+      dir,
+      build: join(dir, 'build'),
+      backup: join(dir, 'build', '.backup'),
+      staging: await tmpFolder({ dir: env.staging })
+    },
+    has_dirty_lockfile: true
+  };
+
+  return project;
 }

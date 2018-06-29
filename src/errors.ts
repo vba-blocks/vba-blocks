@@ -110,6 +110,14 @@ export const unrecognizedComponent = (path: string) =>
 export const runScriptNotFound = (path: string) =>
   generateError('run-script-not-found', { path });
 
+export const newNameRequired = () => generateError('new-name-required', {});
+
+export const newDirExists = (name: string, dir: string) =>
+  generateError('new-dir-exists', { name, dir });
+
+export const fromNotFound = (from: string) =>
+  generateError('from-not-found', { from });
+
 function generateError<T extends CliErrorCode>(
   code: T,
   values: ErrorMessages[T],

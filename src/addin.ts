@@ -1,4 +1,5 @@
-import { join } from './utils/path';
+import { join, dirname } from './utils/path';
+import { ensureDir } from './utils/fs';
 import run from './utils/run';
 import env from './env';
 import { Project } from './project';
@@ -58,15 +59,26 @@ export async function exportTo(
 ): Promise<void> {
   const { application, addin, file } = getTargetInfo(project, target);
 
-  const result = await run(
-    application,
-    options.addin || addin,
-    'Build.ExportTo',
-    {
-      file,
-      staging
-    }
-  );
+  await run(application, options.addin || addin, 'Build.ExportTo', {
+    file,
+    staging
+  });
+}
+
+/**
+ * Create a new document at the given path
+ */
+export async function createDocument(
+  project: Project,
+  target: Target,
+  options: AddinOptions = {}
+): Promise<void> {
+  const { application, addin, file: path } = getTargetInfo(project, target);
+
+  await ensureDir(dirname(path));
+  await run(application, options.addin || addin, 'Build.CreateDocument', {
+    path
+  });
 }
 
 /**

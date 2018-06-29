@@ -18,6 +18,7 @@ export interface Env {
   staging: string;
 
   reporter: Reporter;
+  silent: boolean;
 }
 
 const cache = join(homedir(), '.vba-blocks');
@@ -38,7 +39,8 @@ const env: Env = {
   sources: join(cache, 'sources'),
   staging: getStaging(cache),
 
-  reporter
+  reporter,
+  silent: false
 };
 
 export default env;

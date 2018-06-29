@@ -1,6 +1,6 @@
-import { join, normalize } from '../utils/path';
-import { parse as parseToml } from '../utils/toml';
-import { pathExists, readFile } from '../utils/fs';
+import { join, normalize, relative } from '../utils/path';
+import { parse as parseToml, convert as convertToToml } from '../utils/toml';
+import { pathExists, readFile, writeFile } from '../utils/fs';
 import { manifestNotFound } from '../errors';
 import { Version } from './version';
 import { Source, parseSrc } from './source';
@@ -174,4 +174,32 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   const manifest = parseManifest(parsed, normalize(dir));
 
   return manifest;
+}
+
+export async function writeManifest(manifest: Manifest, dir: string) {
+  const value: any = {};
+  if (manifest.package) {
+    value.package = manifest.package;
+  } else if (manifest.project) {
+    value.project = manifest.project;
+  }
+
+  value.src = {};
+  manifest.src.forEach(source => {
+    let { path, optional } = source;
+    path = relative(manifest.dir, path);
+    value.src[source.name] = optional ? { path, optional } : path;
+  });
+
+  value.targets = {};
+  manifest.targets.forEach(target => {
+    let { name, type, path } = target;
+    path = relative(manifest.dir, path);
+    value.targets[type] = name !== manifest.name ? { name, path } : path;
+  });
+
+  // TODO dependencies and references
+
+  const toml = convertToToml(value);
+  await writeFile(join(dir, 'vba-block.toml'), toml);
 }

@@ -3,7 +3,7 @@ import env from '../env';
 import { Project } from '../project';
 import { Changeset } from './compare-build-graphs';
 import { Component } from './component';
-import { Manifest } from '../manifest';
+import { Manifest, Source } from '../manifest';
 import { writeFile, remove, ensureDir } from '../utils/fs';
 import { join, dirname, relative } from '../utils/path';
 import parallel from '../utils/parallel';
@@ -45,13 +45,24 @@ async function updateManifest(project: Project, changeset: Changeset) {
   const operations: string[] = [];
 
   for (const component of changeset.components.added) {
+    const source: Source = {
+      name: component.name,
+      path: join(project.paths.dir, `src/${component.filename}`)
+    };
+    project.manifest.src.push(source);
+
     operations.push(addSrc(project.manifest, component));
   }
   for (const component of changeset.components.removed) {
+    const index = project.manifest.src.findIndex(
+      source => source.name === component.name
+    );
+    project.manifest.src.splice(index, 1);
+
     operations.push(removeSrc(component));
   }
 
-  if (operations.length) {
+  if (operations.length && !env.silent) {
     const type = project.manifest.package ? 'package' : 'project';
     console.log(
       `The following changes are required in this ${type}'s vba-block.toml:`

@@ -24,6 +24,9 @@ export interface ErrorMessages {
   'resolve-failed': { details?: string };
   'component-unrecognized': { path: string };
   'run-script-not-found': { path: string };
+  'new-name-required': {};
+  'new-dir-exists': { name: string; dir: string };
+  'from-not-found': { from: string };
 }
 
 export interface Messages {
@@ -130,7 +133,18 @@ export const reporter: Reporter = {
       'run-script-not-found': ({ path }) => dedent`
         Bridge script not found at "${path}".
 
-        This is a fatal error and will require vba-blocks to be re-installed.`
+        This is a fatal error and will require vba-blocks to be re-installed.`,
+
+      'new-name-required': _ => dedent`
+        "name" is required with vba-blocks new (e.g. vba-blocks new project-name).
+
+        Try \`vba-blocks new --help\` for more information.`,
+
+      'new-dir-exists': ({ name, dir }) => dedent`
+        A directory for "${name}" already exists: "${dir}".`,
+
+      'from-not-found': ({ from }) => dedent`
+        The \`from\` document was not found at "${from}"`
     }
   }
 };
