@@ -79,8 +79,10 @@ Public Function ExportTo(Info As Variant) As String
             ' I'm not sure when this could occur, so just warn for now
             Output.Warnings.Add "Unknown component type: " & Component.Type
         End Select
-        
-        If Extension <> "" Then
+
+        ' Avoid exporting built-in modules / classes that are blank
+        ' User-added modules / classes that are blank are assumed to be intentional
+        If Extension <> "" And Not (Component.Type = vbext_ct_Document And ComponentIsBlank(Component)) Then
             Path = FileSystem.JoinPath(Staging, Component.Name & Extension)
             Installer.Export Document.VBProject, Component.Name, Path, Overwrite:=True
         End If
@@ -153,4 +155,19 @@ ErrorHandling:
 
     Output.Errors.Add Err.Number & ": " & Err.Description
     CreateDocument = Output.Result
+End Function
+
+Private Function ComponentIsBlank(Component As Object) As Boolean
+    Dim LineNumber As Long
+    Dim Line As String
+    
+    For LineNumber = 1 To Component.CodeModule.CountOfLines
+        Line = Component.CodeModule.Lines(LineNumber)
+        If Not (Line = "Option Explicit" Or Line = "") Then
+            ComponentIsBlank = False
+            Exit Function
+        End If
+    Next LineNumber
+
+    ComponentIsBlank = True
 End Function

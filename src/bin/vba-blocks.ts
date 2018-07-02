@@ -35,6 +35,7 @@ const help = dedent`
   Usage: vba-blocks [command] [options]
 
   Commands
+    - new           Create new project / package
     - build         Build project from manifest
     - export        Export src from built target
 
