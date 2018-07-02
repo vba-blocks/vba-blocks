@@ -113,7 +113,7 @@ export async function initProject(
   const config = await loadConfig();
 
   // TODO load defaults from config
-  const version = '1.0.0';
+  const version = '0.1.0';
   const authors: string[] = [];
   const license = 'MIT';
 

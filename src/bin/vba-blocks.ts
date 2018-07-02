@@ -7,7 +7,7 @@ import { CliError, unknownCommand, cleanError } from '../errors';
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
 
-const commands = ['build', 'export', 'new', 'healthcheck'];
+const commands = ['new', 'build', 'export', 'target', 'healthcheck'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -38,6 +38,7 @@ const help = dedent`
     - new           Create new project / package
     - build         Build project from manifest
     - export        Export src from built target
+    - target        Commands related to targets
 
   Options:
     -h, --help      Output usage information
