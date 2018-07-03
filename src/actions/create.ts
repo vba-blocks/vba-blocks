@@ -1,13 +1,12 @@
 import env from '../env';
-import { Target, writeManifest } from '../manifest';
+import { Manifest, writeManifest } from '../manifest';
 import { TargetType } from '../manifest/target';
 import { initProject } from '../project';
-import { join, basename, extname, sanitize } from '../utils/path';
-import { pathExists, ensureDir, writeFile, copy, emptyDir } from '../utils/fs';
+import addTarget from '../targets/add-target';
+import { join, extname } from '../utils/path';
+import { pathExists, ensureDir, writeFile } from '../utils/fs';
 import { init } from '../utils/git';
 import { newNameRequired, newDirExists, fromNotFound } from '../errors';
-import { createDocument, exportTo } from '../addin';
-import exportTarget from '../targets/export-target';
 
 export interface CreateOptions {
   name: string;
@@ -22,7 +21,7 @@ export default async function create(options: CreateOptions) {
     throw newNameRequired();
   }
 
-  const {
+  let {
     name,
     target: target_type,
     from,
@@ -50,48 +49,21 @@ export default async function create(options: CreateOptions) {
     );
   }
 
-  const project = await initProject(name, dir);
+  const project = await initProject(name, dir, {
+    type: as_package ? 'package' : 'project'
+  });
 
-  let target: Target;
   if (from) {
-    const target_type = extname(from).replace('.', '');
-    const target_name = basename(from, extname(from));
-
-    target = {
-      name: target_name,
-      type: <TargetType>target_type,
-      path: join(dir, `targets/${target_type}`),
-      filename: `${sanitize(target_name)}.${target_type}`
-    };
-
-    await copy(from, join(project.paths.build, target.filename));
-  } else if (target_type) {
-    target = {
-      name,
-      type: <TargetType>target_type,
-      path: join(dir, `targets/${target_type}`),
-      filename: `${sanitize(name)}.${target_type}`
-    };
-
-    await createDocument(project, target);
+    target_type = extname(from).replace('.', '');
   }
-
-  if (target!) {
-    project.manifest.targets.push(target!);
-
-    const staging = join(project.paths.staging, 'export');
-
-    await ensureDir(staging);
-    await emptyDir(staging);
-    await exportTo(project, target!, staging);
-
-    const previous = env.silent;
-    env.silent = true;
-
-    await exportTarget(target!, { project, dependencies: [] }, staging);
-
-    env.silent = previous;
+  if (target_type) {
+    const dependencies: Manifest[] = [];
+    await addTarget(
+      <TargetType>target_type,
+      { project, dependencies },
+      { from }
+    );
+  } else {
+    await writeManifest(project.manifest, project.paths.dir);
   }
-
-  await writeManifest(project.manifest, project.paths.dir);
 }

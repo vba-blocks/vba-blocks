@@ -7,7 +7,7 @@
     "moduleResolution": "node",
     "outDir": "typings",
     "rootDir": "src",
-    "target": "es2018",
+    "target": "esnext",
     "lib": ["es2017"]
   },
   "include": ["src/**/*.ts"],

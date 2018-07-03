@@ -40,7 +40,7 @@ export interface ProjectInfo {
 export default async function buildTarget(
   target: Target,
   info: ProjectInfo,
-  options: BuildOptions
+  options: BuildOptions = {}
 ) {
   const { project } = info;
 

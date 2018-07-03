@@ -3,7 +3,7 @@ import env from '../env';
 import { Project } from '../project';
 import { Changeset } from './compare-build-graphs';
 import { Component } from './component';
-import { Manifest, Source } from '../manifest';
+import { Manifest, Source, writeManifest } from '../manifest';
 import { writeFile, remove, ensureDir } from '../utils/fs';
 import { join, dirname, relative } from '../utils/path';
 import parallel from '../utils/parallel';
@@ -42,36 +42,21 @@ export default async function applyChangeset(
 }
 
 async function updateManifest(project: Project, changeset: Changeset) {
-  const operations: string[] = [];
-
   for (const component of changeset.components.added) {
     const source: Source = {
       name: component.name,
       path: join(project.paths.dir, `src/${component.filename}`)
     };
     project.manifest.src.push(source);
-
-    operations.push(addSrc(project.manifest, component));
   }
   for (const component of changeset.components.removed) {
     const index = project.manifest.src.findIndex(
       source => source.name === component.name
     );
     project.manifest.src.splice(index, 1);
-
-    operations.push(removeSrc(component));
   }
 
-  if (operations.length && !env.silent) {
-    console.log(
-      `The following changes are required in this ${
-        project.manifest.type
-      }'s vba-block.toml:`
-    );
-    for (const operation of operations) {
-      console.log(`\n${operation}`);
-    }
-  }
+  await writeManifest(project.manifest, project.paths.dir);
 }
 
 async function writeComponent(path: string, component: Component) {

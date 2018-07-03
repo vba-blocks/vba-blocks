@@ -65,6 +65,7 @@ export interface Snapshot {
 export interface Metadata {
   authors: string[];
   publish: boolean;
+  defaults?: string[];
   [name: string]: any;
 }
 
@@ -103,6 +104,7 @@ export function parseManifest(value: any, dir: string): Manifest {
     `[package] or [project] is required, with name, version, and authors specified. \n\n${EXAMPLE}`
   );
 
+  const defaults = [];
   let type: ManifestType, name, version, authors, publish;
   if (value.project) {
     type = 'project';
@@ -112,6 +114,11 @@ export function parseManifest(value: any, dir: string): Manifest {
     publish = false;
 
     manifestOk(name, `[project] name is a required field. \n\n${EXAMPLE}`);
+
+    // Store defaults to distinguish from user-set values
+    if (!value.project.version) defaults.push('version');
+    if (!value.project.authors) defaults.push('authors');
+    defaults.push('publish');
   } else {
     type = 'package';
     name = value.package.name;
@@ -128,6 +135,8 @@ export function parseManifest(value: any, dir: string): Manifest {
       authors,
       `[package] authors is a required field. \n\n${EXAMPLE}`
     );
+
+    if (!('publish' in value.package)) defaults.push('publish');
   }
 
   const src = parseSrc(value.src || {}, dir);
@@ -142,7 +151,7 @@ export function parseManifest(value: any, dir: string): Manifest {
     type,
     name,
     version,
-    metadata: { authors, publish },
+    metadata: { authors, publish, defaults },
     src,
     dependencies,
     references,
@@ -180,9 +189,21 @@ export async function loadManifest(dir: string): Promise<Manifest> {
 }
 
 export async function writeManifest(manifest: Manifest, dir: string) {
-  const { type, name, version, metadata } = manifest;
+  const {
+    type,
+    name,
+    version,
+    metadata: { authors, publish, defaults = [], ...metadata }
+  } = manifest;
+
+  const values: any = { name };
+  if (!defaults.includes('version')) values.version = version;
+  if (!defaults.includes('authors')) values.authors = authors;
+  if (!defaults.includes('publish')) values.publish = publish;
+  Object.assign(values, metadata);
+
   const value: any = {
-    [type]: { name, version, ...metadata }
+    [type]: values
   };
 
   value.src = {};
@@ -202,5 +223,5 @@ export async function writeManifest(manifest: Manifest, dir: string) {
   // TODO dependencies and references
 
   const toml = convertToToml(value);
-  await writeFile(join(dir, 'vba-block.toml'), toml);
+  await writeFile(join(dir, 'vba-block.toml'), toml + '\n');
 }
