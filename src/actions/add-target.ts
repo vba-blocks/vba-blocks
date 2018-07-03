@@ -14,7 +14,7 @@ export interface AddOptions {
   path?: string;
 }
 
-export async function add(options: AddOptions) {
+export default async function add(options: AddOptions) {
   let { type, from, name, path } = options;
   if (!type) {
     throw new Error('type is required (e.g. vba-blocks target add xlsm)');
@@ -57,12 +57,6 @@ export async function add(options: AddOptions) {
   await emptyDir(staging);
   await exportTo(project, target!, staging);
 
-  const previous = env.silent;
-  env.silent = true;
-
   await exportTarget(target!, { project, dependencies }, staging);
-
-  env.silent = previous;
-
   await writeManifest(project.manifest, project.paths.dir);
 }
