@@ -1,8 +1,9 @@
 import { isString, isNumber, isBoolean, isDate, isObject } from './is';
 
 export { parse } from 'toml';
+export { toToml as convert } from 'tomlify-j0.4';
 
-export function convert(value: any, level = 0): string {
+export function toLockfile(value: any, level = 0): string {
   if (isString(value)) {
     return `"${value}"`;
   } else if (isNumber(value)) {
@@ -19,10 +20,10 @@ export function convert(value: any, level = 0): string {
       for (const [key, item] of Object.entries(value)) {
         if (Array.isArray(item)) {
           item.forEach(subitem => {
-            converted += `[[${key}]]\n${convert(subitem, level + 1)}\n`;
+            converted += `[[${key}]]\n${toLockfile(subitem, level + 1)}\n`;
           });
         } else {
-          converted += `[${key}]\n${convert(item, level + 1)}\n`;
+          converted += `[${key}]\n${toLockfile(item, level + 1)}\n`;
         }
       }
     } else if (level === 1) {
@@ -32,11 +33,11 @@ export function convert(value: any, level = 0): string {
           const empty = item.length === 0;
           converted += `${key} = [\n`;
           converted += item
-            .map(subitem => `  ${convert(subitem, level + 1)}`)
+            .map(subitem => `  ${toLockfile(subitem, level + 1)}`)
             .join(',\n');
           converted += empty ? ']\n' : ',\n]\n';
         } else {
-          converted += `${key} = ${convert(item, level + 1)}\n`;
+          converted += `${key} = ${toLockfile(item, level + 1)}\n`;
         }
       }
     } else {
@@ -46,7 +47,7 @@ export function convert(value: any, level = 0): string {
     return converted;
   } else {
     throw new Error(
-      `Unsupported type passed to convert. Only String, Number, Boolean, Date, Array, and Object are supported`
+      `Unsupported type passed to toLockfile. Only String, Number, Boolean, Date, Array, and Object are supported`
     );
   }
 }

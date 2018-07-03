@@ -1,7 +1,7 @@
 import { ok } from 'assert';
 import { join, relative } from './utils/path';
 import { pathExists, readFile, writeFile } from './utils/fs';
-import { convert as convertToToml, parse as parseToml } from './utils/toml';
+import { toLockfile as convertToToml, parse as parseToml } from './utils/toml';
 import has from './utils/has';
 import { Snapshot } from './manifest';
 import { Dependency, satisfies } from './manifest/dependency';

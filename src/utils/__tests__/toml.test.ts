@@ -1,9 +1,9 @@
-import { convert } from '../toml';
+import { toLockfile } from '../toml';
 
-describe('convert', () => {
+describe('toLockfile', () => {
   test('should convert lockfile', () => {
     expect(
-      convert({
+      toLockfile({
         root: {
           name: 'project',
           dependencies: ['a 1.2.3']

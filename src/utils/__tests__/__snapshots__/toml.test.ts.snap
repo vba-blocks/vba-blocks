@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`convert should convert lockfile 1`] = `
+exports[`toLockfile should convert lockfile 1`] = `
 "[root]
 name = \\"project\\"
 dependencies = [
