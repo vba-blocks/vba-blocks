@@ -72,12 +72,7 @@ End Function
 Public Function GetBase(FilePath As String) As String
     Dim Parts() As String
     Parts = VBA.Split(NormalizePath(FilePath), Separator)
-
-    If UBound(Parts) = 0 Then
-        GetBase = ""
-    Else
-        GetBase = Parts(UBound(Parts))
-    End If
+    GetBase = Parts(UBound(Parts))
 End Function
 
 ''

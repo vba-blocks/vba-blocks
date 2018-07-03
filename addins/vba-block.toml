@@ -14,5 +14,6 @@ json = "^2"
 
 [targets]
 xlsm = "targets/xlsm"
+xlam = "targets/xlam"
 
 # TODO xlam, ppam, dotm, Access, and Outlook

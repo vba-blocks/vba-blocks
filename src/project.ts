@@ -9,6 +9,8 @@ import { fetch } from './sources';
 import resolve, { DependencyGraph } from './resolve';
 import { readLockfile, isLockfileValid } from './lockfile';
 
+const debug = require('debug')('vba-blocks:project');
+
 export interface Project {
   manifest: Manifest;
   workspace: Workspace;
@@ -42,6 +44,12 @@ export async function loadProject(dir: string = env.cwd): Promise<Project> {
 
   // Resolve packages from lockfile or from sources
   const has_dirty_lockfile = !lockfile || !isLockfileValid(lockfile, workspace);
+  debug(
+    !has_dirty_lockfile
+      ? 'Loading packages from lockfile'
+      : 'Resolving packages'
+  );
+
   const packages = !has_dirty_lockfile
     ? lockfile!.packages
     : await resolve(config, workspace, lockfile ? lockfile.packages : []);

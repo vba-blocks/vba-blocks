@@ -162,7 +162,7 @@ Private Function ComponentIsBlank(Component As Object) As Boolean
     Dim Line As String
     
     For LineNumber = 1 To Component.CodeModule.CountOfLines
-        Line = Component.CodeModule.Lines(LineNumber)
+        Line = Component.CodeModule.Lines(LineNumber, 1)
         If Not (Line = "Option Explicit" Or Line = "") Then
             ComponentIsBlank = False
             Exit Function

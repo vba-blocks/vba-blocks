@@ -6,6 +6,8 @@ import { join } from './path';
 import { pathExists } from './fs';
 import { runScriptNotFound } from '../errors';
 
+const debug = require('debug')('vba-blocks:run');
+
 export interface RunResult {
   success: boolean;
   messages: string[];
@@ -47,6 +49,10 @@ export default async function run(
         .map(part => `"${escape(part)}"`)
         .join(' ')}`
     : `osascript ${script}  ${parts.map(part => `'${part}'`).join(' ')}`;
+
+  debug('Run:');
+  debug('params:', { application, file, macro, args });
+  debug('command:', command);
 
   let result;
   try {

@@ -3,6 +3,7 @@ import chalk from 'chalk';
 import dedent from 'dedent';
 import has from '../utils/has';
 import { CliError, unknownCommand, cleanError } from '../errors';
+import { RunError } from '../utils/run';
 
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
@@ -84,6 +85,10 @@ function isCliError(error: Error | CliError): error is CliError {
   return has(error, 'underlying');
 }
 
+function isRunError(error: Error | RunError): error is RunError {
+  return has(error, 'result');
+}
+
 function handleError(err: Error | CliError) {
   const { message, stack } = cleanError(err);
 
@@ -100,7 +105,10 @@ function handleError(err: Error | CliError) {
 
   debug(err);
   if (isCliError(err) && err.underlying) {
-    debug(err.underlying);
+    debug('underlying', err.underlying);
+  }
+  if (isRunError(err)) {
+    debug('result', err.result);
   }
 
   process.exit(1);
