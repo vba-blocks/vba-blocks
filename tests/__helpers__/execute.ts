@@ -1,7 +1,7 @@
 import { promisify } from 'util';
 import { copy, remove, ensureDirSync, readFile } from 'fs-extra';
 import walkSync from 'walk-sync';
-import { join, resolve, extname } from '../../src/utils/path';
+import { join, resolve, extname, basename } from '../../src/utils/path';
 import { tmpFolder } from '../../src/utils/fs';
 import { RunResult } from '../../src/utils/run';
 import truncate from '../../src/utils/truncate';
@@ -14,19 +14,25 @@ export { RunResult };
 const tmp_dir = join(__dirname, '../.tmp');
 ensureDirSync(tmp_dir);
 
+export async function tmp(id: string, action: (cwd: string) => void) {
+  const path = await tmpFolder({ dir: tmp_dir, prefix: `${id}-` });
+
+  try {
+    await action(path);
+  } finally {
+    await remove(path);
+  }
+}
+
 export async function setup(
   dir: string,
   id: string,
   action: (cwd: string) => void
 ): Promise<void> {
-  const path = await tmpFolder({ dir: tmp_dir, prefix: `${id}-` });
-  await copy(dir, path);
-
-  try {
+  await tmp(id, async path => {
+    await copy(dir, path);
     await action(path);
-  } finally {
-    // await remove(path);
-  }
+  });
 }
 
 export async function execute(
@@ -58,7 +64,10 @@ export async function readdir(
       details[file] = '<TODO>';
     } else {
       const data = await readFile(resolve(cwd, file), 'utf8');
-      details[file] = truncate(normalize(data), 200);
+      details[file] =
+        basename(file) === 'vba-block.toml'
+          ? data
+          : truncate(normalize(data), 200);
     }
   });
   await Promise.all(checking);
