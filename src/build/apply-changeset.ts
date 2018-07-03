@@ -63,9 +63,10 @@ async function updateManifest(project: Project, changeset: Changeset) {
   }
 
   if (operations.length && !env.silent) {
-    const type = project.manifest.package ? 'package' : 'project';
     console.log(
-      `The following changes are required in this ${type}'s vba-block.toml:`
+      `The following changes are required in this ${
+        project.manifest.type
+      }'s vba-block.toml:`
     );
     for (const operation of operations) {
       console.log(`\n${operation}`);

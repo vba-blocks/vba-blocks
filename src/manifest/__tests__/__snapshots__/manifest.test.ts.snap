@@ -4,16 +4,13 @@ exports[`load valid references 1`] = `
 Object {
   "dependencies": Array [],
   "dir": ".",
-  "name": "package-name",
-  "package": Object {
+  "metadata": Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "name": "package-name",
     "publish": false,
-    "version": "1.0.0",
   },
-  "project": undefined,
+  "name": "package-name",
   "references": Array [
     Object {
       "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
@@ -26,6 +23,7 @@ Object {
   ],
   "src": Array [],
   "targets": Array [],
+  "type": "package",
   "version": "1.0.0",
 }
 `;
@@ -40,16 +38,13 @@ Object {
     },
   ],
   "dir": ".",
-  "name": "standard",
-  "package": undefined,
-  "project": Object {
+  "metadata": Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "name": "standard",
     "publish": false,
-    "version": "0.0.0",
   },
+  "name": "standard",
   "references": Array [],
   "src": Array [
     Object {
@@ -91,6 +86,7 @@ Object {
       "type": "xlsm",
     },
   ],
+  "type": "project",
   "version": "0.0.0",
 }
 `;
@@ -134,19 +130,17 @@ Object {
     },
   ],
   "dir": ".",
-  "name": "package-name",
-  "package": Object {
+  "metadata": Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "name": "package-name",
     "publish": false,
-    "version": "1.0.0",
   },
-  "project": undefined,
+  "name": "package-name",
   "references": Array [],
   "src": Array [],
   "targets": Array [],
+  "type": "package",
   "version": "1.0.0",
 }
 `;
@@ -155,19 +149,17 @@ exports[`loads valid package metadata 1`] = `
 Object {
   "dependencies": Array [],
   "dir": ".",
-  "name": "package-name",
-  "package": Object {
+  "metadata": Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "name": "package-name",
     "publish": false,
-    "version": "1.0.0",
   },
-  "project": undefined,
+  "name": "package-name",
   "references": Array [],
   "src": Array [],
   "targets": Array [],
+  "type": "package",
   "version": "1.0.0",
 }
 `;
@@ -176,16 +168,13 @@ exports[`loads valid sources 1`] = `
 Object {
   "dependencies": Array [],
   "dir": ".",
-  "name": "package-name",
-  "package": Object {
+  "metadata": Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "name": "package-name",
     "publish": false,
-    "version": "1.0.0",
   },
-  "project": undefined,
+  "name": "package-name",
   "references": Array [],
   "src": Array [
     Object {
@@ -205,6 +194,7 @@ Object {
     },
   ],
   "targets": Array [],
+  "type": "package",
   "version": "1.0.0",
 }
 `;
@@ -213,16 +203,13 @@ exports[`loads valid targets 1`] = `
 Object {
   "dependencies": Array [],
   "dir": ".",
-  "name": "package-name",
-  "package": Object {
+  "metadata": Object {
     "authors": Array [
       "Tim Hall",
     ],
-    "name": "package-name",
     "publish": false,
-    "version": "1.0.0",
   },
-  "project": undefined,
+  "name": "package-name",
   "references": Array [],
   "src": Array [],
   "targets": Array [
@@ -239,6 +226,7 @@ Object {
       "type": "xlam",
     },
   ],
+  "type": "package",
   "version": "1.0.0",
 }
 `;

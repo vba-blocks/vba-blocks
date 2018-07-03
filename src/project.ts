@@ -128,11 +128,10 @@ export async function initProject(
   // Manually generate manifest and project
   // (may be included in project in the future)
   const manifest: Manifest = {
+    type,
     name,
     version,
-    [type]: {
-      name,
-      version,
+    metadata: {
       authors,
       publish: type === 'package',
       license
