@@ -42,7 +42,7 @@ export default async function create(options: CreateOptions) {
 
   if (git_init) {
     await init(dir);
-    await writeFile(join(dir, '.gitignore'), `build/`);
+    await writeFile(join(dir, '.gitignore'), `/build`);
     await writeFile(
       join(dir, '.gitattributes'),
       `* text=auto\n*.bas text eol=crlf\n*.cls text eol=crlf`

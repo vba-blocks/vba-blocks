@@ -31,11 +31,6 @@ export class CliError extends Error {
   }
 }
 
-export type AssertOk = (
-  value: any,
-  message: Error | string | undefined
-) => void;
-
 export const unknownCommand = (command: string) =>
   generateError('unknown-command', { command });
 
@@ -46,7 +41,7 @@ export const manifestInvalid = (message: string) =>
   generateError('manifest-invalid', { message });
 
 export const manifestOk = (value: any, message: string) =>
-  (<AssertOk>ok)(value, manifestInvalid(message));
+  ok(value, manifestInvalid(message));
 
 export const sourceUnsupported = (type: string) =>
   generateError('source-unsupported', { type });

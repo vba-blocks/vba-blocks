@@ -30,7 +30,6 @@ Attribute VB_Exposed = True
 name = \\"complex\\"
 version = \\"0.0.0\\"
 authors = [\\"Tim Hall\\"]
-publish = false
 
 [src]
 ThisWorkbook = \\"src/ThisWorkbook.cls\\"
@@ -42,7 +41,8 @@ Class1 = \\"src/Class1.cls\\"
 Added = \\"src/Added.bas\\"
 
 [targets]
-xlsm = \\"targets/xlsm\\"",
+xlsm = \\"targets/xlsm\\"
+",
   ],
 ]
 `;
