@@ -56,7 +56,7 @@
     "decompress": "^4.2.0",
     "dedent": "^0.7.0",
     "dugite": "^1.39.0",
-    "fs-extra": "^6.0.0",
+    "fs-extra": "^7.0.0",
     "logic-solver": "^2.0.1",
     "mri": "^1.1.0",
     "sanitize-filename": "^1.6.1",
