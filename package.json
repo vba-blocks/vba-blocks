@@ -44,6 +44,7 @@
       "js",
       "json"
     ],
+    "testEnvironment": "node",
     "testRegex": "(/__tests__/.*|(\\.|/)(test))\\.(js|ts)$",
     "transform": {
       "^.+\\.ts$": "ts-jest"
@@ -79,15 +80,15 @@
     "husky": "^0.14.3",
     "jest": "^23.1.0",
     "jest-environment-node": "^23.1.0",
-    "lint-staged": "^4.0.4",
+    "lint-staged": "^7.2.0",
     "npm-run-all": "^4.1.2",
     "opn": "^5.3.0",
     "pkg": "^4.3.1",
     "prettier": "^1.6.1",
-    "rollup": "^0.58.2",
+    "rollup": "^0.63.5",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",
     "ts-jest": "^23.0.0",
-    "typescript": "^2.9.1"
+    "typescript": "^3.0.1"
   }
 }
