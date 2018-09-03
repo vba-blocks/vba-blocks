@@ -1,11 +1,13 @@
-import { Project, fetchDependencies } from '../project';
 import { Target, TargetType } from '../manifest/target';
 import { basename, extname, join, sanitize } from '../utils/path';
 import { copy, ensureDir, emptyDir, remove } from '../utils/fs';
 import { exportTo, createDocument } from '../addin';
-import { writeManifest } from '../manifest';
 import exportTarget, { extractTarget } from './export-target';
 import buildTarget, { ProjectInfo } from './build-target';
+import {
+  applyChanges,
+  addTarget as addTargetToManifest
+} from '../manifest/patch-manifest';
 
 export interface AddOptions {
   from?: string;
@@ -69,9 +71,12 @@ export default async function addTarget(
     await copy(extracted, target.path);
 
     await buildTarget(target, info);
-
-    await writeManifest(project.manifest, project.paths.dir);
   }
+
+  applyChanges([addTargetToManifest(project.manifest, target)]);
+
+  // TODO Write directly to manifest once patching is ready
+  // await writeManifest(project.manifest, project.paths.dir);
 
   // Finally, cleanup staging
   await remove(staging);

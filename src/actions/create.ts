@@ -63,7 +63,7 @@ export default async function create(options: CreateOptions) {
       { project, dependencies },
       { from }
     );
-  } else {
-    await writeManifest(project.manifest, project.paths.dir);
   }
+
+  await writeManifest(project.manifest, project.paths.dir);
 }

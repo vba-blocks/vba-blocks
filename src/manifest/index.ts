@@ -6,13 +6,7 @@ import { Version } from './version';
 import { Source, parseSrc } from './source';
 // TODO #features
 // import { Feature, parseFeatures } from './feature';
-import {
-  Dependency,
-  parseDependencies,
-  isRegistryDependency,
-  isPathDependency,
-  isGitDependency
-} from './dependency';
+import { Dependency, parseDependencies } from './dependency';
 import { Reference, parseReferences } from './reference';
 import { Target, parseTargets } from './target';
 import { manifestOk, manifestInvalid } from '../errors';
@@ -219,21 +213,6 @@ export async function writeManifest(manifest: Manifest, dir: string) {
     value.src[source.name] = optional ? { path, optional } : path;
   });
 
-  value.dependencies = {};
-  manifest.dependencies.forEach(dependency => {
-    if (isRegistryDependency(dependency)) {
-      const { name, registry, version } = dependency;
-      value.dependencies[name] =
-        registry === 'vba-blocks' ? version : { registry, version };
-    } else if (isPathDependency(dependency)) {
-      const { name, path } = dependency;
-      value.dependencies[name] = { path };
-    } else {
-      const { name, git, tag, branch, rev } = dependency;
-      value.dependencies[name] = { git, tag, branch, rev };
-    }
-  });
-
   value.targets = {};
   manifest.targets.forEach(target => {
     let { name, type, path } = target;
@@ -241,7 +220,13 @@ export async function writeManifest(manifest: Manifest, dir: string) {
     value.targets[type] = name !== manifest.name ? { name, path } : path;
   });
 
-  // TODO references
+  // TODO dependencies and references
+  if (manifest.dependencies.length) {
+    throw new Error(`writeManifest does not currently support dependencies`);
+  }
+  if (manifest.references.length) {
+    throw new Error(`writeManifest does not currently support references`);
+  }
 
   const toml = convertToToml(value);
   await writeFile(join(dir, 'vba-block.toml'), toml + '\n');

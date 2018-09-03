@@ -110,13 +110,14 @@ describe('add-target', () => {
   test('should add blank target', async () => {
     await tmp('add-blank-target', async cwd => {
       await execute(cwd, `new add-blank`);
-      await execute(
+      const { stdout } = await execute(
         join(cwd, 'add-blank'),
         'add-target xlsm --name target-name'
       );
 
       const result = await readdir(join(cwd, 'add-blank'));
       expect(result).toMatchSnapshot();
+      expect(stdout).toMatchSnapshot();
     });
   });
 
@@ -125,13 +126,14 @@ describe('add-target', () => {
       await setup(standard, 'add-existing-target-build', async built => {
         await execute(built, 'build');
         await execute(cwd, `new add-existing`);
-        await execute(
+        const { stdout } = await execute(
           join(cwd, 'add-existing'),
           `add-target xlsm --from ${join(built, 'build/standard.xlsm')}`
         );
 
         const result = await readdir(join(cwd, 'add-existing'));
         expect(result).toMatchSnapshot();
+        expect(stdout).toMatchSnapshot();
       });
     });
   });

@@ -2,10 +2,15 @@ import env from '../env';
 import { Project } from '../project';
 import { Changeset } from './compare-build-graphs';
 import { Component } from './component';
-import { Source, writeManifest } from '../manifest';
+import { Source } from '../manifest';
 import { writeFile, remove, ensureDir } from '../utils/fs';
 import { join, dirname } from '../utils/path';
 import parallel from '../utils/parallel';
+import {
+  addSource,
+  removeSource,
+  applyChanges
+} from '../manifest/patch-manifest';
 
 export default async function applyChangeset(
   project: Project,
@@ -41,21 +46,24 @@ export default async function applyChangeset(
 }
 
 async function updateManifest(project: Project, changeset: Changeset) {
+  const changes: string[] = [];
   for (const component of changeset.components.added) {
     const source: Source = {
       name: component.name,
       path: join(project.paths.dir, `src/${component.filename}`)
     };
     project.manifest.src.push(source);
+    changes.push(addSource(project.manifest, source));
   }
   for (const component of changeset.components.removed) {
     const index = project.manifest.src.findIndex(
       source => source.name === component.name
     );
     project.manifest.src.splice(index, 1);
+    changes.push(removeSource(project.manifest, component.name));
   }
 
-  await writeManifest(project.manifest, project.paths.dir);
+  applyChanges(changes);
 }
 
 async function writeComponent(path: string, component: Component) {

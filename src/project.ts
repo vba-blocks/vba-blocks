@@ -121,9 +121,10 @@ export async function initProject(
   const config = await loadConfig();
 
   // TODO load defaults from config
-  const version = '0.1.0';
+  const version = '0.0.0';
   const authors: string[] = [];
-  const license = 'MIT';
+  const license = 'UNLICENSED';
+  const defaults: string[] = type === 'package' ? [] : ['publish'];
 
   // Manually generate manifest and project
   // (may be included in project in the future)
@@ -134,7 +135,8 @@ export async function initProject(
     metadata: {
       authors,
       publish: type === 'package',
-      license
+      license,
+      defaults
     },
     dependencies: [],
     src: [],

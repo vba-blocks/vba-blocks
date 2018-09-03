@@ -16,20 +16,23 @@ Object {
   "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "vba-block.toml": "[project]
 name = \\"add-blank\\"
-version = \\"0.1.0\\"
+version = \\"0.0.0\\"
 authors = []
+license = \\"UNLICENSED\\"
 
 [src]
 
 [targets]
-
-[targets.xlsm]
-name = \\"target-name\\"
-path = \\"targets/xlsm\\"
-
-[dependencies]
 ",
 }
+`;
+
+exports[`add-target should add blank target 2`] = `
+"The following changes need to be applied to vba-block.toml:
+
+Add the following to the [targets] section:
+xlsm = { name = \\"target-name\\" path = \\"targets/xlsm\\" }
+"
 `;
 
 exports[`add-target should add from existing 1`] = `
@@ -59,28 +62,48 @@ Object {
   "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "vba-block.toml": "[project]
 name = \\"add-existing\\"
-version = \\"0.1.0\\"
+version = \\"0.0.0\\"
 authors = []
+license = \\"UNLICENSED\\"
 
 [src]
-Class1 = \\"src/Class1.cls\\"
-Dictionary = \\"src/Dictionary.cls\\"
-JsonConverter = \\"src/JsonConverter.bas\\"
-Sheet1 = \\"src/Sheet1.cls\\"
-Sheet2 = \\"src/Sheet2.cls\\"
-Sheet3 = \\"src/Sheet3.cls\\"
-ThisWorkbook = \\"src/ThisWorkbook.cls\\"
-Validation = \\"src/Validation.bas\\"
 
 [targets]
-
-[targets.xlsm]
-name = \\"standard\\"
-path = \\"targets/xlsm\\"
-
-[dependencies]
 ",
 }
+`;
+
+exports[`add-target should add from existing 2`] = `
+"The following changes need to be applied to vba-block.toml:
+
+Add the following to the [src] section:
+Class1 = \\"src/Class1.cls\\"
+
+Add the following to the [src] section:
+Dictionary = \\"src/Dictionary.cls\\"
+
+Add the following to the [src] section:
+JsonConverter = \\"src/JsonConverter.bas\\"
+
+Add the following to the [src] section:
+Sheet1 = \\"src/Sheet1.cls\\"
+
+Add the following to the [src] section:
+Sheet2 = \\"src/Sheet2.cls\\"
+
+Add the following to the [src] section:
+Sheet3 = \\"src/Sheet3.cls\\"
+
+Add the following to the [src] section:
+ThisWorkbook = \\"src/ThisWorkbook.cls\\"
+
+Add the following to the [src] section:
+Validation = \\"src/Validation.bas\\"
+The following changes need to be applied to vba-block.toml:
+
+Add the following to the [targets] section:
+xlsm = { name = \\"standard\\" path = \\"targets/xlsm\\" }
+"
 `;
 
 exports[`build 1`] = `
@@ -122,25 +145,40 @@ Object {
   "vba-block.toml": "[project]
 name = \\"empty\\"
 
-[src]
-Class1 = \\"src/Class1.cls\\"
-Dictionary = \\"src/Dictionary.cls\\"
-JsonConverter = \\"src/JsonConverter.bas\\"
-Sheet1 = \\"src/Sheet1.cls\\"
-Sheet2 = \\"src/Sheet2.cls\\"
-Sheet3 = \\"src/Sheet3.cls\\"
-ThisWorkbook = \\"src/ThisWorkbook.cls\\"
-Validation = \\"src/Validation.bas\\"
-
 [targets]
 xlsm = \\"targets/xlsm\\"
-
-[dependencies]
 ",
 }
 `;
 
-exports[`export export to empty project 2`] = `""`;
+exports[`export export to empty project 2`] = `
+"The following changes need to be applied to vba-block.toml:
+
+Add the following to the [src] section:
+Class1 = \\"src/Class1.cls\\"
+
+Add the following to the [src] section:
+Dictionary = \\"src/Dictionary.cls\\"
+
+Add the following to the [src] section:
+JsonConverter = \\"src/JsonConverter.bas\\"
+
+Add the following to the [src] section:
+Sheet1 = \\"src/Sheet1.cls\\"
+
+Add the following to the [src] section:
+Sheet2 = \\"src/Sheet2.cls\\"
+
+Add the following to the [src] section:
+Sheet3 = \\"src/Sheet3.cls\\"
+
+Add the following to the [src] section:
+ThisWorkbook = \\"src/ThisWorkbook.cls\\"
+
+Add the following to the [src] section:
+Validation = \\"src/Validation.bas\\"
+"
+`;
 
 exports[`export export to project with dependency 1`] = `
 Object {
@@ -166,24 +204,37 @@ Object {
   "vba-block.toml": "[project]
 name = \\"json\\"
 
-[src]
-Class1 = \\"src/Class1.cls\\"
-Sheet1 = \\"src/Sheet1.cls\\"
-Sheet2 = \\"src/Sheet2.cls\\"
-Sheet3 = \\"src/Sheet3.cls\\"
-ThisWorkbook = \\"src/ThisWorkbook.cls\\"
-Validation = \\"src/Validation.bas\\"
+[dependencies]
+json = \\"^2\\"
 
 [targets]
 xlsm = \\"targets/xlsm\\"
-
-[dependencies]
-json = \\"^2\\"
 ",
 }
 `;
 
-exports[`export export to project with dependency 2`] = `""`;
+exports[`export export to project with dependency 2`] = `
+"The following changes need to be applied to vba-block.toml:
+
+Add the following to the [src] section:
+Class1 = \\"src/Class1.cls\\"
+
+Add the following to the [src] section:
+Sheet1 = \\"src/Sheet1.cls\\"
+
+Add the following to the [src] section:
+Sheet2 = \\"src/Sheet2.cls\\"
+
+Add the following to the [src] section:
+Sheet3 = \\"src/Sheet3.cls\\"
+
+Add the following to the [src] section:
+ThisWorkbook = \\"src/ThisWorkbook.cls\\"
+
+Add the following to the [src] section:
+Validation = \\"src/Validation.bas\\"
+"
+`;
 
 exports[`new should create blank project 1`] = `
 Object {
@@ -191,16 +242,13 @@ Object {
   ".gitignore": "/build",
   "vba-block.toml": "[project]
 name = \\"blank-project\\"
-version = \\"0.1.0\\"
+version = \\"0.0.0\\"
 authors = []
-publish = false
-license = \\"MIT\\"
+license = \\"UNLICENSED\\"
 
 [src]
 
 [targets]
-
-[dependencies]
 ",
 }
 `;
@@ -209,16 +257,14 @@ exports[`new should create blank project 2`] = `
 Object {
   "vba-block.toml": "[package]
 name = \\"blank-package\\"
-version = \\"0.1.0\\"
+version = \\"0.0.0\\"
 authors = []
 publish = true
-license = \\"MIT\\"
+license = \\"UNLICENSED\\"
 
 [src]
 
 [targets]
-
-[dependencies]
 ",
 }
 `;
@@ -250,10 +296,9 @@ Object {
   "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "vba-block.toml": "[project]
 name = \\"existing-target\\"
-version = \\"0.1.0\\"
+version = \\"0.0.0\\"
 authors = []
-publish = false
-license = \\"MIT\\"
+license = \\"UNLICENSED\\"
 
 [src]
 Class1 = \\"src/Class1.cls\\"
@@ -270,8 +315,6 @@ Validation = \\"src/Validation.bas\\"
 [targets.xlsm]
 name = \\"standard\\"
 path = \\"targets/xlsm\\"
-
-[dependencies]
 ",
 }
 `;
@@ -292,17 +335,14 @@ Object {
   "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "vba-block.toml": "[project]
 name = \\"blank-target\\"
-version = \\"0.1.0\\"
+version = \\"0.0.0\\"
 authors = []
-publish = false
-license = \\"MIT\\"
+license = \\"UNLICENSED\\"
 
 [src]
 
 [targets]
 xlsm = \\"targets/xlsm\\"
-
-[dependencies]
 ",
 }
 `;

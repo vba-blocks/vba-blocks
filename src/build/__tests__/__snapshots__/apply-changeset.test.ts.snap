@@ -1,48 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should apply changeset for project 1`] = `Array []`;
-
-exports[`should apply changeset for project 2`] = `
+exports[`should apply changeset for project 1`] = `
 Array [
   Array [
-    "projects/complex/src/ThisWorkbook.cls",
-    "VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = \\"ThisWorkbook\\"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = True
-Attribute VB_Exposed = True
-' (changed)
-",
-  ],
-  Array [
-    "projects/complex/src/Added.bas",
-    "Attribute VB_Name = \\"Added\\"
-' (added)
-",
-  ],
-  Array [
-    "projects/complex/vba-block.toml",
-    "[project]
-name = \\"complex\\"
-version = \\"0.0.0\\"
-authors = [\\"Tim Hall\\"]
-
-[src]
-ThisWorkbook = \\"src/ThisWorkbook.cls\\"
-Sheet1 = \\"src/Sheet1.cls\\"
-Sheet2 = \\"src/Sheet2.cls\\"
-Sheet3 = \\"src/Sheet3.cls\\"
-UserForm1 = \\"src/UserForm1.frm\\"
-Class1 = \\"src/Class1.cls\\"
+    "The following changes need to be applied to vba-block.toml:
+Add the following to the [src] section:
 Added = \\"src/Added.bas\\"
 
-[targets]
-xlsm = \\"targets/xlsm\\"
-",
+Remove \`Validation\` from the [src] section",
   ],
 ]
 `;
