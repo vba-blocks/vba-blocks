@@ -48,7 +48,8 @@ export async function execute(
   return result;
 }
 
-const isBackup = /\.backup/g;
+const isBackup = /\.backup/;
+const isGit = /\.git[\/,\\]/;
 const isBinary = (file: string) => ['.xlsm', '.frx'].includes(extname(file));
 
 export async function readdir(
@@ -57,7 +58,7 @@ export async function readdir(
   const files = walkSync(cwd, { directories: false });
   const details: { [file: string]: string } = {};
   const checking = files.map(async file => {
-    if (isBackup.test(file)) return;
+    if (isBackup.test(file) || isGit.test(file)) return;
 
     // TEMP Need reproducible builds to compare binary results
     if (isBinary(file)) {
