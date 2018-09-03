@@ -1,11 +1,10 @@
-import dedent from 'dedent';
 import env from '../env';
 import { Project } from '../project';
 import { Changeset } from './compare-build-graphs';
 import { Component } from './component';
-import { Manifest, Source, writeManifest } from '../manifest';
+import { Source, writeManifest } from '../manifest';
 import { writeFile, remove, ensureDir } from '../utils/fs';
-import { join, dirname, relative } from '../utils/path';
+import { join, dirname } from '../utils/path';
 import parallel from '../utils/parallel';
 
 export default async function applyChangeset(
@@ -67,26 +66,4 @@ async function writeComponent(path: string, component: Component) {
   if (component.binary_path) {
     await writeFile(join(dir, component.binary_path), component.details.binary);
   }
-}
-
-function addSrc(manifest: Manifest, component: Component): string {
-  const path = component.details.path!;
-  const binary_path =
-    component.binary_path && join(dirname(path), component.binary_path);
-
-  const relative_path = relative(manifest.dir, path);
-  const relative_binary_path =
-    binary_path && relative(manifest.dir, binary_path);
-
-  const details = relative_binary_path
-    ? `{ path = "${relative_path}", binary = "${relative_binary_path}" }`
-    : `"${relative_path}"`;
-
-  return dedent`
-    Add the following to the [src] section:
-    ${component.name} = ${details}`;
-}
-
-function removeSrc(component: Component): string {
-  return `Remove \`${component.name}\` from the [src] section`;
 }
