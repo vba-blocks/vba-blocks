@@ -13,6 +13,7 @@ export interface AddOptions {
   from?: string;
   name?: string;
   path?: string;
+  __temp__log_patch?: boolean;
 }
 
 export default async function addTarget(
@@ -24,7 +25,8 @@ export default async function addTarget(
   let {
     from,
     name = project.manifest.name,
-    path = `targets/${type}`
+    path = `targets/${type}`,
+    __temp__log_patch = true
   } = options;
 
   const staging = join(project.paths.staging, 'export');
@@ -73,7 +75,9 @@ export default async function addTarget(
     await buildTarget(target, info);
   }
 
-  applyChanges([addTargetToManifest(project.manifest, target)]);
+  if (__temp__log_patch) {
+    applyChanges([addTargetToManifest(project.manifest, target)]);
+  }
 
   // TODO Write directly to manifest once patching is ready
   // await writeManifest(project.manifest, project.paths.dir);

@@ -4,6 +4,8 @@ import { Manifest, Source, Dependency, Target } from './';
 import { isRegistryDependency, isPathDependency } from './dependency';
 
 export function applyChanges(changes: string[]) {
+  if (!changes.length) return;
+
   console.log(
     `The following changes need to be applied to vba-block.toml:\n\n${changes.join(
       '\n\n'

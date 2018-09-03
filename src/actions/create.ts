@@ -61,7 +61,7 @@ export default async function create(options: CreateOptions) {
     await addTarget(
       <TargetType>target_type,
       { project, dependencies },
-      { from }
+      { from, __temp__log_patch: false }
     );
   }
 
