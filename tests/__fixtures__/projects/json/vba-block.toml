@@ -1,0 +1,8 @@
+[project]
+name = "json"
+
+[dependencies]
+json = "^2"
+
+[targets]
+xlsm = "targets/xlsm"

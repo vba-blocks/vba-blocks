@@ -7,6 +7,7 @@ export const sources = join(cache, 'sources');
 
 export const projects = join(dir, 'projects');
 export const empty = join(projects, 'empty');
+export const json = join(projects, 'json');
 export const standard = join(projects, './standard');
 export const complex = join(projects, 'complex');
 export const needsSat = join(projects, 'needs-sat');
