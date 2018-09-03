@@ -9,7 +9,6 @@
   "typings": "typings/index.d.ts",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js}\"",
-    "precommit": "lint-staged",
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
     "build": "run-s build:compile build:bundle",
@@ -27,12 +26,6 @@
     "scripts": [
       "lib/bin/*.js",
       "lib/sat-solver.js"
-    ]
-  },
-  "lint-staged": {
-    "**/*.{ts,js,json}": [
-      "prettier --write",
-      "git add"
     ]
   },
   "prettier": {
@@ -75,14 +68,8 @@
     "@types/semver": "^5.4.0",
     "@types/tar": "^4.0.0",
     "@types/tmp": "^0.0.33",
-    "copyfiles": "^2.0.0",
-    "cross-env": "^5.1.4",
-    "husky": "^0.14.3",
     "jest": "^23.1.0",
-    "jest-environment-node": "^23.1.0",
-    "lint-staged": "^7.2.0",
     "npm-run-all": "^4.1.2",
-    "opn": "^5.3.0",
     "pkg": "^4.3.1",
     "prettier": "^1.6.1",
     "rollup": "^0.63.5",
