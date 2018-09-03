@@ -1,4 +1,4 @@
-const { join, dirname } = require('path');
+const { join } = require('path');
 const { copy } = require('fs-extra');
 
 main().catch(err => {
@@ -24,7 +24,7 @@ async function main() {
     join(__dirname, '../dist/addins'),
     {
       overwrite: true,
-      filter(src, dest) {
+      filter(src) {
         return !src.includes('.backup');
       }
     }
