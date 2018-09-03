@@ -4,9 +4,10 @@ version = "0.0.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
 
 [src]
-Build = "./src/Build.bas"
-OfficeApplication = "./src/OfficeApplication.cls"
-Output = "./src/Output.bas"
+Build = "src/Build.bas"
+OfficeApplication = "src/OfficeApplication.cls"
+Output = "src/Output.bas"
+ThisWorkbook = "src/ThisWorkbook.cls"
 
 [dependencies]
 installer = { path = "VBA-Installer" }
