@@ -8,9 +8,9 @@ import {
   execute,
   readdir
 } from './__helpers__/execute';
-import { standard, empty } from './__fixtures__';
+import { standard, empty, json } from './__fixtures__';
 
-jest.setTimeout(20000);
+jest.setTimeout(30000);
 
 test('build', async () => {
   await setup(standard, 'build', async cwd => {
@@ -21,24 +21,45 @@ test('build', async () => {
   });
 });
 
-test('export', async () => {
-  await setup(empty, 'export-empty', async cwd => {
-    await setup(standard, 'export-standard', async built => {
-      // 1. Build standard project
-      await execute(built, 'build');
+describe('export', () => {
+  test('export to empty project', async () => {
+    await setup(empty, 'export-empty', async cwd => {
+      await setup(standard, 'export-standard', async built => {
+        // 1. Build standard project
+        await execute(built, 'build');
 
-      // 2. Copy standard built into empty
-      await copy(
-        join(built, 'build/standard.xlsm'),
-        join(cwd, 'build/empty.xlsm')
-      );
+        // 2. Copy standard built into empty
+        await copy(
+          join(built, 'build/standard.xlsm'),
+          join(cwd, 'build/empty.xlsm')
+        );
 
-      // 3. Export "empty" project
-      const { stdout } = await execute(cwd, 'export xlsm');
+        // 3. Export "empty" project
+        const { stdout } = await execute(cwd, 'export xlsm');
 
-      const result = await readdir(cwd);
-      expect(result).toMatchSnapshot();
-      expect(stdout).toMatchSnapshot();
+        const result = await readdir(cwd);
+        expect(result).toMatchSnapshot();
+        expect(stdout).toMatchSnapshot();
+      });
+    });
+  });
+
+  test('export to project with dependency', async () => {
+    await setup(json, 'export-json', async cwd => {
+      await setup(standard, 'export-standard-to-json', async built => {
+        await execute(built, 'build');
+
+        await copy(
+          join(built, 'build/standard.xlsm'),
+          join(cwd, 'build/json.xlsm')
+        );
+
+        const { stdout } = await execute(cwd, 'export xlsm');
+
+        const result = await readdir(cwd);
+        expect(result).toMatchSnapshot();
+        expect(stdout).toMatchSnapshot();
+      });
     });
   });
 });
