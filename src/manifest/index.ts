@@ -8,7 +8,7 @@ import { Source, parseSrc } from './source';
 // import { Feature, parseFeatures } from './feature';
 import { Dependency, parseDependencies } from './dependency';
 import { Reference, parseReferences } from './reference';
-import { Target, parseTargets } from './target';
+import { Target, parseTargets, parseTarget } from './target';
 import { manifestOk, manifestInvalid } from '../errors';
 
 export {
@@ -47,12 +47,8 @@ export {
  * # version = "1.0"
  * # guid = "{420B2830-E718-11CF-893D-00A0C9054228}"
  *
- * [targets]
- * xlsm = "targets/xlsm"
- *
- * [targets.xlam]
- * name = "custom-name"
- * path = "targets/xlam"
+ * [target]
+ * type = "xlsm"
  * ```
  */
 
@@ -65,8 +61,9 @@ export interface Snapshot {
 export interface Metadata {
   authors: string[];
   publish: boolean;
-  defaults?: string[];
   [name: string]: any;
+
+  __temp_defaults?: string[];
 }
 
 export interface Manifest extends Snapshot {
@@ -74,7 +71,8 @@ export interface Manifest extends Snapshot {
   metadata: Metadata;
   src: Source[];
   references: Reference[];
-  targets: Target[];
+  target?: Target;
+  targets?: Target[];
   dir: string;
 
   // TODO #features
@@ -142,7 +140,16 @@ export function parseManifest(value: any, dir: string): Manifest {
   const src = parseSrc(value.src || {}, dir);
   const dependencies = parseDependencies(value.dependencies || {}, dir);
   const references = parseReferences(value.references || {});
-  const targets = parseTargets(value.targets || {}, name, dir);
+
+  let target, targets;
+  if (value.target) {
+    const type = value.target.type;
+    const path = value.target.path || 'target';
+
+    target = parseTarget(type, { ...value.target, path }, name, dir);
+  } else if (value.targets) {
+    targets = parseTargets(value.targets, name, dir);
+  }
 
   // TODO #features
   // const { features, defaultFeatures } = parseFeatures(value.features || {});
@@ -151,10 +158,11 @@ export function parseManifest(value: any, dir: string): Manifest {
     type,
     name,
     version,
-    metadata: { authors, publish, defaults },
+    metadata: { authors, publish, __temp_defaults: defaults },
     src,
     dependencies,
     references,
+    target,
     targets,
     dir
 
@@ -193,7 +201,7 @@ export async function writeManifest(manifest: Manifest, dir: string) {
     type,
     name,
     version,
-    metadata: { authors, publish, defaults = [], ...metadata }
+    metadata: { authors, publish, __temp_defaults: defaults = [], ...metadata }
   } = manifest;
 
   const values: any = { name };
@@ -213,12 +221,21 @@ export async function writeManifest(manifest: Manifest, dir: string) {
     value.src[source.name] = optional ? { path, optional } : path;
   });
 
-  value.targets = {};
-  manifest.targets.forEach(target => {
-    let { name, type, path } = target;
+  if (manifest.target) {
+    let { name, type, path } = manifest.target;
     path = relative(manifest.dir, path);
-    value.targets[type] = name !== manifest.name ? { name, path } : path;
-  });
+
+    value.target = { type };
+    if (name !== manifest.name) value.target.name = name;
+    if (path !== 'manifest') value.target.path = path;
+  } else if (manifest.targets) {
+    value.targets = {};
+    manifest.targets.forEach(target => {
+      let { name, type, path } = target;
+      path = path && relative(manifest.dir, path);
+      value.targets[type] = name !== manifest.name ? { name, path } : path;
+    });
+  }
 
   // TODO dependencies and references
   if (manifest.dependencies.length) {

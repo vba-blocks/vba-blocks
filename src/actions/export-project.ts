@@ -1,3 +1,4 @@
+import { Target } from '../manifest';
 import { loadProject, fetchDependencies } from '../project';
 import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
@@ -5,38 +6,46 @@ import { join } from '../utils/path';
 import { emptyDir, ensureDir } from '../utils/fs';
 
 export interface ExportOptions {
-  target: string;
+  target?: string;
   completed?: string;
   addin?: string;
 }
 
-export default async function exportProject(options: ExportOptions) {
-  if (!options || !options.target) {
-    // TODO official error
-    throw new Error('target required for export');
+export default async function exportProject(options: ExportOptions = {}) {
+  const project = await loadProject();
+
+  if (!options.target && !project.manifest.target) {
+    throw new Error('--target TYPE is required for export');
   }
 
-  const { target: target_type, completed } = options;
-
-  const project = await loadProject();
-  const dependencies = await fetchDependencies(project);
-  const target = project.manifest.targets.find(
-    target => target.type === target_type
-  );
+  let target: Target | undefined;
+  if (project.manifest.target) {
+    if (!options.target || options.target === project.manifest.target.type) {
+      target = project.manifest.target;
+    }
+  } else if (project.manifest.targets) {
+    target = project.manifest.targets.find(
+      target => target.type === options.target
+    );
+  } else {
+    // TODO Load target from blank target
+  }
 
   if (!target) {
-    throw new Error(`No target found for "${target_type}"`);
+    throw new Error(`No target found for "${options.target}"`);
   }
 
+  const dependencies = await fetchDependencies(project);
   let staging: string;
-  if (!completed) {
+
+  if (!options.completed) {
     staging = join(project.paths.staging, 'export');
 
     await ensureDir(staging);
     await emptyDir(staging);
     await exportTo(project, target, staging, options);
   } else {
-    staging = completed;
+    staging = options.completed;
   }
 
   await exportTarget(target, { project, dependencies }, staging);

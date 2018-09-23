@@ -48,7 +48,14 @@ export default async function addTarget(
       path: join(project.paths.dir, path),
       filename: `${sanitize(name)}.${type}`
     };
-    project.manifest.targets.push(target);
+    if (project.manifest.target) {
+      project.manifest.targets = [project.manifest.target, target];
+      project.manifest.target = undefined;
+    } else if (project.manifest.targets) {
+      project.manifest.targets.push(target);
+    } else {
+      project.manifest.target = target;
+    }
 
     await copy(from, join(project.paths.build, target.filename));
     await exportTo(project, target, staging);
@@ -64,7 +71,14 @@ export default async function addTarget(
       path: join(project.paths.dir, path),
       filename: `${sanitize(name)}.${type}`
     };
-    project.manifest.targets.push(target);
+    if (project.manifest.target) {
+      project.manifest.targets = [project.manifest.target, target];
+      project.manifest.target = undefined;
+    } else if (project.manifest.targets) {
+      project.manifest.targets.push(target);
+    } else {
+      project.manifest.target = target;
+    }
 
     await createDocument(project, target);
 

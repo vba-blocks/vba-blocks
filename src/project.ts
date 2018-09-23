@@ -124,7 +124,7 @@ export async function initProject(
   const version = '0.0.0';
   const authors: string[] = [];
   const license = 'UNLICENSED';
-  const defaults: string[] = type === 'package' ? [] : ['publish'];
+  const __temp_defaults: string[] = type === 'package' ? [] : ['publish'];
 
   // Manually generate manifest and project
   // (may be included in project in the future)
@@ -136,7 +136,7 @@ export async function initProject(
       authors,
       publish: type === 'package',
       license,
-      defaults
+      __temp_defaults
     },
     dependencies: [],
     src: [],

@@ -1,0 +1,19 @@
+[project]
+name = "single"
+version = "0.0.0"
+authors = ["Tim Hall"]
+
+[src]
+ThisWorkbook = "src/ThisWorkbook.cls"
+Sheet1 = "src/Sheet1.cls"
+Sheet2 = "src/Sheet2.cls"
+Sheet3 = "src/Sheet3.cls"
+# UserForm1 = { path = "src/UserForm1.frm", binary = "src/UserForm1.frx" }
+Validation = "src/Validation.bas"
+Class1 = "src/Class1.cls"
+
+[dependencies]
+json = "^2"
+
+[target]
+type = "xlsm"

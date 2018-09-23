@@ -7,9 +7,10 @@ const help = dedent`
 
   Create a clean build of the project (after backing up any existing built targets).
 
-  Usage: vba-blocks build [options]`;
-
-// TODO add --targets xlsm,xlam option
+  Usage: vba-blocks build [options]
+  
+  Options:
+    --target=TYPE   Build target of type TYPE [default = target / all targets]`;
 
 module.exports = async (args: Args) => {
   if (args.help) {
@@ -17,6 +18,7 @@ module.exports = async (args: Args) => {
     return;
   }
 
+  const target = <string | undefined>args.target;
   const addin = <string | undefined>args.addin;
-  await build({ addin });
+  await build({ target, addin });
 };

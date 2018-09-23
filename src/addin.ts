@@ -11,6 +11,7 @@ export type Addin = string;
 
 export interface AddinOptions {
   addin?: string;
+  staging?: boolean;
 }
 
 export const extensions: { [application: string]: string[] } = {
@@ -72,13 +73,19 @@ export async function createDocument(
   project: Project,
   target: Target,
   options: AddinOptions = {}
-): Promise<void> {
-  const { application, addin, file: path } = getTargetInfo(project, target);
+): Promise<string> {
+  const { application, addin, file: path } = getTargetInfo(
+    project,
+    target,
+    options
+  );
 
   await ensureDir(dirname(path));
   await run(application, options.addin || addin, 'Build.CreateDocument', {
     path
   });
+
+  return path;
 }
 
 /**
@@ -86,13 +93,17 @@ export async function createDocument(
  */
 export function getTargetInfo(
   project: Project,
-  target: Target
+  target: Target,
+  options: AddinOptions = {}
 ): { application: Application; addin: Addin; file: string } {
   const application = byExtension[target.type];
   if (!application) throw new Error(`Unsupported target type "${target.type}"`);
 
   const addin = addins[application];
-  const file = join(project.paths.build, target.filename);
+  const file = join(
+    options.staging ? project.paths.staging : project.paths.build,
+    target.filename
+  );
 
   return { application, addin, file };
 }

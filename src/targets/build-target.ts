@@ -1,13 +1,12 @@
 import { Project } from '../project';
 import { Manifest, Target } from '../manifest';
 import {
-  targetNotFound,
   targetImportFailed,
   targetIsOpen,
   targetCreateFailed,
   targetRestoreFailed
 } from '../errors';
-import { importGraph } from '../addin';
+import { importGraph, createDocument } from '../addin';
 import { loadFromProject, stageBuildGraph } from '../build';
 import { join } from '../utils/path';
 import {
@@ -21,6 +20,7 @@ import {
 import { zip } from '../utils/zip';
 
 export interface BuildOptions {
+  target?: string;
   addin?: string;
 }
 
@@ -44,12 +44,12 @@ export default async function buildTarget(
 ) {
   const { project } = info;
 
-  if (!(await pathExists(target.path))) {
-    throw targetNotFound(target);
-  }
-
   // Build fresh target in staging directory
-  const staged = await createTarget(project, target);
+  // (for no target path, create blank target)
+  const staged = !target.blank
+    ? await createTarget(project, target)
+    : await createDocument(project, target, { staging: true });
+
   await importTarget(target, info, staged, options);
 
   // Backup and move from staging to build directory
@@ -77,7 +77,7 @@ export async function createTarget(
 
   try {
     await ensureDir(project.paths.staging);
-    await zip(target.path, file);
+    await zip(target.path!, file);
   } catch (err) {
     throw targetCreateFailed(target, err);
   }

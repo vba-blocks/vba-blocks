@@ -106,7 +106,31 @@ xlsm = { name = \\"standard\\" path = \\"targets/xlsm\\" }
 "
 `;
 
-exports[`build 1`] = `
+exports[`build build project with no target 1`] = `
+Object {
+  "errors": Array [],
+  "messages": Array [],
+  "stderr": "",
+  "stdout": "{\\"success\\":true,\\"errors\\":[]}
+",
+  "success": true,
+  "warnings": Array [],
+}
+`;
+
+exports[`build build project with single target 1`] = `
+Object {
+  "errors": Array [],
+  "messages": Array [],
+  "stderr": "",
+  "stdout": "{\\"success\\":true,\\"errors\\":[]}
+",
+  "success": true,
+  "warnings": Array [],
+}
+`;
+
+exports[`build build standard project 1`] = `
 Object {
   "errors": Array [],
   "messages": Array [],

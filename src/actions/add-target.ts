@@ -12,7 +12,7 @@ export interface AddOptions {
 export default async function add(options: AddOptions) {
   let { type, from, name, path } = options;
   if (!type) {
-    throw new Error('type is required (e.g. vba-blocks target add xlsm)');
+    throw new Error('type is required (e.g. vba-blocks add-target xlsm)');
   }
 
   const project = await loadProject();

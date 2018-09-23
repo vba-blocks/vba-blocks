@@ -5,7 +5,10 @@ import exportProject from '../actions/export-project';
 const help = dedent`
   Export src from built target.
 
-  Usage: vba-blocks export <target>`;
+  Usage: vba-blocks export
+  
+  Options:
+    --target=TYPE   Export target of type TYPE [default = target]`;
 
 module.exports = async (args: Args) => {
   if (args.help) {

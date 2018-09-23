@@ -153,9 +153,13 @@ test('loads valid targets', () => {
   expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
-test('throws for invalid targets', () => {
-  let value = { ...BASE_MANIFEST, targets: { xlsm: {} } };
-  expect(() => parseManifest(value, FIXTURES)).toThrow();
+test('loads valid target', () => {
+  const value = {
+    ...BASE_MANIFEST,
+    target: { type: 'xlsm' }
+  };
+
+  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('loads and parses manifest', async () => {
@@ -186,8 +190,13 @@ function normalize(
       src.binary = normalizePath(src.binary, relativeTo);
     }
   }
-  for (const target of manifest.targets) {
-    target.path = normalizePath(target.path, relativeTo);
+  if (manifest.target) {
+    manifest.target.path = normalizePath(manifest.target.path, relativeTo);
+  }
+  if (manifest.targets) {
+    for (const target of manifest.targets) {
+      target.path = normalizePath(target.path, relativeTo);
+    }
   }
   for (const dependency of manifest.dependencies) {
     if (isPathDependency(dependency)) {

@@ -8,16 +8,36 @@ import {
   execute,
   readdir
 } from './__helpers__/execute';
-import { standard, empty, json } from './__fixtures__';
+import { standard, empty, json, single, targetless } from './__fixtures__';
 
 jest.setTimeout(30000);
 
-test('build', async () => {
-  await setup(standard, 'build', async cwd => {
-    await execute(cwd, 'build');
+describe('build', () => {
+  test('build standard project', async () => {
+    await setup(standard, 'build', async cwd => {
+      await execute(cwd, 'build');
 
-    const result = await validateBuild(cwd, 'standard.xlsm');
-    expect(result).toMatchSnapshot();
+      const result = await validateBuild(cwd, 'standard.xlsm');
+      expect(result).toMatchSnapshot();
+    });
+  });
+
+  test('build project with single target', async () => {
+    await setup(single, 'build-single', async cwd => {
+      await execute(cwd, 'build');
+
+      const result = await validateBuild(cwd, 'single.xlsm');
+      expect(result).toMatchSnapshot();
+    });
+  });
+
+  test('build project with no target', async () => {
+    await setup(targetless, 'build-targetless', async cwd => {
+      await execute(cwd, 'build --target xlsm');
+
+      const result = await validateBuild(cwd, 'targetless.xlsm');
+      expect(result).toMatchSnapshot();
+    });
   });
 });
 

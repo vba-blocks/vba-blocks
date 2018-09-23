@@ -5,11 +5,11 @@ Object {
   "dependencies": Array [],
   "dir": ".",
   "metadata": Object {
+    "__temp_defaults": Array [
+      "publish",
+    ],
     "authors": Array [
       "Tim Hall",
-    ],
-    "defaults": Array [
-      "publish",
     ],
     "publish": false,
   },
@@ -25,7 +25,8 @@ Object {
     },
   ],
   "src": Array [],
-  "targets": Array [],
+  "target": undefined,
+  "targets": undefined,
   "type": "package",
   "version": "1.0.0",
 }
@@ -42,11 +43,11 @@ Object {
   ],
   "dir": ".",
   "metadata": Object {
+    "__temp_defaults": Array [
+      "publish",
+    ],
     "authors": Array [
       "Tim Hall",
-    ],
-    "defaults": Array [
-      "publish",
     ],
     "publish": false,
   },
@@ -84,6 +85,7 @@ Object {
       "path": "src/Class1.cls",
     },
   ],
+  "target": undefined,
   "targets": Array [
     Object {
       "filename": "standard.xlsm",
@@ -137,18 +139,19 @@ Object {
   ],
   "dir": ".",
   "metadata": Object {
+    "__temp_defaults": Array [
+      "publish",
+    ],
     "authors": Array [
       "Tim Hall",
-    ],
-    "defaults": Array [
-      "publish",
     ],
     "publish": false,
   },
   "name": "package-name",
   "references": Array [],
   "src": Array [],
-  "targets": Array [],
+  "target": undefined,
+  "targets": undefined,
   "type": "package",
   "version": "1.0.0",
 }
@@ -159,18 +162,19 @@ Object {
   "dependencies": Array [],
   "dir": ".",
   "metadata": Object {
+    "__temp_defaults": Array [
+      "publish",
+    ],
     "authors": Array [
       "Tim Hall",
-    ],
-    "defaults": Array [
-      "publish",
     ],
     "publish": false,
   },
   "name": "package-name",
   "references": Array [],
   "src": Array [],
-  "targets": Array [],
+  "target": undefined,
+  "targets": undefined,
   "type": "package",
   "version": "1.0.0",
 }
@@ -181,11 +185,11 @@ Object {
   "dependencies": Array [],
   "dir": ".",
   "metadata": Object {
+    "__temp_defaults": Array [
+      "publish",
+    ],
     "authors": Array [
       "Tim Hall",
-    ],
-    "defaults": Array [
-      "publish",
     ],
     "publish": false,
   },
@@ -208,7 +212,36 @@ Object {
       "path": "src/c.frm",
     },
   ],
-  "targets": Array [],
+  "target": undefined,
+  "targets": undefined,
+  "type": "package",
+  "version": "1.0.0",
+}
+`;
+
+exports[`loads valid target 1`] = `
+Object {
+  "dependencies": Array [],
+  "dir": ".",
+  "metadata": Object {
+    "__temp_defaults": Array [
+      "publish",
+    ],
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "publish": false,
+  },
+  "name": "package-name",
+  "references": Array [],
+  "src": Array [],
+  "target": Object {
+    "filename": "package-name.xlsm",
+    "name": "package-name",
+    "path": "target",
+    "type": "xlsm",
+  },
+  "targets": undefined,
   "type": "package",
   "version": "1.0.0",
 }
@@ -219,17 +252,18 @@ Object {
   "dependencies": Array [],
   "dir": ".",
   "metadata": Object {
+    "__temp_defaults": Array [
+      "publish",
+    ],
     "authors": Array [
       "Tim Hall",
-    ],
-    "defaults": Array [
-      "publish",
     ],
     "publish": false,
   },
   "name": "package-name",
   "references": Array [],
   "src": Array [],
+  "target": undefined,
   "targets": Array [
     Object {
       "filename": "package-name.xlsm",

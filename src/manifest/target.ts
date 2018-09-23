@@ -10,9 +10,18 @@ export interface Target {
   type: TargetType;
   path: string;
   filename: string;
+  blank?: boolean;
 }
 
 const EXAMPLE = `Example vba-block.toml:
+
+  [target]
+  type = "xlsm"
+
+  [target]
+  type = "xlam"
+  name = "addin"
+  path = "targets/xlam"
 
   [targets]
   xlsm = "targets/xlsm"

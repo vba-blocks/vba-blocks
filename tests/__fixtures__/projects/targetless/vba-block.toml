@@ -1,0 +1,11 @@
+[project]
+name = "targetless"
+version = "0.0.0"
+authors = ["Tim Hall"]
+
+[src]
+Validation = "src/Validation.bas"
+Class1 = "src/Class1.cls"
+
+[dependencies]
+json = "^2"
