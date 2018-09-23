@@ -74,7 +74,7 @@ export const tmpFile = jest.fn(async (options: TmpOptions = {}) => {
     ({ tmpdir: dir } = require('tmp'));
   }
 
-  return join(dir, `${prefix}${index++}.tmp`);
+  return join(dir!, `${prefix}${index++}.tmp`);
 });
 
 export const tmpFolder = jest.fn(async (options: TmpOptions = {}) => {
@@ -83,7 +83,7 @@ export const tmpFolder = jest.fn(async (options: TmpOptions = {}) => {
     ({ tmpdir: dir } = require('tmp'));
   }
 
-  return join(dir, `${prefix}${index++}`);
+  return join(dir!, `${prefix}${index++}`);
 });
 
 export const writeFile = jest.fn(

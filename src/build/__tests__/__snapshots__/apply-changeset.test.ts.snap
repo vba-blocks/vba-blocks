@@ -4,6 +4,7 @@ exports[`should apply changeset for project 1`] = `
 Array [
   Array [
     "The following changes need to be applied to vba-block.toml:
+
 Add the following to the [src] section:
 Added = \\"src/Added.bas\\"
 
