@@ -4,27 +4,10 @@ import { loadProject, fetchDependencies } from '../project';
 import { BuildOptions, buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
 
-/**
- * Build
- *
- * 1. Load Project
- *    a. Load Manifest
- *    b. Load Workspace
- *    c. Load Lockfile
- *    d. Resolve Dependencies
- * 2. Fetch Dependenices
- * 3. Build target(s)
- *    a. Create binary
- *    b. Create ProjectGraph
- *    c. Transform ProjectGraph
- *    d. Stage ProjectGraph
- *    e. Import ProjectGraph
- * 4. Write Lockfile
- */
 export default async function build(options: BuildOptions = {}) {
-  // 1
   const project = await loadProject();
 
+  // Load targets from --target TYPE option or project manifest
   let targets: Target[] | undefined;
   if (options.target) {
     let target: Target | undefined;
@@ -39,6 +22,7 @@ export default async function build(options: BuildOptions = {}) {
         target => target.type === options.target
       );
     } else {
+      // Create blank target for --target TYPE
       const type = <TargetType>options.target;
       const name = project.manifest.name;
 
@@ -52,6 +36,7 @@ export default async function build(options: BuildOptions = {}) {
     }
 
     if (!target) {
+      // TODO "official" error
       throw new Error(
         `Target "${options.target}" not found for the current project`
       );
@@ -67,21 +52,21 @@ export default async function build(options: BuildOptions = {}) {
   }
 
   if (!targets) {
+    // TODO "official" error
     throw new Error(
       '--target TYPE is required or specify [target] or [targets]'
     );
   }
 
-  // 2
+  // Fetch relevant dependencies
   const dependencies = await fetchDependencies(project);
 
-  // 3
-  // (sequentially to avoid contention issues)
+  // Build target(s) (sequentially to avoid contention issues)
   for (const target of targets) {
     await buildTarget(target, { project, dependencies }, options);
   }
 
-  // 4 (if necessary)
+  // Update lockfile (if necessary)
   if (project.has_dirty_lockfile) {
     await writeLockfile(project.workspace.root.dir, project);
   }

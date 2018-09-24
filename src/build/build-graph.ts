@@ -1,4 +1,4 @@
-import { Source, Reference } from '../manifest';
+import { Reference } from '../manifest';
 import { Component } from './component';
 
 export interface BuildGraph {
