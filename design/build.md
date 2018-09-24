@@ -24,6 +24,15 @@ Details:
 - DependencyGraph: src/resolve/dependency-graph
 - resolve: src/resolve/index (see design/resolve.md for details)
 
+Potential Errors:
+
+- manifest-not-found
+- manifest-invalid
+- (resolving) configuration issues: source-misconfigured-registry or dependency-unknown-source
+- (resolving) dependency-not-found
+- (resolving) resolve-failed
+- TODO target-not-found
+
 ## 2. Fetch dependencies
 
 Using the resolved dependency tree from the project, each of the project's dependencies is fetched and loaded. A global dependency cache is maintained for registry and git dependencies, so if the desired version of a dependency exists in the cache, it is loaded directly. Otherwise, the dependency is loaded from the registry, path, or git source and cached as necessary.
@@ -31,6 +40,13 @@ Using the resolved dependency tree from the project, each of the project's depen
 Details:
 
 - Cache: `{user}/.vba-blocks` includes registry -> packages -> sources (cache for each stage of resolve and fetch)
+
+Potential Errors:
+
+- source-download-failed
+- dependency-invalid-checksum
+- TODO source-path-not-found
+- manifest-not-found or manifest-invalid
 
 ## 3. Build target(s)
 
@@ -45,8 +61,23 @@ Details:
 - `BuildGraph` checks for conflicting component names and reference versions to validate the VBA project
 - build/transform-build-graph converts all line-endings to `\r\n` for platform interoperability
 
+Potential Errors:
+
+- component-unrecognized
+- build-invalid
+- target-create-failed
+- target-import-failed
+- target-is-open
+- target-restore-failed
+
 ## 4. Write lockfile
 
 If the lockfile was invalid, write the project's dependency tree to the lockfile upon a successful build to lock the project's dependencies at a known good state.
 
+Details:
+
 - The lockfile is a combination of the Workspace and DependencyGraph and is serialized to toml in a format that should be compatible with source control
+
+Potential Errors:
+
+- lockfile-write-failed
