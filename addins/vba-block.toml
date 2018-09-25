@@ -10,7 +10,7 @@ Output = "src/Output.bas"
 ThisWorkbook = "src/ThisWorkbook.cls"
 
 [dependencies]
-installer = { path = "VBA-Installer" }
+installer = { path = "vba-installer" }
 json = "^2"
 
 [targets]

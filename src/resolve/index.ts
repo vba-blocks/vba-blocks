@@ -15,6 +15,8 @@ export default async function resolve(
   workspace: Workspace,
   preferred: DependencyGraph = []
 ): Promise<DependencyGraph> {
+  console.log('Resolving dependencies');
+
   // Load, update, and seed resolver
   const resolver = new Resolver(config);
   resolver.prefer(preferred);
@@ -23,17 +25,16 @@ export default async function resolve(
   try {
     return await solveLatest(workspace, resolver);
   } catch (err) {
-    // console.log('solveLatest', err);
     debug(`solveLatest failed with ${err}`);
     // TODO extract conflicts from latest solver error
   }
 
   // Fallback to SAT solver
   try {
+    console.log('(second pass with SAT solver)');
     const { solve: solveSat } = require(join(__dirname, 'sat-solver'));
     return await solveSat(workspace, resolver);
   } catch (err) {
-    // console.log('solveSat', err);
     debug(`solveSat failed with ${err}`);
     // No useful information from SAT solver failure, ignore
   }

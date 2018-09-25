@@ -38,6 +38,8 @@ export interface Project {
 export async function loadProject(dir: string = env.cwd): Promise<Project> {
   const manifest = await loadManifest(dir);
 
+  console.log(`Loading ${manifest.name}`);
+
   const config = await loadConfig();
   const workspace = await loadWorkspace(manifest);
   const lockfile = await readLockfile(workspace.root.dir);
@@ -95,7 +97,7 @@ export async function fetchDependencies(
 
       return manifest;
     },
-    { progress: env.reporter.progress('Fetch dependencies') }
+    { progress: env.reporter.progress('Fetching dependencies') }
   );
 
   return manifests;

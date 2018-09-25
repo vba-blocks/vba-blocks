@@ -52,7 +52,7 @@ export default async function loadFromExport(
 
       return new Component(type, code, { dependency, binary });
     },
-    { progress: env.reporter.progress('Load exported components') }
+    { progress: env.reporter.progress('Loading exported components') }
   );
   components.sort(byComponentName);
 

@@ -7,7 +7,7 @@ authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 Installer = "src/Installer.bas"
 
 [dependencies]
-filesystem = { path = "../VBA-FileSystem" }
+filesystem = { path = "../vba-filesystem" }
 
 # [references.VBIDE]
 # version = "5.3"

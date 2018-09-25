@@ -47,6 +47,7 @@ export default async function buildTarget(
 
   // Build fresh target in staging directory
   // (for no target path, create blank target)
+  console.log(`Creating target ${target.type}`);
   const staged = !target.blank
     ? await createTarget(project, target)
     : await createDocument(project, target, { staging: true });
@@ -114,6 +115,7 @@ export async function importTarget(
   const import_graph = await stageBuildGraph(build_graph, staging);
 
   try {
+    console.log(`Importing target ${target.type}`);
     await importGraph(project, target, import_graph, file, options);
   } catch (err) {
     throw targetImportFailed(target, err);

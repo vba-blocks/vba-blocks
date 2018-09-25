@@ -20,7 +20,7 @@ export default async function applyChangeset(
   await parallel(
     changeset.components.changed,
     component => writeComponent(component.details.path!, component),
-    { progress: env.reporter.progress('Update src') }
+    { progress: env.reporter.progress('Updating src') }
   );
 
   await parallel(
@@ -31,7 +31,7 @@ export default async function applyChangeset(
 
       await writeComponent(path, component);
     },
-    { progress: env.reporter.progress('Add src') }
+    { progress: env.reporter.progress('Adding src') }
   );
 
   await parallel(
@@ -39,7 +39,7 @@ export default async function applyChangeset(
     async component => {
       await remove(component.details.path!);
     },
-    { progress: env.reporter.progress('Remove src') }
+    { progress: env.reporter.progress('Removing src') }
   );
 
   await updateManifest(project, changeset);

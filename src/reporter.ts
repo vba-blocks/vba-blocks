@@ -48,15 +48,10 @@ export const reporter: Reporter = {
   progress(name): Progress {
     return {
       start() {
-        process.stdout.write(name);
+        console.log(name);
       },
-      tick() {
-        process.stdout.write('.');
-      },
-      done() {
-        process.stdout.write(' Done.');
-        console.log();
-      }
+      tick() {},
+      done() {}
     };
   },
 
