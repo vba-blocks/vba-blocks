@@ -19,7 +19,7 @@ module.exports = async (args: Args) => {
     return;
   }
 
-  const [_, name] = args._;
+  const [name] = args._;
   const target = <string | undefined>args.target;
   const from = <string | undefined>args.from;
   const pkg = !!args.package;

@@ -8,7 +8,7 @@ import { RunError } from '../utils/run';
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
 
-const commands = ['new', 'build', 'export', 'add-target', 'healthcheck'];
+const commands = ['new', 'build', 'export', 'target', 'healthcheck'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -39,7 +39,7 @@ const help = dedent`
     - new           Create new project / package
     - build         Build project from manifest
     - export        Export src from built target
-    - add-target    Add a new target to project
+    - target        Commands for working with targets (add)
 
   Options:
     -h, --help      Output usage information
@@ -68,6 +68,9 @@ async function main() {
   if (!commands.includes(command)) {
     throw unknownCommand(command);
   }
+
+  // Remove command from args
+  args._ = args._.slice(1);
 
   let subcommand;
   try {
