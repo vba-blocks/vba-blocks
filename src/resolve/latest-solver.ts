@@ -53,7 +53,7 @@ export function getMatching(resolution: Resolution): Registration | undefined {
   const range = unique(resolution.range).join(' ');
   const registered = resolution.registered.slice().reverse();
 
-  return registered.find(registration =>
-    satisfies(registration.version, range)
-  );
+  return !range
+    ? registered[0]
+    : registered.find(registration => satisfies(registration.version, range));
 }
