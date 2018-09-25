@@ -34,7 +34,7 @@ export interface Messages {
 }
 
 export interface Reporter {
-  progress: (name?: string) => Progress;
+  progress: (name: string) => Progress;
   messages: Messages;
 }
 
@@ -45,11 +45,18 @@ export interface Progress {
 }
 
 export const reporter: Reporter = {
-  progress(): Progress {
+  progress(name): Progress {
     return {
-      start(count?: number) {},
-      tick() {},
-      done() {}
+      start() {
+        process.stdout.write(name);
+      },
+      tick() {
+        process.stdout.write('.');
+      },
+      done() {
+        process.stdout.write(' Done.');
+        console.log();
+      }
     };
   },
 

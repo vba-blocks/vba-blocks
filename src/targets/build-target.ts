@@ -4,7 +4,8 @@ import {
   targetImportFailed,
   targetIsOpen,
   targetCreateFailed,
-  targetRestoreFailed
+  targetRestoreFailed,
+  targetNotFound
 } from '../errors';
 import { importGraph, createDocument } from '../addin';
 import { loadFromProject, stageBuildGraph } from '../build';
@@ -73,6 +74,10 @@ export async function createTarget(
   project: Project,
   target: Target
 ): Promise<string> {
+  if (!(await pathExists(target.path))) {
+    throw targetNotFound(target);
+  }
+
   const file = join(project.paths.staging, target.filename);
 
   try {
@@ -111,8 +116,9 @@ export async function importTarget(
   try {
     await importGraph(project, target, import_graph, file, options);
   } catch (err) {
-    await remove(staging);
     throw targetImportFailed(target, err);
+  } finally {
+    await remove(staging);
   }
 }
 
