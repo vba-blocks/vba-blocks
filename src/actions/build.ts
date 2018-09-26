@@ -4,8 +4,23 @@ import { loadProject, fetchDependencies } from '../project';
 import { BuildOptions, buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
 import { targetNoMatching, targetNoDefault } from '../errors';
+import env from '../env';
+import {
+  buildLoadingProject,
+  buildBuildingTargets,
+  buildBuildingTarget,
+  buildWritingLockfile
+} from '../messages';
+import {
+  isRegistryDependency,
+  isPathDependency,
+  isGitDependency
+} from '../manifest/dependency';
+import { toDependency } from '../sources/registration';
 
 export default async function build(options: BuildOptions = {}) {
+  env.reporter.log(buildLoadingProject());
+
   const project = await loadProject();
 
   // Load targets from --target TYPE option or project manifest
@@ -57,11 +72,25 @@ export default async function build(options: BuildOptions = {}) {
   const dependencies = await fetchDependencies(project);
 
   // Build target(s) (sequentially to avoid contention issues)
+  env.reporter.log(buildBuildingTargets(targets.length));
+  const display_dependencies = project.packages.map(registration => {
+    const dependency = toDependency(registration);
+
+    if (isRegistryDependency(dependency))
+      return `${registration.id} registry+${dependency.registry}`;
+    else return `${registration.id} ${registration.source}`;
+  });
+
   for (const target of targets) {
+    env.reporter.log(
+      buildBuildingTarget(target, project, display_dependencies)
+    );
+
     await buildTarget(target, { project, dependencies }, options);
   }
 
   // Update lockfile (if necessary)
+  env.reporter.log(buildWritingLockfile(!project.has_dirty_lockfile));
   if (project.has_dirty_lockfile) {
     await writeLockfile(project.workspace.root.dir, project);
   }

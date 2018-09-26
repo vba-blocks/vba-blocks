@@ -1,9 +1,27 @@
 import { Messages } from './reporter';
 import env from './env';
+import { Target } from './manifest';
+import { Project } from './project';
 
 export type MessageId = keyof Messages;
 
 // Messages
+
+export const buildLoadingProject = () =>
+  generateMessage('build-project-loading', {});
+
+export const buildBuildingTargets = (count: number) =>
+  generateMessage('build-targets-building', { count });
+
+export const buildBuildingTarget = (
+  target: Target,
+  project: Project,
+  dependencies: string[]
+) =>
+  generateMessage('build-target-building', { target, project, dependencies });
+
+export const buildWritingLockfile = (skipped: boolean) =>
+  generateMessage('build-lockfile-writing', { skipped });
 
 export const updatingProject = () => generateMessage('project-updating', {});
 

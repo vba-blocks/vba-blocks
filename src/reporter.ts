@@ -2,8 +2,18 @@ import { extname } from './utils/path';
 import dedent from 'dedent';
 import { Target } from './manifest';
 import { Registration } from './sources';
+import { Project } from './project';
 
 export interface Messages {
+  'build-project-loading': {};
+  'build-targets-building': { count: number };
+  'build-target-building': {
+    target: Target;
+    project: Project;
+    dependencies: string[];
+  };
+  'build-lockfile-writing': { skipped: boolean };
+
   'project-updating': {};
   'dependencies-resolving': {};
   'dependencies-fetching': {};
@@ -80,6 +90,28 @@ export const reporter: Reporter = {
   },
 
   messages: {
+    'build-project-loading': () => dedent`
+      [1/3] Loading project...`,
+
+    'build-targets-building': ({ count }) => dedent`
+      \n[2/3] Building ${count.toLocaleString()} ${plural(
+      count,
+      'target',
+      'targets'
+    )}...`,
+
+    'build-target-building': ({ target, project, dependencies }) => dedent`
+      Building target "${target.type}" for "${project.manifest.name}"
+
+      ${
+        dependencies.length
+          ? `Dependencies:\n${dependencies.join('\n')}`
+          : '(no dependencies)'
+      }`,
+
+    'build-lockfile-writing': ({ skipped }) => dedent`
+      \n[3/3] Writing lockfile...${skipped ? ' (skipped, no changes)' : ''}`,
+
     'project-updating': () => dedent`
       Updating project`,
 
@@ -233,3 +265,7 @@ export const reporter: Reporter = {
       The target type "${type} is not currently supported`
   }
 };
+
+function plural(count: number, single: string, multiple: string): string {
+  return count === 1 ? single : multiple;
+}
