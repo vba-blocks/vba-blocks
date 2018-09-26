@@ -99,7 +99,7 @@ End Class
 ' -------
 
 Function Unescape(Value)
-  Unescape = Replace(Replace(Value, "|Q|", Chr(34)), "|S|", Chr(32))
+  Unescape = Replace(Value, "^q", Chr(34))
 End Function
 
 Function GetFilename(Path)

@@ -70,12 +70,13 @@ export default async function run(
 }
 
 export function escape(value: string): string {
-  // TODO Test robustness/validity of this approach
-  return value.replace(/\"/g, '|Q|').replace(/ /g, '|S|');
+  // Checked DOS escape characters: http://www.robvanderwoude.com/escapechars.php
+  // and only quotes inside of quoted arguments to vbscript seemed to cause issues
+  return value.replace(/\"/g, '^q');
 }
 
 export function unescape(value: string): string {
-  return value.replace(/\|Q\|/g, '"').replace(/\|S\|/g, ' ');
+  return value.replace(/\^q/g, '"');
 }
 
 export function toResult(
