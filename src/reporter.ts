@@ -3,6 +3,18 @@ import dedent from 'dedent';
 import { Target } from './manifest';
 import { Registration } from './sources';
 
+export interface Messages {
+  'project-updating': {};
+  'dependencies-resolving': {};
+  'dependencies-fetching': {};
+  'export-loading': {};
+  'patch-apply-changes': {};
+  'patch-add-src': {};
+  'patch-remove-src': { name: string };
+  'patch-add-dependency': {};
+  'patch-remove-dependency': { name: string };
+}
+
 export interface ErrorMessages {
   'unknown-command': { command: string };
   'manifest-not-found': { dir: string };
@@ -39,13 +51,11 @@ export interface ErrorMessages {
   'addin-unsupported-type': { type: string };
 }
 
-export interface Messages {
-  errors: { [T in keyof ErrorMessages]: (values: ErrorMessages[T]) => string };
-}
-
 export interface Reporter {
+  log: (message: string) => void;
   progress: (name: string) => Progress;
-  messages: Messages;
+  messages: { [T in keyof Messages]: (values: Messages[T]) => string };
+  errors: { [T in keyof ErrorMessages]: (values: ErrorMessages[T]) => string };
 }
 
 export interface Progress {
@@ -55,6 +65,10 @@ export interface Progress {
 }
 
 export const reporter: Reporter = {
+  log(message) {
+    console.log(message);
+  },
+
   progress(name): Progress {
     return {
       start() {
@@ -66,129 +80,156 @@ export const reporter: Reporter = {
   },
 
   messages: {
-    errors: {
-      'unknown-command': ({ command }) => dedent`
-        Unknown command "${command}".
+    'project-updating': () => dedent`
+      Updating project`,
 
-        Try "vba-blocks --help" for a list of commands.`,
+    'dependencies-resolving': () => dedent`
+      Resolving dependencies`,
 
-      'manifest-not-found': ({ dir }) => dedent`
-        vba-blocks.toml not found in "${dir}".`,
+    'dependencies-fetching': () => dedent`
+      Fetching dependencies`,
 
-      'manifest-invalid': ({ message }) => dedent`
-        vba-blocks.toml is invalid:
-        
-        ${message}`,
+    'export-loading': () => dedent`
+      Loading exported components`,
 
-      'source-unsupported': ({ type }) => dedent`
-        ${type} dependencies are not supported.
+    'patch-apply-changes': () => dedent`
+      The following changes need to be applied to vba-block.toml:`,
 
-        Upgrade to Professional Edition for ${type} dependencies and more`,
+    'patch-add-src': () => dedent`
+      Add the following to the [src] section:`,
 
-      'source-misconfigured-registry': ({ registry }) => dedent`
-        No matching registry configured for "${registry}"`,
+    'patch-remove-src': ({ name }) => dedent`
+      Remove \`${name}\` from the [src] section`,
 
-      'source-no-matching': ({ type, source }) => dedent`
-        No source matches given registration type "${type}" (source = "${source}")`,
+    'patch-add-dependency': () => dedent`
+      Add the following to the [dependencies] section:`,
 
-      'source-download-failed': ({ source }) => dedent`
-        Failed to download "${source}"`,
+    'patch-remove-dependency': ({ name }) => dedent`
+      Remove \`${name}\` from the [dependencies] section`
+  },
 
-      'source-unrecognized-type': ({ type }) => dedent`
-        Unrecognized source type "${type}" in registration ("registry", "path", and "git" are supported)`,
+  errors: {
+    'unknown-command': ({ command }) => dedent`
+      Unknown command "${command}".
 
-      'dependency-not-found': ({ dependency, registry }) => dedent`
-        Dependency "${dependency}" not found in registry "${registry}"`,
+      Try "vba-blocks --help" for a list of commands.`,
 
-      'dependency-invalid-checksum': ({ registration }) => dedent`
-        Dependency "${registration.name}" failed validation.
+    'manifest-not-found': ({ dir }) => dedent`
+      vba-blocks.toml not found in "${dir}".`,
 
-        The downloaded file signature for ${
-          registration.id
-        } does not match the signature in the registry.`,
+    'manifest-invalid': ({ message }) => dedent`
+      vba-blocks.toml is invalid:
+      
+      ${message}`,
 
-      'dependency-path-not-found': ({ dependency, path }) => dedent`
-        Path not found for dependency "${dependency}" (${path})`,
+    'source-unsupported': ({ type }) => dedent`
+      ${type} dependencies are not supported.
 
-      'dependency-unknown-source': ({ dependency }) => dedent`
-        No source matches dependency "${dependency}"`,
+      Upgrade to Professional Edition for ${type} dependencies and more`,
 
-      'build-invalid': ({ message }) => dedent`
-        Invalid build:
-        
-        ${message}.`,
+    'source-misconfigured-registry': ({ registry }) => dedent`
+      No matching registry configured for "${registry}"`,
 
-      'lockfile-write-failed': ({ file }) => dedent`
-        Failed to write lockfile to "${file}".`,
+    'source-no-matching': ({ type, source }) => dedent`
+      No source matches given registration type "${type}" (source = "${source}")`,
 
-      'target-no-matching': ({ type }) => dedent`
-        No matching target found for type "${type}" in project`,
+    'source-download-failed': ({ source }) => dedent`
+      Failed to download "${source}"`,
 
-      'target-no-default': () => dedent`
-        No default target(s) found for project.
-        Use --target TYPE for a blank target or specify [target] or [targets] in vba-block.toml`,
+    'source-unrecognized-type': ({ type }) => dedent`
+      Unrecognized source type "${type}" in registration ("registry", "path", and "git" are supported)`,
 
-      'target-not-found': ({ target }) => dedent`
-        Target "${target.name}" not found at "${target.path}"`,
+    'dependency-not-found': ({ dependency, registry }) => dedent`
+      Dependency "${dependency}" not found in registry "${registry}"`,
 
-      'target-is-open': ({ target, path }) => dedent`
-        Failed to build target "${target.name}", it is currently open.
+    'dependency-invalid-checksum': ({ registration }) => dedent`
+      Dependency "${registration.name}" failed validation.
 
-        Please close "${path}" and try again.`,
+      The downloaded file signature for ${
+        registration.id
+      } does not match the signature in the registry.`,
 
-      'target-create-failed': ({ target }) => dedent`
-        Failed to create project for target "${target.name}"`,
+    'dependency-path-not-found': ({ dependency, path }) => dedent`
+      Path not found for dependency "${dependency}" (${path})`,
 
-      'target-import-failed': ({ target }) => dedent`
-        Failed to import project for target "${target.name}"`,
+    'dependency-unknown-source': ({ dependency }) => dedent`
+      No source matches dependency "${dependency}"`,
 
-      'target-restore-failed': ({ backup, file }) => dedent`
-        Failed to automatically restore backup from "${backup}" to "${file}".
+    'build-invalid': ({ message }) => dedent`
+      Invalid build:
+      
+      ${message}.`,
 
-        The previous version can be moved back manually, if desired.`,
+    'lockfile-write-failed': ({ file }) => dedent`
+      Failed to write lockfile to "${file}".`,
 
-      'target-add-no-type': () => dedent`
-        target TYPE is required to add a target (vba-blocks target add TYPE)`,
+    'target-no-matching': ({ type }) => dedent`
+      No matching target found for type "${type}" in project`,
 
-      'resolve-failed': () => dedent`
-        Unable to resolve dependency graph for project.
+    'target-no-default': () => dedent`
+      No default target(s) found for project.
+      Use --target TYPE for a blank target or specify [target] or [targets] in vba-block.toml`,
 
-        There are dependencies that cannot be satisfied.`,
+    'target-not-found': ({ target }) => dedent`
+      Target "${target.name}" not found at "${target.path}"`,
 
-      'component-unrecognized': ({ path }) => dedent`
-        Unrecognized component extension "${extname(path)}" (at "${path}").`,
+    'target-is-open': ({ target, path }) => dedent`
+      Failed to build target "${target.name}", it is currently open.
 
-      'component-invalid-no-name': () => dedent`
-        Invalid component: No attribute VB_Name found`,
+      Please close "${path}" and try again.`,
 
-      'run-script-not-found': ({ path }) => dedent`
-        Bridge script not found at "${path}".
+    'target-create-failed': ({ target }) => dedent`
+      Failed to create project for target "${target.name}"`,
 
-        This is a fatal error and will require vba-blocks to be re-installed.`,
+    'target-import-failed': ({ target }) => dedent`
+      Failed to import project for target "${target.name}"`,
 
-      'new-name-required': _ => dedent`
-        "name" is required with vba-blocks new (e.g. vba-blocks new project-name).
+    'target-restore-failed': ({ backup, file }) => dedent`
+      Failed to automatically restore backup from "${backup}" to "${file}".
 
-        Try \`vba-blocks new --help\` for more information.`,
+      The previous version can be moved back manually, if desired.`,
 
-      'new-dir-exists': ({ name, dir }) => dedent`
-        A directory for "${name}" already exists: "${dir}".`,
+    'target-add-no-type': () => dedent`
+      target TYPE is required to add a target (vba-blocks target add TYPE)`,
 
-      'from-not-found': ({ from }) => dedent`
-        The \`from\` document was not found at "${from}"`,
+    'resolve-failed': () => dedent`
+      Unable to resolve dependency graph for project.
 
-      'export-no-target': () => dedent`
-        No default target found for project, use --target TYPE to export from a specific target`,
+      There are dependencies that cannot be satisfied.`,
 
-      'export-no-matching': ({ type }) => dedent`
-        No matching target found for type "${type}" in project`,
+    'component-unrecognized': ({ path }) => dedent`
+      Unrecognized component extension "${extname(path)}" (at "${path}").`,
 
-      'export-target-not-found': ({ target, path }) => dedent`
-        Could not find built target for type "${target.type}".
-        (checked "${path}")`,
+    'component-invalid-no-name': () => dedent`
+      Invalid component: No attribute VB_Name found`,
 
-      'addin-unsupported-type': ({ type }) => dedent`
-        The target type "${type} is not currently supported`
-    }
+    'run-script-not-found': ({ path }) => dedent`
+      Bridge script not found at "${path}".
+
+      This is a fatal error and will require vba-blocks to be re-installed.`,
+
+    'new-name-required': _ => dedent`
+      "name" is required with vba-blocks new (e.g. vba-blocks new project-name).
+
+      Try \`vba-blocks new --help\` for more information.`,
+
+    'new-dir-exists': ({ name, dir }) => dedent`
+      A directory for "${name}" already exists: "${dir}".`,
+
+    'from-not-found': ({ from }) => dedent`
+      The \`from\` document was not found at "${from}"`,
+
+    'export-no-target': () => dedent`
+      No default target found for project, use --target TYPE to export from a specific target`,
+
+    'export-no-matching': ({ type }) => dedent`
+      No matching target found for type "${type}" in project`,
+
+    'export-target-not-found': ({ target, path }) => dedent`
+      Could not find built target for type "${target.type}".
+      (checked "${path}")`,
+
+    'addin-unsupported-type': ({ type }) => dedent`
+      The target type "${type} is not currently supported`
   }
 };

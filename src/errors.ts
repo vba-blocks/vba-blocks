@@ -31,6 +31,8 @@ export class CliError extends Error {
   }
 }
 
+// Errors
+
 export const unknownCommand = (command: string) =>
   generateError('unknown-command', { command });
 
@@ -104,7 +106,7 @@ export const targetAddNoType = () => generateError('target-add-no-type', {});
 export const resolveFailed = (details?: string) => {
   const code = 'resolve-failed';
 
-  let formatted = env.reporter.messages.errors[code]({});
+  let formatted = env.reporter.errors[code]({});
   if (details) {
     formatted += `\n${details}`;
   }
@@ -149,7 +151,7 @@ function generateError<T extends CliErrorCode>(
 ): CliError {
   type Message = (values: ErrorMessages[T]) => string;
 
-  const message = <Message>env.reporter.messages.errors[code];
+  const message = <Message>env.reporter.errors[code];
   const formatted = message(values);
 
   return new CliError(formatted, { code, underlying });

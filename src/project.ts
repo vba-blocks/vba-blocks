@@ -8,6 +8,7 @@ import { Workspace, loadWorkspace } from './workspace';
 import { fetch } from './sources';
 import resolve, { DependencyGraph } from './resolve';
 import { readLockfile, isLockfileValid } from './lockfile';
+import { fetchingDependencies } from './messages';
 
 const debug = require('debug')('vba-blocks:project');
 
@@ -37,8 +38,6 @@ export interface Project {
  */
 export async function loadProject(dir: string = env.cwd): Promise<Project> {
   const manifest = await loadManifest(dir);
-
-  console.log(`Loading ${manifest.name}`);
 
   const config = await loadConfig();
   const workspace = await loadWorkspace(manifest);
@@ -97,7 +96,7 @@ export async function fetchDependencies(
 
       return manifest;
     },
-    { progress: env.reporter.progress('Fetching dependencies') }
+    { progress: env.reporter.progress(fetchingDependencies()) }
   );
 
   return manifests;

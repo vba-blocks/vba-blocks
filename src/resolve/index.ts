@@ -5,6 +5,8 @@ import { DependencyGraph, getRegistration } from './dependency-graph';
 import Resolver from './resolver';
 import solveLatest from './latest-solver';
 import { resolveFailed } from '../errors';
+import env from '../env';
+import { resolvingDependencies } from '../messages';
 
 const debug = require('debug')('vba-blocks:resolve');
 
@@ -15,7 +17,7 @@ export default async function resolve(
   workspace: Workspace,
   preferred: DependencyGraph = []
 ): Promise<DependencyGraph> {
-  console.log('Resolving dependencies');
+  env.reporter.log(resolvingDependencies());
 
   // Load, update, and seed resolver
   const resolver = new Resolver(config);
@@ -31,7 +33,6 @@ export default async function resolve(
 
   // Fallback to SAT solver
   try {
-    console.log('(second pass with SAT solver)');
     const { solve: solveSat } = require(join(__dirname, 'sat-solver'));
     return await solveSat(workspace, resolver);
   } catch (err) {

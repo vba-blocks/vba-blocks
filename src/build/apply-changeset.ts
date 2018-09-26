@@ -11,16 +11,21 @@ import {
   removeSource,
   applyChanges
 } from '../manifest/patch-manifest';
+import { updatingProject } from '../messages';
 
 export default async function applyChangeset(
   project: Project,
   changeset: Changeset
 ) {
+  const progress = env.reporter.progress(updatingProject());
+  const done = progress.done;
+  progress.done = () => {};
+
   // Update src directory
   await parallel(
     changeset.components.changed,
     component => writeComponent(component.details.path!, component),
-    { progress: env.reporter.progress('Updating src') }
+    { progress }
   );
 
   await parallel(
@@ -31,7 +36,7 @@ export default async function applyChangeset(
 
       await writeComponent(path, component);
     },
-    { progress: env.reporter.progress('Adding src') }
+    { progress }
   );
 
   await parallel(
@@ -39,10 +44,12 @@ export default async function applyChangeset(
     async component => {
       await remove(component.details.path!);
     },
-    { progress: env.reporter.progress('Removing src') }
+    { progress }
   );
 
   await updateManifest(project, changeset);
+
+  done();
 }
 
 async function updateManifest(project: Project, changeset: Changeset) {

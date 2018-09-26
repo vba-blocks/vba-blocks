@@ -2,15 +2,19 @@ import dedent from 'dedent';
 import { relative } from '../utils/path';
 import { Manifest, Source, Dependency, Target } from './';
 import { isRegistryDependency, isPathDependency } from './dependency';
+import {
+  patchApplyChanges,
+  patchAddSrc,
+  patchRemoveSrc,
+  patchAddDependency,
+  patchRemoveDependency
+} from '../messages';
+import env from '../env';
 
 export function applyChanges(changes: string[]) {
   if (!changes.length) return;
 
-  console.log(
-    `The following changes need to be applied to vba-block.toml:\n\n${changes.join(
-      '\n\n'
-    )}`
-  );
+  env.reporter.log(`${patchApplyChanges()}\n\n${changes.join('\n\n')}`);
 }
 
 export function addSource(manifest: Manifest, source: Source): string {
@@ -23,12 +27,12 @@ export function addSource(manifest: Manifest, source: Source): string {
     : `"${relative_path}"`;
 
   return dedent`
-    Add the following to the [src] section:
+    ${patchAddSrc()}
     ${source.name} = ${details}`;
 }
 
 export function removeSource(_: Manifest, name: string): string {
-  return `Remove \`${name}\` from the [src] section`;
+  return patchRemoveSrc(name);
 }
 
 export function addDependency(
@@ -59,12 +63,12 @@ export function addDependency(
   }
 
   return dedent`
-    Add the following to the [dependencies] section:
+    ${patchAddDependency()}
     ${dependency.name} = ${details}`;
 }
 
 export function removeDependency(_: Manifest, name: string): string {
-  return `Remove \`${name}\` from the [dependencies] section`;
+  return patchRemoveDependency(name);
 }
 
 export function addTarget(manifest: Manifest, target: Target): string {
@@ -74,6 +78,7 @@ export function addTarget(manifest: Manifest, target: Target): string {
       ? `{ name = "${target.name}" path = "${relative_path}" }`
       : `"${relative_path}"`;
 
+  // TODO Need to account for [target] vs [targets]
   return dedent`
     Add the following to the [targets] section:
     ${target.type} = ${details}`;
