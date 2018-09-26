@@ -8,13 +8,13 @@ import { loadManifest } from '../manifest';
 import { Dependency, PathDependency } from '../manifest/dependency';
 import { Source } from './source';
 import { pathExists } from '../utils/fs';
+import { dependencyPathNotFound } from '../errors';
 
 export default class PathSource implements Source {
   async resolve(dependency: Dependency): Promise<Registration[]> {
     const { name, path } = <PathDependency>dependency;
     if (!pathExists(path)) {
-      // TODO "official" error
-      throw new Error(`Path not found for dependency "${name}" (${path})`);
+      throw dependencyPathNotFound(name, path);
     }
 
     // Load registration details (version and dependencies) from manifest directly

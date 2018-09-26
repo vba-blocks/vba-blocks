@@ -55,11 +55,17 @@ export const sourceNoneMatching = (type: string, source: string) =>
 export const sourceDownloadFailed = (source: string, underlying: Error) =>
   generateError('source-download-failed', { source }, underlying);
 
+export const sourceUnrecognizedType = (type: string) =>
+  generateError('source-unrecognized-type', { type });
+
 export const dependencyNotFound = (dependency: string, registry: string) =>
   generateError('dependency-not-found', { dependency, registry });
 
 export const dependencyInvalidChecksum = (registration: Registration) =>
   generateError('dependency-invalid-checksum', { registration });
+
+export const dependencyPathNotFound = (dependency: string, path: string) =>
+  generateError('dependency-path-not-found', { dependency, path });
 
 export const dependencyUnknownSource = (dependency: string) =>
   generateError('dependency-unknown-source', { dependency });
@@ -69,6 +75,11 @@ export const buildInvalid = (message: string) =>
 
 export const lockfileWriteFailed = (file: string, underlying: Error) =>
   generateError('lockfile-write-failed', { file }, underlying);
+
+export const targetNoMatching = (type: string) =>
+  generateError('target-no-matching', { type });
+
+export const targetNoDefault = () => generateError('target-no-default', {});
 
 export const targetNotFound = (target: Target) =>
   generateError('target-not-found', { target });
@@ -88,6 +99,8 @@ export const targetRestoreFailed = (
   underlying: Error
 ) => generateError('target-restore-failed', { backup, file }, underlying);
 
+export const targetAddNoType = () => generateError('target-add-no-type', {});
+
 export const resolveFailed = (details?: string) => {
   const code = 'resolve-failed';
 
@@ -102,6 +115,9 @@ export const resolveFailed = (details?: string) => {
 export const unrecognizedComponent = (path: string) =>
   generateError('component-unrecognized', { path });
 
+export const componentInvalidNoName = () =>
+  generateError('component-invalid-no-name', {});
+
 export const runScriptNotFound = (path: string) =>
   generateError('run-script-not-found', { path });
 
@@ -112,6 +128,19 @@ export const newDirExists = (name: string, dir: string) =>
 
 export const fromNotFound = (from: string) =>
   generateError('from-not-found', { from });
+
+export const exportNoDefault = () => generateError('export-no-target', {});
+
+export const exportNoMatching = (type: string) =>
+  generateError('export-no-matching', { type });
+
+export const exportTargetNotFound = (target: Target, path: string) =>
+  generateError('export-target-not-found', { target, path });
+
+export const addinUnsupportedType = (type: string) =>
+  generateError('addin-unsupported-type', { type });
+
+// Utils
 
 function generateError<T extends CliErrorCode>(
   code: T,

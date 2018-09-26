@@ -3,6 +3,7 @@ import { TargetType } from '../manifest/target';
 import { loadProject, fetchDependencies } from '../project';
 import { BuildOptions, buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
+import { targetNoMatching, targetNoDefault } from '../errors';
 
 export default async function build(options: BuildOptions = {}) {
   const project = await loadProject();
@@ -36,10 +37,7 @@ export default async function build(options: BuildOptions = {}) {
     }
 
     if (!target) {
-      // TODO "official" error
-      throw new Error(
-        `Target "${options.target}" not found for the current project`
-      );
+      throw targetNoMatching(options.target);
     }
 
     targets = [target];
@@ -52,10 +50,7 @@ export default async function build(options: BuildOptions = {}) {
   }
 
   if (!targets) {
-    // TODO "official" error
-    throw new Error(
-      '--target TYPE is required or specify [target] or [targets]'
-    );
+    throw targetNoDefault();
   }
 
   // Fetch relevant dependencies

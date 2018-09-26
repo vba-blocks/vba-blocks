@@ -1,7 +1,7 @@
 import { extname, relative } from '../utils/path';
 import { readFile } from '../utils/fs';
 import truncate from '../utils/truncate';
-import { unrecognizedComponent } from '../errors';
+import { unrecognizedComponent, componentInvalidNoName } from '../errors';
 
 export type ComponentType = 'module' | 'class' | 'form' | 'document';
 
@@ -28,7 +28,7 @@ export class Component {
 
   get name(): string {
     const line = findLine(this.code, 'Attribute VB_Name');
-    if (!line) throw new Error('No attribute VB_Name found in component');
+    if (!line) throw componentInvalidNoName();
 
     const [key, value] = line.split('=');
     return JSON.parse(value);
@@ -60,8 +60,9 @@ export class Component {
     }
 
     const code = await readFile(path);
-    const binary = <Buffer | undefined>(binary_path &&
-      (await readFile(binary_path)));
+    const binary = <Buffer | undefined>(
+      (binary_path && (await readFile(binary_path)))
+    );
 
     return new Component(type, code, { path, dependency, binary });
   }

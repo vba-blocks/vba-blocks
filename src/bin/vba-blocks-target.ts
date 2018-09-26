@@ -39,7 +39,7 @@ module.exports = async (args: Args) => {
     debug(`loading "./vba-blocks-target-${command}.js"`);
     subcommand = require(`./vba-blocks-target-${command}.js`);
   } catch (err) {
-    throw new Error(`Failed to load command "${command}".\n${err.stack}`);
+    throw new Error(`Failed to load target command "${command}"`);
   }
 
   debug(`starting "target.${command}" with args ${JSON.stringify(args)}`);

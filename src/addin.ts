@@ -5,6 +5,7 @@ import env from './env';
 import { Project } from './project';
 import { Target } from './manifest';
 import { ImportGraph } from './build';
+import { addinUnsupportedType } from './errors';
 
 export type Application = string;
 export type Addin = string;
@@ -97,7 +98,7 @@ export function getTargetInfo(
   options: AddinOptions = {}
 ): { application: Application; addin: Addin; file: string } {
   const application = byExtension[target.type];
-  if (!application) throw new Error(`Unsupported target type "${target.type}"`);
+  if (!application) throw addinUnsupportedType(target.type);
 
   const addin = addins[application];
   const file = join(

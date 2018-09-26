@@ -12,6 +12,7 @@ import {
   applyChangeset,
   toSrc
 } from '../build';
+import { exportTargetNotFound } from '../errors';
 
 /**
  * Export target (with staging directory)
@@ -59,11 +60,7 @@ export async function extractTarget(
   const dest = join(staging, 'targets', target.type);
 
   if (!(await pathExists(src))) {
-    throw new Error(
-      `Could not find built target for type "${
-        target.type
-      }".\n(checked "${src}")`
-    );
+    throw exportTargetNotFound(target, src);
   }
 
   await ensureDir(dest);

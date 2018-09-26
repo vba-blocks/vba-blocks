@@ -2,6 +2,7 @@ import { parse as parseQuerystring } from 'querystring';
 import { Snapshot, Dependency } from '../manifest';
 import has from '../utils/has';
 import { isString } from '../utils/is';
+import { sourceUnrecognizedType } from '../errors';
 
 export interface Registration extends Snapshot {
   id: string;
@@ -69,7 +70,7 @@ export function toDependency(registration: Registration): Dependency {
   } else if (type === 'path') {
     return { name, path: value };
   } else {
-    throw new Error(`Unrecognized registration type "${type}"`);
+    throw sourceUnrecognizedType(type);
   }
 }
 

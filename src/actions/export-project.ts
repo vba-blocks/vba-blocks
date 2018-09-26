@@ -4,6 +4,7 @@ import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
 import { join } from '../utils/path';
 import { emptyDir, ensureDir } from '../utils/fs';
+import { exportNoDefault, exportNoMatching } from '../errors';
 
 export interface ExportOptions {
   target?: string;
@@ -15,7 +16,7 @@ export default async function exportProject(options: ExportOptions = {}) {
   const project = await loadProject();
 
   if (!options.target && !project.manifest.target) {
-    throw new Error('--target TYPE is required for export');
+    throw exportNoDefault();
   }
 
   let target: Target | undefined;
@@ -32,7 +33,7 @@ export default async function exportProject(options: ExportOptions = {}) {
   }
 
   if (!target) {
-    throw new Error(`No target found for "${options.target}"`);
+    throw exportNoMatching(options.target!);
   }
 
   const dependencies = await fetchDependencies(project);
