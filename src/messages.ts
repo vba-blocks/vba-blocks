@@ -23,6 +23,14 @@ export const buildBuildingTarget = (
 export const buildWritingLockfile = (skipped: boolean) =>
   generateMessage('build-lockfile-writing', { skipped });
 
+export const exportLoadingProject = () =>
+  generateMessage('export-project-loading', {});
+
+export const exportToStaging = (target: Target) =>
+  generateMessage('export-to-staging', { target });
+
+export const exportToProject = () => generateMessage('export-to-project', {});
+
 export const updatingProject = () => generateMessage('project-updating', {});
 
 export const resolvingDependencies = () =>

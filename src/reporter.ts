@@ -14,6 +14,10 @@ export interface Messages {
   };
   'build-lockfile-writing': { skipped: boolean };
 
+  'export-project-loading': {};
+  'export-to-staging': { target: Target };
+  'export-to-project': {};
+
   'project-updating': {};
   'dependencies-resolving': {};
   'dependencies-fetching': {};
@@ -115,8 +119,17 @@ export const reporter: Reporter = {
     'build-lockfile-writing': ({ skipped }) => dedent`
       \n[3/3] Writing lockfile...${skipped ? ' (skipped, no changes)' : ''}`,
 
+    'export-project-loading': () => dedent`
+      [1/3] Loading project...`,
+
+    'export-to-staging': ({ target }) => dedent`
+      \n[2/3] Exporting src from "${target.filename}"`,
+
+    'export-to-project': () => dedent`
+      \n[3/3] Updating project`,
+
     'project-updating': () => dedent`
-      Updating project`,
+      Updating src files`,
 
     'dependencies-resolving': () => dedent`
       Resolving dependencies`,
@@ -128,7 +141,7 @@ export const reporter: Reporter = {
       Loading exported components`,
 
     'patch-apply-changes': () => dedent`
-      The following changes need to be applied to vba-block.toml:`,
+      \nThe following changes need to be applied to vba-block.toml:`,
 
     'patch-add-src': () => dedent`
       Add the following to the [src] section:`,

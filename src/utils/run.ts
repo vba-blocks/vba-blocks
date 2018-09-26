@@ -64,6 +64,7 @@ export default async function run(
     throw new RunError(result);
   }
 
+  debug('result:', result);
   return result;
 }
 

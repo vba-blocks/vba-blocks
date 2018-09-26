@@ -11,12 +11,9 @@ import {
   buildBuildingTarget,
   buildWritingLockfile
 } from '../messages';
-import {
-  isRegistryDependency,
-  isPathDependency,
-  isGitDependency
-} from '../manifest/dependency';
+import { isRegistryDependency } from '../manifest/dependency';
 import { toDependency } from '../sources/registration';
+import { sanitize } from '../utils/path';
 
 export default async function build(options: BuildOptions = {}) {
   env.reporter.log(buildLoadingProject());
@@ -46,7 +43,7 @@ export default async function build(options: BuildOptions = {}) {
         type,
         name,
         path: `targets/${type}`,
-        filename: `${name}.${type}`,
+        filename: `${sanitize(name)}.${type}`,
         blank: true
       };
     }

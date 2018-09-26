@@ -16,7 +16,7 @@ module.exports = async (args: Args) => {
     return;
   }
 
-  const [target] = args._;
+  const target = <string | undefined>args.target;
   const completed = <string | undefined>args.completed;
   const addin = <string | undefined>args.addin;
 

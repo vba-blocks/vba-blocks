@@ -30,7 +30,10 @@ export default async function exportTarget(
   const { project, dependencies } = info;
 
   // Extract target to staging
-  const extracted = await extractTarget(project, target, staging);
+  let extracted: string;
+  if (!target.blank) {
+    extracted = await extractTarget(project, target, staging);
+  }
 
   // Compare project and exported and apply changes to project
   const project_build_graph = await loadFromProject(project, dependencies);
@@ -44,8 +47,10 @@ export default async function exportTarget(
   await applyChangeset(project, changeset);
 
   // Move target to dest
-  await remove(target.path);
-  await copy(extracted, target.path);
+  if (!target.blank) {
+    await remove(target.path);
+    await copy(extracted!, target.path);
+  }
 
   // Finally, cleanup staging
   await remove(staging);

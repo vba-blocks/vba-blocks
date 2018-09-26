@@ -78,6 +78,7 @@ Class Excel
       If Addin.Name = Name And Addin.IsOpen Then
         Set Workbook = Addin
         WorkbookWasOpen = True
+        Exit Sub
       End If
     Next
 
@@ -117,7 +118,7 @@ End Function
 
 Function GetFilename(Path)
   Dim Parts
-  Parts = Split(Path, "\")
+  Parts = Split(Replace(Path, "\", "/"), "/")
 
   GetFilename = Parts(UBound(Parts))
 End Function

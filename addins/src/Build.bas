@@ -58,6 +58,8 @@ Public Function ExportTo(Info As Variant) As String
     Dim Document As Object
     Dim App As New OfficeApplication
 
+    Output.Messages.Add "ExportTo"
+
     Set Values = JsonConverter.ParseJson(Info)
     Set Document = App.GetDocument(Values("file"))
     Staging = Values("staging")

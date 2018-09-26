@@ -2,9 +2,16 @@ import { Target } from '../manifest';
 import { loadProject, fetchDependencies } from '../project';
 import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
-import { join } from '../utils/path';
+import { join, sanitize } from '../utils/path';
 import { emptyDir, ensureDir } from '../utils/fs';
 import { exportNoDefault, exportNoMatching } from '../errors';
+import { TargetType } from '../manifest/target';
+import env from '../env';
+import {
+  exportLoadingProject,
+  exportToStaging,
+  exportToProject
+} from '../messages';
 
 export interface ExportOptions {
   target?: string;
@@ -13,6 +20,8 @@ export interface ExportOptions {
 }
 
 export default async function exportProject(options: ExportOptions = {}) {
+  env.reporter.log(exportLoadingProject());
+
   const project = await loadProject();
 
   if (!options.target && !project.manifest.target) {
@@ -29,7 +38,16 @@ export default async function exportProject(options: ExportOptions = {}) {
       target => target.type === options.target
     );
   } else {
-    // TODO Load target from blank target
+    const type = <TargetType>options.target;
+    const name = project.manifest.name;
+
+    target = {
+      type,
+      name,
+      path: `targets/${type}`,
+      filename: `${sanitize(name)}.${type}`,
+      blank: true
+    };
   }
 
   if (!target) {
@@ -42,6 +60,8 @@ export default async function exportProject(options: ExportOptions = {}) {
   if (!options.completed) {
     staging = join(project.paths.staging, 'export');
 
+    env.reporter.log(exportToStaging(target));
+
     await ensureDir(staging);
     await emptyDir(staging);
     await exportTo(project, target, staging, options);
@@ -49,5 +69,6 @@ export default async function exportProject(options: ExportOptions = {}) {
     staging = options.completed;
   }
 
+  env.reporter.log(exportToProject());
   await exportTarget(target, { project, dependencies }, staging);
 }
