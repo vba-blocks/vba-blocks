@@ -43,11 +43,9 @@ export default async function run(
     throw runScriptNotFound(script);
   }
 
-  const parts = [application, file, macro, arg];
+  const parts = [application, file, macro, escape(arg)];
   const command = env.isWindows
-    ? `cscript //Nologo ${script} ${parts
-        .map(part => `"${escape(part)}"`)
-        .join(' ')}`
+    ? `cscript //Nologo ${script} ${parts.map(part => `"${part}"`).join(' ')}`
     : `osascript ${script}  ${parts.map(part => `'${part}'`).join(' ')}`;
 
   debug('Run:');

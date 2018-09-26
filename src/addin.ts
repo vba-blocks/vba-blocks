@@ -19,7 +19,7 @@ export const extensions: { [application: string]: string[] } = {
   excel: ['xlsx', 'xlsm', 'xlam']
 };
 export const addins: { [application: string]: string } = {
-  excel: join(env.addins, 'vba-blocks.xlsm') // TEMP vba-blocks.xlam
+  excel: join(env.addins, 'vba-blocks.xlam')
 };
 
 const byExtension: { [extension: string]: string } = {};

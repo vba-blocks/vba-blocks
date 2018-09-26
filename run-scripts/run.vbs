@@ -4,21 +4,21 @@ Dim Command
 Dim Arg
 
 App = WScript.Arguments(0)
-Addin = Unescape(WScript.Arguments(1))
+File = WScript.Arguments(1)
 Command = WScript.Arguments(2)
 Arg = Unescape(WScript.Arguments(3))
 
-Run App, Addin, Command, Arg
+Run App, File, Command, Arg
 WScript.Quit 0
 
-Function Run(App, Addin, Command, Arg)
+Function Run(App, File, Command, Arg)
   Dim Instance
   Dim Result
 
   Select Case App
   Case "excel"
     Set Instance = New Excel
-    Result = Instance.Run(Addin, Command, Arg)
+    Result = Instance.Run(File, Command, Arg)
   Case Else
     Fail "Unsupported App: " & App
   End Select
@@ -37,13 +37,12 @@ Class Excel
 
   Private Sub Class_Initialize
     OpenExcel
-    App.Visible = True
   End Sub
 
-  Public Function Run(Addin, Command, Arg)
+  Public Function Run(File, Command, Arg)
     On Error Resume Next
 
-    OpenWorkbook(Addin)
+    OpenWorkbook(File)
     Run = App.Run("'" & Workbook.Name & "'!" & Command, Arg)
 
     If Err.Number <> 0 Then
@@ -62,14 +61,28 @@ Class Excel
       If Err.Number <> 0 Then
         Fail "Failed to open Excel: " & Err.Description
       End If
+
+      App.Visible = False
     Else
       ExcelWasOpen = True
     End If
   End Sub
 
   Private Sub OpenWorkbook(Path)
+    Dim Name
+    Dim Addin
+    Name = GetFilename(Path)
+
+    ' Check add-ins first
+    For Each Addin In App.AddIns
+      If Addin.Name = Name And Addin.IsOpen Then
+        Set Workbook = Addin
+        WorkbookWasOpen = True
+      End If
+    Next
+
     On Error Resume Next
-    Set Workbook = App.Workbooks(GetFilename(Path))
+    Set Workbook = App.Workbooks(Name)
 
     If Err.Number <> 0 Then
       Err.Clear
