@@ -4,12 +4,7 @@ import { pathExists, readFile, writeFile } from './utils/fs';
 import { toLockfile as convertToToml, parse as parseToml } from './utils/toml';
 import has from './utils/has';
 import { Snapshot } from './manifest';
-import {
-  Dependency,
-  satisfies,
-  isPathDependency,
-  isGitDependency
-} from './manifest/dependency';
+import { Dependency, satisfies } from './manifest/dependency';
 import { Workspace } from './workspace';
 import {
   Registration,
