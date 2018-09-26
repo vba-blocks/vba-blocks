@@ -980,15 +980,15 @@ domexception@^1.0.1:
     webidl-conversions "^4.0.2"
 
 dugite@^1.39.0:
-  version "1.74.0"
-  resolved "https://registry.yarnpkg.com/dugite/-/dugite-1.74.0.tgz#20f6439242750d12966ab534aebd52d78911d241"
+  version "1.75.0"
+  resolved "https://registry.yarnpkg.com/dugite/-/dugite-1.75.0.tgz#1d729b91ce34332a47c90957547bfa225f3fdbac"
   dependencies:
     checksum "^0.1.1"
     mkdirp "^0.5.1"
     progress "^2.0.0"
     request "^2.88.0"
     rimraf "^2.5.4"
-    tar "^4.0.2"
+    tar "^4.4.6"
 
 duplexer@^0.1.1, duplexer@~0.1.1:
   version "0.1.1"
@@ -3719,7 +3719,7 @@ tar-stream@^1.5.0, tar-stream@^1.5.2:
     to-buffer "^1.1.1"
     xtend "^4.0.0"
 
-tar@^4, tar@^4.0.2:
+tar@^4, tar@^4.4.6:
   version "4.4.6"
   resolved "https://registry.yarnpkg.com/tar/-/tar-4.4.6.tgz#63110f09c00b4e60ac8bcfe1bf3c8660235fbc9b"
   dependencies:
@@ -3831,8 +3831,8 @@ truncate-utf8-bytes@^1.0.0:
     utf8-byte-length "^1.0.1"
 
 ts-jest@^23.0.0:
-  version "23.10.1"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.1.tgz#ad0196f7b81f08888897004d9ed870c1a901511a"
+  version "23.10.2"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.2.tgz#10212ec4aba3cb6c75578b09460589ee80cf527a"
   dependencies:
     bs-logger "0.x"
     buffer-from "1.x"
