@@ -2,7 +2,7 @@
 name = "vba-blocks"
 version = "0.0.0"
 dependencies = [
-  "installer 0.0.0 path+vba-installer",
+  "installer 0.0.0 path+vba-installer/",
   "json 2.3.0 registry+vba-blocks#42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f",
 ]
 
@@ -16,16 +16,16 @@ dependencies = [
 [[packages]]
 name = "filesystem"
 version = "0.0.0"
-source = "path+vba-filesystem"
+source = "path+vba-filesystem/"
 dependencies = [
 ]
 
 [[packages]]
 name = "installer"
 version = "0.0.0"
-source = "path+vba-installer"
+source = "path+vba-installer/"
 dependencies = [
-  "filesystem 0.0.0 path+vba-filesystem",
+  "filesystem 0.0.0 path+vba-filesystem/",
 ]
 
 [[packages]]
