@@ -69,31 +69,28 @@ Class Excel
   End Sub
 
   Private Sub OpenWorkbook(Path)
-    Dim Name
-    Dim Addin
-    Name = GetFilename(Path)
-
-    ' Check add-ins first
-    For Each Addin In App.AddIns
-      If Addin.Name = Name And Addin.IsOpen Then
-        Set Workbook = Addin
-        WorkbookWasOpen = True
-        Exit Sub
-      End If
-    Next
-
     On Error Resume Next
-    Set Workbook = App.Workbooks(Name)
+    
+    ' Check add-ins first
+    ' C:/.../vba-blocks.xlam -> index = vba-blocks
+    Set Workbook = App.AddIns(GetFileName(Path))
+    If Err.Number = 0 Then
+      WorkbookWasOpen = True
+      Exit Sub
+    End If
+
+    Err.Clear
+    Set Workbook = App.Workbooks(GetFileBase(Path))
+    If Err.Number = 0 Then
+      WorkbookWasOpen = True
+      Exit Sub
+    End If
+
+    Err.Clear
+    Set Workbook = App.Workbooks.Open(Path)
 
     If Err.Number <> 0 Then
-      Err.Clear
-      Set Workbook = App.Workbooks.Open(Path)
-
-      If Err.Number <> 0 Then
-        Fail "Failed to open workbook: " & Err.Description
-      End If
-    Else
-      WorkbookWasOpen = True
+      Fail "Failed to open workbook: " & Err.Description
     End If
   End Sub
 
@@ -116,11 +113,19 @@ Function Unescape(Value)
   Unescape = Replace(Value, "^q", Chr(34))
 End Function
 
-Function GetFilename(Path)
+Function GetFileBase(Path)
   Dim Parts
   Parts = Split(Replace(Path, "\", "/"), "/")
 
-  GetFilename = Parts(UBound(Parts))
+  GetFileBase = Parts(UBound(Parts))
+End Function
+
+Function GetFileName(Path)
+  Dim Parts
+  Parts = Split(GetFileBase(Path), ".")
+
+  ' Naive approach, may need to be revisited in the future
+  GetFileName = Parts(LBound(Parts))
 End Function
 
 Sub Fail(Message)
