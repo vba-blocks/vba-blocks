@@ -1,2 +1,2 @@
-{"name":"web","vers":"4.0.22","deps":[{"name":"json","req":"^2"}],"cksum":"253052084974af810a115b031e782b4b3a23fdf55d77594ee5f9e2d76a2d396d"}
-{"name":"web","vers":"4.1.5","deps":[{"name":"json","req":"^2.3.0"}],"cksum":"56c0bfaa84be448b39c65aa83f1c7530db0635a6b2b6ee8589a18feea29e37e9"}
+{"name":"web","vers":"4.0.22","deps":[{"name":"json","req":"^2"}],"cksum":"0928440b7828117c7517f0cc533e7899ecf8a22f290247b6fb842784d6fa506f"}
+{"name":"web","vers":"4.1.5","deps":[{"name":"json","req":"^2.3.0"}],"cksum":"2a4127262423459a75b79579fe3b670daa58b1be41b02d01e7c01465cd8e4a35"}
