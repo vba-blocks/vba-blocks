@@ -13,16 +13,26 @@ jest.mock('../../src/utils/git');
 
 const original_env = { ...env };
 
-export function setupEnvironment(cwd: string) {
+interface EnvironmentOptions {
+  silent?: boolean;
+}
+
+export function setupEnvironment(
+  cwd: string,
+  options: EnvironmentOptions = {}
+) {
+  const { silent = true } = options;
+
   env.cwd = cwd;
   env.cache = cache;
   env.registry = join(cache, 'registry');
   env.packages = join(cache, 'packages');
   env.sources = join(cache, 'sources');
+  env.reporter.silent = silent;
 }
 
-export async function setup(cwd: string) {
-  setupEnvironment(cwd);
+export async function setup(cwd: string, options: EnvironmentOptions = {}) {
+  setupEnvironment(cwd, options);
 
   const project = await loadProject();
   const dependencies = await fetchDependencies(project);

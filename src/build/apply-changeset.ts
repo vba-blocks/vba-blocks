@@ -18,8 +18,11 @@ export default async function applyChangeset(
   changeset: Changeset
 ) {
   const progress = env.reporter.progress(updatingProject());
+  const start = progress.start;
+  progress.start = () => {};
   const done = progress.done;
   progress.done = () => {};
+  start();
 
   // Update src directory
   await parallel(

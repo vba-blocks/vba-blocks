@@ -8,13 +8,14 @@ import applyChangeset from '../apply-changeset';
 afterEach(reset);
 
 test('should apply changeset for project', async () => {
-  const { project, dependencies } = await setup(complex);
+  jest.spyOn(console, 'log').mockImplementation(() => {});
 
+  const { project, dependencies } = await setup(complex, { silent: false });
   const before = await loadFromProject(project, dependencies);
   const after = await loadFromExport(standardChangesExport);
   const changeset = compareBuildGraphs(before, after);
 
-  jest.spyOn(console, 'log').mockImplementation(() => {});
+  mock(console.log).clear();
   await applyChangeset(project, changeset);
 
   expect(mock(console.log).calls).toMatchSnapshot();
@@ -25,6 +26,7 @@ test('should apply changeset for project', async () => {
 interface Mock {
   calls: any[][];
   restore: () => void;
+  clear: () => void;
 }
 
 function mock(value: any): Mock {
@@ -34,6 +36,9 @@ function mock(value: any): Mock {
     },
     restore() {
       return value.mockRestore();
+    },
+    clear() {
+      return value.mockClear();
     }
   };
 }

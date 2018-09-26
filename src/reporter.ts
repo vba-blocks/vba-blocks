@@ -64,6 +64,7 @@ export interface ErrorMessages {
 }
 
 export interface Reporter {
+  silent?: boolean;
   log: (message: string) => void;
   progress: (name: string) => Progress;
   messages: { [T in keyof Messages]: (values: Messages[T]) => string };
@@ -78,13 +79,13 @@ export interface Progress {
 
 export const reporter: Reporter = {
   log(message) {
-    console.log(message);
+    if (!this.silent) console.log(message);
   },
 
   progress(name): Progress {
     return {
-      start() {
-        console.log(name);
+      start: () => {
+        if (!this.silent) console.log(name);
       },
       tick() {},
       done() {}

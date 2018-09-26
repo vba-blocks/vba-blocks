@@ -80,11 +80,11 @@ export async function run(
   application: string,
   file: string,
   macro: string,
-  args: object = {}
+  arg: string
 ): Promise<RunResult> {
   let result;
   try {
-    result = await _run(application, file, macro, args);
+    result = await _run(application, file, macro, arg);
 
     // Give Office time to clean up
     await wait();
