@@ -80,7 +80,7 @@ export async function run(
   application: string,
   file: string,
   macro: string,
-  arg: string
+  arg: string = ''
 ): Promise<RunResult> {
   let result;
   try {

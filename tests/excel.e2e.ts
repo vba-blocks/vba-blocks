@@ -55,7 +55,7 @@ describe('export', () => {
         );
 
         // 3. Export "empty" project
-        const { stdout } = await execute(cwd, 'export xlsm');
+        const { stdout } = await execute(cwd, 'export --target xlsm');
 
         const result = await readdir(cwd);
         expect(result).toMatchSnapshot();
@@ -74,7 +74,7 @@ describe('export', () => {
           join(cwd, 'build/json.xlsm')
         );
 
-        const { stdout } = await execute(cwd, 'export xlsm');
+        const { stdout } = await execute(cwd, 'export --target xlsm');
 
         const result = await readdir(cwd);
         expect(result).toMatchSnapshot();
@@ -126,13 +126,13 @@ describe('new', () => {
   });
 });
 
-describe('add-target', () => {
+describe('target add', () => {
   test('should add blank target', async () => {
     await tmp('add-blank-target', async cwd => {
       await execute(cwd, `new add-blank`);
       const { stdout } = await execute(
         join(cwd, 'add-blank'),
-        'add-target xlsm --name target-name'
+        'target add xlsm --name target-name'
       );
 
       const result = await readdir(join(cwd, 'add-blank'));
@@ -148,7 +148,7 @@ describe('add-target', () => {
         await execute(cwd, `new add-existing`);
         const { stdout } = await execute(
           join(cwd, 'add-existing'),
-          `add-target xlsm --from ${join(built, 'build/standard.xlsm')}`
+          `target add xlsm --from ${join(built, 'build/standard.xlsm')}`
         );
 
         const result = await readdir(join(cwd, 'add-existing'));
