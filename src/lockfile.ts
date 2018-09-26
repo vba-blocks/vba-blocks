@@ -1,10 +1,15 @@
 import { ok } from 'assert';
-import { join, relative } from './utils/path';
+import { join, relative, trailing } from './utils/path';
 import { pathExists, readFile, writeFile } from './utils/fs';
 import { toLockfile as convertToToml, parse as parseToml } from './utils/toml';
 import has from './utils/has';
 import { Snapshot } from './manifest';
-import { Dependency, satisfies } from './manifest/dependency';
+import {
+  Dependency,
+  satisfies,
+  isPathDependency,
+  isGitDependency
+} from './manifest/dependency';
 import { Workspace } from './workspace';
 import {
   Registration,
@@ -68,11 +73,12 @@ export async function writeLockfile(
 
 // Check if lockfile is still valid for loaded workspace
 // (e.g. invalidated by changing/adding dependency to manifest)
-export function isLockfileValid(
+export async function isLockfileValid(
   lockfile: Lockfile,
   workspace: Workspace
-): boolean {
-  if (!compareManifests(workspace.root, lockfile.workspace.root)) return false;
+): Promise<boolean> {
+  if (!(await compareManifests(workspace.root, lockfile.workspace.root)))
+    return false;
 
   if (lockfile.workspace.members.length !== workspace.members.length)
     return false;
@@ -83,7 +89,7 @@ export function isLockfileValid(
   for (const member of lockfile.workspace.members) {
     const currentMember = byName[member.name];
     if (!currentMember) return false;
-    if (!compareManifests(currentMember, member)) return false;
+    if (!(await compareManifests(currentMember, member))) return false;
   }
 
   return true;
@@ -207,7 +213,7 @@ function prepareSource(source: string, dir: string): string {
   const { type, value, details } = getSourceParts(source);
   if (type !== 'path') return source;
 
-  const relativePath = relative(dir, value);
+  const relativePath = trailing(relative(dir, value));
   return getRegistrationSource(type, relativePath, details);
 }
 
@@ -237,7 +243,7 @@ function toDependencyId(
   const { type, value, details } = getSourceParts(source);
 
   if (type === 'path') {
-    const relativePath = relative(dir, value);
+    const relativePath = trailing(relative(dir, value));
     source = getRegistrationSource(type, relativePath, details);
   }
 
@@ -261,15 +267,21 @@ function getDependency(id: string, byName: DependencyByName): Dependency {
  * - version
  * - dependencies
  */
-function compareManifests(current: Snapshot, locked: Snapshot): boolean {
+async function compareManifests(
+  current: Snapshot,
+  locked: Snapshot
+): Promise<boolean> {
   if (current.name !== locked.name) return false;
   if (current.version !== locked.version) return false;
 
-  return compareDependencies(current, locked);
+  return await compareDependencies(current, locked);
 }
 
 // Compare dependencies between current user manifest and lockfile manifest
-function compareDependencies(current: Snapshot, locked: Snapshot): boolean {
+async function compareDependencies(
+  current: Snapshot,
+  locked: Snapshot
+): Promise<boolean> {
   if (current.dependencies.length !== locked.dependencies.length) return false;
 
   const byName: { [name: string]: Dependency } = {};
@@ -280,7 +292,7 @@ function compareDependencies(current: Snapshot, locked: Snapshot): boolean {
   for (const dependency of locked.dependencies) {
     const currentValue = byName[dependency.name];
     if (!currentValue) return false;
-    if (!satisfies(currentValue, dependency)) return false;
+    if (!(await satisfies(currentValue, dependency))) return false;
   }
 
   return true;

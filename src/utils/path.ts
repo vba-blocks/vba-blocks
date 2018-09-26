@@ -33,3 +33,7 @@ export function resolve(...parts: string[]): string {
 export function sanitize(name: string): string {
   return sanitizeFilename(name, { replacement: '-' });
 }
+
+export function trailing(value: string): string {
+  return value.endsWith('/') ? value : `${value}/`;
+}

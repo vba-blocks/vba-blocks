@@ -68,7 +68,7 @@ export function toDependency(registration: Registration): Dependency {
     const gitDetails = parseQuerystring(details!);
     return { name, git: value, ...gitDetails };
   } else if (type === 'path') {
-    return { name, path: value };
+    return { name, path: value, version };
   } else {
     throw sourceUnrecognizedType(type);
   }

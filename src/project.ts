@@ -44,7 +44,8 @@ export async function loadProject(dir: string = env.cwd): Promise<Project> {
   const lockfile = await readLockfile(workspace.root.dir);
 
   // Resolve packages from lockfile or from sources
-  const has_dirty_lockfile = !lockfile || !isLockfileValid(lockfile, workspace);
+  const has_dirty_lockfile =
+    !lockfile || !(await isLockfileValid(lockfile, workspace));
   debug(
     !has_dirty_lockfile
       ? 'Loading packages from lockfile'
