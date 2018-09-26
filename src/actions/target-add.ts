@@ -11,7 +11,7 @@ export interface AddOptions {
 }
 
 export default async function add(options: AddOptions) {
-  let { type, from, name, path } = options;
+  const { type, from, name, path } = options;
   if (!type) {
     throw targetAddNoType();
   }

@@ -42,12 +42,17 @@ export async function importGraph(
   const { application, addin } = getTargetInfo(project, target);
   const { name, components, references } = graph;
 
-  await run(application, options.addin || addin, 'Build.ImportGraph', {
-    file,
-    name,
-    src: components,
-    references
-  });
+  await run(
+    application,
+    options.addin || addin,
+    'Build.ImportGraph',
+    JSON.stringify({
+      file,
+      name,
+      src: components,
+      references
+    })
+  );
 }
 
 /**
@@ -61,10 +66,15 @@ export async function exportTo(
 ): Promise<void> {
   const { application, addin, file } = getTargetInfo(project, target);
 
-  await run(application, options.addin || addin, 'Build.ExportTo', {
-    file,
-    staging
-  });
+  await run(
+    application,
+    options.addin || addin,
+    'Build.ExportTo',
+    JSON.stringify({
+      file,
+      staging
+    })
+  );
 }
 
 /**
@@ -82,9 +92,14 @@ export async function createDocument(
   );
 
   await ensureDir(dirname(path));
-  await run(application, options.addin || addin, 'Build.CreateDocument', {
-    path
-  });
+  await run(
+    application,
+    options.addin || addin,
+    'Build.CreateDocument',
+    JSON.stringify({
+      path
+    })
+  );
 
   return path;
 }
@@ -97,9 +112,7 @@ export function getTargetInfo(
   target: Target,
   options: AddinOptions = {}
 ): { application: Application; addin: Addin; file: string } {
-  const application = byExtension[target.type];
-  if (!application) throw addinUnsupportedType(target.type);
-
+  const application = extensionToApplication(target.type);
   const addin = addins[application];
   const file = join(
     options.staging ? project.paths.staging : project.paths.build,
@@ -107,4 +120,12 @@ export function getTargetInfo(
   );
 
   return { application, addin, file };
+}
+
+export function extensionToApplication(extension: string): string {
+  extension = extension.replace('.', '');
+  const application = byExtension[extension];
+  if (!application) throw addinUnsupportedType(extension);
+
+  return application;
 }

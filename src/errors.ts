@@ -142,6 +142,10 @@ export const exportTargetNotFound = (target: Target, path: string) =>
 export const addinUnsupportedType = (type: string) =>
   generateError('addin-unsupported-type', { type });
 
+export const runMissingFile = () => generateError('run-missing-file', {});
+
+export const runMissingMacro = () => generateError('run-missing-macro', {});
+
 // Utils
 
 function generateError<T extends CliErrorCode>(

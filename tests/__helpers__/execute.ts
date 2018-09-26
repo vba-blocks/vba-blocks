@@ -4,7 +4,7 @@ import walkSync from 'walk-sync';
 import { join, resolve, extname, basename } from '../../src/utils/path';
 import { tmpFolder } from '../../src/utils/fs';
 import { RunResult } from '../../src/utils/run';
-import truncate from '../../src/utils/truncate';
+import { truncate } from '../../src/utils/text';
 const exec = promisify(require('child_process').exec);
 
 import { run as _run } from '../../';

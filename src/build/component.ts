@@ -1,6 +1,6 @@
 import { extname, relative } from '../utils/path';
 import { readFile } from '../utils/fs';
-import truncate from '../utils/truncate';
+import { BY_LINE, truncate } from '../utils/text';
 import { unrecognizedComponent, componentInvalidNoName } from '../errors';
 
 export type ComponentType = 'module' | 'class' | 'form' | 'document';
@@ -78,8 +78,6 @@ export const type_to_extension: { [type: string]: string } = {
   class: '.cls',
   form: '.frm'
 };
-
-const BY_LINE = /(?:\r\n|\r|\n)/g;
 
 function findLine(code: string, search: string): string | undefined {
   const lines = code.split(BY_LINE).map(line => line.trim());

@@ -1,24 +1,24 @@
 Dim App
 Dim Addin
 Dim Command
-Dim Args
+Dim Arg
 
 App = WScript.Arguments(0)
 Addin = Unescape(WScript.Arguments(1))
 Command = WScript.Arguments(2)
-Args = Unescape(WScript.Arguments(3))
+Arg = Unescape(WScript.Arguments(3))
 
-Run App, Addin, Command, Args
+Run App, Addin, Command, Arg
 WScript.Quit 0
 
-Function Run(App, Addin, Command, Args)
+Function Run(App, Addin, Command, Arg)
   Dim Instance
   Dim Result
 
   Select Case App
   Case "excel"
     Set Instance = New Excel
-    Result = Instance.Run(Addin, Command, Args)
+    Result = Instance.Run(Addin, Command, Arg)
   Case Else
     Fail "Unsupported App: " & App
   End Select
@@ -40,11 +40,11 @@ Class Excel
     App.Visible = True
   End Sub
 
-  Public Function Run(Addin, Command, Args)
+  Public Function Run(Addin, Command, Arg)
     On Error Resume Next
 
     OpenWorkbook(Addin)
-    Run = App.Run("'" & Workbook.Name & "'!" & Command, Args)
+    Run = App.Run("'" & Workbook.Name & "'!" & Command, Arg)
 
     If Err.Number <> 0 Then
       Fail "Failed to run command: " & Err.Description

@@ -8,7 +8,7 @@ import { RunError } from '../utils/run';
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
 
-const commands = ['new', 'build', 'export', 'target', 'healthcheck'];
+const commands = ['new', 'build', 'export', 'target', 'run', 'healthcheck'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -40,6 +40,7 @@ const help = dedent`
     - build         Build project from manifest
     - export        Export src from built target
     - target        Commands for working with targets (add)
+    - run           Run macro in document / add-in
 
   Options:
     -h, --help      Output usage information

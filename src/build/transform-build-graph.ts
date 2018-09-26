@@ -1,6 +1,5 @@
 import { BuildGraph } from './build-graph';
-
-const BY_LINE = /(?:\r\n|\r|\n)/g;
+import { BY_LINE } from '../utils/text';
 
 export async function toCompiled(graph: BuildGraph): Promise<BuildGraph> {
   return graph;

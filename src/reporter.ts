@@ -59,6 +59,8 @@ export interface ErrorMessages {
   'export-no-matching': { type: string };
   'export-target-not-found': { target: Target; path: string };
   'addin-unsupported-type': { type: string };
+  'run-missing-file': {};
+  'run-missing-macro': {};
 }
 
 export interface Reporter {
@@ -262,7 +264,13 @@ export const reporter: Reporter = {
       (checked "${path}")`,
 
     'addin-unsupported-type': ({ type }) => dedent`
-      The target type "${type} is not currently supported`
+      The target type "${type} is not currently supported`,
+
+    'run-missing-file': () => dedent`
+      file is required for vba-blocks run (e.g. vba-blocks run FILE MACRO [ARGS...])`,
+
+    'run-missing-macro': () => dedent`
+      macro is required for vba-blocks run (e.g. vba-blocks run FILE MACRO [ARGS...])`
   }
 };
 
