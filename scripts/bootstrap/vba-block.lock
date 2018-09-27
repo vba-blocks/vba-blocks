@@ -2,8 +2,7 @@
 name = "bootstrap"
 version = "0.0.0"
 dependencies = [
-  "installer 0.0.0 path+../../addins/VBA-Installer/",
-  "json 2.3.0 registry+vba-blocks#42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f",
+  "vba-blocks 0.0.0 path+../../addins/",
 ]
 
 [[packages]]
@@ -23,7 +22,7 @@ dependencies = [
 [[packages]]
 name = "installer"
 version = "0.0.0"
-source = "path+../../addins/VBA-Installer/"
+source = "path+../../addins/vba-installer/"
 dependencies = [
   "filesystem 0.0.0 path+../../addins/vba-filesystem/",
 ]
@@ -34,5 +33,14 @@ version = "2.3.0"
 source = "registry+vba-blocks#42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f"
 dependencies = [
   "dictionary 1.4.1 registry+vba-blocks#8034e569e4efcb7bdb1a0600c0aa2d857147b8be0ccbc6764af065d45e967e46",
+]
+
+[[packages]]
+name = "vba-blocks"
+version = "0.0.0"
+source = "path+../../addins/"
+dependencies = [
+  "installer 0.0.0 path+../../addins/vba-installer/",
+  "json 2.3.0 registry+vba-blocks#42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f",
 ]
 
