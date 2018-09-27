@@ -11,7 +11,7 @@ const help = dedent`
     --target=TYPE   Add target of type TYPE to project (e.g. xlsm)
     --from=PATH     Create target and src from workbook/document
     --package       Create as package
-    --no-git        Skip initializing git reposistory`;
+    --no-git        Skip initializing git repository`;
 
 module.exports = async (args: Args) => {
   if (args.help) {
