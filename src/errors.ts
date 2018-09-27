@@ -131,6 +131,11 @@ export const newDirExists = (name: string, dir: string) =>
 export const fromNotFound = (from: string) =>
   generateError('from-not-found', { from });
 
+export const initAlreadyInitialized = () =>
+  generateError('init-already-initialized', {});
+
+export const initNameRequired = () => generateError('init-name-required', {});
+
 export const exportNoDefault = () => generateError('export-no-target', {});
 
 export const exportNoMatching = (type: string) =>

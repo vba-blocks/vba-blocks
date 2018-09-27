@@ -1,17 +1,19 @@
 import { Args } from 'mri';
 import dedent from 'dedent';
-import create from '../actions/create';
+import init from '../actions/init';
 
 const help = dedent`
-  Create a new project / package in a new directory
+  Initialize a new project in the current directory
 
-  Usage: vba-blocks new <name> [options]
+  Usage: vba-blocks init [options]
 
   Options:
     --target=TYPE   Add target of type TYPE to project (e.g. xlsm)
     --from=PATH     Create target and src from workbook/document
-    --package       Create as package
-    --no-git        Skip initializing git repository`;
+    --name=NAME     Set project name (default = --from or directory name)
+    --package       Initialize as package
+    --no-git        Skip initializing git repository
+  `;
 
 module.exports = async (args: Args) => {
   if (args.help) {
@@ -19,11 +21,11 @@ module.exports = async (args: Args) => {
     return;
   }
 
-  const [name] = args._;
   const target = <string | undefined>args.target;
   const from = <string | undefined>args.from;
+  const name = <string | undefined>args.name;
   const pkg = !!args.package;
   const git = 'git' in args ? <boolean>args.git : true;
 
-  await create({ name, target, from, pkg, git });
+  await init({ target, from, name, pkg, git });
 };

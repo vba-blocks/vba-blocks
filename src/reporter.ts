@@ -59,6 +59,8 @@ export interface ErrorMessages {
   'new-name-required': {};
   'new-dir-exists': { name: string; dir: string };
   'from-not-found': { from: string };
+  'init-already-initialized': {};
+  'init-name-required': {};
   'export-no-target': {};
   'export-no-matching': { type: string };
   'export-target-not-found': { target: Target; path: string };
@@ -173,22 +175,22 @@ export const reporter: Reporter = {
     'source-unsupported': ({ type }) => dedent`
       ${type} dependencies are not supported.
 
-      Upgrade to Professional Edition for ${type} dependencies and more`,
+      Upgrade to Professional Edition (coming soon) for ${type} dependencies and more.`,
 
     'source-misconfigured-registry': ({ registry }) => dedent`
-      No matching registry configured for "${registry}"`,
+      No matching registry configured for "${registry}".`,
 
     'source-no-matching': ({ type, source }) => dedent`
-      No source matches given registration type "${type}" (source = "${source}")`,
+      No source matches given registration type "${type}" (source = "${source}").`,
 
     'source-download-failed': ({ source }) => dedent`
-      Failed to download "${source}"`,
+      Failed to download "${source}".`,
 
     'source-unrecognized-type': ({ type }) => dedent`
-      Unrecognized source type "${type}" in registration ("registry", "path", and "git" are supported)`,
+      Unrecognized source type "${type}" in registration ("registry", "path", and "git" are supported).`,
 
     'dependency-not-found': ({ dependency, registry }) => dedent`
-      Dependency "${dependency}" not found in registry "${registry}"`,
+      Dependency "${dependency}" not found in registry "${registry}".`,
 
     'dependency-invalid-checksum': ({ registration }) => dedent`
       Dependency "${registration.name}" failed validation.
@@ -198,28 +200,28 @@ export const reporter: Reporter = {
       } does not match the signature in the registry.`,
 
     'dependency-path-not-found': ({ dependency, path }) => dedent`
-      Path not found for dependency "${dependency}" (${path})`,
+      Path not found for dependency "${dependency}" (${path}).`,
 
     'dependency-unknown-source': ({ dependency }) => dedent`
-      No source matches dependency "${dependency}"`,
+      No source matches dependency "${dependency}".`,
 
     'build-invalid': ({ message }) => dedent`
       Invalid build:
       
-      ${message}.`,
+      ${message}`,
 
     'lockfile-write-failed': ({ file }) => dedent`
       Failed to write lockfile to "${file}".`,
 
     'target-no-matching': ({ type }) => dedent`
-      No matching target found for type "${type}" in project`,
+      No matching target found for type "${type}" in project.`,
 
     'target-no-default': () => dedent`
       No default target(s) found for project.
-      Use --target TYPE for a blank target or specify [target] or [targets] in vba-block.toml`,
+      Use --target TYPE for a blank target or specify [target] or [targets] in vba-block.toml.`,
 
     'target-not-found': ({ target }) => dedent`
-      Target "${target.name}" not found at "${target.path}"`,
+      Target "${target.name}" not found at "${target.path}".`,
 
     'target-is-open': ({ target, path }) => dedent`
       Failed to build target "${target.name}", it is currently open.
@@ -227,10 +229,10 @@ export const reporter: Reporter = {
       Please close "${path}" and try again.`,
 
     'target-create-failed': ({ target }) => dedent`
-      Failed to create project for target "${target.name}"`,
+      Failed to create project for target "${target.name}".`,
 
     'target-import-failed': ({ target }) => dedent`
-      Failed to import project for target "${target.name}"`,
+      Failed to import project for target "${target.name}".`,
 
     'target-restore-failed': ({ backup, file }) => dedent`
       Failed to automatically restore backup from "${backup}" to "${file}".
@@ -238,7 +240,7 @@ export const reporter: Reporter = {
       The previous version can be moved back manually, if desired.`,
 
     'target-add-no-type': () => dedent`
-      target TYPE is required to add a target (vba-blocks target add TYPE)`,
+      target TYPE is required to add a target (vba-blocks target add TYPE).`,
 
     'resolve-failed': () => dedent`
       Unable to resolve dependency graph for project.
@@ -249,7 +251,7 @@ export const reporter: Reporter = {
       Unrecognized component extension "${extname(path)}" (at "${path}").`,
 
     'component-invalid-no-name': () => dedent`
-      Invalid component: No attribute VB_Name found`,
+      Invalid component: No attribute VB_Name found.`,
 
     'run-script-not-found': ({ path }) => dedent`
       Bridge script not found at "${path}".
@@ -265,26 +267,33 @@ export const reporter: Reporter = {
       A directory for "${name}" already exists: "${dir}".`,
 
     'from-not-found': ({ from }) => dedent`
-      The \`from\` document was not found at "${from}"`,
+      The \`from\` document was not found at "${from}".`,
+
+    'init-already-initialized': () => dedent`
+      A vba-blocks project already exists in this directory.`,
+
+    'init-name-required': () => dedent`
+      Unable to determine name from current directory or --from. --name NAME is required to initialize this project.`,
 
     'export-no-target': () => dedent`
-      No default target found for project, use --target TYPE to export from a specific target`,
+      No default target found for project, use --target TYPE to export from a specific target.`,
 
     'export-no-matching': ({ type }) => dedent`
-      No matching target found for type "${type}" in project`,
+      No matching target found for type "${type}" in project.`,
 
     'export-target-not-found': ({ target, path }) => dedent`
-      Could not find built target for type "${target.type}".
-      (checked "${path}")`,
+      Could not find built target for type "${
+        target.type
+      }" (checked "${path}").`,
 
     'addin-unsupported-type': ({ type }) => dedent`
-      The target type "${type} is not currently supported`,
+      The target type "${type} is not currently supported.`,
 
     'run-missing-file': () => dedent`
-      file is required for vba-blocks run (e.g. vba-blocks run FILE MACRO [ARGS...])`,
+      file is required for vba-blocks run (e.g. vba-blocks run FILE MACRO [ARGS...]).`,
 
     'run-missing-macro': () => dedent`
-      macro is required for vba-blocks run (e.g. vba-blocks run FILE MACRO [ARGS...])`
+      macro is required for vba-blocks run (e.g. vba-blocks run FILE MACRO [ARGS...]).`
   }
 };
 
