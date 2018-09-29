@@ -62,9 +62,7 @@ Object {
   "vba-block.lock": "[root]{LF}name = \\"empty\\"{LF}version = \\"0.0.0\\"{LF}dependencies = [{LF}]{LF}{LF}",
   "vba-block.toml": "[project]
 name = \\"empty\\"
-
-[targets]
-xlsm = \\"targets/xlsm\\"
+target = { type = \\"xlsm\\", path = \\"targets/xlsm\\" }
 ",
 }
 `;
@@ -130,12 +128,10 @@ Object {
   "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "vba-block.toml": "[project]
 name = \\"json\\"
+target = { type = \\"xlsm\\", path = \\"targets/xlsm\\" }
 
 [dependencies]
 json = \\"^2\\"
-
-[targets]
-xlsm = \\"targets/xlsm\\"
 ",
 }
 `;
@@ -173,24 +169,7 @@ Validation = \\"src/Validation.bas\\"
 "
 `;
 
-exports[`new should create blank project 1`] = `
-Object {
-  ".gitattributes": "* text=auto{LF}*.bas text eol=crlf{LF}*.cls text eol=crlf",
-  ".gitignore": "/build",
-  "vba-block.toml": "[project]
-name = \\"blank-project\\"
-version = \\"0.0.0\\"
-authors = []
-license = \\"UNLICENSED\\"
-
-[src]
-
-[targets]
-",
-}
-`;
-
-exports[`new should create blank project 2`] = `
+exports[`new should create blank package 1`] = `
 Object {
   "vba-block.toml": "[package]
 name = \\"blank-package\\"
@@ -200,8 +179,6 @@ publish = true
 license = \\"UNLICENSED\\"
 
 [src]
-
-[targets]
 ",
 }
 `;
@@ -219,23 +196,27 @@ Object {
   "src/Sheet3.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Sheet3\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
   "src/ThisWorkbook.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"ThisWorkbook\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{...",
   "src/Validation.bas": "Attribute VB_Name = \\"Validation\\"{CR}{LF}Public Function Validate(Args As Variant) As String{CR}{LF}    On Error GoTo ErrorHandling{CR}{LF}{CR}{LF}    Dim Errors As New Collection{CR}{LF}{CR}{LF}    If...",
-  "targets/xlsm/[Content_Types].xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Types xmlns=\\"http://schemas.openxmlformats.org/package/2006/content-types\\"><Default Extension=\\"bin\\" ContentType=\\"application/vnd.ms-offi...",
-  "targets/xlsm/_rels/.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
-  "targets/xlsm/docProps/app.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Properties xmlns=\\"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties\\" xmlns:vt=\\"http://schemas.openxmlformats.org...",
-  "targets/xlsm/docProps/core.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<cp:coreProperties xmlns:cp=\\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\\" xmlns:dc=\\"http://purl.org/dc/elemen...",
-  "targets/xlsm/xl/_rels/workbook.xml.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
-  "targets/xlsm/xl/sharedStrings.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<sst xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" count=\\"3\\" uniqueCount=\\"3\\"><si><t>A1</t></si><si><t>B2</t></si><si>...",
-  "targets/xlsm/xl/styles.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<styleSheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:mc=\\"http://schemas.openxmlformats.org/markup-compatib...",
-  "targets/xlsm/xl/theme/theme1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<a:theme xmlns:a=\\"http://schemas.openxmlformats.org/drawingml/2006/main\\" name=\\"Office Theme\\"><a:themeElements><a:clrScheme name=\\"Office\\">...",
-  "targets/xlsm/xl/workbook.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<workbook xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/200...",
-  "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "targets/xlsm/xl/worksheets/sheet2.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
+  "target/[Content_Types].xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Types xmlns=\\"http://schemas.openxmlformats.org/package/2006/content-types\\"><Default Extension=\\"bin\\" ContentType=\\"application/vnd.ms-offi...",
+  "target/_rels/.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
+  "target/docProps/app.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Properties xmlns=\\"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties\\" xmlns:vt=\\"http://schemas.openxmlformats.org...",
+  "target/docProps/core.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<cp:coreProperties xmlns:cp=\\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\\" xmlns:dc=\\"http://purl.org/dc/elemen...",
+  "target/xl/_rels/workbook.xml.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
+  "target/xl/sharedStrings.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<sst xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" count=\\"3\\" uniqueCount=\\"3\\"><si><t>A1</t></si><si><t>B2</t></si><si>...",
+  "target/xl/styles.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<styleSheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:mc=\\"http://schemas.openxmlformats.org/markup-compatib...",
+  "target/xl/theme/theme1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<a:theme xmlns:a=\\"http://schemas.openxmlformats.org/drawingml/2006/main\\" name=\\"Office Theme\\"><a:themeElements><a:clrScheme name=\\"Office\\">...",
+  "target/xl/workbook.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<workbook xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/200...",
+  "target/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
+  "target/xl/worksheets/sheet2.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
+  "target/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "vba-block.toml": "[project]
 name = \\"existing-target\\"
 version = \\"0.0.0\\"
 authors = []
 license = \\"UNLICENSED\\"
+
+[project.target]
+type = \\"xlsm\\"
+name = \\"standard\\"
 
 [src]
 Class1 = \\"src/Class1.cls\\"
@@ -246,12 +227,6 @@ Sheet2 = \\"src/Sheet2.cls\\"
 Sheet3 = \\"src/Sheet3.cls\\"
 ThisWorkbook = \\"src/ThisWorkbook.cls\\"
 Validation = \\"src/Validation.bas\\"
-
-[targets]
-
-[targets.xlsm]
-name = \\"standard\\"
-path = \\"targets/xlsm\\"
 ",
 }
 `;
@@ -261,140 +236,23 @@ Object {
   ".gitattributes": "* text=auto{LF}*.bas text eol=crlf{LF}*.cls text eol=crlf",
   ".gitignore": "/build",
   "build/blank-target.xlsm": "<TODO>",
-  "targets/xlsm/[Content_Types].xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Types xmlns=\\"http://schemas.openxmlformats.org/package/2006/content-types\\"><Default Extension=\\"rels\\" ContentType=\\"application/vnd.openxm...",
-  "targets/xlsm/_rels/.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
-  "targets/xlsm/docProps/app.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Properties xmlns=\\"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties\\" xmlns:vt=\\"http://schemas.openxmlformats.org...",
-  "targets/xlsm/docProps/core.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<cp:coreProperties xmlns:cp=\\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\\" xmlns:dc=\\"http://purl.org/dc/elemen...",
-  "targets/xlsm/xl/_rels/workbook.xml.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
-  "targets/xlsm/xl/styles.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<styleSheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:mc=\\"http://schemas.openxmlformats.org/markup-compatib...",
-  "targets/xlsm/xl/theme/theme1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<a:theme xmlns:a=\\"http://schemas.openxmlformats.org/drawingml/2006/main\\" name=\\"Office Theme\\"><a:themeElements><a:clrScheme name=\\"Office\\">...",
-  "targets/xlsm/xl/workbook.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<workbook xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/200...",
-  "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
+  "target/[Content_Types].xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Types xmlns=\\"http://schemas.openxmlformats.org/package/2006/content-types\\"><Default Extension=\\"rels\\" ContentType=\\"application/vnd.openxm...",
+  "target/_rels/.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
+  "target/docProps/app.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Properties xmlns=\\"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties\\" xmlns:vt=\\"http://schemas.openxmlformats.org...",
+  "target/docProps/core.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<cp:coreProperties xmlns:cp=\\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\\" xmlns:dc=\\"http://purl.org/dc/elemen...",
+  "target/xl/_rels/workbook.xml.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
+  "target/xl/styles.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<styleSheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:mc=\\"http://schemas.openxmlformats.org/markup-compatib...",
+  "target/xl/theme/theme1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<a:theme xmlns:a=\\"http://schemas.openxmlformats.org/drawingml/2006/main\\" name=\\"Office Theme\\"><a:themeElements><a:clrScheme name=\\"Office\\">...",
+  "target/xl/workbook.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<workbook xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/200...",
+  "target/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "vba-block.toml": "[project]
 name = \\"blank-target\\"
 version = \\"0.0.0\\"
 authors = []
 license = \\"UNLICENSED\\"
+target = \\"xlsm\\"
 
 [src]
-
-[targets]
-xlsm = \\"targets/xlsm\\"
 ",
 }
-`;
-
-exports[`target add should add blank target 1`] = `
-Object {
-  ".gitattributes": "* text=auto{LF}*.bas text eol=crlf{LF}*.cls text eol=crlf",
-  ".gitignore": "/build",
-  "build/target-name.xlsm": "<TODO>",
-  "targets/xlsm/[Content_Types].xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Types xmlns=\\"http://schemas.openxmlformats.org/package/2006/content-types\\"><Default Extension=\\"rels\\" ContentType=\\"application/vnd.openxm...",
-  "targets/xlsm/_rels/.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
-  "targets/xlsm/docProps/app.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Properties xmlns=\\"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties\\" xmlns:vt=\\"http://schemas.openxmlformats.org...",
-  "targets/xlsm/docProps/core.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<cp:coreProperties xmlns:cp=\\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\\" xmlns:dc=\\"http://purl.org/dc/elemen...",
-  "targets/xlsm/xl/_rels/workbook.xml.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
-  "targets/xlsm/xl/styles.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<styleSheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:mc=\\"http://schemas.openxmlformats.org/markup-compatib...",
-  "targets/xlsm/xl/theme/theme1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<a:theme xmlns:a=\\"http://schemas.openxmlformats.org/drawingml/2006/main\\" name=\\"Office Theme\\"><a:themeElements><a:clrScheme name=\\"Office\\">...",
-  "targets/xlsm/xl/workbook.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<workbook xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/200...",
-  "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "vba-block.toml": "[project]
-name = \\"add-blank\\"
-version = \\"0.0.0\\"
-authors = []
-license = \\"UNLICENSED\\"
-
-[src]
-
-[targets]
-",
-}
-`;
-
-exports[`target add should add blank target 2`] = `
-"Resolving dependencies
-Fetching dependencies
-
-The following changes need to be applied to vba-block.toml:
-
-Add the following to the [targets] section:
-xlsm = { name = \\"target-name\\" path = \\"targets/xlsm\\" }
-"
-`;
-
-exports[`target add should add from existing 1`] = `
-Object {
-  ".gitattributes": "* text=auto{LF}*.bas text eol=crlf{LF}*.cls text eol=crlf",
-  ".gitignore": "/build",
-  "build/standard.xlsm": "<TODO>",
-  "src/Class1.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Class1\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
-  "src/Dictionary.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Dictionary\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF...",
-  "src/JsonConverter.bas": "Attribute VB_Name = \\"JsonConverter\\"{CR}{LF}''{CR}{LF}' VBA-JSON v2.3.0{CR}{LF}' (c) Tim Hall - https://github.com/VBA-tools/VBA-JSON{CR}{LF}'{CR}{LF}' JSON Converter for VBA{CR}{LF}'{CR}{LF}' Errors:{...",
-  "src/Sheet1.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Sheet1\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
-  "src/Sheet2.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Sheet2\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
-  "src/Sheet3.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"Sheet3\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{LF}Att...",
-  "src/ThisWorkbook.cls": "VERSION 1.0 CLASS{CR}{LF}BEGIN{CR}{LF}  MultiUse = -1  'True{CR}{LF}END{CR}{LF}Attribute VB_Name = \\"ThisWorkbook\\"{CR}{LF}Attribute VB_GlobalNameSpace = False{CR}{LF}Attribute VB_Creatable = False{CR}{...",
-  "src/Validation.bas": "Attribute VB_Name = \\"Validation\\"{CR}{LF}Public Function Validate(Args As Variant) As String{CR}{LF}    On Error GoTo ErrorHandling{CR}{LF}{CR}{LF}    Dim Errors As New Collection{CR}{LF}{CR}{LF}    If...",
-  "targets/xlsm/[Content_Types].xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Types xmlns=\\"http://schemas.openxmlformats.org/package/2006/content-types\\"><Default Extension=\\"bin\\" ContentType=\\"application/vnd.ms-offi...",
-  "targets/xlsm/_rels/.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
-  "targets/xlsm/docProps/app.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Properties xmlns=\\"http://schemas.openxmlformats.org/officeDocument/2006/extended-properties\\" xmlns:vt=\\"http://schemas.openxmlformats.org...",
-  "targets/xlsm/docProps/core.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<cp:coreProperties xmlns:cp=\\"http://schemas.openxmlformats.org/package/2006/metadata/core-properties\\" xmlns:dc=\\"http://purl.org/dc/elemen...",
-  "targets/xlsm/xl/_rels/workbook.xml.rels": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<Relationships xmlns=\\"http://schemas.openxmlformats.org/package/2006/relationships\\"><Relationship Id=\\"rId3\\" Type=\\"http://schemas.openxmlf...",
-  "targets/xlsm/xl/sharedStrings.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<sst xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" count=\\"3\\" uniqueCount=\\"3\\"><si><t>A1</t></si><si><t>B2</t></si><si>...",
-  "targets/xlsm/xl/styles.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<styleSheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:mc=\\"http://schemas.openxmlformats.org/markup-compatib...",
-  "targets/xlsm/xl/theme/theme1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<a:theme xmlns:a=\\"http://schemas.openxmlformats.org/drawingml/2006/main\\" name=\\"Office Theme\\"><a:themeElements><a:clrScheme name=\\"Office\\">...",
-  "targets/xlsm/xl/workbook.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<workbook xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/200...",
-  "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "targets/xlsm/xl/worksheets/sheet2.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "vba-block.toml": "[project]
-name = \\"add-existing\\"
-version = \\"0.0.0\\"
-authors = []
-license = \\"UNLICENSED\\"
-
-[src]
-
-[targets]
-",
-}
-`;
-
-exports[`target add should add from existing 2`] = `
-"Resolving dependencies
-Fetching dependencies
-Loading exported components
-Updating src files
-
-The following changes need to be applied to vba-block.toml:
-
-Add the following to the [src] section:
-Class1 = \\"src/Class1.cls\\"
-
-Add the following to the [src] section:
-Dictionary = \\"src/Dictionary.cls\\"
-
-Add the following to the [src] section:
-JsonConverter = \\"src/JsonConverter.bas\\"
-
-Add the following to the [src] section:
-Sheet1 = \\"src/Sheet1.cls\\"
-
-Add the following to the [src] section:
-Sheet2 = \\"src/Sheet2.cls\\"
-
-Add the following to the [src] section:
-Sheet3 = \\"src/Sheet3.cls\\"
-
-Add the following to the [src] section:
-ThisWorkbook = \\"src/ThisWorkbook.cls\\"
-
-Add the following to the [src] section:
-Validation = \\"src/Validation.bas\\"
-
-The following changes need to be applied to vba-block.toml:
-
-Add the following to the [targets] section:
-xlsm = { name = \\"standard\\" path = \\"targets/xlsm\\" }
-"
 `;

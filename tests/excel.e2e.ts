@@ -85,14 +85,7 @@ describe('export', () => {
 });
 
 describe('new', () => {
-  test('should create blank project', async () => {
-    await tmp('new-blank-project', async cwd => {
-      await execute(cwd, 'new blank-project');
-
-      const result = await readdir(join(cwd, 'blank-project'));
-      expect(result).toMatchSnapshot();
-    });
-
+  test('should create blank package', async () => {
     await tmp('new-blank-package', async cwd => {
       await execute(cwd, 'new blank-package --package --no-git');
 
@@ -121,39 +114,6 @@ describe('new', () => {
 
         const result = await readdir(join(cwd, 'existing-target'));
         expect(result).toMatchSnapshot();
-      });
-    });
-  });
-});
-
-describe('target add', () => {
-  test('should add blank target', async () => {
-    await tmp('add-blank-target', async cwd => {
-      await execute(cwd, `new add-blank`);
-      const { stdout } = await execute(
-        join(cwd, 'add-blank'),
-        'target add xlsm --name target-name'
-      );
-
-      const result = await readdir(join(cwd, 'add-blank'));
-      expect(result).toMatchSnapshot();
-      expect(stdout).toMatchSnapshot();
-    });
-  });
-
-  test('should add from existing', async () => {
-    await tmp('add-existing-target', async cwd => {
-      await setup(standard, 'add-existing-target-build', async built => {
-        await execute(built, 'build');
-        await execute(cwd, `new add-existing`);
-        const { stdout } = await execute(
-          join(cwd, 'add-existing'),
-          `target add xlsm --from ${join(built, 'build/standard.xlsm')}`
-        );
-
-        const result = await readdir(join(cwd, 'add-existing'));
-        expect(result).toMatchSnapshot();
-        expect(stdout).toMatchSnapshot();
       });
     });
   });
