@@ -1,13 +1,14 @@
 [*]
 indent_style = space
-tab_width = 2
-insert_final_newline = true
-charset = utf-8
-
-[*.{js,ts,json}]
 indent_size = 2
 end_of_line = lf
+trim_trailing_whitespace = true
+insert_final_newline = true
+charset = utf-8
 
 [*.{bas,cls}]
 indent_size = 4
 end_of_line = crlf
+
+[*.rs]
+indent_size = 4

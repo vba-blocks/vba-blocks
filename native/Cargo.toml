@@ -1,0 +1,17 @@
+[package]
+name = "native"
+version = "0.0.0"
+authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
+license = "MIT"
+build = "build.rs"
+exclude = ["artifacts.json", "index.node"]
+
+[lib]
+name = "native"
+crate-type = ["dylib"]
+
+[build-dependencies]
+neon-build = "0.2.0"
+
+[dependencies]
+neon = "0.2.0"

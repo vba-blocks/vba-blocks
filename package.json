@@ -20,7 +20,8 @@
     "build:pkg:mac": "pkg --targets node8-mac-x64 -o dist/bin/vba-blocks .",
     "build:copy": "node scripts/copy",
     "build:addins": "cd addins && node ../scripts/build",
-    "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build"
+    "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
+    "build:native": "neon build --release"
   },
   "pkg": {
     "scripts": [
@@ -69,6 +70,7 @@
     "@types/tar": "^4.0.0",
     "@types/tmp": "^0.0.33",
     "jest": "^23.1.0",
+    "neon-cli": "^0.2.0",
     "npm-run-all": "^4.1.2",
     "pkg": "^4.3.1",
     "prettier": "^1.6.1",

@@ -5,6 +5,9 @@ tests/__fixtures__/project/build
 tests/__fixtures__/filesystem.ts
 tests/.tmp
 addins/build
+native/target
+native/index.node
+native/artifacts.json
 
 # Ignore temporary Excel files
 */~$*
