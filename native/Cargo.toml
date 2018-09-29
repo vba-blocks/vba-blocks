@@ -14,5 +14,9 @@ crate-type = ["dylib"]
 neon-build = "0.2.0"
 
 [dependencies]
+inflections = "1.1.1"
+itertools = "0.7.8"
 neon = "0.2.0"
 sysinfo = "0.6.0"
+winapi = { version = "0.3.6", features = ["basetsd", "minwindef", "winuser"] }
+winreg = { version = "0.5.1", features = ["transactions"] }

@@ -1,7 +1,15 @@
+#[cfg(windows)]
+extern crate inflections;
+#[cfg(windows)]
+extern crate itertools;
 #[macro_use]
 extern crate neon;
 #[cfg(windows)]
 extern crate sysinfo;
+#[cfg(windows)]
+extern crate winapi;
+#[cfg(windows)]
+extern crate winreg;
 
 #[cfg(windows)]
 mod process_list;
