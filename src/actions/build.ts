@@ -12,9 +12,11 @@ import {
 } from '../messages';
 import { isRegistryDependency } from '../manifest/dependency';
 import { toDependency } from '../sources/registration';
-import { sanitize } from '../utils/path';
+import { sanitize, join } from '../utils/path';
 
-export default async function build(options: BuildOptions = {}) {
+export default async function build(
+  options: BuildOptions = {}
+): Promise<string> {
   env.reporter.log(buildLoadingProject());
 
   const project = await loadProject();
@@ -73,4 +75,6 @@ export default async function build(options: BuildOptions = {}) {
   if (project.has_dirty_lockfile) {
     await writeLockfile(project.workspace.root.dir, project);
   }
+
+  return join(project.manifest.dir, 'build', target.filename);
 }

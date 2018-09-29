@@ -1,6 +1,7 @@
 import { Args } from 'mri';
 import dedent from 'dedent';
 import build from '../actions/build';
+import open from '../utils/open';
 
 const help = dedent`
   Build project from manifest.
@@ -10,7 +11,8 @@ const help = dedent`
   Usage: vba-blocks build [options]
   
   Options:
-    --target=TYPE   Build target of type TYPE [default = target / all targets]`;
+    --target=TYPE   Build target of type TYPE
+    --open          Open built target`;
 
 module.exports = async (args: Args) => {
   if (args.help) {
@@ -20,5 +22,10 @@ module.exports = async (args: Args) => {
 
   const target = <string | undefined>args.target;
   const addin = <string | undefined>args.addin;
-  await build({ target, addin });
+
+  const path = await build({ target, addin });
+
+  if (!!args.open) {
+    open(path);
+  }
 };
