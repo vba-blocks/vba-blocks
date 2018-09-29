@@ -26,7 +26,6 @@ Object {
   ],
   "src": Array [],
   "target": undefined,
-  "targets": undefined,
   "type": "package",
   "version": "1.0.0",
 }
@@ -85,15 +84,12 @@ Object {
       "path": "src/Class1.cls",
     },
   ],
-  "target": undefined,
-  "targets": Array [
-    Object {
-      "filename": "standard.xlsm",
-      "name": "standard",
-      "path": "targets/xlsm",
-      "type": "xlsm",
-    },
-  ],
+  "target": Object {
+    "filename": "standard.xlsm",
+    "name": "standard",
+    "path": "targets/xlsm",
+    "type": "xlsm",
+  },
   "type": "project",
   "version": "0.0.0",
 }
@@ -151,7 +147,6 @@ Object {
   "references": Array [],
   "src": Array [],
   "target": undefined,
-  "targets": undefined,
   "type": "package",
   "version": "1.0.0",
 }
@@ -174,7 +169,6 @@ Object {
   "references": Array [],
   "src": Array [],
   "target": undefined,
-  "targets": undefined,
   "type": "package",
   "version": "1.0.0",
 }
@@ -213,7 +207,6 @@ Object {
     },
   ],
   "target": undefined,
-  "targets": undefined,
   "type": "package",
   "version": "1.0.0",
 }
@@ -241,13 +234,12 @@ Object {
     "path": "target",
     "type": "xlsm",
   },
-  "targets": undefined,
   "type": "package",
   "version": "1.0.0",
 }
 `;
 
-exports[`loads valid targets 1`] = `
+exports[`loads valid target 2`] = `
 Object {
   "dependencies": Array [],
   "dir": ".",
@@ -263,21 +255,12 @@ Object {
   "name": "package-name",
   "references": Array [],
   "src": Array [],
-  "target": undefined,
-  "targets": Array [
-    Object {
-      "filename": "package-name.xlsm",
-      "name": "package-name",
-      "path": "targets/xlsm",
-      "type": "xlsm",
-    },
-    Object {
-      "filename": "addin.xlam",
-      "name": "addin",
-      "path": "targets/xlam",
-      "type": "xlam",
-    },
-  ],
+  "target": Object {
+    "filename": "addin.xlam",
+    "name": "addin",
+    "path": "targets/xlam",
+    "type": "xlam",
+  },
   "type": "package",
   "version": "1.0.0",
 }

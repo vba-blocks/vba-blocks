@@ -1,4 +1,4 @@
-[project]
+[package]
 name = "targetless"
 version = "0.0.0"
 authors = ["Tim Hall"]

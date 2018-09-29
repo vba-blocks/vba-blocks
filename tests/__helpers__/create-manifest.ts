@@ -8,26 +8,30 @@ export default function createManifest(options: any): Manifest {
     project,
     src = [],
     references = [],
-    targets = [],
     dir = FIXTURES
   } = options;
 
-  const { name = 'testing', version = '0.0.0', authors = [], publish = false } =
-    pkg || project;
+  const {
+    name = 'testing',
+    version = '0.0.0',
+    authors = [],
+    publish = false,
+    target
+  } = pkg || project;
   const dependencies =
     options.dependencies && !Array.isArray(options.dependencies)
       ? toDependencies(options.dependencies)
       : options.dependencies || [];
 
   return {
+    type: pkg ? 'package' : 'project',
     name,
     version,
-    package: pkg && { name, version, authors, publish },
-    project: project && { name, version, authors, publish },
+    metadata: { authors, publish },
     src,
     dependencies,
     references,
-    targets,
+    target,
     dir
   };
 }

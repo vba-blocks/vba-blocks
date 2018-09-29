@@ -1,5 +1,7 @@
-[project]
+[package]
 name = "unresolvable"
+version = "0.0.0"
+authors = ["Tim Hall"]
 
 [dependencies]
 web = "^4"

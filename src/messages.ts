@@ -10,9 +10,6 @@ export type MessageId = keyof Messages;
 export const buildLoadingProject = () =>
   generateMessage('build-project-loading', {});
 
-export const buildBuildingTargets = (count: number) =>
-  generateMessage('build-targets-building', { count });
-
 export const buildBuildingTarget = (
   target: Target,
   project: Project,

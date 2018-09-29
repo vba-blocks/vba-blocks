@@ -7,7 +7,6 @@ import { targetNoMatching, targetNoDefault } from '../errors';
 import env from '../env';
 import {
   buildLoadingProject,
-  buildBuildingTargets,
   buildBuildingTarget,
   buildWritingLockfile
 } from '../messages';
@@ -20,20 +19,14 @@ export default async function build(options: BuildOptions = {}) {
 
   const project = await loadProject();
 
-  // Load targets from --target TYPE option or project manifest
-  let targets: Target[] | undefined;
+  // Load target from --target TYPE option or project manifest
+  let target: Target | undefined;
   if (options.target) {
-    let target: Target | undefined;
     if (project.manifest.target) {
-      // For [target], --target TYPE must match target.type
+      // For defined target, --target TYPE must match target.type
       if (project.manifest.target.type === options.target) {
         target = project.manifest.target;
       }
-    } else if (project.manifest.targets) {
-      // For [targets], --target TYPE must match one target
-      target = project.manifest.targets.find(
-        target => target.type === options.target
-      );
     } else {
       // Create blank target for --target TYPE
       const type = <TargetType>options.target;
@@ -42,7 +35,7 @@ export default async function build(options: BuildOptions = {}) {
       target = {
         type,
         name,
-        path: `targets/${type}`,
+        path: 'target',
         filename: `${sanitize(name)}.${type}`,
         blank: true
       };
@@ -51,25 +44,19 @@ export default async function build(options: BuildOptions = {}) {
     if (!target) {
       throw targetNoMatching(options.target);
     }
-
-    targets = [target];
   } else if (project.manifest.target) {
     // Build [target]
-    targets = [project.manifest.target];
-  } else if (project.manifest.targets) {
-    // Build all [targets]
-    targets = project.manifest.targets;
+    target = project.manifest.target;
   }
 
-  if (!targets) {
+  if (!target) {
     throw targetNoDefault();
   }
 
   // Fetch relevant dependencies
   const dependencies = await fetchDependencies(project);
 
-  // Build target(s) (sequentially to avoid contention issues)
-  env.reporter.log(buildBuildingTargets(targets.length));
+  // Build target
   const display_dependencies = project.packages.map(registration => {
     const dependency = toDependency(registration);
 
@@ -77,14 +64,9 @@ export default async function build(options: BuildOptions = {}) {
       return `${registration.id} registry+${dependency.registry}`;
     else return `${registration.id} ${registration.source}`;
   });
+  env.reporter.log(buildBuildingTarget(target, project, display_dependencies));
 
-  for (const target of targets) {
-    env.reporter.log(
-      buildBuildingTarget(target, project, display_dependencies)
-    );
-
-    await buildTarget(target, { project, dependencies }, options);
-  }
+  await buildTarget(target, { project, dependencies }, options);
 
   // Update lockfile (if necessary)
   env.reporter.log(buildWritingLockfile(!project.has_dirty_lockfile));

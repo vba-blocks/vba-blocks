@@ -143,7 +143,6 @@ export async function initProject(
     dependencies: [],
     src: [],
     references: [],
-    targets: [],
     dir
   };
 

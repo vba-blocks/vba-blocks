@@ -8,6 +8,7 @@ import {
   applyChanges,
   addTarget as addTargetToManifest
 } from '../manifest/patch-manifest';
+import { targetAlreadyDefined } from '../errors';
 
 export interface AddOptions {
   from?: string;
@@ -25,9 +26,13 @@ export default async function addTarget(
   let {
     from,
     name = project.manifest.name,
-    path = `targets/${type}`,
+    path = 'target',
     __temp__log_patch = true
   } = options;
+
+  if (project.manifest.target) {
+    throw targetAlreadyDefined();
+  }
 
   const staging = join(project.paths.staging, 'export');
   await ensureDir(staging);
@@ -42,20 +47,12 @@ export default async function addTarget(
 
     name = basename(from, extname(from));
 
-    target = {
+    target = project.manifest.target = {
       name,
       type,
       path: join(project.paths.dir, path),
       filename: `${sanitize(name)}.${type}`
     };
-    if (project.manifest.target) {
-      project.manifest.targets = [project.manifest.target, target];
-      project.manifest.target = undefined;
-    } else if (project.manifest.targets) {
-      project.manifest.targets.push(target);
-    } else {
-      project.manifest.target = target;
-    }
 
     await copy(from, join(project.paths.build, target.filename));
     await exportTo(project, target, staging);
@@ -65,20 +62,12 @@ export default async function addTarget(
     // - create blank document
     // - extract target only
     // - rebuild target
-    target = {
+    target = project.manifest.target = {
       name,
       type,
       path: join(project.paths.dir, path),
       filename: `${sanitize(name)}.${type}`
     };
-    if (project.manifest.target) {
-      project.manifest.targets = [project.manifest.target, target];
-      project.manifest.target = undefined;
-    } else if (project.manifest.targets) {
-      project.manifest.targets.push(target);
-    } else {
-      project.manifest.target = target;
-    }
 
     await createDocument(project, target);
 

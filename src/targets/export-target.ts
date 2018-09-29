@@ -1,7 +1,7 @@
 import walk from 'walk-sync';
 import { Target } from '../manifest';
 import { Project } from '../project';
-import { join, extname } from '../utils/path';
+import { join } from '../utils/path';
 import { copy, remove, ensureDir, pathExists } from '../utils/fs';
 import { unzip } from '../utils/zip';
 import { ProjectInfo } from './build-target';
@@ -13,6 +13,8 @@ import {
   toSrc
 } from '../build';
 import { exportTargetNotFound } from '../errors';
+
+const IS_VBA = /vba.*\.bin/gi;
 
 /**
  * Export target (with staging directory)
@@ -62,7 +64,7 @@ export async function extractTarget(
   staging: string
 ): Promise<string> {
   const src = join(project.paths.build, target.filename);
-  const dest = join(staging, 'targets', target.type);
+  const dest = join(staging, 'target');
 
   if (!(await pathExists(src))) {
     throw exportTargetNotFound(target, src);
@@ -74,7 +76,7 @@ export async function extractTarget(
   // Remove compiled VBA from dest
   const extracted = walk(dest, { directories: false });
   const compiled = extracted
-    .filter(file => extname(file) === '.bin')
+    .filter(file => IS_VBA.test(file))
     .map(file => join(dest, file));
 
   await Promise.all(compiled.map(async file => await remove(file)));

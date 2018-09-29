@@ -6,7 +6,7 @@ import { Version } from './version';
 import { Source, parseSrc } from './source';
 import { Dependency, parseDependencies } from './dependency';
 import { Reference, parseReferences } from './reference';
-import { Target, parseTargets, parseTarget } from './target';
+import { Target, parseTarget } from './target';
 import { manifestOk, manifestInvalid } from '../errors';
 
 export { Version, Source, Dependency, Reference, Target };
@@ -16,29 +16,16 @@ export { Version, Source, Dependency, Reference, Target };
  * ```toml
  * [package]
  * name = "package-name"
- * version = "1.0.0-rc.1"
+ * version = "1.0.0"
  * authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
  *
  * [src]
  * A = "src/a.bas"
  * B = { path = "src/b.cls" }
- * C = { path = "src/c.frm", optional = true }
  *
  * [dependencies]
- * dictionary = "v1.4.1"
- * with-properties = { version = "1.0.0" }
+ * dictionary = "^1"
  * from-path = { path = "packages/from-path" }
- * from-git-master = { git = "https://github.com/VBA-tools/VBA-Web.git" }
- * from-git-branch = { git = "https://github.com/VBA-tools/VBA-Web.git", branch = "beta" }
- * from-git-tag = { git = "https://github.com/VBA-tools/VBA-Web.git", tag = "v1.0.0" }
- * from-git-rev = { git = "https://github.com/VBA-tools/VBA-Web.git", rev = "a1b2c3d4" }
- *
- * # [references.Scripting]
- * # version = "1.0"
- * # guid = "{420B2830-E718-11CF-893D-00A0C9054228}"
- *
- * [target]
- * type = "xlsm"
  * ```
  */
 
@@ -62,7 +49,6 @@ export interface Manifest extends Snapshot {
   src: Source[];
   references: Reference[];
   target?: Target;
-  targets?: Target[];
   dir: string;
 }
 
@@ -79,17 +65,21 @@ Example vba-block.toml for a project (e.g. workbook, document, etc.):
 
   [project]
   name = "my-project"
-  version = "0.0.0"
-  authors = ["..."]`;
+  target = "xlsm"`;
 
 export function parseManifest(value: any, dir: string): Manifest {
   manifestOk(
     value && (value.package || value.project),
-    `[package] or [project] is required, with name, version, and authors specified. \n\n${EXAMPLE}`
+    `A [package] or [project] section is required. \n\n${EXAMPLE}`
   );
 
   const defaults = [];
-  let type: ManifestType, name, version, authors, publish;
+  let type: ManifestType,
+    name: string,
+    version: string,
+    authors: string[],
+    publish: boolean,
+    target: Target | undefined;
   if (value.project) {
     type = 'project';
     name = value.project.name;
@@ -98,11 +88,17 @@ export function parseManifest(value: any, dir: string): Manifest {
     publish = false;
 
     manifestOk(name, `[project] name is a required field. \n\n${EXAMPLE}`);
+    manifestOk(
+      value.project.target,
+      `[project] target is a required field. \n\n${EXAMPLE}`
+    );
 
     // Store defaults to distinguish from user-set values
     if (!value.project.version) defaults.push('version');
     if (!value.project.authors) defaults.push('authors');
     defaults.push('publish');
+
+    target = parseTarget(value.project.target, name, dir);
   } else {
     type = 'package';
     name = value.package.name;
@@ -121,21 +117,14 @@ export function parseManifest(value: any, dir: string): Manifest {
     );
 
     if (!('publish' in value.package)) defaults.push('publish');
+
+    target =
+      value.package.target && parseTarget(value.package.target, name, dir);
   }
 
   const src = parseSrc(value.src || {}, dir);
   const dependencies = parseDependencies(value.dependencies || {}, dir);
   const references = parseReferences(value.references || {});
-
-  let target, targets;
-  if (value.target) {
-    const type = value.target.type;
-    const path = value.target.path || 'target';
-
-    target = parseTarget(type, { ...value.target, path }, name, dir);
-  } else if (value.targets) {
-    targets = parseTargets(value.targets, name, dir);
-  }
 
   return {
     type,
@@ -146,7 +135,6 @@ export function parseManifest(value: any, dir: string): Manifest {
     dependencies,
     references,
     target,
-    targets,
     dir
   };
 }
@@ -201,19 +189,19 @@ export async function writeManifest(manifest: Manifest, dir: string) {
   });
 
   if (manifest.target) {
-    let { name, type, path } = manifest.target;
+    let { name, type: target_type, path } = manifest.target;
     path = relative(manifest.dir, path);
 
-    value.target = { type };
-    if (name !== manifest.name) value.target.name = name;
-    if (path !== 'manifest') value.target.path = path;
-  } else if (manifest.targets) {
-    value.targets = {};
-    manifest.targets.forEach(target => {
-      let { name, type, path } = target;
-      path = path && relative(manifest.dir, path);
-      value.targets[type] = name !== manifest.name ? { name, path } : path;
-    });
+    let target: string | { type: string; name?: string; path?: string };
+    if (name !== manifest.name || path !== 'target') {
+      target = { type: target_type };
+      if (name !== manifest.name) target.name = name;
+      if (path !== 'target') target.path = path;
+    } else {
+      target = target_type;
+    }
+
+    value[type].target = target;
   }
 
   // TODO dependencies and references

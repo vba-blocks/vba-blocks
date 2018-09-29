@@ -9,7 +9,8 @@ import addTarget from '../targets/add-target';
 import {
   fromNotFound,
   initNameRequired,
-  initAlreadyInitialized
+  initAlreadyInitialized,
+  initTargetRequired
 } from '../errors';
 
 export interface InitOptions {
@@ -43,6 +44,15 @@ export default async function init(options: InitOptions) {
 
   if (!name) {
     throw initNameRequired();
+  }
+  if (!target_type && !from && name.includes('.')) {
+    const parts = name.split('.');
+    target_type = parts.pop();
+    name = parts.join('.');
+  }
+
+  if (!as_package && !target_type && !from) {
+    throw initTargetRequired();
   }
 
   await ensureDir(join(dir, 'src'));

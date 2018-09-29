@@ -33,10 +33,6 @@ export default async function exportProject(options: ExportOptions = {}) {
     if (!options.target || options.target === project.manifest.target.type) {
       target = project.manifest.target;
     }
-  } else if (project.manifest.targets) {
-    target = project.manifest.targets.find(
-      target => target.type === options.target
-    );
   } else {
     const type = <TargetType>options.target;
     const name = project.manifest.name;

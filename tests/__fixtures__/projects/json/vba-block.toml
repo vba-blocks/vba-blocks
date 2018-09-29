@@ -1,8 +1,6 @@
 [project]
 name = "json"
+target = { type = "xlsm", path = "targets/xlsm" }
 
 [dependencies]
 json = "^2"
-
-[targets]
-xlsm = "targets/xlsm"

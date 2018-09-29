@@ -103,6 +103,9 @@ export const targetRestoreFailed = (
 
 export const targetAddNoType = () => generateError('target-add-no-type', {});
 
+export const targetAlreadyDefined = () =>
+  generateError('target-already-defined', {});
+
 export const resolveFailed = (details?: string) => {
   const code = 'resolve-failed';
 
@@ -125,6 +128,8 @@ export const runScriptNotFound = (path: string) =>
 
 export const newNameRequired = () => generateError('new-name-required', {});
 
+export const newTargetRequired = () => generateError('new-target-required', {});
+
 export const newDirExists = (name: string, dir: string) =>
   generateError('new-dir-exists', { name, dir });
 
@@ -135,6 +140,9 @@ export const initAlreadyInitialized = () =>
   generateError('init-already-initialized', {});
 
 export const initNameRequired = () => generateError('init-name-required', {});
+
+export const initTargetRequired = () =>
+  generateError('init-target-required', {});
 
 export const exportNoDefault = () => generateError('export-no-target', {});
 

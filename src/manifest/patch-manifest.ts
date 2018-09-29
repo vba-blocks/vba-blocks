@@ -73,13 +73,18 @@ export function removeDependency(_: Manifest, name: string): string {
 
 export function addTarget(manifest: Manifest, target: Target): string {
   const relative_path = relative(manifest.dir, target.path);
-  const details =
-    target.name !== manifest.name
-      ? `{ name = "${target.name}" path = "${relative_path}" }`
-      : `"${relative_path}"`;
 
-  // TODO Need to account for [target] vs [targets]
+  let details;
+  if (target.name !== manifest.name && relative_path !== 'target') {
+    details = target.type;
+  } else {
+    details = `{ type = "${target.type}"`;
+    if (target.name !== manifest.name) details += `, name = "${target.name}"`;
+    if (relative_path !== 'target') details += `, path = "${relative_path}"`;
+    details += ' }';
+  }
+
   return dedent`
-    Add the following to the [targets] section:
-    ${target.type} = ${details}`;
+    Add the following to the [${manifest.type}] section:
+    target = ${details}`;
 }

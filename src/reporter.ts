@@ -6,7 +6,6 @@ import { Project } from './project';
 
 export interface Messages {
   'build-project-loading': {};
-  'build-targets-building': { count: number };
   'build-target-building': {
     target: Target;
     project: Project;
@@ -52,15 +51,18 @@ export interface ErrorMessages {
   'target-import-failed': { target: Target };
   'target-restore-failed': { backup: string; file: string };
   'target-add-no-type': {};
+  'target-already-defined': {};
   'resolve-failed': { details?: string };
   'component-unrecognized': { path: string };
   'component-invalid-no-name': {};
   'run-script-not-found': { path: string };
   'new-name-required': {};
+  'new-target-required': {};
   'new-dir-exists': { name: string; dir: string };
   'from-not-found': { from: string };
   'init-already-initialized': {};
   'init-name-required': {};
+  'init-target-required': {};
   'export-no-target': {};
   'export-no-matching': { type: string };
   'export-target-not-found': { target: Target; path: string };
@@ -102,15 +104,8 @@ export const reporter: Reporter = {
     'build-project-loading': () => dedent`
       [1/3] Loading project...`,
 
-    'build-targets-building': ({ count }) => dedent`
-      \n[2/3] Building ${count.toLocaleString()} ${plural(
-      count,
-      'target',
-      'targets'
-    )}...`,
-
     'build-target-building': ({ target, project, dependencies }) => dedent`
-      Building target "${target.type}" for "${project.manifest.name}"
+      \n[2/3] Building target "${target.type}" for "${project.manifest.name}"
 
       ${
         dependencies.length
@@ -242,6 +237,9 @@ export const reporter: Reporter = {
     'target-add-no-type': () => dedent`
       target TYPE is required to add a target (vba-blocks target add TYPE).`,
 
+    'target-already-defined': () => dedent`
+      A target is already defined for this project.`,
+
     'resolve-failed': () => dedent`
       Unable to resolve dependency graph for project.
 
@@ -263,6 +261,12 @@ export const reporter: Reporter = {
 
       Try \`vba-blocks new --help\` for more information.`,
 
+    'new-target-required': _ => dedent`
+      .TYPE, --target, or --from is required for vba-blocks projects.
+      (e.g. vba-blocks new project.name.TYPE)
+      
+      Try \`vba-blocks new --help\` for more information.`,
+
     'new-dir-exists': ({ name, dir }) => dedent`
       A directory for "${name}" already exists: "${dir}".`,
 
@@ -274,6 +278,10 @@ export const reporter: Reporter = {
 
     'init-name-required': () => dedent`
       Unable to determine name from current directory or --from. --name NAME is required to initialize this project.`,
+
+    'init-target-required': () => dedent`
+      --target or --from is required for vba-blocks projects.
+      (e.g. vba-blocks init --target xlsm)`,
 
     'export-no-target': () => dedent`
       No default target found for project, use --target TYPE to export from a specific target.`,

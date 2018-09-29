@@ -1,13 +1,20 @@
 import { Manifest, parseManifest, loadManifest } from '../';
-import { isPathDependency, isRegistryDependency } from '../dependency';
-import { join, relative } from '../../utils/path';
+import { isPathDependency } from '../dependency';
+import { relative } from '../../utils/path';
 import {
   dir as FIXTURES,
   standard,
   invalidManifest
 } from '../../../tests/__fixtures__';
 
-const BASE_MANIFEST = {
+const BASE_MANIFEST: {
+  package: {
+    name: string;
+    version: string;
+    authors: string[];
+    target?: string | object;
+  };
+} = {
   package: { name: 'package-name', version: '1.0.0', authors: ['Tim Hall'] }
 };
 
@@ -114,23 +121,15 @@ test('throws for invalid references', () => {
   expect(() => parseManifest(value, FIXTURES)).toThrow();
 });
 
-test('loads valid targets', () => {
-  const value = {
-    ...BASE_MANIFEST,
-    targets: {
-      xlsm: 'targets/xlsm',
-      xlam: { name: 'addin', path: 'targets/xlam' }
-    }
-  };
-
-  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
-});
-
 test('loads valid target', () => {
   const value = {
-    ...BASE_MANIFEST,
-    target: { type: 'xlsm' }
+    ...BASE_MANIFEST
   };
+  value.package.target = 'xlsm';
+
+  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
+
+  value.package.target = { type: 'xlam', name: 'addin', path: 'targets/xlam' };
 
   expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
@@ -165,11 +164,6 @@ function normalize(
   }
   if (manifest.target) {
     manifest.target.path = normalizePath(manifest.target.path, relativeTo);
-  }
-  if (manifest.targets) {
-    for (const target of manifest.targets) {
-      target.path = normalizePath(target.path, relativeTo);
-    }
   }
   for (const dependency of manifest.dependencies) {
     if (isPathDependency(dependency)) {

@@ -2,6 +2,7 @@
 name = "complex"
 version = "0.0.0"
 authors = ["Tim Hall"]
+target = { type = "xlsm", path = "targets/xlsm" }
 
 [src]
 ThisWorkbook = "src/ThisWorkbook.cls"
@@ -14,6 +15,3 @@ Class1 = "src/Class1.cls"
 
 [dependencies]
 web = "^4"
-
-[targets]
-xlsm = "targets/xlsm"

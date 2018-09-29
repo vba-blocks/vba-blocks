@@ -1,5 +1,3 @@
 [project]
 name = "empty"
-
-[targets]
-xlsm = "targets/xlsm"
+target = { type = "xlsm", path = "targets/xlsm" }
