@@ -96,7 +96,7 @@ describe('new', () => {
 
   test('should create with blank target', async () => {
     await tmp('new-blank-target', async cwd => {
-      await execute(cwd, 'new blank-target --target xlsm');
+      await execute(cwd, 'new blank-target.xlsm');
 
       const result = await readdir(join(cwd, 'blank-target'));
       expect(result).toMatchSnapshot();
