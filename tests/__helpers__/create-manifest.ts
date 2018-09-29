@@ -10,10 +10,6 @@ export default function createManifest(options: any): Manifest {
     references = [],
     targets = [],
     dir = FIXTURES
-
-    // TODO #features
-    // defaultFeatures = [],
-    // features = [],
   } = options;
 
   const { name = 'testing', version = '0.0.0', authors = [], publish = false } =
@@ -33,10 +29,6 @@ export default function createManifest(options: any): Manifest {
     references,
     targets,
     dir
-
-    // TODO #features
-    // features,
-    // defaultFeatures,
   };
 }
 

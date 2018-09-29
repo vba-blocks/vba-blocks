@@ -4,22 +4,12 @@ import { pathExists, readFile, writeFile } from '../utils/fs';
 import { manifestNotFound } from '../errors';
 import { Version } from './version';
 import { Source, parseSrc } from './source';
-// TODO #features
-// import { Feature, parseFeatures } from './feature';
 import { Dependency, parseDependencies } from './dependency';
 import { Reference, parseReferences } from './reference';
 import { Target, parseTargets, parseTarget } from './target';
 import { manifestOk, manifestInvalid } from '../errors';
 
-export {
-  Version,
-  Source,
-  // TODO #features
-  // Feature,
-  Dependency,
-  Reference,
-  Target
-};
+export { Version, Source, Dependency, Reference, Target };
 
 /**
  * @example
@@ -74,10 +64,6 @@ export interface Manifest extends Snapshot {
   target?: Target;
   targets?: Target[];
   dir: string;
-
-  // TODO #features
-  // features: Feature[];
-  // defaultFeatures: string[];
 }
 
 export type ManifestType = 'package' | 'project';
@@ -151,9 +137,6 @@ export function parseManifest(value: any, dir: string): Manifest {
     targets = parseTargets(value.targets, name, dir);
   }
 
-  // TODO #features
-  // const { features, defaultFeatures } = parseFeatures(value.features || {});
-
   return {
     type,
     name,
@@ -165,10 +148,6 @@ export function parseManifest(value: any, dir: string): Manifest {
     target,
     targets,
     dir
-
-    // TODO #features
-    // features,
-    // defaultFeatures,
   };
 }
 

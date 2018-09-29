@@ -9,11 +9,6 @@ import { loadManifest } from '.';
 export interface DependencyDetails {
   name: string;
   version?: string;
-
-  // TODO #features
-  // defaultFeatures?: boolean;
-  // features?: string[];
-  // optional?: boolean;
 }
 
 export interface RegistryDependency extends DependencyDetails {
@@ -62,10 +57,6 @@ export function parseDependency(
   if (isString(value)) value = { version: value };
 
   const {
-    // TODO #features
-    // features = [],
-    // 'default-features': defaultFeatures = true,
-    // optional = false,
     registry = 'vba-blocks',
     version,
     path,
@@ -74,10 +65,6 @@ export function parseDependency(
     branch = 'master',
     rev
   }: {
-    // TODO #features
-    // features?: string[];
-    // 'default-features'?: boolean;
-    // optional?: boolean;
     registry?: string;
     version?: string;
     path?: string;
