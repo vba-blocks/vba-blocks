@@ -1,5 +1,7 @@
 #[macro_use]
 extern crate neon;
+#[cfg(windows)]
+extern crate sysinfo;
 
 #[cfg(windows)]
 mod process_list;
