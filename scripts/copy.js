@@ -29,6 +29,14 @@ async function main() {
       }
     }
   );
+
+  await copy(
+    join(__dirname, '../native/target/release/vba-blocks-native.exe'),
+    join(__dirname, '../dist/native/vba-blocks-native.exe'),
+    {
+      overwrite: true
+    }
+  );
 }
 
 function resolveModule(name) {

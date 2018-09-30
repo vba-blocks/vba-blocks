@@ -26,6 +26,7 @@ const bin = {
   [`${src}/bin/vba-blocks-new.js`]: 'lib/bin/vba-blocks-new.js',
   [`${src}/bin/vba-blocks-init.js`]: 'lib/bin/vba-blocks-init.js',
   [`${src}/bin/vba-blocks-run.js`]: 'lib/bin/vba-blocks-run.js',
+  [`${src}/bin/vba-blocks-setup.js`]: 'lib/bin/vba-blocks-setup.js',
   [`${src}/bin/vba-blocks-healthcheck.js`]: 'lib/bin/vba-blocks-healthcheck.js'
 };
 
@@ -43,7 +44,9 @@ export default [
       replace({
         VERSION: version,
         'DIR-ADDINS': '../../addins/build',
-        'DIR-RUN-SCRIPTS': '../../run-scripts'
+        'DIR-RUN-SCRIPTS': '../../run-scripts',
+        'DIR-NATIVE': '../../native',
+        'DIR-BIN': '../../dist/bin'
       })
     ],
     treeshake: { pureExternalModules: true }
@@ -62,7 +65,9 @@ export default [
         resolve(),
         replace({
           'DIR-ADDINS': '../addins/build',
-          'DIR-RUN-SCRIPTS': '../run-scripts'
+          'DIR-RUN-SCRIPTS': '../run-scripts',
+          'DIR-NATIVE': '../native',
+          'DIR-BIN': '../dist/bin'
         })
       ],
       treeshake: { pureExternalModules: true }
@@ -83,7 +88,9 @@ export default [
         replace({
           'sat-solver': '../sat-solver',
           'DIR-ADDINS': '../../addins/build',
-          'DIR-RUN-SCRIPTS': '../../run-scripts'
+          'DIR-RUN-SCRIPTS': '../../run-scripts',
+          'DIR-NATIVE': '../../native',
+          'DIR-BIN': '../../dist/bin'
         })
       ],
       treeshake: { pureExternalModules: true }

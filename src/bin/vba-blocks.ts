@@ -8,7 +8,15 @@ import { RunError } from '../utils/run';
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
 
-const commands = ['new', 'init', 'build', 'export', 'run', 'healthcheck'];
+const commands = [
+  'new',
+  'init',
+  'build',
+  'export',
+  'run',
+  'setup',
+  'healthcheck'
+];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',

@@ -8,6 +8,7 @@ import {
   readFile,
   readJson,
   remove,
+  symlink,
   writeFile
 } from 'fs-extra';
 
@@ -62,6 +63,7 @@ export {
   readJson,
   remove,
   reset,
+  symlink,
   tmpFile,
   tmpFolder,
   writeFile

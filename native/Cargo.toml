@@ -1,22 +1,13 @@
 [package]
-name = "native"
+name = "vba-blocks-native"
 version = "0.0.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 license = "MIT"
-build = "build.rs"
-exclude = ["artifacts.json", "index.node"]
-
-[lib]
-name = "native"
-crate-type = ["dylib"]
-
-[build-dependencies]
-neon-build = "0.2.0"
 
 [dependencies]
+clap = "2.32.0"
 inflections = "1.1.1"
 itertools = "0.7.8"
-neon = "0.2.0"
 sysinfo = "0.6.0"
 winapi = { version = "0.3.6", features = ["basetsd", "minwindef", "winuser"] }
 winreg = { version = "0.5.1", features = ["transactions"] }

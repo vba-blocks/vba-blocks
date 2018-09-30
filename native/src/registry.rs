@@ -1,6 +1,5 @@
 use inflections::Inflect;
 use itertools::Itertools;
-use neon::prelude::*;
 use std::ffi::CString;
 use std::io;
 use std::path::Path;
@@ -13,14 +12,13 @@ use winreg::enums::*;
 use winreg::transaction::Transaction;
 use winreg::RegKey;
 
-pub fn add_to_open(mut cx: FunctionContext) -> JsResult<JsUndefined> {
-    let application = cx.argument::<JsString>(0)?.value().to_title_case();
-    let filename = cx.argument::<JsString>(1)?.value();
+pub fn add_to_open(application: &str, filename: &str) {
+    let application = application.to_title_case();
 
     let options = open_application_key(&application)
-        .or_else(|_| cx.throw_error("Could not find Office application in registry"))?
+        .expect("Could not find Office application in registry")
         .open_subkey_with_flags("Options", KEY_ALL_ACCESS)
-        .or_else(|_| cx.throw_error("Could not find/open Options"))?;
+        .expect("Could not find/open Options");
 
     let open = options
         .enum_values()
@@ -31,11 +29,11 @@ pub fn add_to_open(mut cx: FunctionContext) -> JsResult<JsUndefined> {
     for (name, _) in open {
         let value: String = options
             .get_value(&name)
-            .or_else(|_| cx.throw_error("Could not get OPEN value"))?;
+            .expect("Could not get OPEN value");
 
         if value == get_reg_string(&filename) {
             println!("Existing OPEN value found: {} = {}", name, value);
-            return Ok(JsUndefined::new());
+            return;
         }
         index += 1;
     }
@@ -46,20 +44,17 @@ pub fn add_to_open(mut cx: FunctionContext) -> JsResult<JsUndefined> {
     println!("Adding {} = {} to {}\\Options", name, value, application);
     options
         .set_value(name, &value)
-        .or_else(|_| cx.throw_error("Failed to set OPEN value"))?;
-
-    Ok(JsUndefined::new())
+        .expect("Failed to set OPEN value");
 }
 
-pub fn remove_from_open(mut cx: FunctionContext) -> JsResult<JsUndefined> {
-    let application = cx.argument::<JsString>(0)?.value().to_title_case();
-    let filename = cx.argument::<JsString>(1)?.value();
-    let t = Transaction::new().or_else(|_| cx.throw_error("Failed to start transaction"))?;
+pub fn remove_from_open(application: &str, filename: &str) {
+    let application = application.to_title_case();
+    let t = Transaction::new().expect("Failed to start transaction");
 
     let options = open_application_key(&application)
-        .or_else(|_| cx.throw_error("Could not find Office application in registry"))?
+        .expect("Could not find Office application in registry")
         .open_subkey_transacted_with_flags("Options", &t, KEY_ALL_ACCESS)
-        .or_else(|_| cx.throw_error("Count not find/open Options"))?;
+        .expect("Count not find/open Options");
 
     let open = options
         .enum_values()
@@ -72,7 +67,7 @@ pub fn remove_from_open(mut cx: FunctionContext) -> JsResult<JsUndefined> {
     for (name, _) in open {
         let value: String = options
             .get_value(&name)
-            .or_else(|_| cx.throw_error("Could not get OPEN value"))?;
+            .expect("Could not get OPEN value");
 
         if found {
             let shifted = get_open_key(index);
@@ -80,17 +75,17 @@ pub fn remove_from_open(mut cx: FunctionContext) -> JsResult<JsUndefined> {
             println!("Shifting {} -> {}", name, shifted);
             options
                 .set_value(shifted, &value)
-                .or_else(|_| cx.throw_error("Could not shift OPEN value"))?;
+                .expect("Could not shift OPEN value");
             options
                 .delete_value(name)
-                .or_else(|_| cx.throw_error("Could not shift OPEN value"))?;
+                .expect("Could not shift OPEN value");
 
             index += 1;
         } else if value == get_reg_string(&filename) {
             println!("Deleting {} = {}", name, value);
             options
                 .delete_value(name)
-                .or_else(|_| cx.throw_error("Could not remove OPEN value"))?;
+                .expect("Could not remove OPEN value");
             found = true;
         } else {
             index += 1;
@@ -98,37 +93,31 @@ pub fn remove_from_open(mut cx: FunctionContext) -> JsResult<JsUndefined> {
     }
 
     t.commit()
-        .or_else(|_| cx.throw_error("Failed to complete remove transaction"))?;
-
-    Ok(JsUndefined::new())
+        .expect("Failed to complete remove transaction");
 }
 
-pub fn enable_vbom(mut cx: FunctionContext) -> JsResult<JsUndefined> {
-    let application = cx.argument::<JsString>(0)?.value().to_title_case();
+pub fn enable_vbom(application: &str) {
+    let application = application.to_title_case();
 
     let security = open_application_key(&application)
-        .or_else(|_| cx.throw_error("Could not find Office application in registry"))?
+        .expect("Could not find Office application in registry")
         .open_subkey_with_flags("Security", KEY_ALL_ACCESS)
-        .or_else(|_| cx.throw_error("Count not find/open Security"))?;
+        .expect("Count not find/open Security");
 
     println!("Setting {}\\Security: AccessVBOM = 1", application);
     security
         .set_value("AccessVBOM", &1u32)
-        .or_else(|_| cx.throw_error("Could not set AccessVBOM"))?;
-
-    Ok(JsUndefined::new())
+        .expect("Could not set AccessVBOM");
 }
 
-pub fn add_to_path(mut cx: FunctionContext) -> JsResult<JsUndefined> {
-    let path = cx.argument::<JsString>(0)?.value();
-
+pub fn add_to_path(path: &str) {
     let environment = RegKey::predef(HKEY_CURRENT_USER)
         .open_subkey_with_flags("Environment", KEY_ALL_ACCESS)
-        .or_else(|_| cx.throw_error("Count not open Environment"))?;
+        .expect("Count not open Environment");
 
     let path_value: String = environment
         .get_value("Path")
-        .or_else(|_| cx.throw_error("Could not get Path from registry"))?;
+        .expect("Could not get Path from registry");
 
     let mut values: Vec<&str> = path_value
         .split(";")
@@ -138,7 +127,7 @@ pub fn add_to_path(mut cx: FunctionContext) -> JsResult<JsUndefined> {
     for value in values.iter() {
         if &path == value {
             println!("Existing value in PATH: {}", value);
-            return Ok(JsUndefined::new());
+            return;
         }
     }
 
@@ -147,22 +136,18 @@ pub fn add_to_path(mut cx: FunctionContext) -> JsResult<JsUndefined> {
     println!("Adding \"{}\" to PATH = {}", path, values.join(";"));
     environment
         .set_value("Path", &(values.join(";")))
-        .or_else(|_| cx.throw_error("Could not set Path in registry"))?;
-    broadcast_environment_change().or_else(|_| cx.throw_error("Failed to notify environment"))?;
-
-    Ok(JsUndefined::new())
+        .expect("Could not set Path in registry");
+    broadcast_environment_change().expect("Failed to notify environment");
 }
 
-pub fn remove_from_path(mut cx: FunctionContext) -> JsResult<JsUndefined> {
-    let path = cx.argument::<JsString>(0)?.value();
-
+pub fn remove_from_path(path: &str) {
     let environment = RegKey::predef(HKEY_CURRENT_USER)
         .open_subkey_with_flags("Environment", KEY_ALL_ACCESS)
-        .or_else(|_| cx.throw_error("Could not open Environment"))?;
+        .expect("Could not open Environment");
 
     let path_value: String = environment
         .get_value("Path")
-        .or_else(|_| cx.throw_error("Could not get Path from registry"))?;
+        .expect("Could not get Path from registry");
 
     let values: Vec<&str> = path_value
         .split(";")
@@ -178,16 +163,14 @@ pub fn remove_from_path(mut cx: FunctionContext) -> JsResult<JsUndefined> {
 
     if filtered.len() == existing {
         println!("\"{}\" not found in PATH", path);
-        return Ok(JsUndefined::new());
+        return;
     }
 
     println!("Removed \"{}\" from PATH = {}", path, filtered.join(";"));
     environment
         .set_value("Path", &(filtered.join(";")))
-        .or_else(|_| cx.throw_error("Failed to remove value from Path"))?;
-    broadcast_environment_change().or_else(|_| cx.throw_error("Failed to notify environment"))?;
-
-    Ok(cx.undefined())
+        .expect("Failed to remove value from Path");
+    broadcast_environment_change().expect("Failed to notify environment");
 }
 
 fn broadcast_environment_change() -> Result<(), io::Error> {

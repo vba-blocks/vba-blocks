@@ -7,7 +7,7 @@ import { Target } from './manifest';
 import { ImportGraph } from './build';
 import { addinUnsupportedType } from './errors';
 
-export type Application = string;
+export type Application = 'excel';
 export type Addin = string;
 
 export interface AddinOptions {
@@ -122,10 +122,10 @@ export function getTargetInfo(
   return { application, addin, file };
 }
 
-export function extensionToApplication(extension: string): string {
+export function extensionToApplication(extension: string): Application {
   extension = extension.replace('.', '');
   const application = byExtension[extension];
   if (!application) throw addinUnsupportedType(extension);
 
-  return application;
+  return <Application>application;
 }
