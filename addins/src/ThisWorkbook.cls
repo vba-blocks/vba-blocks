@@ -15,11 +15,11 @@ Private Sub Workbook_Open()
 End Sub
 
 Private Sub App_WorkbookAfterSave(ByVal Wb As Workbook, ByVal Success As Boolean)
-    Dim ProjectDir As String
-    Dim TargetType As String
+    ' Dim ProjectDir As String
+    ' Dim TargetType As String
 
-    ProjectDir = FileSystem.GetDir(Wb.Path)
-    TargetType = Replace(FileSystem.GetExtension(Wb.Name), ".", "")
-    
+    ' ProjectDir = FileSystem.GetDir(Wb.Path)
+    ' TargetType = Replace(FileSystem.GetExtension(Wb.Name), ".", "")
+
     ' TODO vba-blocks export {TargetType} --cwd {ProjectDir}
 End Sub
