@@ -70,11 +70,11 @@ Class Excel
 
   Private Sub OpenWorkbook(Path)
     On Error Resume Next
-    
+
     ' Check add-ins first
     ' C:/.../vba-blocks.xlam -> index = vba-blocks
-    Set Workbook = App.AddIns(GetFileName(Path))
-    If Err.Number = 0 Then
+    Set Workbook = App.AddIns2(GetFileName(Path))
+    If Err.Number = 0 And Workbook.IsOpen Then
       WorkbookWasOpen = True
       Exit Sub
     End If
