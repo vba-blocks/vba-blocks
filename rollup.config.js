@@ -45,7 +45,7 @@ export default [
         VERSION: version,
         'DIR-ADDINS': '../../addins/build',
         'DIR-RUN-SCRIPTS': '../../run-scripts',
-        'DIR-NATIVE': '../../native',
+        'DIR-NATIVE': '../../native/target/debug',
         'DIR-BIN': '../../dist/bin'
       })
     ],
@@ -66,7 +66,7 @@ export default [
         replace({
           'DIR-ADDINS': '../addins/build',
           'DIR-RUN-SCRIPTS': '../run-scripts',
-          'DIR-NATIVE': '../native',
+          'DIR-NATIVE': '../native/target/debug',
           'DIR-BIN': '../dist/bin'
         })
       ],
@@ -89,7 +89,7 @@ export default [
           'sat-solver': '../sat-solver',
           'DIR-ADDINS': '../../addins/build',
           'DIR-RUN-SCRIPTS': '../../run-scripts',
-          'DIR-NATIVE': '../../native',
+          'DIR-NATIVE': '../../native/target/debug',
           'DIR-BIN': '../../dist/bin'
         })
       ],

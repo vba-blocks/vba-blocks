@@ -14,6 +14,9 @@ module.exports = async () => {
   if (!(await pathExists(env.addins))) {
     errors.push(`Missing addins at "${env.addins}"`);
   }
+  if (!(await pathExists(env.native))) {
+    errors.push(`Missing native binaries at "${env.native}"`);
+  }
 
   if (errors.length) {
     throw new Error(

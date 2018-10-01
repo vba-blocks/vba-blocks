@@ -132,11 +132,13 @@ pub fn add_to_path(path: &str) {
     }
 
     values.push(&path);
+    let result = values.join(";");
 
-    println!("Adding \"{}\" to PATH = {}", path, values.join(";"));
+    println!("Adding \"{}\" to PATH = {}", path, result);
     environment
-        .set_value("Path", &(values.join(";")))
+        .set_value("Path", &result)
         .expect("Could not set Path in registry");
+
     broadcast_environment_change().expect("Failed to notify environment");
 }
 
