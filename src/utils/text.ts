@@ -21,3 +21,7 @@ export function joinCommas(values: any[]): string {
   const last = values.pop();
   return `${values.join(', ')}, and ${last}`;
 }
+
+export function capitalize(value: string): string {
+  return value[0].toUpperCase() + value.substr(1);
+}

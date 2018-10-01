@@ -11,6 +11,7 @@ import { join, basename } from '../utils/path';
 import { pathExists, remove, symlink } from '../utils/fs';
 import env from '../env';
 import dedent from 'dedent';
+import { capitalize } from '../utils/text';
 
 const addins_dir = env.isWindows
   ? join(homedir(), 'AppData', 'Roaming', 'Microsoft', 'Addins')
@@ -40,7 +41,6 @@ export function installExcel(): Operation {
     },
     async run() {
       await installAddin('excel');
-      console.log('Installed Excel.');
     }
   };
 }
@@ -54,7 +54,6 @@ export function uninstallExcel(): Operation {
     },
     async run() {
       await uninstallAddin('excel');
-      console.log('Uninstalled Excel.');
     }
   };
 }
@@ -66,8 +65,9 @@ export function addToPATH(): Operation {
       await _addToPATH();
       console.log(dedent`
         Added vba-blocks to PATH.
+
         Note: The shortcut won't be available in the current console,
-        restart or open a new console / cmd windows before using it.`);
+        restart or open a new console / cmd windows before using it.\n`);
     }
   };
 }
@@ -89,31 +89,36 @@ export async function appClosed(application: Application) {
 
     if (processes.some(name => match.test(name))) {
       throw new Error(
-        `${application} must be closed for the vba-blocks add-in to be installed correctly.`
+        `${capitalize(
+          application
+        )} must be closed for the vba-blocks add-in to be installed correctly.`
       );
     }
   }
 }
 
 export async function addinsDirExists() {
-  if (!(await pathExists(addins_dir))) {
+  if (env.isWindows && !(await pathExists(addins_dir))) {
     throw new Error(`Add-in directory not found at "${addins_dir}".`);
   }
 }
 
 export async function installAddin(application: Application) {
   const addin = addins[application];
-  const filename = basename(addin);
-  const path = join(addins_dir, filename);
-
-  await remove(path);
-  await symlink(addin, path, 'file');
 
   if (env.isWindows) {
+    const filename = basename(addin);
+    const path = join(addins_dir, filename);
+
+    await remove(path);
+    await symlink(addin, path, 'file');
+
     await addToOPEN(application, filename);
     await enableVBOM(application);
+
+    console.log(`Installed ${capitalize(application)} add-in.`);
   } else {
-    // TODO
+    console.log(`Add "${addin}" to add-ins in ${capitalize(application)}.`);
   }
 }
 
@@ -124,6 +129,7 @@ export async function uninstallAddin(application: Application) {
 
   if (env.isWindows) {
     await removeFromOPEN(application, filename);
+    console.log(`Uninstalled ${capitalize(application)} add-in.`);
   } else {
     // TODO
   }
