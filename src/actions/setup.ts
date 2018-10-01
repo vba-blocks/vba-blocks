@@ -84,17 +84,13 @@ export function removeFromPATH(): Operation {
 
 export async function appClosed(application: Application) {
   if (env.isWindows) {
-    try {
-      const match = new RegExp(`${application}.exe`, 'i');
-      const processes = await getProcesses();
-      if (processes.some(name => match.test(name))) {
-        throw new Error(
-          `${application} must be closed for the vba-blocks add-in to be installed correctly.`
-        );
-      }
-    } catch (_) {
-      // (ignore)
-      return false;
+    const match = new RegExp(`${application}`, 'i');
+    const processes = await getProcesses();
+
+    if (processes.some(name => match.test(name))) {
+      throw new Error(
+        `${application} must be closed for the vba-blocks add-in to be installed correctly.`
+      );
     }
   }
 }
