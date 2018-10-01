@@ -12,8 +12,8 @@
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
     "build": "run-s build:compile build:bundle",
-    "build:win": "run-s build:native build build:addins build:pkg:win build:copy",
-    "build:mac": "run-s build:native build build:addins build:pkg:mac build:copy",
+    "build:win": "run-s build:clean build:native build build:addins build:pkg:win build:copy",
+    "build:mac": "run-s build:clean build build:addins build:pkg:mac build:copy",
     "build:compile": "tsc",
     "build:bundle": "rollup -c",
     "build:pkg:win": "pkg --targets node10-win-x86 -o dist/bin/vba-blocks.exe .",
@@ -21,7 +21,8 @@
     "build:copy": "node scripts/copy",
     "build:addins": "cd addins && node ../scripts/build",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
-    "build:native": "cd native && cargo build --release"
+    "build:native": "cd native && cargo build --release",
+    "build:clean": "rimraf dist"
   },
   "pkg": {
     "scripts": [
@@ -75,6 +76,7 @@
     "npm-run-all": "^4.1.2",
     "pkg": "^4.3.1",
     "prettier": "^1.6.1",
+    "rimraf": "^2.6.2",
     "rollup": "^0.63.5",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",

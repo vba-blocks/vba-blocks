@@ -1,24 +1,15 @@
 extern crate clap;
-
-#[cfg(windows)]
 extern crate inflections;
-#[cfg(windows)]
 extern crate itertools;
-#[cfg(windows)]
 extern crate sysinfo;
-#[cfg(windows)]
 extern crate winapi;
-#[cfg(windows)]
 extern crate winreg;
 
-#[cfg(windows)]
 mod process_list;
-#[cfg(windows)]
 mod registry;
 
 use clap::{App, SubCommand};
 
-#[cfg(windows)]
 fn main() {
     let matches = App::new("vba-blocks-native")
         .version("0.0.0")
@@ -62,9 +53,4 @@ fn main() {
 
         registry::remove_from_path(path);
     }
-}
-
-#[cfg(not(windows))]
-fn main() {
-    panic!("Not supported on this platform.");
 }

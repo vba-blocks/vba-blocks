@@ -9,34 +9,30 @@ main().catch(err => {
 async function main() {
   await copy(
     join(resolveModule('dugite'), 'git'),
-    join(__dirname, '../dist/git'),
-    { overwrite: false }
+    join(__dirname, '../dist/git')
   );
 
   await copy(
     join(__dirname, '../run-scripts'),
-    join(__dirname, '../dist/run-scripts'),
-    { overwrite: true }
+    join(__dirname, '../dist/run-scripts')
   );
 
   await copy(
     join(__dirname, '../addins/build'),
     join(__dirname, '../dist/addins'),
     {
-      overwrite: true,
       filter(src) {
         return !src.includes('.backup');
       }
     }
   );
 
-  await copy(
-    join(__dirname, '../native/target/release/vba-blocks-native.exe'),
-    join(__dirname, '../dist/native/vba-blocks-native.exe'),
-    {
-      overwrite: true
-    }
-  );
+  if (process.platform === 'win32') {
+    await copy(
+      join(__dirname, '../native/target/release/vba-blocks-native.exe'),
+      join(__dirname, '../dist/native/vba-blocks-native.exe')
+    );
+  }
 }
 
 function resolveModule(name) {
