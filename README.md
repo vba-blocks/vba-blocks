@@ -2,28 +2,109 @@
 
 Coming soon: A package manager for VBA.
 
-This repository contains the Office Add-ins and CLI for working with vba-blocks.
+This repository contains the CLI, Office Add-ins, and run scripts for working with vba-blocks.
 
-## Building the CLI
+## Installation
 
-> vba-blocks Desktop (coming soon) takes care of all of this for you.
+1. Download the [latest release](https://github.com/vba-blocks/vba-blocks/releases) for your platform (Windows or Mac)
+2. Unzip the `.vba-blocks` folder into your user directory (e.g. `C:/Users/YOUR-NAME` on Windows)
+3. TODO Double-click the extracted `.vba-blocks/bin/vba-blocks` to setup vba-blocks
+4. :rocket: You're ready to go!
+
+## Usage
+
+### `new`
+
+Create a new folder with a blank/generated vba-blocks project inside
+
+```
+# Create a folder "project-name" with a blank xlsm project
+> vba-blocks new project-name.xlsm
+
+# (equivalent to above)
+> vba-blocks new project-name --target xlsm
+
+# Create a folder "from-existing" with a project from an existing workbook
+> vba-blocks new from-existing --from existing.xlsm
+
+# Create a blank package for sharing as a library between projects
+> vba-blocks new json-converter --package
+```
+
+### `init`
+
+Create a blank/generated vba-blocks project in the current folder
+
+```
+# Create a blank xlsm project with current folder's name
+> vba-blocks init --target xlsm
+
+# Create a project from an existing workbook
+> vba-blocks init --from existing.xlsm
+
+# Create a blank package
+> vba-blocks init --package
+```
+
+### `build`
+
+Build an Excel workbook from the project's source. The built file is located in the `build/` folder and if a previously built file is found it is moved to `/.backup` to protect against losing any previously saved work.
+
+```
+# Build a project
+> vba-blocks build
+
+# Build and open a project for editing
+> vba-blocks build --open
+
+# Build a package using a blank target
+> vba-blocks build --target xlsm
+```
+
+### `export`
+
+Once you've completed your edits and are ready to commit your changes, export your project with `vba-blocks export`.
+
+```
+# Export a project
+> vba-blocks export
+
+# Export a previously built package
+> vba-blocks export --target xlsm
+```
+
+### `run`
+
+`vba-blocks run` is a useful utility function for running a public macro in the given workbook and if it returns a string value, outputing it to the console.
+
+```vb
+' File: build/example.xlsm
+' Module: Tests
+Public Function RunTests(Input As Variant) As String
+  ' (currently, a single Variant input argument is required)
+
+  RunTests = "Howdy!"
+End Function
+```
+
+```
+> vba-blocks run build/example.xlsm Tests.RunTests
+Howdy!
+
+```
+
+## Development
 
 ### Prerequisites
 
 1. `git clone` this repo
 2. Install [node](https://www.nodejs.com/) v8.11.4 or later
 3. Install [yarn](https://www.yarnpkg.com/) v1.9.4 or later
-4. Install node-gyp dependencies for [Mac](https://github.com/nodejs/node-gyp#on-macos) or [Windows](https://github.com/nodejs/node-gyp#on-macos)
+4. Install node-gyp dependencies for [Mac](https://github.com/nodejs/node-gyp#on-macos) or [Windows](https://github.com/nodejs/node-gyp#on-windows)
+5. Install [Rust](https://www.rust-lang.org/en-US/) (via [rustup](https://rustup.rs/)). For Windows, use the i686 toolchain with `rustup default stable-i686`
 
 ### Build
 
 1. Run `yarn`
 2. Run `yarn build:win` (Windows) or `yarn build:mac` (Mac)
-3. Verify build with `dist\bin\vba-blocks healthcheck` (Windows) or `dist/bin/vba-blocks healthcheck` (Mac)
-
-### Install
-
-1. Add `{vba-blocks directory}\dist\bin` to user or system PATH on Windows (TODO add to PATH for Mac)
-2. Add `{vba-blocks directory}\dist\addins\vba-blocks.{...}` to desired Office applications (only Excel is supported at the moment)
-3. Open a new cmd/terminal window and run `vba-blocks healthcheck` to verify installation
-4. :rocket: You're ready to go!
+3. Verify build with `dist\unpacked\bin\vba-blocks healthcheck` (Windows) or `dist/unpacked/bin/vba-blocks healthcheck` (Mac). You should see `No issues found.`
