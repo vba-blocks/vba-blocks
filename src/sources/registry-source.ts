@@ -77,6 +77,7 @@ export default class RegistrySource implements Source {
     const file = getLocalPackage(this.local.packages, registration);
 
     const [_, checksum] = registration.source.split('#', 2);
+    const [algorithm, hash] = checksum.split('-');
 
     if (!(await pathExists(file))) {
       const unverifiedFile = await tmpFile();
@@ -86,11 +87,11 @@ export default class RegistrySource implements Source {
         throw sourceDownloadFailed(registration.source, err);
       }
 
-      const comparison = await getChecksum(unverifiedFile);
-      if (comparison !== checksum) {
+      const comparison = await getChecksum(unverifiedFile, algorithm);
+      if (comparison !== hash) {
         debug(`Checksum failed for ${unverifiedFile}`);
-        debug(`Expected ${checksum}, received ${comparison}`);
-        
+        debug(`Expected ${hash} (${algorithm}), received ${comparison}`);
+
         throw dependencyInvalidChecksum(registration);
       }
 
