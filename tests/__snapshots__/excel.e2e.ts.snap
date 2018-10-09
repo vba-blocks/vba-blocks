@@ -59,7 +59,6 @@ Object {
   "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "targets/xlsm/xl/worksheets/sheet2.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "vba-block.lock": "[root]{LF}name = \\"empty\\"{LF}version = \\"0.0.0\\"{LF}dependencies = [{LF}]{LF}{LF}",
   "vba-block.toml": "[project]
 name = \\"empty\\"
 target = { type = \\"xlsm\\", path = \\"targets/xlsm\\" }
@@ -69,6 +68,7 @@ target = { type = \\"xlsm\\", path = \\"targets/xlsm\\" }
 
 exports[`export export to empty project 2`] = `
 "[1/3] Loading project...
+Resolving dependencies
 Fetching dependencies
 
 [2/3] Exporting src from \\"empty.xlsm\\"
