@@ -1,5 +1,5 @@
 import _run from '../utils/run';
-import { extname } from '../utils/path';
+import { extname, resolve } from '../utils/path';
 import { runMissingFile, runMissingMacro } from '../errors';
 import { extensionToApplication } from '../addin';
 
@@ -16,6 +16,6 @@ export default async function run(options: RunOptions) {
   if (!macro) throw runMissingMacro();
 
   const application = extensionToApplication(extname(file));
-  const { stdout } = await _run(application, file, macro, arg);
+  const { stdout } = await _run(application, resolve(file), macro, arg);
   console.log(stdout);
 }
