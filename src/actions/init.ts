@@ -56,7 +56,6 @@ export default async function init(options: InitOptions) {
   }
 
   await ensureDir(join(dir, 'src'));
-  await ensureDir(join(dir, 'targets'));
 
   if (git && !(await pathExists(join(dir, '.git')))) {
     await git_init(dir);
