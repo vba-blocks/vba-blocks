@@ -74,9 +74,11 @@ Class Excel
     ' Check add-ins first
     ' C:/.../vba-blocks.xlam -> index = vba-blocks
     Set Workbook = App.AddIns2(GetFileName(Path))
-    If Err.Number = 0 And Workbook.IsOpen Then
-      WorkbookWasOpen = True
-      Exit Sub
+    If Err.Number = 0 Then
+      If Workbook.IsOpen Then
+        WorkbookWasOpen = True
+        Exit Sub
+      End If
     End If
 
     Err.Clear

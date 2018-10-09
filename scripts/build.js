@@ -2,7 +2,8 @@ const { join } = require('path');
 const vba = require('../lib/index');
 
 main().catch(err => {
-  console.error(err);
+  console.error(err.message);
+  console.log(err.underlying && err.underlying.result);
   process.exit(1);
 });
 
