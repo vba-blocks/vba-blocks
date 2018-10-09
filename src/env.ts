@@ -4,6 +4,8 @@ import getStaging from './utils/get-staging';
 import isPackaged from './utils/is-packaged';
 import { Reporter, reporter } from './reporter';
 
+const is_setup = /vba\-blocks\-setup/g.test(process.execPath);
+
 export interface Env {
   isWindows: boolean;
   cwd: string;
@@ -36,7 +38,7 @@ const env: Env = {
     ? join(process.execPath, '../../run-scripts')
     : join(__dirname, 'DIR-RUN-SCRIPTS'),
   native: isPackaged()
-    ? join(process.execPath, '../../native')
+    ? join(process.execPath, is_setup ? '../native' : '../../native')
     : join(__dirname, 'DIR-NATIVE'),
   bin: isPackaged()
     ? join(process.execPath, '../../bin')

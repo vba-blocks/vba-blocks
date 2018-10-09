@@ -1,5 +1,5 @@
 import mri from 'mri';
-import chalk from 'chalk';
+import * as colors from 'ansi-colors';
 import dedent from 'dedent';
 import has from '../utils/has';
 import { CliError, unknownCommand, cleanError } from '../errors';
@@ -8,15 +8,7 @@ import { RunError } from '../utils/run';
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
 
-const commands = [
-  'new',
-  'init',
-  'build',
-  'export',
-  'run',
-  'setup',
-  'healthcheck'
-];
+const commands = ['new', 'init', 'build', 'export', 'run', 'healthcheck'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -68,19 +60,28 @@ main()
 async function main() {
   let [command] = args._;
 
-  if (!command && args.version) {
-    console.log(version);
-    return;
-  }
-  if (!command && args.help) {
-    console.log(help);
-    return;
-  }
-
-  // For double-click / direct run of vba-blocks show interactive setup
-  // (desired is double-click = setup, run = help, but no good way to distinguish)
   if (!command) {
-    command = 'setup';
+    if (args.version) {
+      console.log(version);
+    } else if (args.help) {
+      console.log(help);
+    } else {
+      console.log(help);
+      console.log();
+
+      console.log(dedent`
+        Run "vba-blocks COMMAND" from the command-line to use vba-blocks.
+
+        Press any key to continue...`);
+
+      await new Promise(resolve => {
+        process.stdin.setRawMode!(true);
+        process.stdin.resume();
+        process.stdin.on('data', resolve);
+      });
+    }
+
+    return;
   }
 
   if (!commands.includes(command)) {
@@ -110,10 +111,10 @@ function isRunError(error: Error | RunError): error is RunError {
   return has(error, 'result');
 }
 
-function handleError(err: Error | CliError) {
+export function handleError(err: Error | CliError) {
   const { message, stack } = cleanError(err);
 
-  console.error(`${chalk.redBright('ERROR')} ${message}`);
+  console.error(`${colors.redBright('ERROR')} ${message}`);
 
   // TODO
   // if (err.code) {

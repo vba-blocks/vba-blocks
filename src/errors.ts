@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import * as colors from 'ansi-colors';
 import { ok } from 'assert';
 import env from './env';
 import { isString } from './utils/is';
@@ -21,7 +21,7 @@ export class CliError extends Error {
   constructor(message: string, options: CliErrorOptions = {}) {
     if (options.underlying) {
       const underlying = cleanError(options.underlying);
-      message += chalk`\n\n{dim ${underlying.message}}`;
+      message += `\n\n${colors.dim(underlying.message)}`;
     }
 
     super(message);

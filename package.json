@@ -12,9 +12,9 @@
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
     "build": "run-s build:compile build:bundle",
-    "build:win": "run-s build:clean build:native build build:addins build:pkg:win build:copy build:zip",
+    "build:win": "run-s build:clean build:native build build:addins build:pkg:win build:setup:win build:copy build:zip",
     "rebuild:win": "run-s build build:pkg:win build:copy",
-    "build:mac": "run-s build:clean build build:addins build:pkg:mac build:copy",
+    "build:mac": "run-s build:clean build build:addins build:pkg:mac build:setup:mac build:copy",
     "rebuild:mac": "run-s build build:pkg:mac build:copy",
     "build:compile": "tsc",
     "build:bundle": "rollup -c",
@@ -25,7 +25,9 @@
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
     "build:native": "cd native && cargo build --release",
     "build:clean": "rimraf typings && rimraf lib && rimraf dist",
-    "build:zip": "node scripts/zip"
+    "build:zip": "node scripts/zip",
+    "build:setup:win": "pkg --targets node10-win-x86 -o dist/unpacked/vba-blocks-setup.exe setup",
+    "build:setup:mac": "pkg --targets node10-mac-x64 -o dist/unpacked/vba-blocks-setup setup"
   },
   "pkg": {
     "scripts": [
@@ -49,8 +51,8 @@
     }
   },
   "dependencies": {
+    "ansi-colors": "^3.1.0",
     "archiver": "^2.0.0",
-    "chalk": "^2.3.0",
     "debug": "^3.1.0",
     "decompress": "^4.2.0",
     "dedent": "^0.7.0",
@@ -59,7 +61,7 @@
     "logic-solver": "^2.0.1",
     "mri": "^1.1.0",
     "pretty-hrtime": "^1.0.3",
-    "prompts": "^1.1.1",
+    "prompts": "git+https://github.com/timhall/prompts#1c65937",
     "sanitize-filename": "^1.6.1",
     "semver": "^5.4.1",
     "tmp": "^0.0.33",
@@ -76,7 +78,6 @@
     "@types/tar": "^4.0.0",
     "@types/tmp": "^0.0.33",
     "jest": "^23.1.0",
-    "neon-cli": "^0.2.0",
     "npm-run-all": "^4.1.2",
     "pkg": "^4.3.1",
     "prettier": "^1.6.1",
