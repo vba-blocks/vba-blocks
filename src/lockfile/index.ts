@@ -1,26 +1,26 @@
 import { ok } from 'assert';
 import { satisfies as satisfiesSemver } from 'semver';
-import { join, relative, trailing } from './utils/path';
-import { pathExists, readFile, writeFile } from './utils/fs';
-import { toLockfile as convertToToml, parse as parseToml } from './utils/toml';
-import has from './utils/has';
-import { Snapshot, loadManifest } from './manifest';
+import { join, relative, trailing } from '../utils/path';
+import { pathExists, readFile, writeFile } from '../utils/fs';
+import { toLockfile as convertToToml, parse as parseToml } from '../utils/toml';
+import has from '../utils/has';
+import { Snapshot, loadManifest } from '../manifest';
 import {
   Dependency,
   isRegistryDependency,
   isPathDependency,
   isGitDependency
-} from './manifest/dependency';
-import { Workspace } from './workspace';
+} from '../manifest/dependency';
+import { Workspace } from '../workspace';
 import {
   Registration,
   getRegistrationId,
   getRegistrationSource,
   getSourceParts,
   toDependency
-} from './sources/registration';
-import { DependencyGraph, getRegistration } from './resolve';
-import { lockfileWriteFailed } from './errors';
+} from '../sources/registration';
+import { DependencyGraph, getRegistration } from '../resolve';
+import { lockfileWriteFailed } from '../errors';
 
 const debug = require('debug')('vba-blocks:lockfile');
 
