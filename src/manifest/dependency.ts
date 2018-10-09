@@ -1,10 +1,8 @@
-import { satisfies as satisfiesSemver } from 'semver';
 import { Version } from './version';
 import { join, trailing } from '../utils/path';
 import { isString } from '../utils/is';
 import has from '../utils/has';
 import { manifestOk } from '../errors';
-import { loadManifest } from '.';
 
 export interface DependencyDetails {
   name: string;
@@ -90,40 +88,6 @@ export function parseDependency(
     else if (tag) return { ...details, git: git!, tag };
     else return { ...details, git: git!, branch };
   }
-}
-
-export async function satisfies(
-  value: Dependency,
-  comparison: Dependency
-): Promise<boolean> {
-  if (isRegistryDependency(comparison)) {
-    // Note: Order matters in value / comparison
-    //
-    // value = manifest / user value
-    // comparison = lockfile value (more specific)
-    return (
-      isRegistryDependency(value) &&
-      satisfiesSemver(comparison.version, value.version)
-    );
-  } else if (isPathDependency(comparison)) {
-    if (!isPathDependency(value)) return false;
-    if (value.path !== comparison.path) return false;
-
-    // Check if current version of path dependency matches
-    const manifest = await loadManifest(value.path);
-    return manifest.version === comparison.version!;
-  } else if (isGitDependency(comparison)) {
-    if (!isGitDependency(value)) return false;
-
-    if (has(value, 'rev') && has(comparison, 'rev'))
-      return value.rev === comparison.rev;
-    if (has(value, 'tag') && has(comparison, 'tag'))
-      return value.tag === comparison.tag;
-    if (has(value, 'branch') && has(comparison, 'branch'))
-      return value.branch === comparison.branch;
-  }
-
-  return false;
 }
 
 export function isRegistryDependency(

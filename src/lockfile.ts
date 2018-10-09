@@ -1,10 +1,16 @@
 import { ok } from 'assert';
+import { satisfies as satisfiesSemver } from 'semver';
 import { join, relative, trailing } from './utils/path';
 import { pathExists, readFile, writeFile } from './utils/fs';
 import { toLockfile as convertToToml, parse as parseToml } from './utils/toml';
 import has from './utils/has';
-import { Snapshot } from './manifest';
-import { Dependency, satisfies } from './manifest/dependency';
+import { Snapshot, loadManifest } from './manifest';
+import {
+  Dependency,
+  isRegistryDependency,
+  isPathDependency,
+  isGitDependency
+} from './manifest/dependency';
 import { Workspace } from './workspace';
 import {
   Registration,
@@ -287,8 +293,42 @@ async function compareDependencies(
   for (const dependency of locked.dependencies) {
     const currentValue = byName[dependency.name];
     if (!currentValue) return false;
-    if (!(await satisfies(currentValue, dependency))) return false;
+    if (!(await satisfiesDependency(currentValue, dependency))) return false;
   }
 
   return true;
+}
+
+async function satisfiesDependency(
+  value: Dependency,
+  comparison: Dependency
+): Promise<boolean> {
+  if (isRegistryDependency(comparison)) {
+    // Note: Order matters in value / comparison
+    //
+    // value = manifest / user value
+    // comparison = lockfile value (more specific)
+    return (
+      isRegistryDependency(value) &&
+      satisfiesSemver(comparison.version, value.version)
+    );
+  } else if (isPathDependency(comparison)) {
+    if (!isPathDependency(value)) return false;
+    if (value.path !== comparison.path) return false;
+
+    // Check if current version of path dependency matches
+    const manifest = await loadManifest(value.path);
+    return manifest.version === comparison.version!;
+  } else if (isGitDependency(comparison)) {
+    if (!isGitDependency(value)) return false;
+
+    if (has(value, 'rev') && has(comparison, 'rev'))
+      return value.rev === comparison.rev;
+    if (has(value, 'tag') && has(comparison, 'tag'))
+      return value.tag === comparison.tag;
+    if (has(value, 'branch') && has(comparison, 'branch'))
+      return value.branch === comparison.branch;
+  }
+
+  return false;
 }

@@ -5,6 +5,7 @@ const { version, dependencies } = require('./package.json');
 
 const builtin = [
   'assert',
+  'child_process',
   'crypto',
   'fs',
   'https',
