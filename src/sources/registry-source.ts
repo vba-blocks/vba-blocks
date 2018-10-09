@@ -88,6 +88,9 @@ export default class RegistrySource implements Source {
 
       const comparison = await getChecksum(unverifiedFile);
       if (comparison !== checksum) {
+        debug(`Checksum failed for ${unverifiedFile}`);
+        debug(`Expected ${checksum}, received ${comparison}`);
+        
         throw dependencyInvalidChecksum(registration);
       }
 

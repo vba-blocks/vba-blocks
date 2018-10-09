@@ -21,9 +21,9 @@ async function checksum(file, algorithm = 'sha256') {
 }
 
 function hash(data, options) {
-  const { algorithm = 'sha256', encoding = 'utf8', digest = 'hex' } = options;
+  const { algorithm = 'sha256', digest = 'hex' } = options;
 
   return createHash(algorithm)
-    .update(Buffer.isBuffer(data) ? data.toString('utf-8') : data, encoding)
+    .update(data)
     .digest(digest);
 }
