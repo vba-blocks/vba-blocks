@@ -46,7 +46,7 @@ export default [
         'DIR-ADDINS': '../../addins/build',
         'DIR-RUN-SCRIPTS': '../../run-scripts',
         'DIR-NATIVE': '../../native/target/debug',
-        'DIR-BIN': '../../dist/bin'
+        'DIR-BIN': '../../dist/unpacked/bin'
       })
     ],
     treeshake: { pureExternalModules: true }
@@ -67,7 +67,7 @@ export default [
           'DIR-ADDINS': '../addins/build',
           'DIR-RUN-SCRIPTS': '../run-scripts',
           'DIR-NATIVE': '../native/target/debug',
-          'DIR-BIN': '../dist/bin'
+          'DIR-BIN': '../dist/unpacked/bin'
         })
       ],
       treeshake: { pureExternalModules: true }
@@ -90,7 +90,7 @@ export default [
           'DIR-ADDINS': '../../addins/build',
           'DIR-RUN-SCRIPTS': '../../run-scripts',
           'DIR-NATIVE': '../../native/target/debug',
-          'DIR-BIN': '../../dist/bin'
+          'DIR-BIN': '../../dist/unpacked/bin'
         })
       ],
       treeshake: { pureExternalModules: true }
