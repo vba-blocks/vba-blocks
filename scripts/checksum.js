@@ -23,7 +23,7 @@ async function checksum(file, algorithm = 'sha256') {
 function hash(data, options) {
   const { algorithm = 'sha256', digest = 'hex' } = options;
 
-  return createHash(algorithm)
+  return `${algorithm}-${createHash(algorithm)
     .update(data)
-    .digest(digest);
+    .digest(digest)}`;
 }

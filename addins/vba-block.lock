@@ -3,13 +3,13 @@ name = "vba-blocks"
 version = "0.0.0"
 dependencies = [
   "installer 0.0.0 path+vba-installer/",
-  "json 2.3.0 registry+vba-blocks#42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f",
+  "json 2.3.0 registry+vba-blocks#sha256-3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
 ]
 
 [[packages]]
 name = "dictionary"
 version = "1.4.1"
-source = "registry+vba-blocks#8034e569e4efcb7bdb1a0600c0aa2d857147b8be0ccbc6764af065d45e967e46"
+source = "registry+vba-blocks#sha256-b241062bcd7ffd68c9063e3980a5df4c6781df29d96763a020d291e52454f6a5"
 dependencies = [
 ]
 
@@ -31,8 +31,8 @@ dependencies = [
 [[packages]]
 name = "json"
 version = "2.3.0"
-source = "registry+vba-blocks#42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f"
+source = "registry+vba-blocks#sha256-3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799"
 dependencies = [
-  "dictionary 1.4.1 registry+vba-blocks#8034e569e4efcb7bdb1a0600c0aa2d857147b8be0ccbc6764af065d45e967e46",
+  "dictionary 1.4.1 registry+vba-blocks#sha256-b241062bcd7ffd68c9063e3980a5df4c6781df29d96763a020d291e52454f6a5",
 ]
 

@@ -17,7 +17,7 @@ Object {
       ],
       "id": "json@1.0.3",
       "name": "json",
-      "source": "registry+vba-blocks#d43b1724178c15181b3125f03591c0857743808395fc483d1da4210d0c9934ca",
+      "source": "registry+vba-blocks#sha256-bfa82d85e9964ac5fd9dbb014319b84eed127b93fca5495fab0256ce22b28b38",
       "version": "1.0.3",
     },
     Object {
@@ -30,7 +30,7 @@ Object {
       ],
       "id": "json@2.0.1",
       "name": "json",
-      "source": "registry+vba-blocks#5e2d5f3fad7bf216e9c6a5089ce43b1bd72c0ae0b03f7dc841ed3274cbb074cc",
+      "source": "registry+vba-blocks#sha256-88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e",
       "version": "2.0.1",
     },
     Object {
@@ -43,7 +43,7 @@ Object {
       ],
       "id": "json@2.1.0",
       "name": "json",
-      "source": "registry+vba-blocks#92b15892bfac833b89269c5f1f4c55f75430e407ed5a83b7695f1610c08a48c9",
+      "source": "registry+vba-blocks#sha256-c00e834ea96c4a6968d167b6616b2fa44a13fb672ff690b60a13326ca18de711",
       "version": "2.1.0",
     },
     Object {
@@ -56,7 +56,7 @@ Object {
       ],
       "id": "json@2.2.4",
       "name": "json",
-      "source": "registry+vba-blocks#0bdffb250e70366bb165843a4983bfafdb4b42bdeb853cbbc7994787ff48e908",
+      "source": "registry+vba-blocks#sha256-d788c54fff7e78fe95ced0684ebda35a17150751d9f629c45d2e705d6d9b6a62",
       "version": "2.2.4",
     },
     Object {
@@ -69,7 +69,7 @@ Object {
       ],
       "id": "json@2.3.0",
       "name": "json",
-      "source": "registry+vba-blocks#42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f",
+      "source": "registry+vba-blocks#sha256-3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
       "version": "2.3.0",
     },
   ],
@@ -97,7 +97,7 @@ Object {
   ],
   "id": "json@2.0.1",
   "name": "json",
-  "source": "registry+vba-blocks#5e2d5f3fad7bf216e9c6a5089ce43b1bd72c0ae0b03f7dc841ed3274cbb074cc",
+  "source": "registry+vba-blocks#sha256-88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e",
   "version": "2.0.1",
 }
 `;
@@ -132,7 +132,7 @@ Object {
       ],
       "id": "json@1.0.3",
       "name": "json",
-      "source": "registry+vba-blocks#d43b1724178c15181b3125f03591c0857743808395fc483d1da4210d0c9934ca",
+      "source": "registry+vba-blocks#sha256-bfa82d85e9964ac5fd9dbb014319b84eed127b93fca5495fab0256ce22b28b38",
       "version": "1.0.3",
     },
     Object {
@@ -145,7 +145,7 @@ Object {
       ],
       "id": "json@2.0.1",
       "name": "json",
-      "source": "registry+vba-blocks#5e2d5f3fad7bf216e9c6a5089ce43b1bd72c0ae0b03f7dc841ed3274cbb074cc",
+      "source": "registry+vba-blocks#sha256-88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e",
       "version": "2.0.1",
     },
     Object {
@@ -158,7 +158,7 @@ Object {
       ],
       "id": "json@2.1.0",
       "name": "json",
-      "source": "registry+vba-blocks#92b15892bfac833b89269c5f1f4c55f75430e407ed5a83b7695f1610c08a48c9",
+      "source": "registry+vba-blocks#sha256-c00e834ea96c4a6968d167b6616b2fa44a13fb672ff690b60a13326ca18de711",
       "version": "2.1.0",
     },
     Object {
@@ -171,7 +171,7 @@ Object {
       ],
       "id": "json@2.2.4",
       "name": "json",
-      "source": "registry+vba-blocks#0bdffb250e70366bb165843a4983bfafdb4b42bdeb853cbbc7994787ff48e908",
+      "source": "registry+vba-blocks#sha256-d788c54fff7e78fe95ced0684ebda35a17150751d9f629c45d2e705d6d9b6a62",
       "version": "2.2.4",
     },
     Object {
@@ -184,7 +184,7 @@ Object {
       ],
       "id": "json@2.3.0",
       "name": "json",
-      "source": "registry+vba-blocks#42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f",
+      "source": "registry+vba-blocks#sha256-3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
       "version": "2.3.0",
     },
   ],
@@ -211,7 +211,7 @@ Array [
           ],
           "id": "json@1.0.3",
           "name": "json",
-          "source": "registry+vba-blocks#d43b1724178c15181b3125f03591c0857743808395fc483d1da4210d0c9934ca",
+          "source": "registry+vba-blocks#sha256-bfa82d85e9964ac5fd9dbb014319b84eed127b93fca5495fab0256ce22b28b38",
           "version": "1.0.3",
         },
         Object {
@@ -224,7 +224,7 @@ Array [
           ],
           "id": "json@2.0.1",
           "name": "json",
-          "source": "registry+vba-blocks#5e2d5f3fad7bf216e9c6a5089ce43b1bd72c0ae0b03f7dc841ed3274cbb074cc",
+          "source": "registry+vba-blocks#sha256-88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e",
           "version": "2.0.1",
         },
         Object {
@@ -237,7 +237,7 @@ Array [
           ],
           "id": "json@2.1.0",
           "name": "json",
-          "source": "registry+vba-blocks#92b15892bfac833b89269c5f1f4c55f75430e407ed5a83b7695f1610c08a48c9",
+          "source": "registry+vba-blocks#sha256-c00e834ea96c4a6968d167b6616b2fa44a13fb672ff690b60a13326ca18de711",
           "version": "2.1.0",
         },
         Object {
@@ -250,7 +250,7 @@ Array [
           ],
           "id": "json@2.2.4",
           "name": "json",
-          "source": "registry+vba-blocks#0bdffb250e70366bb165843a4983bfafdb4b42bdeb853cbbc7994787ff48e908",
+          "source": "registry+vba-blocks#sha256-d788c54fff7e78fe95ced0684ebda35a17150751d9f629c45d2e705d6d9b6a62",
           "version": "2.2.4",
         },
         Object {
@@ -263,7 +263,7 @@ Array [
           ],
           "id": "json@2.3.0",
           "name": "json",
-          "source": "registry+vba-blocks#42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f",
+          "source": "registry+vba-blocks#sha256-3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799",
           "version": "2.3.0",
         },
       ],

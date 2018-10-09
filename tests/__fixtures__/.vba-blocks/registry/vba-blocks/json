@@ -1,5 +1,5 @@
-{"name":"json","vers":"1.0.3","deps":[{"name":"dictionary","req":"^1"}],"cksum":"d43b1724178c15181b3125f03591c0857743808395fc483d1da4210d0c9934ca"}
-{"name":"json","vers":"2.0.1","deps":[{"name":"dictionary","req":"^1"}],"cksum":"5e2d5f3fad7bf216e9c6a5089ce43b1bd72c0ae0b03f7dc841ed3274cbb074cc"}
-{"name":"json","vers":"2.1.0","deps":[{"name":"dictionary","req":"^1"}],"cksum":"92b15892bfac833b89269c5f1f4c55f75430e407ed5a83b7695f1610c08a48c9"}
-{"name":"json","vers":"2.2.4","deps":[{"name":"dictionary","req":"^1"}],"cksum":"0bdffb250e70366bb165843a4983bfafdb4b42bdeb853cbbc7994787ff48e908"}
-{"name":"json","vers":"2.3.0","deps":[{"name":"dictionary","req":"^1"}],"cksum":"42372ab20cd42fc364b68207c17cf063f267abd3d3ec738315b00b25fb7c690f"}
+{"name":"json","vers":"1.0.3","deps":[{"name":"dictionary","req":"^1"}],"cksum":"sha256-bfa82d85e9964ac5fd9dbb014319b84eed127b93fca5495fab0256ce22b28b38"}
+{"name":"json","vers":"2.0.1","deps":[{"name":"dictionary","req":"^1"}],"cksum":"sha256-88fe488b3062b8c734923afa76dbf6628044ea0bc9bb460b4a9b2e2dd514f28e"}
+{"name":"json","vers":"2.1.0","deps":[{"name":"dictionary","req":"^1"}],"cksum":"sha256-c00e834ea96c4a6968d167b6616b2fa44a13fb672ff690b60a13326ca18de711"}
+{"name":"json","vers":"2.2.4","deps":[{"name":"dictionary","req":"^1"}],"cksum":"sha256-d788c54fff7e78fe95ced0684ebda35a17150751d9f629c45d2e705d6d9b6a62"}
+{"name":"json","vers":"2.3.0","deps":[{"name":"dictionary","req":"^1"}],"cksum":"sha256-3c2760ce2940dd19c16542cead792e0d05e58566155b1fbc72d445fe50a36799"}

@@ -1,5 +1,5 @@
-{"name":"dictionary","vers":"1.0.0","deps":[],"cksum":"f0336ad96d53add97d86986b87b1f8f488b4078ce9a6f37d983eb6ce5af7aec6"}
-{"name":"dictionary","vers":"1.1.1","deps":[],"cksum":"dd480763e3fc419de5670eda4da5caf3eedf741558adaab819a6ca12acf6ec7c"}
-{"name":"dictionary","vers":"1.2.0","deps":[],"cksum":"1679ae3efd26d3f934ea81e4e2757ec64b339c89ee40c7ed9fbfff9a6c90295f"}
-{"name":"dictionary","vers":"1.3.0","deps":[],"cksum":"12dc2973ef88cd45ed96a42790654ccf84645d7abc7e9fda579df4d073a31ca4"}
-{"name":"dictionary","vers":"1.4.1","deps":[],"cksum":"8034e569e4efcb7bdb1a0600c0aa2d857147b8be0ccbc6764af065d45e967e46"}
+{"name":"dictionary","vers":"1.0.0","deps":[],"cksum":"sha256-2ee3deae0342d04e1a3863ffddfb21306e75ce044f2ca86752dea6719e7ba230"}
+{"name":"dictionary","vers":"1.1.1","deps":[],"cksum":"sha256-bb5442a06ef94148706291dce53f7310648e54a794b0cdd0624b6ecd0f7b16a8"}
+{"name":"dictionary","vers":"1.2.0","deps":[],"cksum":"sha256-f29e5be79440ccab778e06a8dba233dcd4cd0f5e8520e64a8832e27617b82d04"}
+{"name":"dictionary","vers":"1.3.0","deps":[],"cksum":"sha256-b806ddc68069576e11be3db0c07ba00750d0b8efedcdc93c9973900d617f15e4"}
+{"name":"dictionary","vers":"1.4.1","deps":[],"cksum":"sha256-b241062bcd7ffd68c9063e3980a5df4c6781df29d96763a020d291e52454f6a5"}
