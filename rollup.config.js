@@ -65,6 +65,7 @@ export default [
       plugins: [
         resolve(),
         replace({
+          VERSION: version,
           'DIR-ADDINS': '../addins/build',
           'DIR-RUN-SCRIPTS': '../run-scripts',
           'DIR-NATIVE': '../native/target/debug',
@@ -87,6 +88,7 @@ export default [
       plugins: [
         resolve(),
         replace({
+          VERSION: version,
           'sat-solver': '../sat-solver',
           'DIR-ADDINS': '../../addins/build',
           'DIR-RUN-SCRIPTS': '../../run-scripts',

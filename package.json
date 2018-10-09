@@ -22,7 +22,7 @@
     "build:addins": "cd addins && node ../scripts/build",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
     "build:native": "cd native && cargo build --release",
-    "build:clean": "rimraf dist",
+    "build:clean": "rimraf typings && rimraf lib && rimraf dist",
     "build:zip": "node scripts/zip"
   },
   "pkg": {
