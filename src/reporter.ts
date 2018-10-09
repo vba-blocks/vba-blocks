@@ -105,12 +105,9 @@ export const reporter: Reporter = {
       [1/3] Loading project...`,
 
     'build-target-building': ({ target, project, dependencies }) => dedent`
-      \n[2/3] Building target "${target.type}" for "${project.manifest.name}"
-
+      \n[2/3] Building target "${target.type}" for "${project.manifest.name}"...
       ${
-        dependencies.length
-          ? `Dependencies:\n${dependencies.join('\n')}`
-          : '(no dependencies)'
+        dependencies.length ? `\nDependencies:\n${dependencies.join('\n')}` : ''
       }`,
 
     'build-lockfile-writing': ({ skipped }) => dedent`
@@ -164,7 +161,7 @@ export const reporter: Reporter = {
 
     'manifest-invalid': ({ message }) => dedent`
       vba-blocks.toml is invalid:
-      
+
       ${message}`,
 
     'source-unsupported': ({ type }) => dedent`
@@ -202,7 +199,7 @@ export const reporter: Reporter = {
 
     'build-invalid': ({ message }) => dedent`
       Invalid build:
-      
+
       ${message}`,
 
     'lockfile-write-failed': ({ file }) => dedent`
@@ -264,7 +261,7 @@ export const reporter: Reporter = {
     'new-target-required': _ => dedent`
       .TYPE, --target, or --from is required for vba-blocks projects.
       (e.g. vba-blocks new project.name.TYPE)
-      
+
       Try \`vba-blocks new --help\` for more information.`,
 
     'new-dir-exists': ({ name, dir }) => dedent`
