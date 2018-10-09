@@ -66,12 +66,21 @@ main()
   .catch(handleError);
 
 async function main() {
-  const [command] = args._;
+  let [command] = args._;
 
-  if (!command) {
-    if (args.version) console.log(version);
-    else console.log(help);
+  if (!command && args.version) {
+    console.log(version);
     return;
+  }
+  if (!command && args.help) {
+    console.log(help);
+    return;
+  }
+
+  // For double-click / direct run of vba-blocks show interactive setup
+  // (desired is double-click = setup, run = help, but no good way to distinguish)
+  if (!command) {
+    command = 'setup';
   }
 
   if (!commands.includes(command)) {

@@ -1,4 +1,6 @@
 import { Args } from 'mri';
+import chalk from 'chalk';
+import prompts from 'prompts';
 import dedent from 'dedent';
 import {
   setup,
@@ -7,6 +9,8 @@ import {
   uninstallExcel,
   removeFromPATH
 } from '../actions/setup';
+
+const version = 'VERSION';
 
 const help = dedent`
   Setup vba-blocks add-ins and CLI
@@ -32,10 +36,48 @@ module.exports = async (args: Args) => {
     console.log(help);
     return;
   }
+  const interactive = !without(Object.keys(args), '_').length;
 
-  const install = <string | boolean | undefined>args.install;
-  const uninstall = <string | boolean | undefined>args.uninstall;
-  const add_to_path = <boolean | undefined>args.path;
+  let install, uninstall, add_to_path;
+  if (interactive) {
+    if (!process.stdout.isTTY) {
+      console.log(help);
+      return;
+    }
+
+    console.log();
+    console.log(dedent`
+        ${chalk.bold.white('Welcome to vba-blocks!')}
+
+        This will walkthrough setting up vba-blocks for use.
+        For help on how to use vba-blocks, run "vba-blocks help" in the command-line
+      `);
+    console.log();
+
+    const answers = await prompts([
+      {
+        type: 'confirm',
+        name: 'path',
+        message: 'Add to PATH',
+        initial: true
+      },
+      {
+        type: 'confirm',
+        name: 'excel',
+        message: 'Install Excel Add-in',
+        initial: true
+      }
+    ]);
+    console.log();
+
+    install = answers.excel ? 'excel' : undefined;
+    add_to_path = answers.path || undefined;
+  } else {
+    install = <string | boolean | undefined>args.install;
+    uninstall = <string | boolean | undefined>args.uninstall;
+    add_to_path = <boolean | undefined>args.path;
+  }
+
   const operations = [];
 
   if (install === true) {
@@ -59,11 +101,30 @@ module.exports = async (args: Args) => {
     }
   }
 
-  if (!operations.length) {
+  if (!operations.length && !interactive) {
     console.log('No setup operations found.\n');
     console.log(help);
     return;
   }
 
   await setup(operations);
+
+  if (interactive) {
+    console.log(dedent`
+      ${chalk.greenBright('Ready!')} vba-blocks is ready for usage.
+
+      Try "vba-blocks help" from the command line to get started.
+
+      Press any key to exit`);
+
+    await new Promise(resolve => {
+      process.stdin.setRawMode!(true);
+      process.stdin.resume();
+      process.stdin.on('data', resolve);
+    });
+  }
 };
+
+function without<T>(values: T[], value: T): T[] {
+  return values.filter(item => item !== value);
+}

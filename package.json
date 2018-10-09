@@ -59,6 +59,7 @@
     "logic-solver": "^2.0.1",
     "mri": "^1.1.0",
     "pretty-hrtime": "^1.0.3",
+    "prompts": "^1.1.1",
     "sanitize-filename": "^1.6.1",
     "semver": "^5.4.1",
     "tmp": "^0.0.33",
