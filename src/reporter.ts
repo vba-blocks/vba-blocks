@@ -154,7 +154,7 @@ export const reporter: Reporter = {
     'unknown-command': ({ command }) => dedent`
       Unknown command "${command}".
 
-      Try "vba-blocks --help" for a list of commands.`,
+      Try "vba-blocks help" for a list of commands.`,
 
     'manifest-not-found': ({ dir }) => dedent`
       vba-blocks.toml not found in "${dir}".`,
@@ -256,13 +256,13 @@ export const reporter: Reporter = {
     'new-name-required': _ => dedent`
       "name" is required with vba-blocks new (e.g. vba-blocks new project-name).
 
-      Try \`vba-blocks new --help\` for more information.`,
+      Try \`vba-blocks new help\` for more information.`,
 
     'new-target-required': _ => dedent`
       .TYPE, --target, or --from is required for vba-blocks projects.
       (e.g. vba-blocks new project.name.TYPE)
 
-      Try \`vba-blocks new --help\` for more information.`,
+      Try \`vba-blocks new help\` for more information.`,
 
     'new-dir-exists': ({ name, dir }) => dedent`
       A directory for "${name}" already exists: "${dir}".`,

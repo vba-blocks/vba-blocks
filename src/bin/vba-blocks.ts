@@ -41,12 +41,13 @@ const help = dedent`
     - build         Build project from manifest
     - export        Export src from built target
     - run           Run macro in document / add-in
+    - help          Outputs this message or the help of the given command
 
   Options:
     -h, --help      Output usage information
     -v, --version   Output the version number
 
-  Use "vba-blocks COMMAND --help" for help on specific commands.
+  Use "vba-blocks help COMMAND" for help on specific commands.
   Visit https://vba-blocks.com to learn more about vba-blocks.`;
 
 process.title = 'vba-blocks';
@@ -82,6 +83,18 @@ async function main() {
     }
 
     return;
+  }
+
+  if (command === 'help') {
+    command = args._[1];
+
+    if (!command) {
+      console.log(help);
+      return;
+    }
+
+    args._ = [command];
+    args.help = true;
   }
 
   if (!commands.includes(command)) {
