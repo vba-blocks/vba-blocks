@@ -1,5 +1,5 @@
 import { Target, TargetType } from '../manifest/target';
-import { basename, extname, join, sanitize } from '../utils/path';
+import { basename, extname, join, sanitize, resolve } from '../utils/path';
 import { copy, ensureDir, emptyDir, remove } from '../utils/fs';
 import { exportTo, createDocument } from '../addin';
 import exportTarget, { extractTarget } from './export-target';
@@ -44,7 +44,7 @@ export default async function addTarget(
     // - use name of file for name of target
     // - copy file to build/
     // - run standard export on file
-
+    from = resolve(from);
     name = basename(from, extname(from));
 
     target = project.manifest.target = {
@@ -56,7 +56,7 @@ export default async function addTarget(
 
     await copy(from, join(project.paths.build, target.filename));
     await exportTo(project, target, staging);
-    await exportTarget(target, info, staging);
+    await exportTarget(target, info, staging, { __temp__log_patch });
   } else {
     // For standard add-target, don't want to remove any existing src
     // - create blank document

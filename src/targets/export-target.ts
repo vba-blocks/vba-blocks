@@ -16,6 +16,10 @@ import { exportTargetNotFound } from '../errors';
 
 const IS_VBA = /vba.*\.bin/gi;
 
+export interface ExportOptions {
+  __temp__log_patch?: boolean;
+}
+
 /**
  * Export target (with staging directory)
  *
@@ -27,9 +31,11 @@ const IS_VBA = /vba.*\.bin/gi;
 export default async function exportTarget(
   target: Target,
   info: ProjectInfo,
-  staging: string
+  staging: string,
+  options: ExportOptions = {}
 ) {
   const { project, dependencies } = info;
+  const { __temp__log_patch = true } = options;
 
   // Extract target to staging
   let extracted: string;
@@ -46,7 +52,9 @@ export default async function exportTarget(
     project_build_graph,
     transformed_build_graph
   );
-  await applyChangeset(project, changeset);
+  if (__temp__log_patch) {
+    await applyChangeset(project, changeset);
+  }
 
   // Move target to dest
   if (!target.blank) {
