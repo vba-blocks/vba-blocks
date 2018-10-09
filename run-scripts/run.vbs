@@ -73,7 +73,7 @@ Class Excel
 
     ' Check add-ins first
     ' C:/.../vba-blocks.xlam -> index = vba-blocks
-    Set Workbook = App.AddIns2(GetFileName(Path))
+    Set Workbook = App.AddIns(GetFileName(Path))
     If Err.Number = 0 Then
       If Workbook.IsOpen Then
         WorkbookWasOpen = True
