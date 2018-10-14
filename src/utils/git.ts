@@ -1,27 +1,18 @@
-import { join, dirname } from './path';
-import { IGitResult, GitProcess } from 'dugite';
-import isPackaged from './is-packaged';
+import { join } from './path';
+import * as fs from 'fs';
+import * as git from 'isomorphic-git';
 
-if (isPackaged()) {
-  // For packaged, git is included with .exe (not bundled)
-  // Pass to dugite with environment variable
-  process.env.LOCAL_GIT_DIRECTORY = join(dirname(process.execPath), '../git');
+git.plugins.set('fs', fs);
+
+export async function clone(remote: string, name: string, cwd: string) {
+  const dir = join(cwd, name);
+  await git.clone({ dir, url: remote, depth: 1 });
 }
 
-export interface ExecResult extends IGitResult {}
-
-export async function clone(
-  remote: string,
-  name: string,
-  cwd: string
-): Promise<ExecResult> {
-  return GitProcess.exec(['clone', '--depth', '1', remote, name], cwd);
+export async function pull(local: string) {
+  await git.pull({ dir: local });
 }
 
-export async function pull(local: string): Promise<ExecResult> {
-  return GitProcess.exec(['pull'], local);
-}
-
-export async function init(dir?: string): Promise<ExecResult> {
-  return GitProcess.exec(['init'], dir || process.cwd());
+export async function init(dir: string) {
+  await git.init({ dir });
 }

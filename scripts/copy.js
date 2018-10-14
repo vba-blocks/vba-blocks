@@ -8,11 +8,6 @@ main().catch(err => {
 
 async function main() {
   await copy(
-    join(resolveModule('dugite'), 'git'),
-    join(__dirname, '../dist/unpacked/git')
-  );
-
-  await copy(
     join(__dirname, '../run-scripts'),
     join(__dirname, '../dist/unpacked/run-scripts')
   );
