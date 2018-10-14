@@ -1,13 +1,11 @@
 /typings
-lib
-dist
-tests/__fixtures__/project/build
-tests/__fixtures__/filesystem.ts
-tests/.tmp
-addins/build
+/lib
+/dist
+/tests/.tmp
+/addins/build
 native/target
-native/index.node
-native/artifacts.json
+/installer/vba-blocks.wixobj
+/installer/vba-blocks.wixpdb
 
 # Ignore temporary Excel files
 */~$*

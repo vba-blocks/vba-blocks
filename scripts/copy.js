@@ -26,13 +26,6 @@ async function main() {
       }
     }
   );
-
-  if (process.platform === 'win32') {
-    await copy(
-      join(__dirname, '../native/target/release/vba-blocks-native.exe'),
-      join(__dirname, '../dist/unpacked/native/vba-blocks-native.exe')
-    );
-  }
 }
 
 function resolveModule(name) {
