@@ -15,7 +15,8 @@ import { updatingProject } from '../messages';
 
 export default async function applyChangeset(
   project: Project,
-  changeset: Changeset
+  changeset: Changeset,
+  options: { __temp__log_patch: boolean } = { __temp__log_patch: true }
 ) {
   const progress = env.reporter.progress(updatingProject());
   const start = progress.start;
@@ -50,12 +51,16 @@ export default async function applyChangeset(
     { progress }
   );
 
-  await updateManifest(project, changeset);
+  await updateManifest(project, changeset, options);
 
   done();
 }
 
-async function updateManifest(project: Project, changeset: Changeset) {
+async function updateManifest(
+  project: Project,
+  changeset: Changeset,
+  options: { __temp__log_patch: boolean } = { __temp__log_patch: true }
+) {
   const changes: string[] = [];
   for (const component of changeset.components.added) {
     const source: Source = {
@@ -73,7 +78,9 @@ async function updateManifest(project: Project, changeset: Changeset) {
     changes.push(removeSource(project.manifest, component.name));
   }
 
-  applyChanges(changes);
+  if (options.__temp__log_patch) {
+    applyChanges(changes);
+  }
 }
 
 async function writeComponent(path: string, component: Component) {
