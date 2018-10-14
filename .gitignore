@@ -3,9 +3,9 @@
 /dist
 /tests/.tmp
 /addins/build
-native/target
 /installer/vba-blocks.wixobj
 /installer/vba-blocks.wixpdb
+/installer/actions/target
 
 # Ignore temporary Excel files
 */~$*
