@@ -48,7 +48,6 @@ export default async function run(
     ? `cscript //Nologo "${script}" ${parts.map(part => `"${part}"`).join(' ')}`
     : `osascript '${script}' ${parts.map(part => `'${part}'`).join(' ')}`;
 
-  debug('Run:');
   debug('params:', { application, file, macro, arg });
   debug('command:', command);
 
