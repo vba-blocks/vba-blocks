@@ -2,6 +2,7 @@ const { join } = require('path');
 const { createWriteStream } = require('fs');
 const { create: createArchive } = require('archiver');
 const { version } = require('../package.json');
+const is_windows = process.platform === 'win32';
 
 main().catch(err => {
   console.error(err);
@@ -9,10 +10,11 @@ main().catch(err => {
 });
 
 async function main() {
+  if (!is_windows) return;
+
   const dist = join(__dirname, '../dist');
   const unpacked = join(dist, 'unpacked');
-  const platform = process.platform === 'win32' ? 'win-x86' : 'mac';
-  const file = join(dist, `vba-blocks-v${version}-${platform}.zip`);
+  const file = join(dist, `vba-blocks-v${version}.zip`);
 
   return new Promise((resolve, reject) => {
     try {

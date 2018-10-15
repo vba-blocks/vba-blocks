@@ -1,13 +1,10 @@
 /typings
-lib
-dist
-tests/__fixtures__/project/build
-tests/__fixtures__/filesystem.ts
-tests/.tmp
-addins/build
-native/target
-native/index.node
-native/artifacts.json
+/lib
+/dist
+/tests/.tmp
+/addins/build
+/installer/vba-blocks.w*
+/installer/actions/target
 
 # Ignore temporary Excel files
 */~$*

@@ -1,13 +1,12 @@
 [package]
-name = "vba-blocks-native"
+name = "vba-blocks-actions"
 version = "0.0.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 license = "MIT"
 
 [dependencies]
-clap = "2.32.0"
-inflections = "1.1.1"
+dirs = "1.0.4"
 itertools = "0.7.8"
-sysinfo = "0.6.0"
+symlink = "0.1.0"
 winapi = { version = "0.3.6", features = ["basetsd", "minwindef", "winuser"] }
 winreg = { version = "0.5.1", features = ["transactions"] }

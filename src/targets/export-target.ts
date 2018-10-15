@@ -52,9 +52,7 @@ export default async function exportTarget(
     project_build_graph,
     transformed_build_graph
   );
-  if (__temp__log_patch) {
-    await applyChangeset(project, changeset);
-  }
+  await applyChangeset(project, changeset, { __temp__log_patch });
 
   // Move target to dest
   if (!target.blank) {

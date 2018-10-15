@@ -8,11 +8,6 @@ main().catch(err => {
 
 async function main() {
   await copy(
-    join(resolveModule('dugite'), 'git'),
-    join(__dirname, '../dist/unpacked/git')
-  );
-
-  await copy(
     join(__dirname, '../run-scripts'),
     join(__dirname, '../dist/unpacked/run-scripts')
   );
@@ -26,13 +21,6 @@ async function main() {
       }
     }
   );
-
-  if (process.platform === 'win32') {
-    await copy(
-      join(__dirname, '../native/target/release/vba-blocks-native.exe'),
-      join(__dirname, '../dist/unpacked/native/vba-blocks-native.exe')
-    );
-  }
 }
 
 function resolveModule(name) {

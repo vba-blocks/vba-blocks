@@ -1,20 +1,10 @@
-use inflections::Inflect;
 use itertools::Itertools;
-use std::ffi::CString;
-use std::io;
 use std::path::Path;
-use winapi::shared::basetsd::PDWORD_PTR;
-use winapi::shared::minwindef::{DWORD, LPARAM, PDWORD, UINT, WPARAM};
-use winapi::um::winuser::{
-    SendMessageTimeoutA, HWND_BROADCAST, SMTO_ABORTIFHUNG, WM_SETTINGCHANGE,
-};
 use winreg::enums::*;
 use winreg::transaction::Transaction;
 use winreg::RegKey;
 
 pub fn add_to_open(application: &str, filename: &str) {
-    let application = application.to_title_case();
-
     let options = open_application_key(&application)
         .expect("Could not find Office application in registry")
         .open_subkey_with_flags("Options", KEY_ALL_ACCESS)
@@ -48,7 +38,6 @@ pub fn add_to_open(application: &str, filename: &str) {
 }
 
 pub fn remove_from_open(application: &str, filename: &str) {
-    let application = application.to_title_case();
     let t = Transaction::new().expect("Failed to start transaction");
 
     let options = open_application_key(&application)
@@ -97,8 +86,6 @@ pub fn remove_from_open(application: &str, filename: &str) {
 }
 
 pub fn enable_vbom(application: &str) {
-    let application = application.to_title_case();
-
     let security = open_application_key(&application)
         .expect("Could not find Office application in registry")
         .open_subkey_with_flags("Security", KEY_ALL_ACCESS)
@@ -108,91 +95,6 @@ pub fn enable_vbom(application: &str) {
     security
         .set_value("AccessVBOM", &1u32)
         .expect("Could not set AccessVBOM");
-}
-
-pub fn add_to_path(path: &str) {
-    let environment = RegKey::predef(HKEY_CURRENT_USER)
-        .open_subkey_with_flags("Environment", KEY_ALL_ACCESS)
-        .expect("Count not open Environment");
-
-    let path_value: String = environment
-        .get_value("Path")
-        .expect("Could not get Path from registry");
-
-    let mut values: Vec<&str> = path_value
-        .split(";")
-        .filter(|value| value.len() > 0)
-        .collect();
-
-    for value in values.iter() {
-        if &path == value {
-            println!("Existing value in PATH: {}", value);
-            return;
-        }
-    }
-
-    values.push(&path);
-    let result = values.join(";");
-
-    println!("Adding \"{}\" to PATH = {}", path, result);
-    environment
-        .set_value("Path", &result)
-        .expect("Could not set Path in registry");
-
-    broadcast_environment_change().expect("Failed to notify environment");
-}
-
-pub fn remove_from_path(path: &str) {
-    let environment = RegKey::predef(HKEY_CURRENT_USER)
-        .open_subkey_with_flags("Environment", KEY_ALL_ACCESS)
-        .expect("Could not open Environment");
-
-    let path_value: String = environment
-        .get_value("Path")
-        .expect("Could not get Path from registry");
-
-    let values: Vec<&str> = path_value
-        .split(";")
-        .filter(|value| value.len() > 0)
-        .collect();
-
-    let existing = values.len();
-    let filtered: Vec<String> = values
-        .iter()
-        .map(|value| value.to_string())
-        .filter(|value| &path != value)
-        .collect();
-
-    if filtered.len() == existing {
-        println!("\"{}\" not found in PATH", path);
-        return;
-    }
-
-    println!("Removed \"{}\" from PATH = {}", path, filtered.join(";"));
-    environment
-        .set_value("Path", &(filtered.join(";")))
-        .expect("Failed to remove value from Path");
-    broadcast_environment_change().expect("Failed to notify environment");
-}
-
-fn broadcast_environment_change() -> Result<(), io::Error> {
-    match unsafe {
-        let result: DWORD = 0;
-
-        SendMessageTimeoutA(
-            HWND_BROADCAST,
-            WM_SETTINGCHANGE,
-            0 as WPARAM,
-            CString::new("Environment").unwrap().as_ptr() as LPARAM,
-            SMTO_ABORTIFHUNG,
-            5000 as UINT,
-            (result as PDWORD) as PDWORD_PTR,
-        );
-        result
-    } {
-        0 => Ok(()),
-        err => Err(io::Error::from_raw_os_error(err as i32)),
-    }
 }
 
 fn get_index(name: &str) -> i32 {
@@ -212,6 +114,12 @@ fn get_reg_string(value: &str) -> String {
 }
 
 fn open_application_key(application: &str) -> Result<RegKey, &'static str> {
+    // TODO registry keys are set on HKCU, which is probably
+    // unexpected/incompatible with msi install for all users (likely HKLM is expected)
+    //
+    // BUT this is where Microsoft looks for OPEN and VBOM
+    //
+    // -> Look into setting HKCU with WiX
     let office = RegKey::predef(HKEY_CURRENT_USER)
         .open_subkey("Software\\Microsoft\\Office")
         .or_else(|_| Err("Failed to find Office in registry"))?;
