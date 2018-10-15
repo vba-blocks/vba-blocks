@@ -6,7 +6,7 @@ This repository contains the CLI, Office Add-ins, and run scripts for working wi
 
 ## Installation
 
-1. Download the [latest release](https://github.com/vba-blocks/vba-blocks/releases) for your platform (Windows or Mac)
+1. Download and install the [latest release](https://github.com/vba-blocks/vba-blocks/releases) for your platform (Windows or Mac)
 2. :rocket: You're ready to go!
 
 ## Usage
