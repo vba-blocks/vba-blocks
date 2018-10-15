@@ -1,18 +1,22 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-  <Product Name='vba-blocks 0.1.0' Manufacturer='vba-blocks' Id='2e2ded73-a405-44c9-a59d-f2696438e5a3' UpgradeCode='c974b403-45aa-4a15-8875-3775096838db' Language='1033' Codepage='1252' Version='0.1.0'>
-    <Package Id='*' Keywords='Installer' Description="vba-blocks 0.1.0 Installer" Manufacturer='vba-blocks' InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
+  <Product Name='vba-blocks {{version}}' Manufacturer='vba-blocks' Id='2e2ded73-a405-44c9-a59d-f2696438e5a3' UpgradeCode='c974b403-45aa-4a15-8875-3775096838db' Language='1033' Codepage='1252' Version='{{version}}'>
+    <Package Id='*' Keywords='Installer' Description="vba-blocks {{version}} Installer" Manufacturer='vba-blocks' InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
     <Media Id="1" Cabinet="contents.cab" EmbedCab="yes" CompressionLevel="high" />
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="ROOT" Name="vba-blocks">
+        <Directory Id="INSTALLDIR" Name="vba-blocks">
           <Directory Id="BIN" Name="bin" />
           <Directory Id="ADDINS" Name="addins" />
           <Directory Id="RUNSCRIPTS" Name="run-scripts" />
         </Directory>
       </Directory>
+
+      <Component Id="Path" Guid="98c5612c-202a-4775-b4db-3f4047e7b328">
+        <Environment Id="PATH" Name="PATH" Value="[BIN]" Permanent="no" Part="last" Action="set" System="yes" />
+      </Component>
     </Directory>
 
     <DirectoryRef Id="BIN">
@@ -37,6 +41,16 @@
       <ComponentRef Id="vbablocks.exe" />
       <ComponentRef Id="vbablocks.xlam" />
       <ComponentRef Id="run.vbs" />
+      <ComponentRef Id="Path" />
     </Feature>
+
+    <Binary Id='ActionsExe' SourceFile='actions/target/release/vba-blocks-actions.exe' />
+    <CustomAction Id='InstallAddins' BinaryKey='ActionsExe' ExeCommand='--install "[INSTALLDIR]\"' />
+    <CustomAction Id='UninstallAddins' BinaryKey='ActionsExe' ExeCommand='--uninstall' />
+
+    <InstallExecuteSequence>
+      <Custom Action='InstallAddins' Before='InstallFinalize'>NOT Installed</Custom>
+      <Custom Action='UninstallAddins' Before='InstallAddins'>Installed AND NOT UPGRADINGPRODUCTCODE</Custom>
+    </InstallExecuteSequence>
   </Product>
 </Wix>

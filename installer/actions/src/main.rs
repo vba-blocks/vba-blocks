@@ -1,56 +1,52 @@
-extern crate clap;
-extern crate inflections;
+extern crate dirs;
 extern crate itertools;
-extern crate sysinfo;
+extern crate symlink;
 extern crate winapi;
 extern crate winreg;
 
-mod process_list;
 mod registry;
 
-use clap::{App, SubCommand};
+use std::path::Path;
+use std::fs::{remove_file, read_link};
+use std::env;
+use symlink::symlink_file;
 
 fn main() {
-    let matches = App::new("vba-blocks-native")
-        .version("0.0.0")
-        .subcommand(SubCommand::with_name("get-processes"))
-        .subcommand(SubCommand::with_name("add-to-open")
-            .args_from_usage("[application] 'Office application name'
-                              [filename]    'Add-in filename'"))
-        .subcommand(SubCommand::with_name("remove-from-open")
-            .args_from_usage("[application] 'Office application name'
-                              [filename]    'Add-in filename'"))
-        .subcommand(SubCommand::with_name("enable-vbom")
-            .args_from_usage("[application] 'Office application name'"))
-        .subcommand(SubCommand::with_name("add-to-path")
-            .args_from_usage("[path]"))
-        .subcommand(SubCommand::with_name("remove-from-path")
-            .args_from_usage("[path]"))
-        .get_matches();
+    let args: Vec<String> = env::args().collect();
+    let addins_dir = Path::new(&dirs::home_dir().expect("Couldn't find homedir"))
+        .join("AppData").join("Roaming").join("Microsoft").join("Addins");
 
-    if let Some(_) = matches.subcommand_matches("get-processes") {
-        process_list::get_processes();
-    } else if let Some(matches) = matches.subcommand_matches("add-to-open") {
-        let application = matches.value_of("application").expect("application is required");
-        let filename = matches.value_of("filename").expect("filename is required");
+    if args[1] == "--install" {
+        let install_dir = Path::new(&args[2]);
 
-        registry::add_to_open(application, filename);
-    } else if let Some(matches) = matches.subcommand_matches("remove-from-open") {
-        let application = matches.value_of("application").expect("application is required");
-        let filename = matches.value_of("filename").expect("filename is required");
+        // Excel
+        ensure_file_symlink(
+            install_dir.join("addins").join("vba-blocks.xlam").as_path(),
+            addins_dir.join("vba-blocks.xlam").as_path()
+        );
+        registry::add_to_open("Excel", "vba-blocks.xlam");
+        registry::enable_vbom("Excel");
+    } else {
+        registry::remove_from_open("Excel", "vba-blocks.xlam");
+        remove_symlink(addins_dir.join("vba-blocks.xlam").as_path());
+    }
+}
 
-        registry::remove_from_open(application, filename);
-    } else if let Some(matches) = matches.subcommand_matches("enable-vbom") {
-        let application = matches.value_of("application").expect("application is required");
+fn ensure_file_symlink(target: &Path, path: &Path) {
+    remove_symlink(path);
+    symlink_file(target, path).expect("Failed to create symlink to add-in");
+}
 
-        registry::enable_vbom(application);
-    } else if let Some(matches) = matches.subcommand_matches("add-to-path") {
-        let path = matches.value_of("path").expect("path is required");
+fn remove_symlink(path: &Path) {
+    println!("Path exists? {:?} {}", path, path.exists());
+    if path.exists() || symlink_exists(path) {
+        remove_file(path).expect("Failed to remove symlink to add-in");
+    }
+}
 
-        registry::add_to_path(path);
-    } else if let Some(matches) = matches.subcommand_matches("remove-from-path") {
-        let path = matches.value_of("path").expect("path is required");
-
-        registry::remove_from_path(path);
+fn symlink_exists(path: &Path) -> bool {
+    match read_link(path) {
+        Ok(_) => true,
+        Err(_) => false
     }
 }

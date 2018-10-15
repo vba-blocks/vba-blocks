@@ -3,8 +3,7 @@
 /dist
 /tests/.tmp
 /addins/build
-/installer/vba-blocks.wixobj
-/installer/vba-blocks.wixpdb
+/installer/vba-blocks.w*
 /installer/actions/target
 
 # Ignore temporary Excel files
