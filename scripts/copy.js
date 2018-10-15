@@ -9,7 +9,14 @@ main().catch(err => {
 async function main() {
   await copy(
     join(__dirname, '../run-scripts'),
-    join(__dirname, '../dist/unpacked/run-scripts')
+    join(__dirname, '../dist/unpacked/run-scripts'),
+    {
+      filter(src) {
+        return is_windows
+          ? !src.endsWith('.applescript')
+          : !src.endsWith('.vbs');
+      }
+    }
   );
 
   await copy(
@@ -21,9 +28,4 @@ async function main() {
       }
     }
   );
-}
-
-function resolveModule(name) {
-  const [root] = require.resolve(name).split('node_modules', 1);
-  return join(root, 'node_modules', name);
 }
