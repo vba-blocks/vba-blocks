@@ -7,9 +7,7 @@ This repository contains the CLI, Office Add-ins, and run scripts for working wi
 ## Installation
 
 1. Download the [latest release](https://github.com/vba-blocks/vba-blocks/releases) for your platform (Windows or Mac)
-2. Unzip the `.vba-blocks` folder into your user directory (e.g. `C:/Users/YOUR-NAME` on Windows)
-3. TODO Double-click the extracted `.vba-blocks/bin/vba-blocks` to setup vba-blocks
-4. :rocket: You're ready to go!
+2. :rocket: You're ready to go!
 
 ## Usage
 
