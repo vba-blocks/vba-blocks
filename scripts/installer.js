@@ -53,6 +53,14 @@ async function app() {
   );
   await copy(join(__dirname, '../installer/vba-blocks'), script);
   await chmod(script, '555');
+
+  const install_script = join(
+    __dirname,
+    '../installer/Install vba-blocks.applescript'
+  );
+  const dest = join(__dirname, '../dist/Install vba-blocks.app');
+
+  await exec(`osacompile -o '${dest}' '${install_script}'`);
 }
 
 async function dmg() {
@@ -63,8 +71,20 @@ async function dmg() {
   const specification = {
     title,
     contents: [
-      { x: 448, y: 344, type: 'link', path: '/Applications' },
-      { x: 192, y: 344, type: 'file', path: 'vba-blocks.app' }
+      {
+        x: 192,
+        y: 344,
+        type: 'file',
+        path: 'vba-blocks.app'
+      },
+      { x: 292, y: 344, type: 'file', path: 'Install vba-blocks.app' },
+      {
+        x: 0,
+        y: 0,
+        type: 'file',
+        path: join(__dirname, '../installer/Install vba-blocks.applescript'),
+        name: 'Install vba-blocks.applescript'
+      }
     ]
   };
 
