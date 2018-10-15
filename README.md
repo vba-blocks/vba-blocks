@@ -99,7 +99,6 @@ Howdy!
 2. Install [node](https://www.nodejs.com/) v8.11.4 or later
 3. Install [yarn](https://www.yarnpkg.com/) v1.9.4 or later
 4. Install node-gyp dependencies for [Mac](https://github.com/nodejs/node-gyp#on-macos) or [Windows](https://github.com/nodejs/node-gyp#on-windows)
-5. Install [Rust](https://www.rust-lang.org/en-US/) (via [rustup](https://rustup.rs/)). For Windows, use the i686 toolchain with `rustup default stable-i686`
 
 ### Build
 
