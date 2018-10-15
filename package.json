@@ -26,7 +26,8 @@
     "build:clean": "rimraf typings && rimraf lib && rimraf dist/unpacked && rimraf addins/build",
     "build:actions": "cd installer/actions && cargo build --release",
     "package:zip": "node scripts/zip",
-    "package:win": "yarn build:actions && node scripts/installer"
+    "package:win": "yarn build:actions && node scripts/installer",
+    "package:mac": "node scripts/installer"
   },
   "pkg": {
     "scripts": [
@@ -76,6 +77,7 @@
     "@types/semver": "^5.4.0",
     "@types/tar": "^4.0.0",
     "@types/tmp": "^0.0.33",
+    "appdmg": "^0.5.2",
     "jest": "^23.1.0",
     "mustache": "^3.0.0",
     "npm-run-all": "^4.1.2",

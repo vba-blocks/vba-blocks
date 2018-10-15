@@ -1,5 +1,6 @@
 const { join } = require('path');
 const { copy } = require('fs-extra');
+const is_windows = process.platform === 'win32';
 
 main().catch(err => {
   console.error(err);
