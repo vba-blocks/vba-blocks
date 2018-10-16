@@ -2,7 +2,7 @@
 
 BASE_DIR=$(dirname "$0")"/../.."
 INSTALLER_DIR=$BASE_DIR"/.."
-SRC=$INSTALLER_DIR"/vba-blocks.app"
+SRC=$INSTALLER_DIR"/.vba-blocks.app"
 APP="/Applications/vba-blocks.app"
 
 # Remove existing vba-blocks.app

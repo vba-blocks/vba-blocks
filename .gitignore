@@ -8,7 +8,7 @@
 /installer/Install vba-blocks.app
 
 # Ignore temporary Excel files
-*/~$*
+**/~$*
 .backup
 
 # OS and other
