@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-BASE_DIR=$(dirname "$0")
-SRC=$BASE_DIR"/../dist/vba-blocks.app"
+BASE_DIR=$(dirname "$0")"/../.."
+INSTALLER_DIR=$BASE_DIR"/.."
+SRC=$INSTALLER_DIR"/vba-blocks.app"
 APP="/Applications/vba-blocks.app"
 
 # Remove existing vba-blocks.app
@@ -38,5 +39,7 @@ if ! [ -d $CACHE ]; then
   mkdir "$CACHE"
 fi
 
-echo $ADDINS_SRC" -> "$ADDINS_LINK
+echo "Linking "$ADDINS_SRC" to "$ADDINS_LINK
 ln -sf "$ADDINS_SRC" "$ADDINS_LINK"
+
+open $APP

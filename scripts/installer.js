@@ -43,24 +43,28 @@ async function wix() {
 }
 
 async function app() {
-  const script = join(
-    __dirname,
-    '../dist/vba-blocks.app/Contents/MacOS/vba-blocks'
-  );
+  // 1. Create .app from applescript
+  const script = join(__dirname, '../installer/vba-blocks.applescript');
+  const app = join(__dirname, '../dist/vba-blocks.app');
+  await remove(app);
+  await exec(`osacompile -o "${app}" "${script}"`);
+
+  // 2. Copy add-ins, bin, etc. to .app
   await copy(
     join(__dirname, '../dist/unpacked'),
     join(__dirname, '../dist/vba-blocks.app')
   );
-  await copy(join(__dirname, '../installer/vba-blocks'), script);
-  await chmod(script, '555');
 
+  // 3. Create .app for installer
   const install_script = join(
     __dirname,
-    '../installer/Install vba-blocks.applescript'
+    '../dist/Install vba-blocks.app/Contents/MacOS/Install vba-blocks'
   );
-  const dest = join(__dirname, '../dist/Install vba-blocks.app');
-
-  await exec(`osacompile -o '${dest}' '${install_script}'`);
+  await copy(
+    join(__dirname, '../installer/Install vba-blocks.sh'),
+    install_script
+  );
+  await chmod(install_script, '555');
 }
 
 async function dmg() {
@@ -71,20 +75,8 @@ async function dmg() {
   const specification = {
     title,
     contents: [
-      {
-        x: 192,
-        y: 344,
-        type: 'file',
-        path: 'vba-blocks.app'
-      },
-      { x: 292, y: 344, type: 'file', path: 'Install vba-blocks.app' },
-      {
-        x: 0,
-        y: 0,
-        type: 'file',
-        path: join(__dirname, '../installer/Install vba-blocks.applescript'),
-        name: 'Install vba-blocks.applescript'
-      }
+      { x: 192, y: 344, type: 'file', path: 'vba-blocks.app' },
+      { x: 292, y: 344, type: 'file', path: 'Install vba-blocks.app' }
     ]
   };
 
