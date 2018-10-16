@@ -34,8 +34,8 @@ async function wix() {
     'utf8'
   );
 
-  await exec('..\\vendor\\wix\\candle vba-blocks.wxs', { cwd });
-  await exec('..\\vendor\\wix\\light vba-blocks.wixobj', { cwd });
+  await exec('vendor\\wix\\candle vba-blocks.wxs', { cwd });
+  await exec('vendor\\wix\\light vba-blocks.wixobj', { cwd });
 
   const dist = join(__dirname, `../dist/vba-blocks-v${version}.msi`);
   await remove(dist);
