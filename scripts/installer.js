@@ -55,7 +55,13 @@ async function app() {
     join(__dirname, '../dist/vba-blocks.app')
   );
 
-  // 3. Create .app for installer
+  // 3. Copy icon into .app
+  await copy(
+    join(__dirname, '../installer/vba-blocks-icon.icns'),
+    join(__dirname, '../dist/vba-blocks.app/Contents/Resources/vba-blocks.icns')
+  );
+
+  // 4. Create .app for installer
   const title = 'Install vba-blocks';
   const install_script = join(
     __dirname,
