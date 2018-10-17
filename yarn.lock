@@ -3988,6 +3988,11 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+rcedit@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/rcedit/-/rcedit-1.1.1.tgz#79321893357e74f79546617d792c572b38d2f7f0"
+  integrity sha512-6NjOhOpkvbc/gpMEfk2hpXuWyHfbLFN8as5jx3jf4bhELvouRoYvc8d/W3NVVPwEBF1ICfbpwp1oRm8OJ2WDWw==
+
 read-pkg-up@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/read-pkg-up/-/read-pkg-up-1.0.1.tgz#9d63c13276c065918d57f002a57f40a1b643fb02"
