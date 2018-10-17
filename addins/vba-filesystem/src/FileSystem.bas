@@ -1,6 +1,6 @@
 Attribute VB_Name = "FileSystem"
 ''
-' VBA-FileSystem v0.0.0
+' VBA-FileSystem v0.1.0
 ' (c) Tim Hall - https://github.com/VBA-tools/VBA-FileSystem
 '
 ' FileSystem helpers for VBA

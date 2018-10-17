@@ -1,6 +1,6 @@
 [project]
 name = "vba-blocks"
-version = "0.0.0"
+version = "0.1.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
 target = { type = "xlam", path = "targets/xlam" }
 
