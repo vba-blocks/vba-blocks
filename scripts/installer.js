@@ -3,13 +3,14 @@ const { join } = require('path');
 const exec = promisify(require('child_process').exec);
 const { readFile, writeFile, move, remove, copy, chmod } = require('fs-extra');
 const { render } = require('mustache');
+const rcedit = require('rcedit');
 
 const { version } = require('../package.json');
 const is_windows = process.platform === 'win32';
 const fileicon = join(__dirname, '../node_modules/.bin/fileicon');
 const icons = {
-  mac: join(__dirname, '../installer/vba-blocks-icon.icns'),
-  windows: join(__dirname, '../installer/vba-blocks-icon.ico')
+  mac: join(__dirname, '../installer/icons/vba-blocks.icns'),
+  windows: join(__dirname, '../installer/icons/vba-blocks.ico')
 };
 
 main().catch(err => {
