@@ -11,7 +11,6 @@ export interface Env {
 
   addins: string;
   scripts: string;
-  native: string;
   bin: string;
   cache: string;
   registry: string;
@@ -35,9 +34,6 @@ const env: Env = {
   scripts: isPackaged()
     ? join(process.execPath, '../../run-scripts')
     : join(__dirname, 'DIR-RUN-SCRIPTS'),
-  native: isPackaged()
-    ? join(process.execPath, '../../native')
-    : join(__dirname, 'DIR-NATIVE'),
   bin: isPackaged()
     ? join(process.execPath, '../../bin')
     : join(__dirname, 'DIR-BIN'),
