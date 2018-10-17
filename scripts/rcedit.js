@@ -1,6 +1,8 @@
 const { promisify } = require('util');
 const { join } = require('path');
+const { pathExists } = require('fs-extra');
 const rcedit = promisify(require('rcedit'));
+const dedent = require('dedent');
 const { version } = require('../package.json');
 
 main().catch(err => {
@@ -9,7 +11,21 @@ main().catch(err => {
 });
 
 async function main() {
-  const exe = join(__dirname, '../dist/unpacked/bin/vba-blocks.exe');
+  // Issue changing icon on output of pkg
+  // -> change on cached pkg binary
+  const exe = join(__dirname, '../vendor/pkg/v2.5/fetched-v10.4.1-win-x86');
+  if (!(await pathExists(exe))) {
+    console.log(
+      dedent`
+        WARNING Unable to set file information for vba-blocks.exe.
+        Run 'yarn build:pkg:win' or 'yarn build:win' again to apply changes.
+        (If you see this message multiple times, scripts/rcedit.js may need to be updated)
+      `
+    );
+
+    return;
+  }
+
   await rcedit(exe, {
     'version-string': {
       ProductName: 'vba-blocks',

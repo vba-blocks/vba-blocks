@@ -5,7 +5,7 @@
 /addins/build
 /installer/vba-blocks.w*
 /installer/actions/target
-/installer/Install vba-blocks.app
+/vendor/pkg
 
 # Ignore temporary Excel files
 **/~$*
