@@ -60,18 +60,6 @@ async function app() {
     join(__dirname, '../installer/vba-blocks-icon.icns'),
     join(__dirname, '../dist/vba-blocks.app/Contents/Resources/vba-blocks.icns')
   );
-
-  // 4. Create .app for installer
-  const title = 'Install vba-blocks';
-  const install_script = join(
-    __dirname,
-    `../dist/${title}.app/Contents/MacOS/${title}`
-  );
-  await copy(
-    join(__dirname, '../installer/install-vba-blocks.sh'),
-    install_script
-  );
-  await chmod(install_script, '555');
 }
 
 async function dmg() {
@@ -93,19 +81,8 @@ async function dmg() {
     },
     'icon-size': icon_size,
     contents: [
-      {
-        x: 0,
-        y: 0,
-        type: 'file',
-        path: 'vba-blocks.app',
-        name: '.vba-blocks.app'
-      },
-      {
-        x: width / 2 - icon_size,
-        y: height / 2 - icon_size,
-        type: 'file',
-        path: 'Install vba-blocks.app'
-      }
+      { x: 200, y: 250, type: 'file', path: 'vba-blocks.app' },
+      { x: 400, y: 250, type: 'link', path: '/Applications' }
     ]
   };
 
