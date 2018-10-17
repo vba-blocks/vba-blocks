@@ -78,7 +78,7 @@ Once you've completed your edits and are ready to commit your changes, export yo
 ```vb
 ' File: build/example.xlsm
 ' Module: Tests
-Public Function RunTests(Input As Variant) As String
+Public Function RunTests(Value As Variant) As String
   ' (currently, a single Variant input argument is required)
 
   RunTests = "Howdy!"
