@@ -78,7 +78,7 @@ async function pkg() {
   const identifier = 'com.vba-blocks.pkg.app';
   const root = join(__dirname, '../dist/app/');
   const scripts = join(__dirname, '../installer/scripts');
-  const output = join(__dirname, `../dist/vba-blocks ${version}.pkg`);
+  const output = join(__dirname, `../dist/vba-blocks-v${version}.pkg`);
 
   // TODO --sign
   await exec(
