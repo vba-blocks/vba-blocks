@@ -1,7 +1,14 @@
 const { promisify } = require('util');
-const { join } = require('path');
+const { join, dirname } = require('path');
 const exec = promisify(require('child_process').exec);
-const { readFile, writeFile, move, remove, copy } = require('fs-extra');
+const {
+  readFile,
+  writeFile,
+  move,
+  remove,
+  copy,
+  ensureDir
+} = require('fs-extra');
 const { render } = require('mustache');
 
 const { version } = require('../package.json');
@@ -22,7 +29,7 @@ async function main() {
     await wix();
   } else {
     await app();
-    await dmg();
+    await pkg();
   }
 }
 
@@ -54,8 +61,10 @@ async function app() {
 
   // Create .app from applescript
   const script = join(__dirname, '../installer/vba-blocks.applescript');
-  const app = join(__dirname, '../dist/vba-blocks.app');
+  const app = join(__dirname, '../dist/app/vba-blocks.app');
+
   await remove(app);
+  await ensureDir(dirname(app));
   await exec(`osacompile -o "${app}" "${script}"`);
 
   // Copy add-ins, bin, etc. to .app
@@ -65,54 +74,14 @@ async function app() {
   await exec(`"${fileicon}" set "${app}" "${icons.mac}"`);
 }
 
-async function dmg() {
-  const appdmg = require('appdmg');
+async function pkg() {
+  const identifier = 'com.vba-blocks.pkg.app';
+  const root = join(__dirname, '../dist/app/');
+  const scripts = join(__dirname, '../installer/scripts');
+  const output = join(__dirname, `../dist/vba-blocks ${version}.pkg`);
 
-  const title = `vba-blocks ${version} Installer`;
-  const background = join(
-    __dirname,
-    '../installer/backgrounds/vba-blocks-background.png'
+  // TODO --sign
+  await exec(
+    `pkgbuild --identifier ${identifier} --root "${root}" --version ${version} --scripts "${scripts}" --install-location /Applications "${output}"`
   );
-  const dmg = join(__dirname, `../dist/${title}.dmg`);
-  const width = 600;
-  const height = 500;
-  const icon_size = 100;
-
-  const specification = {
-    title,
-    background,
-    window: {
-      size: {
-        width,
-        height
-      }
-    },
-    'icon-size': icon_size,
-    contents: [
-      { x: 190, y: 200, type: 'file', path: 'vba-blocks.app' },
-      { x: 420, y: 200, type: 'link', path: '/Applications' }
-    ]
-  };
-
-  await remove(dmg);
-
-  await new Promise((resolve, reject) => {
-    const processing = appdmg({
-      basepath: join(__dirname, '../dist'),
-      target: dmg,
-      specification
-    });
-
-    processing.on('progress', info => {
-      if (info.type === 'step-begin') {
-        console.log(`DMG: ${info.title}`);
-      }
-    });
-
-    processing.on('finish', resolve);
-    processing.on('error', reject);
-  });
-
-  // Copy icon into dmg
-  await exec(`"${fileicon}" set "${dmg}" "${icons.mac}"`);
 }

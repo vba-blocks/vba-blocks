@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+APP="/Applications/vba-blocks.app"
+
+# Add bin to .profile / .bash_profile
+BIN=$APP"/bin"
+VBA_BLOCKS="export PATH=\"\$PATH:"$BIN"\""
+PROFILE=$HOME"/.profile"
+BASH_PROFILE=$HOME"/.bash_profile"
+
+if ! [ -a $PROFILE ] || ! grep -q $BIN $PROFILE; then
+  echo "Adding "$VBA_BLOCKS" to "$PROFILE
+  echo $VBA_BLOCKS >> "$PROFILE"
+fi
+if [ -a $BAS_PROFILE ] && ! grep -q $BIN $BASH_PROFILE; then
+  echo "Adding "$VBA_BLOCKS" to "$BASH_PROFILE
+  echo $VBA_BLOCKS >> "$BASH_PROFILE"
+fi
+
+# Create accessible add-ins folder
+ADDINS=$APP"/addins/"
+ADDINS_LINK=$HOME"/vba-blocks Add-ins"
+
+echo "Linking "$ADDINS" to "$ADDINS_LINK
+ln -sf "$ADDINS" "$ADDINS_LINK"

@@ -90,7 +90,6 @@
     "typescript": "^3.0.1"
   },
   "optionalDependencies": {
-    "appdmg": "^0.5.2",
     "fileicon": "^0.2.2",
     "rcedit": "^1.1.1"
   }

@@ -4,7 +4,6 @@ import dedent from 'dedent';
 import has from '../utils/has';
 import { CliError, unknownCommand, cleanError } from '../errors';
 import { RunError } from '../utils/run';
-import { install, isInstalled } from '../actions/install';
 
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
@@ -63,20 +62,8 @@ async function main() {
   let [command] = args._;
 
   if (!command) {
-    if (args.version) {
-      console.log(version);
-    } else if (args.help) {
-      console.log(help);
-    } else {
-      if (process.platform === 'darwin' && !(await isInstalled())) {
-        await install();
-        console.log(
-          'Success! vba-blocks is ready, try `vba-blocks help` to get started.\n'
-        );
-      } else {
-        console.log(help);
-      }
-    }
+    if (args.version) console.log(version);
+    else console.log(help);
 
     return;
   }
