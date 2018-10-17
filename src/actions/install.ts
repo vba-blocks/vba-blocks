@@ -1,6 +1,6 @@
 import { homedir } from 'os';
 import { join } from 'path';
-import { readFile, pathExists, writeFile, symlink } from '../utils/fs';
+import { readFile, pathExists, writeFile, remove, symlink } from '../utils/fs';
 import env from '../env';
 
 export async function isInstalled(): Promise<boolean> {
@@ -12,13 +12,17 @@ export async function isInstalled(): Promise<boolean> {
 }
 
 export async function install() {
+  console.log(process.execPath);
+
   const profile = join(homedir(), '.profile');
   const bash_profile = join(homedir(), '.bash_profile');
 
   await addExport(profile);
   if (await pathExists(bash_profile)) await addExport(bash_profile);
 
-  await symlink(env.addins, join(homedir(), 'vba-blocks Add-ins'), 'dir');
+  const addins = join(homedir(), 'vba-blocks Add-ins');
+  await remove(addins);
+  await symlink(env.addins, addins, 'dir');
 }
 
 async function addExport(profile: string) {

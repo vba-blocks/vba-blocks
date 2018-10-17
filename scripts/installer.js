@@ -1,9 +1,8 @@
 const { promisify } = require('util');
 const { join } = require('path');
 const exec = promisify(require('child_process').exec);
-const { readFile, writeFile, move, remove, copy, chmod } = require('fs-extra');
+const { readFile, writeFile, move, remove, copy } = require('fs-extra');
 const { render } = require('mustache');
-const rcedit = require('rcedit');
 
 const { version } = require('../package.json');
 const is_windows = process.platform === 'win32';
@@ -70,6 +69,10 @@ async function dmg() {
   const appdmg = require('appdmg');
 
   const title = `vba-blocks ${version} Installer`;
+  const background = join(
+    __dirname,
+    '../installer/backgrounds/vba-blocks-background.png'
+  );
   const dmg = join(__dirname, `../dist/${title}.dmg`);
   const width = 600;
   const height = 500;
@@ -77,6 +80,7 @@ async function dmg() {
 
   const specification = {
     title,
+    background,
     window: {
       size: {
         width,
@@ -85,8 +89,8 @@ async function dmg() {
     },
     'icon-size': icon_size,
     contents: [
-      { x: 200, y: 250, type: 'file', path: 'vba-blocks.app' },
-      { x: 400, y: 250, type: 'link', path: '/Applications' }
+      { x: 190, y: 200, type: 'file', path: 'vba-blocks.app' },
+      { x: 420, y: 200, type: 'link', path: '/Applications' }
     ]
   };
 
