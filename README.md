@@ -104,4 +104,3 @@ Howdy!
 
 1. Run `yarn`
 2. Run `yarn build:win` (Windows) or `yarn build:mac` (Mac)
-3. Verify build with `dist\unpacked\bin\vba-blocks healthcheck` (Windows) or `dist/unpacked/bin/vba-blocks healthcheck` (Mac). You should see `No issues found.`

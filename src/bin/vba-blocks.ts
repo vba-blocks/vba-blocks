@@ -4,19 +4,12 @@ import dedent from 'dedent';
 import has from '../utils/has';
 import { CliError, unknownCommand, cleanError } from '../errors';
 import { RunError } from '../utils/run';
+import { install, isInstalled } from '../actions/install';
 
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
 
-const commands = [
-  'new',
-  'init',
-  'build',
-  'export',
-  'run',
-  'healthcheck',
-  'setup'
-];
+const commands = ['new', 'init', 'build', 'export', 'run'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -75,19 +68,14 @@ async function main() {
     } else if (args.help) {
       console.log(help);
     } else {
-      console.log(help);
-      console.log();
-
-      console.log(dedent`
-        Run "vba-blocks COMMAND" from the command-line to use vba-blocks.
-
-        Press any key to continue...`);
-
-      await new Promise(resolve => {
-        process.stdin.setRawMode!(true);
-        process.stdin.resume();
-        process.stdin.on('data', resolve);
-      });
+      if (process.platform === 'darwin' && !(await isInstalled())) {
+        await install();
+        console.log(
+          'Success! vba-blocks is ready, try `vba-blocks help` to get started.\n'
+        );
+      } else {
+        console.log(help);
+      }
     }
 
     return;
