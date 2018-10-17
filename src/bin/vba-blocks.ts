@@ -8,7 +8,7 @@ import { RunError } from '../utils/run';
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
 
-const commands = ['new', 'init', 'build', 'export', 'run', 'healthcheck'];
+const commands = ['new', 'init', 'build', 'export', 'run'];
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -62,25 +62,8 @@ async function main() {
   let [command] = args._;
 
   if (!command) {
-    if (args.version) {
-      console.log(version);
-    } else if (args.help) {
-      console.log(help);
-    } else {
-      console.log(help);
-      console.log();
-
-      console.log(dedent`
-        Run "vba-blocks COMMAND" from the command-line to use vba-blocks.
-
-        Press any key to continue...`);
-
-      await new Promise(resolve => {
-        process.stdin.setRawMode!(true);
-        process.stdin.resume();
-        process.stdin.on('data', resolve);
-      });
-    }
+    if (args.version) console.log(version);
+    else console.log(help);
 
     return;
   }

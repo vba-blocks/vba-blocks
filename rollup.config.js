@@ -26,8 +26,7 @@ const bin = {
   [`${src}/bin/vba-blocks-export.js`]: 'lib/bin/vba-blocks-export.js',
   [`${src}/bin/vba-blocks-new.js`]: 'lib/bin/vba-blocks-new.js',
   [`${src}/bin/vba-blocks-init.js`]: 'lib/bin/vba-blocks-init.js',
-  [`${src}/bin/vba-blocks-run.js`]: 'lib/bin/vba-blocks-run.js',
-  [`${src}/bin/vba-blocks-healthcheck.js`]: 'lib/bin/vba-blocks-healthcheck.js'
+  [`${src}/bin/vba-blocks-run.js`]: 'lib/bin/vba-blocks-run.js'
 };
 
 export default [
@@ -45,7 +44,6 @@ export default [
         VERSION: version,
         'DIR-ADDINS': '../../addins/build',
         'DIR-RUN-SCRIPTS': '../../run-scripts',
-        'DIR-NATIVE': '../../native/target/debug',
         'DIR-BIN': '../../dist/unpacked/bin'
       })
     ],
@@ -67,7 +65,6 @@ export default [
           VERSION: version,
           'DIR-ADDINS': '../addins/build',
           'DIR-RUN-SCRIPTS': '../run-scripts',
-          'DIR-NATIVE': '../native/target/debug',
           'DIR-BIN': '../dist/unpacked/bin'
         })
       ],
@@ -91,7 +88,6 @@ export default [
           'sat-solver': '../sat-solver',
           'DIR-ADDINS': '../../addins/build',
           'DIR-RUN-SCRIPTS': '../../run-scripts',
-          'DIR-NATIVE': '../../native/target/debug',
           'DIR-BIN': '../../dist/unpacked/bin'
         })
       ],

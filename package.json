@@ -23,7 +23,7 @@
     "build:copy": "node scripts/copy",
     "build:addins": "cd addins && node ../scripts/build",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
-    "build:clean": "rimraf typings && rimraf lib && rimraf dist/unpacked && rimraf addins/build",
+    "build:clean": "rimraf typings && rimraf lib && rimraf dist && rimraf addins/build",
     "build:actions": "cd installer/actions && cargo build --release",
     "package:zip": "node scripts/zip",
     "package:win": "yarn build:actions && node scripts/installer",
@@ -82,7 +82,6 @@
     "npm-run-all": "^4.1.2",
     "pkg": "^4.3.1",
     "prettier": "^1.6.1",
-    "rcedit": "^1.1.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.63.5",
     "rollup-plugin-node-resolve": "^3.3.0",
@@ -91,6 +90,7 @@
     "typescript": "^3.0.1"
   },
   "optionalDependencies": {
-    "appdmg": "^0.5.2"
+    "fileicon": "^0.2.2",
+    "rcedit": "^1.1.1"
   }
 }

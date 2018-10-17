@@ -20,6 +20,6 @@ async function main() {
     },
     'file-version': version,
     'product-version': version,
-    icon: join(__dirname, '../installer/vba-blocks-icon.ico')
+    icon: join(__dirname, '../installer/icons/vba-blocks.ico')
   });
 }
