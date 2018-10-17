@@ -1,8 +1,6 @@
 # vba-blocks
 
-Coming soon: A package manager for VBA.
-
-This repository contains the CLI, Office Add-ins, and run scripts for working with vba-blocks.
+A package manager and build tool for VBA.
 
 ## Installation
 
