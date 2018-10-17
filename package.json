@@ -23,7 +23,7 @@
     "build:copy": "node scripts/copy",
     "build:addins": "cd addins && node ../scripts/build",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
-    "build:clean": "rimraf typings && rimraf lib && rimraf dist/unpacked && rimraf addins/build",
+    "build:clean": "rimraf typings && rimraf lib && rimraf dist && rimraf addins/build",
     "build:actions": "cd installer/actions && cargo build --release",
     "package:zip": "node scripts/zip",
     "package:win": "yarn build:actions && node scripts/installer",
@@ -91,6 +91,7 @@
     "typescript": "^3.0.1"
   },
   "optionalDependencies": {
-    "appdmg": "^0.5.2"
+    "appdmg": "^0.5.2",
+    "fileicon": "^0.2.2"
   }
 }

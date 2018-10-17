@@ -26,9 +26,7 @@ const bin = {
   [`${src}/bin/vba-blocks-export.js`]: 'lib/bin/vba-blocks-export.js',
   [`${src}/bin/vba-blocks-new.js`]: 'lib/bin/vba-blocks-new.js',
   [`${src}/bin/vba-blocks-init.js`]: 'lib/bin/vba-blocks-init.js',
-  [`${src}/bin/vba-blocks-run.js`]: 'lib/bin/vba-blocks-run.js',
-  [`${src}/bin/vba-blocks-healthcheck.js`]: 'lib/bin/vba-blocks-healthcheck.js',
-  [`${src}/bin/vba-blocks-setup.js`]: 'lib/bin/vba-blocks-setup.js'
+  [`${src}/bin/vba-blocks-run.js`]: 'lib/bin/vba-blocks-run.js'
 };
 
 export default [

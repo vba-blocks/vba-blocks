@@ -1590,6 +1590,11 @@ file-type@^6.1.0:
   resolved "https://registry.yarnpkg.com/file-type/-/file-type-6.2.0.tgz#e50cd75d356ffed4e306dc4f5bcf52a79903a919"
   integrity sha512-YPcTBDV+2Tm0VqjybVd32MHdlEGAtuxS3VAYsumFokDSMG+ROT5wawGlnHDoz7bfMcMDt9hxuXvXwoKUx2fkOg==
 
+fileicon@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/fileicon/-/fileicon-0.2.2.tgz#cf3e03b62518ac59036043e3e391270e5e78edf8"
+  integrity sha512-yD7liEQ5Dh4RGoBGAxF5WnORswd6TRzMYeDTOXXukK/W7qx2NoD3FrTVqOiqR3vcLtIYQ0KB2hZYqaREYOvP6w==
+
 filename-regex@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/filename-regex/-/filename-regex-2.0.1.tgz#c1c4b9bee3e09725ddb106b75c1e301fe2f18b26"

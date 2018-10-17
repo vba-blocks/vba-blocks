@@ -6,6 +6,11 @@ const { render } = require('mustache');
 
 const { version } = require('../package.json');
 const is_windows = process.platform === 'win32';
+const fileicon = join(__dirname, '../node_modules/.bin/fileicon');
+const icons = {
+  mac: join(__dirname, '../installer/vba-blocks-icon.icns'),
+  windows: join(__dirname, '../installer/vba-blocks-icon.ico')
+};
 
 main().catch(err => {
   console.error(err);
@@ -43,30 +48,28 @@ async function wix() {
 }
 
 async function app() {
-  // 1. Create .app from applescript
+  // Add icon to bin/vba-blocks
+  const bin = join(__dirname, '../dist/unpacked/bin/vba-blocks');
+  await exec(`"${fileicon}" set "${bin}" "${icons.mac}"`);
+
+  // Create .app from applescript
   const script = join(__dirname, '../installer/vba-blocks.applescript');
   const app = join(__dirname, '../dist/vba-blocks.app');
   await remove(app);
   await exec(`osacompile -o "${app}" "${script}"`);
 
-  // 2. Copy add-ins, bin, etc. to .app
-  await copy(
-    join(__dirname, '../dist/unpacked'),
-    join(__dirname, '../dist/vba-blocks.app')
-  );
+  // Copy add-ins, bin, etc. to .app
+  await copy(join(__dirname, '../dist/unpacked'), app);
 
-  // 3. Copy icon into .app
-  await copy(
-    join(__dirname, '../installer/vba-blocks-icon.icns'),
-    join(__dirname, '../dist/vba-blocks.app/Contents/Resources/vba-blocks.icns')
-  );
+  // Set icon on .app
+  await exec(`"${fileicon}" set "${app}" "${icons.mac}"`);
 }
 
 async function dmg() {
   const appdmg = require('appdmg');
 
   const title = `vba-blocks ${version} Installer`;
-  const target = join(__dirname, `../dist/${title}.dmg`);
+  const dmg = join(__dirname, `../dist/${title}.dmg`);
   const width = 600;
   const height = 500;
   const icon_size = 100;
@@ -86,12 +89,12 @@ async function dmg() {
     ]
   };
 
-  await remove(target);
+  await remove(dmg);
 
   await new Promise((resolve, reject) => {
     const processing = appdmg({
       basepath: join(__dirname, '../dist'),
-      target,
+      target: dmg,
       specification
     });
 
@@ -104,4 +107,7 @@ async function dmg() {
     processing.on('finish', resolve);
     processing.on('error', reject);
   });
+
+  // Copy icon into dmg
+  await exec(`"${fileicon}" set "${dmg}" "${icons.mac}"`);
 }
