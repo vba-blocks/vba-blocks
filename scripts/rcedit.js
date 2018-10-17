@@ -19,7 +19,7 @@ async function main() {
       OriginalFilename: 'vba-blocks.exe'
     },
     'file-version': version,
-    'product-version': version
-    // icon: 'TODO'
+    'product-version': version,
+    icon: join(__dirname, '../installer/vba-blocks-icon.ico')
   });
 }
