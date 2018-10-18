@@ -52,6 +52,20 @@ async function wix() {
   const dist = join(__dirname, `../dist/vba-blocks-v${version}.msi`);
   await remove(dist);
   await move(join(__dirname, '../installer/vba-blocks.msi'), dist);
+
+  const certificate = process.argv[2];
+  const password = process.argv[3];
+  if (!certificate || !password) {
+    console.log(
+      'WARNING creating unsigned .msi. Use `yarn package:win CERTIFICATE PASSWORD` for code signing'
+    );
+
+    return;
+  }
+
+  await exec(
+    `signtool sign /tr http://timestamp.digicert.com /td sha256 /fd sha256 /f ${certificate} /p ${password} ${dist}`
+  );
 }
 
 async function app() {
