@@ -30,7 +30,7 @@ async function main() {
       archive.pipe(output);
       archive.on('error', reject);
 
-      archive.directory(unpacked, '/.vba-blocks');
+      archive.directory(unpacked, '/');
       archive.finalize();
     } catch (err) {
       reject(err);
