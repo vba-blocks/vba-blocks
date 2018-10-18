@@ -1,13 +1,11 @@
 # vba-blocks
 
-Coming soon: A package manager for VBA.
-
-This repository contains the CLI, Office Add-ins, and run scripts for working with vba-blocks.
+A package manager and build tool for VBA.
 
 ## Installation
 
 1. Download and install the [latest release](https://github.com/vba-blocks/vba-blocks/releases) for your platform (Windows or Mac)
-2. :rocket: You're ready to go!
+2. :rocket: You're ready to go! Open a new command-line session (cmd / terminal) and try `vba-blocks help`
 
 ## Usage
 
@@ -78,7 +76,7 @@ Once you've completed your edits and are ready to commit your changes, export yo
 ```vb
 ' File: build/example.xlsm
 ' Module: Tests
-Public Function RunTests(Input As Variant) As String
+Public Function RunTests(Value As Variant) As String
   ' (currently, a single Variant input argument is required)
 
   RunTests = "Howdy!"
