@@ -80,8 +80,16 @@ async function pkg() {
   const scripts = join(__dirname, '../installer/scripts');
   const output = join(__dirname, `../dist/vba-blocks-v${version}.pkg`);
 
-  // TODO --sign
+  const identity = process.argv[2];
+  if (!identity) {
+    console.log(
+      'WARNING creating unsigned .pkg. Use `yarn package:mac IDENTITY` for code signing'
+    );
+  }
+
   await exec(
-    `pkgbuild --identifier ${identifier} --root "${root}" --version ${version} --scripts "${scripts}" --install-location /Applications "${output}"`
+    `pkgbuild --identifier ${identifier} --root "${root}" --version ${version} --scripts "${scripts}" --install-location /Applications "${output}"${
+      identity ? ` --sign "${identity}"` : ''
+    }`
   );
 }
