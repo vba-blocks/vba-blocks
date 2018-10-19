@@ -12,7 +12,7 @@ export { default as run } from './utils/run';
 export { addins } from './addin';
 
 export { default as build } from './actions/build';
-export { default as export } from './actions/export-project';
+export { default as exportProject } from './actions/export-project';
 
 export { checksum } from './utils/fs';
 export { parseManifest } from './manifest';
