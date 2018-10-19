@@ -142,14 +142,14 @@ End Sub
 ' Excel
 ' --------------------------------------------- '
 
-Private Function OpenWorkbook(Path As String, ByRef WB As Object) As Boolean
+Private Function OpenWorkbook(Path As String, ByRef Wb As Object) As Boolean
     On Error Resume Next
-    Set WB = Application.Workbooks(FileSystem.GetBase(Path))
+    Set Wb = Application.Workbooks(FileSystem.GetBase(Path))
 
-    If WB Is Nothing Or Err.Number <> 0 Then
+    If Wb Is Nothing Or Err.Number <> 0 Then
         Err.Clear
 
-        Set WB = Application.Workbooks.Open(Path)
+        Set Wb = Application.Workbooks.Open(Path)
         If Err.Number <> 0 Then
             Output.Warnings.Add "Failed to open workbook: " & Err.Description
         End If
@@ -165,12 +165,12 @@ Private Sub CloseWorkbook(Workbook As Object)
 End Sub
 
 Private Function CreateWorkbook(Path As String) As Object
-    Dim WB As Object
+    Dim Wb As Object
     
-    Set WB = Application.Workbooks.Add
-    WB.SaveAs Path, 52 ' XlFileFormat.xlOpenXMLWorkbookMacroEnabled
+    Set Wb = Application.Workbooks.Add
+    Wb.SaveAs Path, 52 ' XlFileFormat.xlOpenXMLWorkbookMacroEnabled
     
-    Set CreateWorkbook = WB
+    Set CreateWorkbook = Wb
 End Function
 
 ' --------------------------------------------- '
