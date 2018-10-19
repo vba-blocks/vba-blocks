@@ -2,7 +2,7 @@
 name = "bootstrap"
 version = "0.1.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
-target = "xlsm"
+target = { type = "xlsm", path = "targets/xlsm" }
 
 [dependencies]
 vba-blocks = { path = "../../addins" }
