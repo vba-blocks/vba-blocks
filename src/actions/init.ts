@@ -23,14 +23,7 @@ export interface InitOptions {
 }
 
 export default async function init(options: InitOptions) {
-  let {
-    name,
-    dir = env.cwd,
-    target: target_type,
-    from,
-    pkg: as_package,
-    git
-  } = options;
+  let { name, dir = env.cwd, target: target_type, from, pkg: as_package, git } = options;
 
   if (await pathExists(join(dir, 'vba-block.toml'))) {
     throw initAlreadyInitialized();

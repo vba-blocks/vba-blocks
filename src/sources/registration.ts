@@ -23,10 +23,7 @@ export function fromSnapshot(snapshot: Snapshot, source: string): Registration {
 
 export function getRegistrationId(name: Snapshot): string;
 export function getRegistrationId(name: string, version: string): string;
-export function getRegistrationId(
-  name: string | Snapshot,
-  version?: string
-): string {
+export function getRegistrationId(name: string | Snapshot, version?: string): string {
   if (!isString(name)) {
     version = name.version;
     name = name.name;
@@ -35,11 +32,7 @@ export function getRegistrationId(
   return `${name}@${version}`;
 }
 
-export function getRegistrationSource(
-  type: string,
-  value: string,
-  details?: string
-): string {
+export function getRegistrationSource(type: string, value: string, details?: string): string {
   let source = `${type}+${value}`;
   if (details) {
     source += `#${details}`;
@@ -74,8 +67,6 @@ export function toDependency(registration: Registration): Dependency {
   }
 }
 
-export function isRegistration(
-  value: Registration | Dependency
-): value is Registration {
+export function isRegistration(value: Registration | Dependency): value is Registration {
   return has(value, 'source');
 }

@@ -37,7 +37,8 @@
     ]
   },
   "prettier": {
-    "singleQuote": true
+    "singleQuote": true,
+    "printWidth": 100
   },
   "jest": {
     "moduleFileExtensions": [

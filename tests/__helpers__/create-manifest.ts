@@ -3,21 +3,10 @@ import { RegistryDependency } from '../../src/manifest/dependency';
 import { dir as FIXTURES } from '../__fixtures__';
 
 export default function createManifest(options: any): Manifest {
-  const {
-    package: pkg,
-    project,
-    src = [],
-    references = [],
-    dir = FIXTURES
-  } = options;
+  const { package: pkg, project, src = [], references = [], dir = FIXTURES } = options;
 
-  const {
-    name = 'testing',
-    version = '0.0.0',
-    authors = [],
-    publish = false,
-    target
-  } = pkg || project;
+  const { name = 'testing', version = '0.0.0', authors = [], publish = false, target } =
+    pkg || project;
   const dependencies =
     options.dependencies && !Array.isArray(options.dependencies)
       ? toDependencies(options.dependencies)

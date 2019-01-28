@@ -19,8 +19,7 @@ export function applyChanges(changes: string[]) {
 
 export function addSource(manifest: Manifest, source: Source): string {
   const relative_path = relative(manifest.dir, source.path);
-  const relative_binary_path =
-    source.binary && relative(manifest.dir, source.binary);
+  const relative_binary_path = source.binary && relative(manifest.dir, source.binary);
 
   const details = relative_binary_path
     ? `{ path = "${relative_path}", binary = "${relative_binary_path}" }`
@@ -35,10 +34,7 @@ export function removeSource(_: Manifest, name: string): string {
   return patchRemoveSrc(name);
 }
 
-export function addDependency(
-  manifest: Manifest,
-  dependency: Dependency
-): string {
+export function addDependency(manifest: Manifest, dependency: Dependency): string {
   let details;
   if (isRegistryDependency(dependency)) {
     const { version, registry } = dependency;

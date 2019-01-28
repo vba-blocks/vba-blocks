@@ -10,14 +10,7 @@ import {
 import { importGraph, createDocument } from '../addin';
 import { loadFromProject, stageBuildGraph } from '../build';
 import { join } from '../utils/path';
-import {
-  pathExists,
-  ensureDir,
-  remove,
-  move,
-  emptyDir,
-  copy
-} from '../utils/fs';
+import { pathExists, ensureDir, remove, move, emptyDir, copy } from '../utils/fs';
 import { zip } from '../utils/zip';
 
 export interface BuildOptions {
@@ -70,10 +63,7 @@ export default async function buildTarget(
 /**
  * Create target binary
  */
-export async function createTarget(
-  project: Project,
-  target: Target
-): Promise<string> {
+export async function createTarget(project: Project, target: Target): Promise<string> {
   if (!(await pathExists(target.path))) {
     throw targetNotFound(target);
   }

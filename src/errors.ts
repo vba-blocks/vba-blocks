@@ -33,20 +33,15 @@ export class CliError extends Error {
 
 // Errors
 
-export const unknownCommand = (command: string) =>
-  generateError('unknown-command', { command });
+export const unknownCommand = (command: string) => generateError('unknown-command', { command });
 
-export const manifestNotFound = (dir: string) =>
-  generateError('manifest-not-found', { dir });
+export const manifestNotFound = (dir: string) => generateError('manifest-not-found', { dir });
 
-export const manifestInvalid = (message: string) =>
-  generateError('manifest-invalid', { message });
+export const manifestInvalid = (message: string) => generateError('manifest-invalid', { message });
 
-export const manifestOk = (value: any, message: string) =>
-  ok(value, manifestInvalid(message));
+export const manifestOk = (value: any, message: string) => ok(value, manifestInvalid(message));
 
-export const sourceUnsupported = (type: string) =>
-  generateError('source-unsupported', { type });
+export const sourceUnsupported = (type: string) => generateError('source-unsupported', { type });
 
 export const sourceMisconfiguredRegistry = (registry: string) =>
   generateError('source-misconfigured-registry', { registry });
@@ -72,19 +67,16 @@ export const dependencyPathNotFound = (dependency: string, path: string) =>
 export const dependencyUnknownSource = (dependency: string) =>
   generateError('dependency-unknown-source', { dependency });
 
-export const buildInvalid = (message: string) =>
-  generateError('build-invalid', { message });
+export const buildInvalid = (message: string) => generateError('build-invalid', { message });
 
 export const lockfileWriteFailed = (file: string, underlying: Error) =>
   generateError('lockfile-write-failed', { file }, underlying);
 
-export const targetNoMatching = (type: string) =>
-  generateError('target-no-matching', { type });
+export const targetNoMatching = (type: string) => generateError('target-no-matching', { type });
 
 export const targetNoDefault = () => generateError('target-no-default', {});
 
-export const targetNotFound = (target: Target) =>
-  generateError('target-not-found', { target });
+export const targetNotFound = (target: Target) => generateError('target-not-found', { target });
 
 export const targetIsOpen = (target: Target, path: string) =>
   generateError('target-is-open', { target, path });
@@ -95,16 +87,12 @@ export const targetCreateFailed = (target: Target, underlying: Error) =>
 export const targetImportFailed = (target: Target, underlying: Error) =>
   generateError('target-import-failed', { target }, underlying);
 
-export const targetRestoreFailed = (
-  backup: string,
-  file: string,
-  underlying: Error
-) => generateError('target-restore-failed', { backup, file }, underlying);
+export const targetRestoreFailed = (backup: string, file: string, underlying: Error) =>
+  generateError('target-restore-failed', { backup, file }, underlying);
 
 export const targetAddNoType = () => generateError('target-add-no-type', {});
 
-export const targetAlreadyDefined = () =>
-  generateError('target-already-defined', {});
+export const targetAlreadyDefined = () => generateError('target-already-defined', {});
 
 export const resolveFailed = (details?: string) => {
   const code = 'resolve-failed';
@@ -120,11 +108,9 @@ export const resolveFailed = (details?: string) => {
 export const unrecognizedComponent = (path: string) =>
   generateError('component-unrecognized', { path });
 
-export const componentInvalidNoName = () =>
-  generateError('component-invalid-no-name', {});
+export const componentInvalidNoName = () => generateError('component-invalid-no-name', {});
 
-export const runScriptNotFound = (path: string) =>
-  generateError('run-script-not-found', { path });
+export const runScriptNotFound = (path: string) => generateError('run-script-not-found', { path });
 
 export const newNameRequired = () => generateError('new-name-required', {});
 
@@ -133,21 +119,17 @@ export const newTargetRequired = () => generateError('new-target-required', {});
 export const newDirExists = (name: string, dir: string) =>
   generateError('new-dir-exists', { name, dir });
 
-export const fromNotFound = (from: string) =>
-  generateError('from-not-found', { from });
+export const fromNotFound = (from: string) => generateError('from-not-found', { from });
 
-export const initAlreadyInitialized = () =>
-  generateError('init-already-initialized', {});
+export const initAlreadyInitialized = () => generateError('init-already-initialized', {});
 
 export const initNameRequired = () => generateError('init-name-required', {});
 
-export const initTargetRequired = () =>
-  generateError('init-target-required', {});
+export const initTargetRequired = () => generateError('init-target-required', {});
 
 export const exportNoDefault = () => generateError('export-no-target', {});
 
-export const exportNoMatching = (type: string) =>
-  generateError('export-no-matching', { type });
+export const exportNoMatching = (type: string) => generateError('export-no-matching', { type });
 
 export const exportTargetNotFound = (target: Target, path: string) =>
   generateError('export-target-not-found', { target, path });
@@ -177,9 +159,7 @@ function generateError<T extends CliErrorCode>(
 const MESSAGE_REGEXP = /(^(.|\n)*?(?=\n\s*at\s.*\:\d*\:\d*))/;
 const ERROR_TEXT = 'Error: ';
 
-export function cleanError(
-  error: string | Error
-): { message: string; stack: string } {
+export function cleanError(error: string | Error): { message: string; stack: string } {
   const content = (isString(error) ? error : error.stack) || 'EMPTY ERROR';
   const message_match = content.match(MESSAGE_REGEXP);
 

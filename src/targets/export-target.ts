@@ -48,10 +48,7 @@ export default async function exportTarget(
   const exported_build_graph = await loadFromExport(staging);
   const transformed_build_graph = await toSrc(exported_build_graph);
 
-  const changeset = compareBuildGraphs(
-    project_build_graph,
-    transformed_build_graph
-  );
+  const changeset = compareBuildGraphs(project_build_graph, transformed_build_graph);
   await applyChangeset(project, changeset, { __temp__log_patch });
 
   // Move target to dest
@@ -81,9 +78,7 @@ export async function extractTarget(
 
   // Remove compiled VBA from dest
   const extracted = walk(dest, { directories: false });
-  const compiled = extracted
-    .filter(file => IS_VBA.test(file))
-    .map(file => join(dest, file));
+  const compiled = extracted.filter(file => IS_VBA.test(file)).map(file => join(dest, file));
 
   await Promise.all(compiled.map(async file => await remove(file)));
 

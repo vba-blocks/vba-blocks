@@ -5,18 +5,12 @@ import { BuildOptions, buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
 import { targetNoMatching, targetNoDefault } from '../errors';
 import env from '../env';
-import {
-  buildLoadingProject,
-  buildBuildingTarget,
-  buildWritingLockfile
-} from '../messages';
+import { buildLoadingProject, buildBuildingTarget, buildWritingLockfile } from '../messages';
 import { isRegistryDependency } from '../manifest/dependency';
 import { toDependency } from '../sources/registration';
 import { sanitize, join } from '../utils/path';
 
-export default async function build(
-  options: BuildOptions = {}
-): Promise<string> {
+export default async function build(options: BuildOptions = {}): Promise<string> {
   env.reporter.log(buildLoadingProject());
 
   const project = await loadProject();

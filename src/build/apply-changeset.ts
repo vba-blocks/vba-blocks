@@ -6,11 +6,7 @@ import { Source } from '../manifest';
 import { writeFile, remove, ensureDir } from '../utils/fs';
 import { join, dirname } from '../utils/path';
 import parallel from '../utils/parallel';
-import {
-  addSource,
-  removeSource,
-  applyChanges
-} from '../manifest/patch-manifest';
+import { addSource, removeSource, applyChanges } from '../manifest/patch-manifest';
 import { updatingProject } from '../messages';
 
 export default async function applyChangeset(
@@ -71,9 +67,7 @@ async function updateManifest(
     changes.push(addSource(project.manifest, source));
   }
   for (const component of changeset.components.removed) {
-    const index = project.manifest.src.findIndex(
-      source => source.name === component.name
-    );
+    const index = project.manifest.src.findIndex(source => source.name === component.name);
     project.manifest.src.splice(index, 1);
     changes.push(removeSource(project.manifest, component.name));
   }

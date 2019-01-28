@@ -24,10 +24,7 @@ export interface Sources {
   path: Source;
 }
 
-export async function resolve(
-  sources: Sources,
-  dependency: Dependency
-): Promise<Registration[]> {
+export async function resolve(sources: Sources, dependency: Dependency): Promise<Registration[]> {
   if (isRegistryDependency(dependency)) {
     const { registry } = dependency;
     const source = sources.registry[registry];
@@ -43,10 +40,7 @@ export async function resolve(
   throw dependencyUnknownSource((<Dependency>dependency).name);
 }
 
-export async function fetch(
-  sources: Sources,
-  registration: Registration
-): Promise<string> {
+export async function fetch(sources: Sources, registration: Registration): Promise<string> {
   const { type, value, details } = getSourceParts(registration.source);
 
   if (type === 'registry') {

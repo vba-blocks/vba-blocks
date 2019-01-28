@@ -21,9 +21,7 @@ if (args.debug) {
   if (debug === true) debug = '*';
   else if (Array.isArray(debug)) debug = debug.join(',');
 
-  const filters = (<string>debug)
-    .split(',')
-    .map(filter => `vba-blocks:${filter}`);
+  const filters = (<string>debug).split(',').map(filter => `vba-blocks:${filter}`);
   const existing = process.env.DEBUG ? process.env.DEBUG.split(',') : [];
 
   process.env.DEBUG = existing.concat(filters).join(',');

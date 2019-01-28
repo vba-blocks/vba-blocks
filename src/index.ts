@@ -4,10 +4,7 @@ export { loadProject, fetchDependencies } from './project';
 export { loadWorkspace } from './workspace';
 
 export { default as resolveDependencies } from './resolve';
-export {
-  resolve as resolveDependency,
-  fetch as fetchDependency
-} from './sources';
+export { resolve as resolveDependency, fetch as fetchDependency } from './sources';
 export { default as run } from './utils/run';
 export { addins } from './addin';
 

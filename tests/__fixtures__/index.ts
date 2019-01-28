@@ -19,8 +19,4 @@ export const targetless = join(projects, 'targetless');
 export const staging = join(cache, 'staging');
 export const standardImport = join(staging, 'standard', 'import');
 export const standardExport = join(staging, 'standard', 'export');
-export const standardChangesExport = join(
-  staging,
-  'standard-changes',
-  'export'
-);
+export const standardChangesExport = join(staging, 'standard-changes', 'export');

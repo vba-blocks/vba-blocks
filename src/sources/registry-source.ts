@@ -12,17 +12,9 @@ import {
 import { clone, pull } from '../utils/git';
 import { unzip } from '../utils/zip';
 import { Dependency, RegistryDependency } from '../manifest/dependency';
-import {
-  Registration,
-  getRegistrationId,
-  getRegistrationSource
-} from './registration';
+import { Registration, getRegistrationId, getRegistrationSource } from './registration';
 import { Source } from './source';
-import {
-  dependencyNotFound,
-  dependencyInvalidChecksum,
-  sourceDownloadFailed
-} from '../errors';
+import { dependencyNotFound, dependencyInvalidChecksum, sourceDownloadFailed } from '../errors';
 
 const debug = require('debug')('vba-blocks:registry-source');
 
@@ -157,18 +149,12 @@ function getPath(index: string, name: string): string {
   return join(index, sanitizePackageName(name));
 }
 
-export function getRemotePackage(
-  packages: string,
-  registration: Registration
-): string {
+export function getRemotePackage(packages: string, registration: Registration): string {
   const { name, version } = registration;
   return `${packages}/${sanitizePackageName(name)}-v${version}.block`;
 }
 
-export function getLocalPackage(
-  packages: string,
-  registration: Registration
-): string {
+export function getLocalPackage(packages: string, registration: Registration): string {
   const { name, version } = registration;
   return join(packages, `${sanitizePackageName(name)}-v${version}.block`);
 }

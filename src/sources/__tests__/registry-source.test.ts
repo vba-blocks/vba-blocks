@@ -25,15 +25,13 @@ describe('utils', () => {
   test('should sanitize package name', () => {
     expect(sanitizePackageName('vba-tools/log')).toEqual('vba-tools--log');
     expect(sanitizePackageName('vba/tools--log')).toEqual('vba--tools--log');
-    expect(sanitizePackageName('a/b.c\\d:e*f"g>h<i|j')).toEqual(
-      'a--b.c-d-e-f-g-h-i-j'
-    );
+    expect(sanitizePackageName('a/b.c\\d:e*f"g>h<i|j')).toEqual('a--b.c-d-e-f-g-h-i-j');
   });
 
   test('should get remote package url', () => {
-    expect(
-      getRemotePackage('https://packages.vba-blocks.com', dictionary)
-    ).toEqual('https://packages.vba-blocks.com/dictionary-v1.0.0.block');
+    expect(getRemotePackage('https://packages.vba-blocks.com', dictionary)).toEqual(
+      'https://packages.vba-blocks.com/dictionary-v1.0.0.block'
+    );
   });
 
   test('should get local package path', () => {

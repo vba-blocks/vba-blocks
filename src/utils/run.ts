@@ -34,10 +34,7 @@ export default async function run(
   macro: string,
   arg: string
 ): Promise<RunResult> {
-  const script = join(
-    env.scripts,
-    env.isWindows ? 'run.vbs' : 'run.applescript'
-  );
+  const script = join(env.scripts, env.isWindows ? 'run.vbs' : 'run.applescript');
 
   if (!(await pathExists(script))) {
     throw runScriptNotFound(script);
@@ -77,11 +74,7 @@ export function unescape(value: string): string {
   return value.replace(/\^q/g, '"');
 }
 
-export function toResult(
-  stdout: string,
-  stderr: string,
-  err?: Error
-): RunResult {
+export function toResult(stdout: string, stderr: string, err?: Error): RunResult {
   let success = false;
   let messages: string[] = [];
   let warnings: string[] = [];

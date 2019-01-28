@@ -1,14 +1,7 @@
 const { promisify } = require('util');
 const { join, dirname } = require('path');
 const exec = promisify(require('child_process').exec);
-const {
-  readFile,
-  writeFile,
-  move,
-  remove,
-  copy,
-  ensureDir
-} = require('fs-extra');
+const { readFile, writeFile, move, remove, copy, ensureDir } = require('fs-extra');
 const { render } = require('mustache');
 
 const { version } = require('../package.json');
@@ -35,16 +28,9 @@ async function main() {
 
 async function wix() {
   const cwd = join(__dirname, '../installer');
-  const template = await readFile(
-    join(__dirname, '../installer/template.wxs'),
-    'utf8'
-  );
+  const template = await readFile(join(__dirname, '../installer/template.wxs'), 'utf8');
   const input = render(template, { version });
-  await writeFile(
-    join(__dirname, '../installer/vba-blocks.wxs'),
-    input,
-    'utf8'
-  );
+  await writeFile(join(__dirname, '../installer/vba-blocks.wxs'), input, 'utf8');
 
   await exec('..\\vendor\\wix\\candle vba-blocks.wxs', { cwd });
   await exec('..\\vendor\\wix\\light vba-blocks.wixobj', { cwd });
@@ -96,9 +82,7 @@ async function pkg() {
 
   const identity = process.argv[2];
   if (!identity) {
-    console.log(
-      'WARNING creating unsigned .pkg. Use `yarn package:mac IDENTITY` for code signing'
-    );
+    console.log('WARNING creating unsigned .pkg. Use `yarn package:mac IDENTITY` for code signing');
   }
 
   await exec(

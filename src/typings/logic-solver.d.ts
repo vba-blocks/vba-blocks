@@ -19,10 +19,6 @@ declare module 'logic-solver' {
   export function xor(...operands: (Variable | Term | Formula)[]): Formula;
   export function implies(...operands: (Variable | Term | Formula)[]): Formula;
   export function equiv(...operands: (Variable | Term | Formula)[]): Formula;
-  export function exactlyOne(
-    ...operands: (Variable | Term | Formula)[]
-  ): Formula;
-  export function atMostOne(
-    ...operands: (Variable | Term | Formula)[]
-  ): Formula;
+  export function exactlyOne(...operands: (Variable | Term | Formula)[]): Formula;
+  export function atMostOne(...operands: (Variable | Term | Formula)[]): Formula;
 }

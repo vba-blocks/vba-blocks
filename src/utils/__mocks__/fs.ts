@@ -86,16 +86,12 @@ export const tmpFolder = jest.fn(async (options: TmpOptions = {}) => {
   return join(dir!, `${prefix}${index++}`);
 });
 
-export const writeFile = jest.fn(
-  async (path: string, data: string | Buffer | null) => {
-    path = normalize(path);
+export const writeFile = jest.fn(async (path: string, data: string | Buffer | null) => {
+  path = normalize(path);
 
-    filesystem[path] =
-      data == null || Buffer.isBuffer(data)
-        ? <Buffer | null>data
-        : Buffer.from(data);
-  }
-);
+  filesystem[path] =
+    data == null || Buffer.isBuffer(data) ? <Buffer | null>data : Buffer.from(data);
+});
 
 export interface NativeError extends Error {
   code?: string;
@@ -103,9 +99,7 @@ export interface NativeError extends Error {
 }
 
 function ENOENT(path: string): NativeError {
-  const error: NativeError = new Error(
-    `ENOENT: no such file or directory, open '${path}'`
-  );
+  const error: NativeError = new Error(`ENOENT: no such file or directory, open '${path}'`);
   error.code = 'ENOENT';
   error.path = path;
 

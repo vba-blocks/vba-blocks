@@ -1,10 +1,5 @@
 import { setupWorkspace, reset } from '../../../tests/__helpers__/project';
-import {
-  standard,
-  complex,
-  needsSat,
-  unresolvable
-} from '../../../tests/__fixtures__';
+import { standard, complex, needsSat, unresolvable } from '../../../tests/__fixtures__';
 import solve from '../latest-solver';
 import Resolver from '../resolver';
 

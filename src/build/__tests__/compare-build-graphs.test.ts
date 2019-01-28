@@ -1,10 +1,5 @@
 import { setup, reset } from '../../../tests/__helpers__/project';
-import {
-  dir,
-  complex,
-  standardExport,
-  standardChangesExport
-} from '../../../tests/__fixtures__';
+import { dir, complex, standardExport, standardChangesExport } from '../../../tests/__fixtures__';
 import { normalizeComponent } from '../component';
 import loadFromProject from '../load-from-project';
 import loadFromExport from '../load-from-export';
@@ -40,15 +35,9 @@ test('should find added, changed, and removed between build graphs', async () =>
 export function normalizeChangeset(changeset: Changeset): Changeset {
   const { components, references } = changeset;
 
-  const added = components.added.map(component =>
-    normalizeComponent(component, dir)
-  );
-  const changed = components.changed.map(component =>
-    normalizeComponent(component, dir)
-  );
-  const removed = components.removed.map(component =>
-    normalizeComponent(component, dir)
-  );
+  const added = components.added.map(component => normalizeComponent(component, dir));
+  const changed = components.changed.map(component => normalizeComponent(component, dir));
+  const removed = components.removed.map(component => normalizeComponent(component, dir));
 
   return {
     components: { added, changed, removed },

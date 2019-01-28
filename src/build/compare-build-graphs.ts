@@ -15,10 +15,7 @@ export interface Changeset {
   };
 }
 
-export default function compareBuildGraphs(
-  before: BuildGraph,
-  after: BuildGraph
-): Changeset {
+export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph): Changeset {
   const changeset: Changeset = {
     components: {
       added: [],

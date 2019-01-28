@@ -85,11 +85,7 @@ export async function createDocument(
   target: Target,
   options: AddinOptions = {}
 ): Promise<string> {
-  const { application, addin, file: path } = getTargetInfo(
-    project,
-    target,
-    options
-  );
+  const { application, addin, file: path } = getTargetInfo(project, target, options);
 
   await ensureDir(dirname(path));
   await run(
@@ -114,10 +110,7 @@ export function getTargetInfo(
 ): { application: Application; addin: Addin; file: string } {
   const application = extensionToApplication(target.type);
   const addin = addins[application];
-  const file = join(
-    options.staging ? project.paths.staging : project.paths.build,
-    target.filename
-  );
+  const file = join(options.staging ? project.paths.staging : project.paths.build, target.filename);
 
   return { application, addin, file };
 }

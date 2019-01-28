@@ -16,11 +16,7 @@ export class Component {
   code: string;
   details: ComponentDetails;
 
-  constructor(
-    type: ComponentType,
-    code: Buffer | string,
-    details: ComponentDetails = {}
-  ) {
+  constructor(type: ComponentType, code: Buffer | string, details: ComponentDetails = {}) {
     this.type = type;
     this.code = code && Buffer.isBuffer(code) ? code.toString() : code;
     this.details = details;
@@ -60,9 +56,7 @@ export class Component {
     }
 
     const code = await readFile(path);
-    const binary = <Buffer | undefined>(
-      (binary_path && (await readFile(binary_path)))
-    );
+    const binary = <Buffer | undefined>(binary_path && (await readFile(binary_path)));
 
     return new Component(type, code, { path, dependency, binary });
   }
@@ -90,10 +84,7 @@ export function byComponentName(a: Component, b: Component): number {
   return 0;
 }
 
-export function normalizeComponent(
-  component: Component,
-  dir: string
-): Component {
+export function normalizeComponent(component: Component, dir: string): Component {
   return {
     type: component.type,
     name: component.name,

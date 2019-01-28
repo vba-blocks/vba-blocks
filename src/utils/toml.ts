@@ -32,9 +32,7 @@ export function toLockfile(value: any, level = 0): string {
         if (Array.isArray(item)) {
           const empty = item.length === 0;
           converted += `${key} = [\n`;
-          converted += item
-            .map(subitem => `  ${toLockfile(subitem, level + 1)}`)
-            .join(',\n');
+          converted += item.map(subitem => `  ${toLockfile(subitem, level + 1)}`).join(',\n');
           converted += empty ? ']\n' : ',\n]\n';
         } else {
           converted += `${key} = ${toLockfile(item, level + 1)}\n`;

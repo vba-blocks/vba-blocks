@@ -106,9 +106,7 @@ export const reporter: Reporter = {
 
     'build-target-building': ({ target, project, dependencies }) => dedent`
       \n[2/3] Building target "${target.type}" for "${project.manifest.name}"...
-      ${
-        dependencies.length ? `\nDependencies:\n${dependencies.join('\n')}` : ''
-      }`,
+      ${dependencies.length ? `\nDependencies:\n${dependencies.join('\n')}` : ''}`,
 
     'build-lockfile-writing': ({ skipped }) => dedent`
       \n[3/3] Writing lockfile...${skipped ? ' (skipped, no changes)' : ''}`,
@@ -287,9 +285,7 @@ export const reporter: Reporter = {
       No matching target found for type "${type}" in project.`,
 
     'export-target-not-found': ({ target, path }) => dedent`
-      Could not find built target for type "${
-        target.type
-      }" (checked "${path}").`,
+      Could not find built target for type "${target.type}" (checked "${path}").`,
 
     'addin-unsupported-type': ({ type }) => dedent`
       The target type "${type} is not currently supported.`,

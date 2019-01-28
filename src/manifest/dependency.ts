@@ -42,16 +42,10 @@ const EXAMPLE = `Example vba-block.toml:
   version = "^2.0.0"`;
 
 export function parseDependencies(value: any, dir: string): Dependency[] {
-  return Object.entries(value).map(([name, value]) =>
-    parseDependency(name, value, dir)
-  );
+  return Object.entries(value).map(([name, value]) => parseDependency(name, value, dir));
 }
 
-export function parseDependency(
-  name: string,
-  value: Version | any,
-  dir: string
-): Dependency {
+export function parseDependency(name: string, value: Version | any, dir: string): Dependency {
   if (isString(value)) value = { version: value };
 
   const {
@@ -90,20 +84,14 @@ export function parseDependency(
   }
 }
 
-export function isRegistryDependency(
-  dependency: Dependency
-): dependency is RegistryDependency {
+export function isRegistryDependency(dependency: Dependency): dependency is RegistryDependency {
   return has(dependency, 'registry');
 }
 
-export function isPathDependency(
-  dependency: Dependency
-): dependency is PathDependency {
+export function isPathDependency(dependency: Dependency): dependency is PathDependency {
   return has(dependency, 'path');
 }
 
-export function isGitDependency(
-  dependency: Dependency
-): dependency is GitDependency {
+export function isGitDependency(dependency: Dependency): dependency is GitDependency {
   return has(dependency, 'git');
 }
