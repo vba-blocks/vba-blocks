@@ -2,5 +2,5 @@ export default function has(
   value: object | undefined | null,
   key: string
 ): boolean {
-  return !!value && value.hasOwnProperty(key);
+  return !!value && typeof value.hasOwnProperty === 'function' && value.hasOwnProperty(key);
 }
