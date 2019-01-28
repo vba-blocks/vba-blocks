@@ -77,14 +77,14 @@ End Function
 ''
 Public Function CreateDocument(Path As String) As Object
     Path = FileSystem.NormalizePath(Path)
-    
+
     If FileSystem.FileExists(Path) Then
         Err.Raise 10202, Description:="Document already exists at " & Path
     End If
-    
+
     Dim AppType As String
     Dim Doc As Object
-    
+
     AppType = GetType(Path)
     Select Case AppType
     Case "excel"
@@ -98,13 +98,13 @@ Public Function CreateDocument(Path As String) As Object
     Case "outlook"
         ' ...
     End Select
-    
+
     Dim Instance As New Dictionary
     Instance("Type") = AppType
     Instance("WasOpen") = False
     Set Instance("Document") = Doc
     Set Documents(Path) = Instance
-    
+
     Set CreateDocument = Doc
 End Function
 
@@ -142,14 +142,14 @@ End Sub
 ' Excel
 ' --------------------------------------------- '
 
-Private Function OpenWorkbook(Path As String, ByRef Wb As Object) As Boolean
+Private Function OpenWorkbook(Path As String, ByRef WB As Object) As Boolean
     On Error Resume Next
-    Set Wb = Application.Workbooks(FileSystem.GetBase(Path))
+    Set WB = Application.Workbooks(FileSystem.GetBase(Path))
 
-    If Wb Is Nothing Or Err.Number <> 0 Then
+    If WB Is Nothing Or Err.Number <> 0 Then
         Err.Clear
 
-        Set Wb = Application.Workbooks.Open(Path)
+        Set WB = Application.Workbooks.Open(Path)
         If Err.Number <> 0 Then
             Output.Warnings.Add "Failed to open workbook: " & Err.Description
         End If
@@ -165,12 +165,12 @@ Private Sub CloseWorkbook(Workbook As Object)
 End Sub
 
 Private Function CreateWorkbook(Path As String) As Object
-    Dim Wb As Object
-    
-    Set Wb = Application.Workbooks.Add
-    Wb.SaveAs Path, 52 ' XlFileFormat.xlOpenXMLWorkbookMacroEnabled
-    
-    Set CreateWorkbook = Wb
+    Dim WB As Object
+
+    Set WB = Application.Workbooks.Add
+    WB.SaveAs Path, 52 ' XlFileFormat.xlOpenXMLWorkbookMacroEnabled
+
+    Set CreateWorkbook = WB
 End Function
 
 ' --------------------------------------------- '
