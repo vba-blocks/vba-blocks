@@ -1,6 +1,6 @@
 import mri from 'mri';
 import * as colors from 'ansi-colors';
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import has from '../utils/has';
 import { CliError, unknownCommand, cleanError } from '../errors';
 import { RunError } from '../utils/run';

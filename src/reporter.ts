@@ -1,5 +1,5 @@
 import { extname } from './utils/path';
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import { Target } from './manifest';
 import { Registration } from './sources';
 import { Project } from './project';
@@ -139,13 +139,13 @@ export const reporter: Reporter = {
       Add the following to the [src] section:`,
 
     'patch-remove-src': ({ name }) => dedent`
-      Remove \`${name}\` from the [src] section`,
+      Remove "${name}" from the [src] section`,
 
     'patch-add-dependency': () => dedent`
       Add the following to the [dependencies] section:`,
 
     'patch-remove-dependency': ({ name }) => dedent`
-      Remove \`${name}\` from the [dependencies] section`
+      Remove "${name}" from the [dependencies] section`
   },
 
   errors: {
@@ -254,19 +254,19 @@ export const reporter: Reporter = {
     'new-name-required': _ => dedent`
       "name" is required with vba-blocks new (e.g. vba-blocks new project-name).
 
-      Try \`vba-blocks new help\` for more information.`,
+      Try "vba-blocks new help" for more information.`,
 
     'new-target-required': _ => dedent`
       .TYPE, --target, or --from is required for vba-blocks projects.
       (e.g. vba-blocks new project.name.TYPE)
 
-      Try \`vba-blocks new help\` for more information.`,
+      Try "vba-blocks new help" for more information.`,
 
     'new-dir-exists': ({ name, dir }) => dedent`
       A directory for "${name}" already exists: "${dir}".`,
 
     'from-not-found': ({ from }) => dedent`
-      The \`from\` document was not found at "${from}".`,
+      The "from" document was not found at "${from}".`,
 
     'init-already-initialized': () => dedent`
       A vba-blocks project already exists in this directory.`,

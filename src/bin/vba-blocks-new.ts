@@ -1,5 +1,5 @@
 import { Args } from 'mri';
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import create from '../actions/create';
 
 const help = dedent`
@@ -13,7 +13,7 @@ const help = dedent`
     --from=PATH     Create target and src from workbook/document
     --package       Create as package
     --no-git        Skip initializing git repository
-    
+
   Examples:
   vba-blocks new analysis.xlsm
   vba-blocks new analysis --target xlsm
