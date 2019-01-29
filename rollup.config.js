@@ -1,5 +1,6 @@
 import resolve from 'rollup-plugin-node-resolve';
 import replace from 'rollup-plugin-replace';
+import babel from 'rollup-plugin-babel';
 
 const { version, dependencies } = require('./package.json');
 
@@ -45,7 +46,8 @@ export default [
         'DIR-ADDINS': '../../addins/build',
         'DIR-RUN-SCRIPTS': '../../run-scripts',
         'DIR-BIN': '../../dist/unpacked/bin'
-      })
+      }),
+      babel()
     ],
     treeshake: { pureExternalModules: true }
   },
@@ -66,7 +68,8 @@ export default [
           'DIR-ADDINS': '../addins/build',
           'DIR-RUN-SCRIPTS': '../run-scripts',
           'DIR-BIN': '../dist/unpacked/bin'
-        })
+        }),
+        babel()
       ],
       treeshake: { pureExternalModules: true }
     };
@@ -89,7 +92,8 @@ export default [
           'DIR-ADDINS': '../../addins/build',
           'DIR-RUN-SCRIPTS': '../../run-scripts',
           'DIR-BIN': '../../dist/unpacked/bin'
-        })
+        }),
+        babel()
       ],
       treeshake: { pureExternalModules: true }
     };

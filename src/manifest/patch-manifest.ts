@@ -1,4 +1,4 @@
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import { relative } from '../utils/path';
 import { Manifest, Source, Dependency, Target } from './';
 import { isRegistryDependency, isPathDependency } from './dependency';
