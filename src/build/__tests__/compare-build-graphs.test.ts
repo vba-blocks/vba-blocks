@@ -1,5 +1,11 @@
 import { setup, reset } from '../../../tests/__helpers__/project';
-import { dir, complex, standardExport, standardChangesExport } from '../../../tests/__fixtures__';
+import {
+  dir,
+  standard,
+  complex,
+  standardExport,
+  standardChangesExport
+} from '../../../tests/__fixtures__';
 import { normalizeComponent } from '../component';
 import loadFromProject from '../load-from-project';
 import loadFromExport from '../load-from-export';
@@ -8,7 +14,7 @@ import compareBuildGraphs, { Changeset } from '../compare-build-graphs';
 afterAll(reset);
 
 test('should find no changes between build graphs', async () => {
-  const { project, dependencies } = await setup(complex);
+  const { project, dependencies } = await setup(standard);
 
   const before = await loadFromProject(project, dependencies);
   const after = await loadFromExport(standardExport);

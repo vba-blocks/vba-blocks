@@ -1,5 +1,9 @@
 import { manifestOk } from '../errors';
 
+export interface ReferenceDetails {
+  dependency?: string;
+}
+
 export interface Reference {
   name: string;
   version: string;
@@ -7,6 +11,7 @@ export interface Reference {
   major: number;
   minor: number;
   optional?: boolean;
+  details?: ReferenceDetails;
 }
 
 const VERSION_REGEX = /^(\d+)\.(\d+)$/;

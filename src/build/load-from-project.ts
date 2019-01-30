@@ -28,7 +28,8 @@ export default async function loadFromProject(
       const name_guid = `${reference.name}_${reference.guid}`;
       if (found_references[name_guid]) continue;
 
-      references.push(reference);
+      const dependency = manifest === project.manifest ? undefined : manifest.name;
+      references.push(Object.assign({ details: { dependency } }, reference));
       found_references[name_guid] = true;
     }
   }

@@ -69,7 +69,18 @@ async function readInfo(staging: string): Promise<ProjectInfo> {
   const path = join(staging, 'project.json');
   if (!(await pathExists(path))) return { name: 'VBAProject', references: [] };
 
-  return await readJson(path);
+  const { name, references } = await readJson(path);
+
+  return {
+    name,
+    references: references.map((reference: Reference) => {
+      // TODO There should be a way to encode this,
+      // but for now just rely on project's BuildGraph
+      reference.details = { dependency: undefined };
+
+      return reference;
+    })
+  };
 }
 
 function isBinary(file: string): boolean {

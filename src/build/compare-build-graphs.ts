@@ -70,8 +70,28 @@ export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph
 
   // Determine reference changes
   for (const reference of after.references) {
-    // TODO
-    // - determine if reference is from dependency
+    const name = reference.name;
+
+    const previous = by_name.references.get(name);
+    by_name.references.delete(name);
+
+    if (previous && previous.details!.dependency) {
+      // Ignore dependencies
+      continue;
+    } else if (!previous) {
+      changeset.references.added.push(reference);
+    } else if (
+      reference.guid !== previous.guid ||
+      reference.major !== previous.major ||
+      reference.minor !== previous.minor
+    ) {
+      reference.details!.dependency = previous.details!.dependency;
+
+      changeset.references.changed.push(reference);
+    }
+  }
+  for (const reference of by_name.references.values()) {
+    changeset.references.removed.push(reference);
   }
 
   return changeset;

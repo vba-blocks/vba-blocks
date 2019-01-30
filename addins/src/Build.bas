@@ -95,8 +95,10 @@ Public Function ExportTo(Info As Variant) As String
 
     Dim Ref As Object ' Reference
     Dim RefInfo As Dictionary
+    Dim BuiltInReferences As Variant
+    BuiltInReferences = Array("stdole", "office")
     For Each Ref In Document.VBProject.References
-        If Not Ref.BuiltIn Then
+        If Not Ref.BuiltIn And Not InArray(VBA.LCase$(Ref.Name), BuiltInReferences) Then
             Set RefInfo = New Dictionary
             RefInfo("name") = Ref.Name
             RefInfo("version") = Ref.Major & "." & Ref.Minor
@@ -168,4 +170,15 @@ Private Function ComponentIsBlank(Component As Object) As Boolean
     Next LineNumber
 
     ComponentIsBlank = True
+End Function
+
+Private Function InArray(Value As Variant, Values As Variant) As Boolean
+    Dim i As Long
+    For i = UBound(Values) To UBound(Values)
+        If Values(i) = Value Then
+            InArray = True
+            Exit Function
+        End If
+    Next i
+
 End Function

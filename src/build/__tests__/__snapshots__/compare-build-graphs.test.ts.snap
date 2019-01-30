@@ -60,7 +60,38 @@ Public Function Validate(Args As Variant) As String
     ],
   },
   "references": Object {
-    "added": Array [],
+    "added": Array [
+      Object {
+        "details": Object {
+          "dependency": undefined,
+        },
+        "guid": "{00020430-0000-0000-C000-000000000046}",
+        "major": 2,
+        "minor": 0,
+        "name": "stdole",
+        "version": "2.0",
+      },
+      Object {
+        "details": Object {
+          "dependency": undefined,
+        },
+        "guid": "{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}",
+        "major": 2,
+        "minor": 8,
+        "name": "Office",
+        "version": "2.8",
+      },
+      Object {
+        "details": Object {
+          "dependency": undefined,
+        },
+        "guid": "{0D452EE1-E08F-101A-852E-02608C4D0BB4}",
+        "major": 2,
+        "minor": 0,
+        "name": "MSForms",
+        "version": "2.0",
+      },
+    ],
     "changed": Array [],
     "removed": Array [],
   },
