@@ -12,7 +12,10 @@ The following changes need to be applied to vba-block.toml:
 Add the following to the [src] section:
 Added = \\"src/Added.bas\\"
 
-Remove \\"Validation\\" from the [src] section",
+Remove \\"Validation\\" from the [src] section
+
+Add the following to the [references] section:
+VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }",
   ],
 ]
 `;
