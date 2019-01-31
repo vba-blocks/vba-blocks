@@ -26,6 +26,8 @@ export interface Messages {
   'patch-remove-src': { name: string };
   'patch-add-dependency': {};
   'patch-remove-dependency': { name: string };
+  'patch-add-reference': {};
+  'patch-remove-reference': { name: string };
 }
 
 export interface ErrorMessages {
@@ -145,7 +147,13 @@ export const reporter: Reporter = {
       Add the following to the [dependencies] section:`,
 
     'patch-remove-dependency': ({ name }) => dedent`
-      Remove "${name}" from the [dependencies] section`
+      Remove "${name}" from the [dependencies] section`,
+
+    'patch-add-reference': () => dedent`
+      Add the following to the [references] section:`,
+
+    'patch-remove-reference': ({ name }) => dedent`
+      Remove "${name}" from the [references] section`
   },
 
   errors: {

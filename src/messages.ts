@@ -40,6 +40,11 @@ export const patchAddDependency = () => generateMessage('patch-add-dependency', 
 export const patchRemoveDependency = (name: string) =>
   generateMessage('patch-remove-dependency', { name });
 
+export const patchAddReference = () => generateMessage('patch-add-reference', {});
+
+export const patchRemoveReference = (name: string) =>
+  generateMessage('patch-remove-reference', { name });
+
 // Utils
 
 function generateMessage<T extends MessageId>(id: T, values: Messages[T]): string {

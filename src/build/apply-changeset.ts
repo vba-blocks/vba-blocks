@@ -6,7 +6,13 @@ import { Source } from '../manifest';
 import { writeFile, remove, ensureDir } from '../utils/fs';
 import { join, dirname } from '../utils/path';
 import parallel from '../utils/parallel';
-import { addSource, removeSource, applyChanges } from '../manifest/patch-manifest';
+import {
+  addSource,
+  removeSource,
+  addReference,
+  removeReference,
+  applyChanges
+} from '../manifest/patch-manifest';
 import { updatingProject } from '../messages';
 
 export default async function applyChangeset(
@@ -70,6 +76,20 @@ async function updateManifest(
     const index = project.manifest.src.findIndex(source => source.name === component.name);
     project.manifest.src.splice(index, 1);
     changes.push(removeSource(project.manifest, component.name));
+  }
+
+  for (let reference of changeset.references.added) {
+    // Remove "details" from reference
+    // TODO maybe details should live on wrapper object
+    reference = Object.assign({}, reference, { details: undefined });
+
+    project.manifest.references.push(reference);
+    changes.push(addReference(project.manifest, reference));
+  }
+  for (const reference of changeset.references.removed) {
+    const index = project.manifest.references.findIndex(ref => ref.name === reference.name);
+    project.manifest.src.splice(index, 1);
+    changes.push(removeReference(project.manifest, reference.name));
   }
 
   if (options.__temp__log_patch) {

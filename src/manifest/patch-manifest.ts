@@ -1,13 +1,15 @@
 import dedent from 'dedent/macro';
 import { relative } from '../utils/path';
-import { Manifest, Source, Dependency, Target } from './';
+import { Manifest, Source, Dependency, Reference, Target } from './';
 import { isRegistryDependency, isPathDependency } from './dependency';
 import {
   patchApplyChanges,
   patchAddSrc,
   patchRemoveSrc,
   patchAddDependency,
-  patchRemoveDependency
+  patchRemoveDependency,
+  patchAddReference,
+  patchRemoveReference
 } from '../messages';
 import env from '../env';
 
@@ -65,6 +67,18 @@ export function addDependency(manifest: Manifest, dependency: Dependency): strin
 
 export function removeDependency(_: Manifest, name: string): string {
   return patchRemoveDependency(name);
+}
+
+export function addReference(_manifest: Manifest, reference: Reference): string {
+  const details = `{ version = "${reference.version}", guid = "${reference.guid}" }`;
+
+  return dedent`
+    ${patchAddReference()}
+    ${reference.name} = ${details}`;
+}
+
+export function removeReference(_manifest: Manifest, name: string): string {
+  return patchRemoveReference(name);
 }
 
 export function addTarget(manifest: Manifest, target: Target): string {
