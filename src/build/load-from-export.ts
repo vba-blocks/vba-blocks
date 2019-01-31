@@ -11,9 +11,7 @@ import { loadingExport } from '../messages';
 
 const binary_extensions = ['.frx'];
 
-export default async function loadFromExport(
-  staging: string
-): Promise<BuildGraph> {
+export default async function loadFromExport(staging: string): Promise<BuildGraph> {
   const files = walk(staging, { directories: false })
     .filter(file => {
       return file !== 'project.json' && !file.startsWith('target');
@@ -39,9 +37,7 @@ export default async function loadFromExport(
       const name = getName(file);
       const type = extension_to_type[extname(file)];
       const code = await readFile(file);
-      const binary = <Buffer | undefined>(
-        (binaries[name] && (await readFile(binaries[name])))
-      );
+      const binary = <Buffer | undefined>(binaries[name] && (await readFile(binaries[name])));
 
       // TODO There should be a way to encode this,
       // but for now just rely on project's BuildGraph
@@ -73,7 +69,18 @@ async function readInfo(staging: string): Promise<ProjectInfo> {
   const path = join(staging, 'project.json');
   if (!(await pathExists(path))) return { name: 'VBAProject', references: [] };
 
-  return await readJson(path);
+  const { name, references } = await readJson(path);
+
+  return {
+    name,
+    references: references.map((reference: Reference) => {
+      // TODO There should be a way to encode this,
+      // but for now just rely on project's BuildGraph
+      reference.details = { dependency: undefined };
+
+      return reference;
+    })
+  };
 }
 
 function isBinary(file: string): boolean {

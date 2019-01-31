@@ -9,6 +9,6 @@ Installer = "src/Installer.bas"
 [dependencies]
 filesystem = { path = "../vba-filesystem" }
 
-# [references.VBIDE]
-# version = "5.3"
-# guid = "{0002E157-0000-0000-C000-000000000046}"
+[references.VBIDE]
+version = "5.3"
+guid = "{0002E157-0000-0000-C000-000000000046}"

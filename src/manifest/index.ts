@@ -88,10 +88,7 @@ export function parseManifest(value: any, dir: string): Manifest {
     publish = false;
 
     manifestOk(name, `[project] name is a required field. \n\n${EXAMPLE}`);
-    manifestOk(
-      value.project.target,
-      `[project] target is a required field. \n\n${EXAMPLE}`
-    );
+    manifestOk(value.project.target, `[project] target is a required field. \n\n${EXAMPLE}`);
 
     // Store defaults to distinguish from user-set values
     if (!value.project.version) defaults.push('version');
@@ -107,19 +104,12 @@ export function parseManifest(value: any, dir: string): Manifest {
     publish = value.package.publish || false;
 
     manifestOk(name, `[package] name is a required field. \n\n${EXAMPLE}`);
-    manifestOk(
-      version,
-      `[package] version is a required field. \n\n${EXAMPLE}`
-    );
-    manifestOk(
-      authors,
-      `[package] authors is a required field. \n\n${EXAMPLE}`
-    );
+    manifestOk(version, `[package] version is a required field. \n\n${EXAMPLE}`);
+    manifestOk(authors, `[package] authors is a required field. \n\n${EXAMPLE}`);
 
     if (!('publish' in value.package)) defaults.push('publish');
 
-    target =
-      value.package.target && parseTarget(value.package.target, name, dir);
+    target = value.package.target && parseTarget(value.package.target, name, dir);
   }
 
   const src = parseSrc(value.src || {}, dir);
@@ -152,9 +142,7 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   try {
     parsed = parseToml(raw.toString());
   } catch (err) {
-    const message = `Syntax Error: ${file} (${err.line}:${err.column})\n\n${
-      err.message
-    }`;
+    const message = `Syntax Error: ${file} (${err.line}:${err.column})\n\n${err.message}`;
     throw manifestInvalid(message);
   }
 

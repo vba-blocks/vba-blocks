@@ -28,15 +28,11 @@ const env: Env = {
   cwd: process.cwd(),
   values: process.env,
 
-  addins: isPackaged()
-    ? join(process.execPath, '../../addins')
-    : join(__dirname, 'DIR-ADDINS'),
+  addins: isPackaged() ? join(process.execPath, '../../addins') : join(__dirname, 'DIR-ADDINS'),
   scripts: isPackaged()
     ? join(process.execPath, '../../run-scripts')
     : join(__dirname, 'DIR-RUN-SCRIPTS'),
-  bin: isPackaged()
-    ? join(process.execPath, '../../bin')
-    : join(__dirname, 'DIR-BIN'),
+  bin: isPackaged() ? join(process.execPath, '../../bin') : join(__dirname, 'DIR-BIN'),
   cache,
   registry: join(cache, 'registry'),
   packages: join(cache, 'packages'),

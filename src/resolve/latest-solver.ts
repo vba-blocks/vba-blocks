@@ -37,9 +37,7 @@ export async function resolveDependencies(
   dependencies: Dependency[],
   resolver: Resolver
 ): Promise<void> {
-  const resolved = await Promise.all(
-    dependencies.map(dependency => resolver.get(dependency))
-  );
+  const resolved = await Promise.all(dependencies.map(dependency => resolver.get(dependency)));
 
   for (const resolution of resolved) {
     const { registered } = resolution;

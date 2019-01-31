@@ -7,11 +7,7 @@ import { emptyDir, ensureDir } from '../utils/fs';
 import { exportNoDefault, exportNoMatching } from '../errors';
 import { TargetType } from '../manifest/target';
 import env from '../env';
-import {
-  exportLoadingProject,
-  exportToStaging,
-  exportToProject
-} from '../messages';
+import { exportLoadingProject, exportToStaging, exportToProject } from '../messages';
 
 export interface ExportOptions {
   target?: string;

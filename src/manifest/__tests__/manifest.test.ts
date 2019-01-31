@@ -1,11 +1,7 @@
 import { Manifest, parseManifest, loadManifest } from '../';
 import { isPathDependency } from '../dependency';
 import { relative } from '../../utils/path';
-import {
-  dir as FIXTURES,
-  standard,
-  invalidManifest
-} from '../../../tests/__fixtures__';
+import { dir as FIXTURES, standard, invalidManifest } from '../../../tests/__fixtures__';
 
 const BASE_MANIFEST: {
   package: {
@@ -25,15 +21,9 @@ test('loads valid package metadata', () => {
 test('throws for invalid package metadata', () => {
   expect(() => parseManifest({}, FIXTURES)).toThrow();
   expect(() => parseManifest({ package: {} }, FIXTURES)).toThrow();
-  expect(() =>
-    parseManifest({ package: { name: 'package-name' } }, FIXTURES)
-  ).toThrow();
-  expect(() =>
-    parseManifest({ package: { version: '1.0.0' } }, FIXTURES)
-  ).toThrow();
-  expect(() =>
-    parseManifest({ package: { authors: ['Tim Hall'] } }, FIXTURES)
-  ).toThrow();
+  expect(() => parseManifest({ package: { name: 'package-name' } }, FIXTURES)).toThrow();
+  expect(() => parseManifest({ package: { version: '1.0.0' } }, FIXTURES)).toThrow();
+  expect(() => parseManifest({ package: { authors: ['Tim Hall'] } }, FIXTURES)).toThrow();
 });
 
 test('loads valid sources', () => {
@@ -149,10 +139,7 @@ test('throws for invalid syntax', async () => {
   }
 });
 
-function normalize(
-  manifest: Manifest,
-  relativeTo: string = FIXTURES
-): Manifest {
+function normalize(manifest: Manifest, relativeTo: string = FIXTURES): Manifest {
   manifest.dir = normalizePath(manifest.dir, relativeTo);
 
   for (const src of manifest.src) {

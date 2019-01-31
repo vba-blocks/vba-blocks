@@ -44,13 +44,8 @@ export async function loadProject(dir: string = env.cwd): Promise<Project> {
   const lockfile = await readLockfile(workspace.root.dir);
 
   // Resolve packages from lockfile or from sources
-  const has_dirty_lockfile =
-    !lockfile || !(await isLockfileValid(lockfile, workspace));
-  debug(
-    !has_dirty_lockfile
-      ? 'Loading packages from lockfile'
-      : 'Resolving packages'
-  );
+  const has_dirty_lockfile = !lockfile || !(await isLockfileValid(lockfile, workspace));
+  debug(!has_dirty_lockfile ? 'Loading packages from lockfile' : 'Resolving packages');
 
   const packages = !has_dirty_lockfile
     ? lockfile!.packages
@@ -86,9 +81,7 @@ export interface FetchProject {
  *
  * After sources complete fetches, manifests are loaded and returned for each package
  */
-export async function fetchDependencies(
-  project: FetchProject
-): Promise<Manifest[]> {
+export async function fetchDependencies(project: FetchProject): Promise<Manifest[]> {
   const manifests = await parallel(
     project.packages,
     async registration => {

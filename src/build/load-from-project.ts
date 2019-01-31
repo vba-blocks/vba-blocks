@@ -28,14 +28,13 @@ export default async function loadFromProject(
       const name_guid = `${reference.name}_${reference.guid}`;
       if (found_references[name_guid]) continue;
 
-      references.push(reference);
+      const dependency = manifest === project.manifest ? undefined : manifest.name;
+      references.push(Object.assign({ details: { dependency } }, reference));
       found_references[name_guid] = true;
     }
   }
 
-  const components = (await Promise.all(loading_components)).sort(
-    byComponentName
-  );
+  const components = (await Promise.all(loading_components)).sort(byComponentName);
   const graph = { name: 'VBAProject', components, references };
 
   validateGraph(project, graph);
@@ -48,32 +47,24 @@ function validateGraph(project: Project, graph: BuildGraph) {
   const errors = [];
 
   for (const component of graph.components) {
-    if (!components_by_name[component.name])
-      components_by_name[component.name] = [];
-    components_by_name[component.name].push(
-      component.details.dependency || project.manifest.name
-    );
+    if (!components_by_name[component.name]) components_by_name[component.name] = [];
+    components_by_name[component.name].push(component.details.dependency || project.manifest.name);
   }
   for (const reference of graph.references) {
-    if (!references_by_name[reference.name])
-      references_by_name[reference.name] = [];
+    if (!references_by_name[reference.name]) references_by_name[reference.name] = [];
     references_by_name[reference.name].push(reference);
   }
 
   for (const [name, from] of Object.entries(components_by_name)) {
     if (from.length > 1) {
       const names = from.map(name => `"${name}"`);
-      errors.push(
-        `Source "${name}" is present in manifests named ${joinCommas(names)}`
-      );
+      errors.push(`Source "${name}" is present in manifests named ${joinCommas(names)}`);
     }
   }
   for (const [name, references] of Object.entries(references_by_name)) {
     if (references.length > 1) {
       const versions = references.map(reference => reference.version);
-      errors.push(
-        `Reference "${name}" has multiple versions: ${joinCommas(versions)}`
-      );
+      errors.push(`Reference "${name}" has multiple versions: ${joinCommas(versions)}`);
     }
   }
 

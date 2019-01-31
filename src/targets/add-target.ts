@@ -4,10 +4,7 @@ import { copy, ensureDir, emptyDir, remove } from '../utils/fs';
 import { exportTo, createDocument } from '../addin';
 import exportTarget, { extractTarget } from './export-target';
 import buildTarget, { ProjectInfo } from './build-target';
-import {
-  applyChanges,
-  addTarget as addTargetToManifest
-} from '../manifest/patch-manifest';
+import { applyChanges, addTarget as addTargetToManifest } from '../manifest/patch-manifest';
 import { targetAlreadyDefined } from '../errors';
 
 export interface AddOptions {
@@ -23,12 +20,7 @@ export default async function addTarget(
   options: AddOptions = {}
 ) {
   const { project } = info;
-  let {
-    from,
-    name = project.manifest.name,
-    path = 'target',
-    __temp__log_patch = true
-  } = options;
+  let { from, name = project.manifest.name, path = 'target', __temp__log_patch = true } = options;
 
   if (project.manifest.target) {
     throw targetAlreadyDefined();

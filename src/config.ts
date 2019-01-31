@@ -4,9 +4,7 @@ import { parse as parseToml } from './utils/toml';
 import env from './env';
 import { Sources, RegistrySource, PathSource, GitSource } from './sources';
 
-export type Registry =
-  | {}
-  | { [name: string]: { index: string; packages: string } };
+export type Registry = {} | { [name: string]: { index: string; packages: string } };
 
 export interface Flags {}
 
@@ -84,9 +82,7 @@ export async function loadConfig(): Promise<Config> {
 }
 
 // Read config from dir (if present)
-export async function readConfig(
-  dir: string
-): Promise<ConfigValue | undefined> {
+export async function readConfig(dir: string): Promise<ConfigValue | undefined> {
   const file = join(dir, 'config.toml');
   if (!(await pathExists(file))) return {};
 

@@ -1,5 +1,5 @@
 import { Args } from 'mri';
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import init from '../actions/init';
 
 const help = dedent`
@@ -13,7 +13,7 @@ const help = dedent`
     --name=NAME     Set project name (default = --from or directory name)
     --package       Initialize as package
     --no-git        Skip initializing git repository
-  
+
   Examples:
   vba-blocks init --target xlsm
   vba-blocks init --name calculations --package

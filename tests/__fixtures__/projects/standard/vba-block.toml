@@ -9,9 +9,15 @@ ThisWorkbook = "src/ThisWorkbook.cls"
 Sheet1 = "src/Sheet1.cls"
 Sheet2 = "src/Sheet2.cls"
 Sheet3 = "src/Sheet3.cls"
-# UserForm1 = { path = "src/UserForm1.frm", binary = "src/UserForm1.frx" }
 Validation = "src/Validation.bas"
 Class1 = "src/Class1.cls"
+
+# TODO Windows-only
+# UserForm1 = { path = "src/UserForm1.frm", binary = "src/UserForm1.frx" }
+
+[references.VBIDE]
+version = "5.3"
+guid = "{0002E157-0000-0000-C000-000000000046}"
 
 [dependencies]
 json = "^2"

@@ -1,5 +1,9 @@
 import { manifestOk } from '../errors';
 
+export interface ReferenceDetails {
+  dependency?: string;
+}
+
 export interface Reference {
   name: string;
   version: string;
@@ -7,6 +11,7 @@ export interface Reference {
   major: number;
   minor: number;
   optional?: boolean;
+  details?: ReferenceDetails;
 }
 
 const VERSION_REGEX = /^(\d+)\.(\d+)$/;
@@ -23,9 +28,7 @@ const EXAMPLE = `Example vba-block.toml:
   optional = true`;
 
 export function parseReferences(value: any): Reference[] {
-  return Object.entries(value).map(([name, value]) =>
-    parseReference(name, value)
-  );
+  return Object.entries(value).map(([name, value]) => parseReference(name, value));
 }
 
 export function parseReference(name: string, value: any): Reference {
@@ -35,14 +38,9 @@ export function parseReference(name: string, value: any): Reference {
     isVersion(version),
     `Reference "${name}" has an invalid version "${version}". ${EXAMPLE}.`
   );
-  manifestOk(
-    isGuid(guid),
-    `Reference "${name}" has an invalid guid "${guid}". ${EXAMPLE}'`
-  );
+  manifestOk(isGuid(guid), `Reference "${name}" has an invalid guid "${guid}". ${EXAMPLE}'`);
 
-  const [major, minor] = version
-    .split('.')
-    .map((part: string) => parseInt(part, 10));
+  const [major, minor] = version.split('.').map((part: string) => parseInt(part, 10));
 
   return { name, version, guid, major, minor, optional };
 }

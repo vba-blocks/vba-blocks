@@ -17,10 +17,7 @@ interface EnvironmentOptions {
   silent?: boolean;
 }
 
-export function setupEnvironment(
-  cwd: string,
-  options: EnvironmentOptions = {}
-) {
+export function setupEnvironment(cwd: string, options: EnvironmentOptions = {}) {
   const { silent = true } = options;
 
   env.cwd = cwd;

@@ -20,15 +20,11 @@ Public Function ImportGraph(Graph As Variant) As String
         Installer.Import Document.VBProject, Src("name"), Src("path"), Overwrite:=True
     Next Src
 
-    ' TODO Receiving the following error:
-    '
-    ' Failed to add reference. -2147319779: Object library not registered
-    '
-    ' Dim Ref As Dictionary
-    ' For Each Ref In Values("references")
-    '     Output.Messages.Add "ref: " & Ref("name") & ", " & Ref("guid") & ", " & Ref("major") & ", " & Ref("minor")
-    '     Installer.AddReference Document.VBProject, Ref("guid"), Ref("major"), Ref("minor")
-    ' Next Ref
+    Dim Ref As Dictionary
+    For Each Ref In Values("references")
+        Output.Messages.Add "ref: " & Ref("name") & ", " & Ref("guid") & ", " & Ref("major") & ", " & Ref("minor")
+        Installer.AddReference Document.VBProject, Ref("guid"), CLng(Ref("major")), CLng(Ref("minor"))
+    Next Ref
 
     Document.Save
 
@@ -89,35 +85,37 @@ Public Function ExportTo(Info As Variant) As String
             Installer.Export Document.VBProject, Component.Name, Path, Overwrite:=True
         End If
     Next Component
-    
+
     ' For "indirect" values (VBA project name and references)
     ' export to project.json for post-processing by vba-blocks
     Dim Project As New Dictionary
-    
+
     Project("name") = Document.VBProject.Name
     Set Project("references") = New Collection
-    
+
     Dim Ref As Object ' Reference
     Dim RefInfo As Dictionary
+    Dim BuiltInReferences As Variant
+    BuiltInReferences = Array("stdole", "office")
     For Each Ref In Document.VBProject.References
-        If Not Ref.BuiltIn Then
+        If Not Ref.BuiltIn And Not InArray(VBA.LCase$(Ref.Name), BuiltInReferences) Then
             Set RefInfo = New Dictionary
             RefInfo("name") = Ref.Name
             RefInfo("version") = Ref.Major & "." & Ref.Minor
             RefInfo("guid") = Ref.Guid
             RefInfo("major") = Ref.Major
             RefInfo("minor") = Ref.Minor
-        
+
             Project("references").Add RefInfo
         End If
     Next Ref
-    
+
     Dim ProjectPath As String
     Dim ProjectJson As String
-    
+
     ProjectPath = FileSystem.JoinPath(Staging, "project.json")
     ProjectJson = JsonConverter.ConvertToJson(Project)
-    
+
     Open ProjectPath For Output As #1
     Print #1, ProjectJson
     Close #1
@@ -162,7 +160,7 @@ End Function
 Private Function ComponentIsBlank(Component As Object) As Boolean
     Dim LineNumber As Long
     Dim Line As String
-    
+
     For LineNumber = 1 To Component.CodeModule.CountOfLines
         Line = Component.CodeModule.Lines(LineNumber, 1)
         If Not (Line = "Option Explicit" Or Line = "") Then
@@ -172,4 +170,15 @@ Private Function ComponentIsBlank(Component As Object) As Boolean
     Next LineNumber
 
     ComponentIsBlank = True
+End Function
+
+Private Function InArray(Value As Variant, Values As Variant) As Boolean
+    Dim i As Long
+    For i = UBound(Values) To UBound(Values)
+        If Values(i) = Value Then
+            InArray = True
+            Exit Function
+        End If
+    Next i
+
 End Function

@@ -60,7 +60,18 @@ Public Function Validate(Args As Variant) As String
     ],
   },
   "references": Object {
-    "added": Array [],
+    "added": Array [
+      Object {
+        "details": Object {
+          "dependency": undefined,
+        },
+        "guid": "{0002E157-0000-0000-C000-000000000046}",
+        "major": 5,
+        "minor": 3,
+        "name": "VBIDE",
+        "version": "5.3",
+      },
+    ],
     "changed": Array [],
     "removed": Array [],
   },

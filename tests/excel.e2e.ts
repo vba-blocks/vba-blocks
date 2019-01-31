@@ -1,13 +1,6 @@
 import { join } from 'path';
 import { copy } from 'fs-extra';
-import {
-  tmp,
-  run,
-  RunResult,
-  setup,
-  execute,
-  readdir
-} from './__helpers__/execute';
+import { tmp, run, RunResult, setup, execute, readdir } from './__helpers__/execute';
 import { standard, empty, json, single, targetless } from './__fixtures__';
 
 jest.setTimeout(30000);
@@ -49,10 +42,7 @@ describe('export', () => {
         await execute(built, 'build');
 
         // 2. Copy standard built into empty
-        await copy(
-          join(built, 'build/standard.xlsm'),
-          join(cwd, 'build/empty.xlsm')
-        );
+        await copy(join(built, 'build/standard.xlsm'), join(cwd, 'build/empty.xlsm'));
 
         // 3. Export "empty" project
         const { stdout } = await execute(cwd, 'export --target xlsm');
@@ -69,10 +59,7 @@ describe('export', () => {
       await setup(standard, 'export-standard-to-json', async built => {
         await execute(built, 'build');
 
-        await copy(
-          join(built, 'build/standard.xlsm'),
-          join(cwd, 'build/json.xlsm')
-        );
+        await copy(join(built, 'build/standard.xlsm'), join(cwd, 'build/json.xlsm'));
 
         const { stdout } = await execute(cwd, 'export --target xlsm');
 
@@ -107,10 +94,7 @@ describe('new', () => {
     await tmp('new-existing-target', async cwd => {
       await setup(standard, 'new-existing-target-build', async built => {
         await execute(built, 'build');
-        await execute(
-          cwd,
-          `new existing-target --from ${join(built, 'build/standard.xlsm')}`
-        );
+        await execute(cwd, `new existing-target --from ${join(built, 'build/standard.xlsm')}`);
 
         const result = await readdir(join(cwd, 'existing-target'));
         expect(result).toMatchSnapshot();

@@ -1,13 +1,15 @@
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import { relative } from '../utils/path';
-import { Manifest, Source, Dependency, Target } from './';
+import { Manifest, Source, Dependency, Reference, Target } from './';
 import { isRegistryDependency, isPathDependency } from './dependency';
 import {
   patchApplyChanges,
   patchAddSrc,
   patchRemoveSrc,
   patchAddDependency,
-  patchRemoveDependency
+  patchRemoveDependency,
+  patchAddReference,
+  patchRemoveReference
 } from '../messages';
 import env from '../env';
 
@@ -19,8 +21,7 @@ export function applyChanges(changes: string[]) {
 
 export function addSource(manifest: Manifest, source: Source): string {
   const relative_path = relative(manifest.dir, source.path);
-  const relative_binary_path =
-    source.binary && relative(manifest.dir, source.binary);
+  const relative_binary_path = source.binary && relative(manifest.dir, source.binary);
 
   const details = relative_binary_path
     ? `{ path = "${relative_path}", binary = "${relative_binary_path}" }`
@@ -35,10 +36,7 @@ export function removeSource(_: Manifest, name: string): string {
   return patchRemoveSrc(name);
 }
 
-export function addDependency(
-  manifest: Manifest,
-  dependency: Dependency
-): string {
+export function addDependency(manifest: Manifest, dependency: Dependency): string {
   let details;
   if (isRegistryDependency(dependency)) {
     const { version, registry } = dependency;
@@ -69,6 +67,18 @@ export function addDependency(
 
 export function removeDependency(_: Manifest, name: string): string {
   return patchRemoveDependency(name);
+}
+
+export function addReference(_manifest: Manifest, reference: Reference): string {
+  const details = `{ version = "${reference.version}", guid = "${reference.guid}" }`;
+
+  return dedent`
+    ${patchAddReference()}
+    ${reference.name} = ${details}`;
+}
+
+export function removeReference(_manifest: Manifest, name: string): string {
+  return patchRemoveReference(name);
 }
 
 export function addTarget(manifest: Manifest, target: Target): string {

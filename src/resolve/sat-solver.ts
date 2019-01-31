@@ -8,10 +8,7 @@ import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution, ResolutionGraph } from './resolver';
 import unique from '../utils/unique';
 
-export async function solve(
-  workspace: Workspace,
-  resolver: Resolver
-): Promise<DependencyGraph> {
+export async function solve(workspace: Workspace, resolver: Resolver): Promise<DependencyGraph> {
   const dependencies = workspace.root.dependencies;
 
   await resolveDependencies(dependencies, resolver);
@@ -55,15 +52,11 @@ export async function solve(
 
   const ids: string[] = solution.getTrueVars();
 
-  const graph = ids
-    .map(id => resolver.getRegistration(id))
-    .filter(isRegistration);
+  const graph = ids.map(id => resolver.getRegistration(id)).filter(isRegistration);
 
   return graph;
 
-  function isRegistration(
-    value: Registration | undefined
-  ): value is Registration {
+  function isRegistration(value: Registration | undefined): value is Registration {
     return value != null;
   }
 }
@@ -72,16 +65,12 @@ export async function resolveDependencies(
   dependencies: Dependency[],
   resolver: Resolver
 ): Promise<void> {
-  const resolved = await Promise.all(
-    dependencies.map(dependency => resolver.get(dependency))
-  );
+  const resolved = await Promise.all(dependencies.map(dependency => resolver.get(dependency)));
 
   for (const resolution of resolved) {
     const { registered } = resolution;
     await Promise.all(
-      registered.map(registration =>
-        resolveDependencies(registration.dependencies, resolver)
-      )
+      registered.map(registration => resolveDependencies(registration.dependencies, resolver))
     );
   }
 }

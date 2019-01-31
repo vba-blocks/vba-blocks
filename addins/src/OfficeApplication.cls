@@ -77,14 +77,14 @@ End Function
 ''
 Public Function CreateDocument(Path As String) As Object
     Path = FileSystem.NormalizePath(Path)
-    
+
     If FileSystem.FileExists(Path) Then
         Err.Raise 10202, Description:="Document already exists at " & Path
     End If
-    
+
     Dim AppType As String
     Dim Doc As Object
-    
+
     AppType = GetType(Path)
     Select Case AppType
     Case "excel"
@@ -98,13 +98,13 @@ Public Function CreateDocument(Path As String) As Object
     Case "outlook"
         ' ...
     End Select
-    
+
     Dim Instance As New Dictionary
     Instance("Type") = AppType
     Instance("WasOpen") = False
     Set Instance("Document") = Doc
     Set Documents(Path) = Instance
-    
+
     Set CreateDocument = Doc
 End Function
 
@@ -166,10 +166,10 @@ End Sub
 
 Private Function CreateWorkbook(Path As String) As Object
     Dim WB As Object
-    
+
     Set WB = Application.Workbooks.Add
     WB.SaveAs Path, 52 ' XlFileFormat.xlOpenXMLWorkbookMacroEnabled
-    
+
     Set CreateWorkbook = WB
 End Function
 

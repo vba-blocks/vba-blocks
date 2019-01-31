@@ -1,5 +1,5 @@
 import { extname } from './utils/path';
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import { Target } from './manifest';
 import { Registration } from './sources';
 import { Project } from './project';
@@ -26,6 +26,8 @@ export interface Messages {
   'patch-remove-src': { name: string };
   'patch-add-dependency': {};
   'patch-remove-dependency': { name: string };
+  'patch-add-reference': {};
+  'patch-remove-reference': { name: string };
 }
 
 export interface ErrorMessages {
@@ -106,9 +108,7 @@ export const reporter: Reporter = {
 
     'build-target-building': ({ target, project, dependencies }) => dedent`
       \n[2/3] Building target "${target.type}" for "${project.manifest.name}"...
-      ${
-        dependencies.length ? `\nDependencies:\n${dependencies.join('\n')}` : ''
-      }`,
+      ${dependencies.length ? `\nDependencies:\n${dependencies.join('\n')}` : ''}`,
 
     'build-lockfile-writing': ({ skipped }) => dedent`
       \n[3/3] Writing lockfile...${skipped ? ' (skipped, no changes)' : ''}`,
@@ -141,13 +141,19 @@ export const reporter: Reporter = {
       Add the following to the [src] section:`,
 
     'patch-remove-src': ({ name }) => dedent`
-      Remove \`${name}\` from the [src] section`,
+      Remove "${name}" from the [src] section`,
 
     'patch-add-dependency': () => dedent`
       Add the following to the [dependencies] section:`,
 
     'patch-remove-dependency': ({ name }) => dedent`
-      Remove \`${name}\` from the [dependencies] section`
+      Remove "${name}" from the [dependencies] section`,
+
+    'patch-add-reference': () => dedent`
+      Add the following to the [references] section:`,
+
+    'patch-remove-reference': ({ name }) => dedent`
+      Remove "${name}" from the [references] section`
   },
 
   errors: {
@@ -256,19 +262,19 @@ export const reporter: Reporter = {
     'new-name-required': _ => dedent`
       "name" is required with vba-blocks new (e.g. vba-blocks new project-name).
 
-      Try \`vba-blocks new help\` for more information.`,
+      Try "vba-blocks new help" for more information.`,
 
     'new-target-required': _ => dedent`
       .TYPE, --target, or --from is required for vba-blocks projects.
       (e.g. vba-blocks new project.name.TYPE)
 
-      Try \`vba-blocks new help\` for more information.`,
+      Try "vba-blocks new help" for more information.`,
 
     'new-dir-exists': ({ name, dir }) => dedent`
       A directory for "${name}" already exists: "${dir}".`,
 
     'from-not-found': ({ from }) => dedent`
-      The \`from\` document was not found at "${from}".`,
+      The "from" document was not found at "${from}".`,
 
     'init-already-initialized': () => dedent`
       A vba-blocks project already exists in this directory.`,
@@ -287,9 +293,7 @@ export const reporter: Reporter = {
       No matching target found for type "${type}" in project.`,
 
     'export-target-not-found': ({ target, path }) => dedent`
-      Could not find built target for type "${
-        target.type
-      }" (checked "${path}").`,
+      Could not find built target for type "${target.type}" (checked "${path}").`,
 
     'addin-unsupported-type': ({ type }) => dedent`
       The target type "${type} is not currently supported.`,

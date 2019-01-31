@@ -61,10 +61,7 @@ export async function readLockfile(dir: string): Promise<Lockfile | null> {
  *
  * @throws lockfile-write-failed
  */
-export async function writeLockfile(
-  dir: string,
-  lockfile: Lockfile
-): Promise<void> {
+export async function writeLockfile(dir: string, lockfile: Lockfile): Promise<void> {
   const file = join(dir, 'vba-block.lock');
   debug(`Writing lockfile to ${file}`);
 
@@ -78,18 +75,12 @@ export async function writeLockfile(
 
 // Check if lockfile is still valid for loaded workspace
 // (e.g. invalidated by changing/adding dependency to manifest)
-export async function isLockfileValid(
-  lockfile: Lockfile,
-  workspace: Workspace
-): Promise<boolean> {
-  if (!lockfile.metadata || lockfile.metadata.version !== LOCKFILE_VERSION)
-    return false;
+export async function isLockfileValid(lockfile: Lockfile, workspace: Workspace): Promise<boolean> {
+  if (!lockfile.metadata || lockfile.metadata.version !== LOCKFILE_VERSION) return false;
 
-  if (!(await compareManifests(workspace.root, lockfile.workspace.root)))
-    return false;
+  if (!(await compareManifests(workspace.root, lockfile.workspace.root))) return false;
 
-  if (lockfile.workspace.members.length !== workspace.members.length)
-    return false;
+  if (lockfile.workspace.members.length !== workspace.members.length) return false;
 
   const byName: { [name: string]: Snapshot } = {};
   workspace.members.forEach(member => (byName[member.name] = member));
@@ -149,10 +140,7 @@ export function fromToml(toml: string, dir: string): Lockfile {
   const byName: DependencyByName = new Map();
   const packages = (parsed.packages || []).map((value: any) => {
     const { name, version, source, dependencies } = value;
-    ok(
-      name && version && source && Array.isArray(dependencies),
-      'Invalid package in lockfile'
-    );
+    ok(name && version && source && Array.isArray(dependencies), 'Invalid package in lockfile');
 
     const registration = {
       id: getRegistrationId(name, version),
@@ -186,10 +174,7 @@ export function fromToml(toml: string, dir: string): Lockfile {
 // Convert raw toml value to manifest
 function toManifest(value: any, byName: DependencyByName): Snapshot {
   const { name, version } = value;
-  ok(
-    name && version && Array.isArray(value.dependencies),
-    'Invalid manifest in lockfile'
-  );
+  ok(name && version && Array.isArray(value.dependencies), 'Invalid manifest in lockfile');
 
   const dependencies: Dependency[] = value.dependencies.map((id: string) =>
     getDependency(id, byName)
@@ -203,11 +188,7 @@ function toManifest(value: any, byName: DependencyByName): Snapshot {
 }
 
 // Prepare manifest for toml
-function prepareManifest(
-  manifest: Snapshot,
-  packages: DependencyGraph,
-  dir: string
-): any {
+function prepareManifest(manifest: Snapshot, packages: DependencyGraph, dir: string): any {
   const { name, version } = manifest;
   const dependencies = manifest.dependencies.map(dependency =>
     toDependencyId(dependency, packages, dir)
@@ -244,11 +225,7 @@ function getSource(source: string, dir: string): string {
 //
 // Minimum information needed for lockfile:
 // "{name} {version} {source}"
-function toDependencyId(
-  dependency: Dependency,
-  packages: DependencyGraph,
-  dir: string
-) {
+function toDependencyId(dependency: Dependency, packages: DependencyGraph, dir: string) {
   const registration = getRegistration(packages, dependency);
   ok(registration, 'No package found for dependency');
 
@@ -280,10 +257,7 @@ function getDependency(id: string, byName: DependencyByName): Dependency {
  * - version
  * - dependencies
  */
-async function compareManifests(
-  current: Snapshot,
-  locked: Snapshot
-): Promise<boolean> {
+async function compareManifests(current: Snapshot, locked: Snapshot): Promise<boolean> {
   if (current.name !== locked.name) return false;
   if (current.version !== locked.version) return false;
 
@@ -291,16 +265,11 @@ async function compareManifests(
 }
 
 // Compare dependencies between current user manifest and lockfile manifest
-async function compareDependencies(
-  current: Snapshot,
-  locked: Snapshot
-): Promise<boolean> {
+async function compareDependencies(current: Snapshot, locked: Snapshot): Promise<boolean> {
   if (current.dependencies.length !== locked.dependencies.length) return false;
 
   const byName: { [name: string]: Dependency } = {};
-  current.dependencies.forEach(
-    dependency => (byName[dependency.name] = dependency)
-  );
+  current.dependencies.forEach(dependency => (byName[dependency.name] = dependency));
 
   for (const dependency of locked.dependencies) {
     const currentValue = byName[dependency.name];
@@ -311,19 +280,13 @@ async function compareDependencies(
   return true;
 }
 
-async function satisfiesDependency(
-  value: Dependency,
-  comparison: Dependency
-): Promise<boolean> {
+async function satisfiesDependency(value: Dependency, comparison: Dependency): Promise<boolean> {
   if (isRegistryDependency(comparison)) {
     // Note: Order matters in value / comparison
     //
     // value = manifest / user value
     // comparison = lockfile value (more specific)
-    return (
-      isRegistryDependency(value) &&
-      satisfiesSemver(comparison.version, value.version)
-    );
+    return isRegistryDependency(value) && satisfiesSemver(comparison.version, value.version);
   } else if (isPathDependency(comparison)) {
     if (!isPathDependency(value)) return false;
     if (value.path !== comparison.path) return false;
@@ -334,10 +297,8 @@ async function satisfiesDependency(
   } else if (isGitDependency(comparison)) {
     if (!isGitDependency(value)) return false;
 
-    if (has(value, 'rev') && has(comparison, 'rev'))
-      return value.rev === comparison.rev;
-    if (has(value, 'tag') && has(comparison, 'tag'))
-      return value.tag === comparison.tag;
+    if (has(value, 'rev') && has(comparison, 'rev')) return value.rev === comparison.rev;
+    if (has(value, 'tag') && has(comparison, 'tag')) return value.tag === comparison.tag;
     if (has(value, 'branch') && has(comparison, 'branch'))
       return value.branch === comparison.branch;
   }

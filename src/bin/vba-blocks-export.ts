@@ -1,12 +1,12 @@
 import { Args } from 'mri';
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import exportProject from '../actions/export-project';
 
 const help = dedent`
   Export src from built target.
 
   Usage: vba-blocks export
-  
+
   Options:
     --target=TYPE   Export target of type TYPE [default = target]`;
 

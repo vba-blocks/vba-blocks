@@ -1,5 +1,5 @@
 import { Args } from 'mri';
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import run from '../actions/run';
 
 const help = dedent`

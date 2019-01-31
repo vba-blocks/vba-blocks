@@ -24,11 +24,7 @@ export async function tmp(id: string, action: (cwd: string) => void) {
   }
 }
 
-export async function setup(
-  dir: string,
-  id: string,
-  action: (cwd: string) => void
-): Promise<void> {
+export async function setup(dir: string, id: string, action: (cwd: string) => void): Promise<void> {
   await tmp(id, async path => {
     await copy(dir, path);
     await action(path);
@@ -52,9 +48,7 @@ const isBackup = /\.backup/;
 const isGit = /\.git[\/,\\]/;
 const isBinary = (file: string) => ['.xlsm', '.frx'].includes(extname(file));
 
-export async function readdir(
-  cwd: string
-): Promise<{ [path: string]: string }> {
+export async function readdir(cwd: string): Promise<{ [path: string]: string }> {
   const files = walkSync(cwd, { directories: false });
   const details: { [file: string]: string } = {};
   const checking = files.map(async file => {
@@ -65,10 +59,7 @@ export async function readdir(
       details[file] = '<TODO>';
     } else {
       const data = await readFile(resolve(cwd, file), 'utf8');
-      details[file] =
-        basename(file) === 'vba-block.toml'
-          ? data
-          : truncate(normalize(data), 200);
+      details[file] = basename(file) === 'vba-block.toml' ? data : truncate(normalize(data), 200);
     }
   });
   await Promise.all(checking);

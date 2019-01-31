@@ -1,9 +1,5 @@
 import { resolve, fetch, Sources, Registration } from '../';
-import {
-  RegistryDependency,
-  PathDependency,
-  GitDependency
-} from '../../manifest/dependency';
+import { RegistryDependency, PathDependency, GitDependency } from '../../manifest/dependency';
 
 const gitDependency: GitDependency = {
   name: 'a',
@@ -59,9 +55,7 @@ test('should resolve from registry using sources', async () => {
   const sources = getSources();
   const registered = await resolve(sources, registryDependency);
 
-  expect(getMock(sources.registry['vba-blocks'].resolve).calls.length).toEqual(
-    1
-  );
+  expect(getMock(sources.registry['vba-blocks'].resolve).calls.length).toEqual(1);
   expect(getMock(sources.path.resolve).calls.length).toEqual(0);
   expect(getMock(sources.git.resolve).calls.length).toEqual(0);
 
@@ -72,9 +66,7 @@ test('should resolve from path using sources', async () => {
   const sources = getSources();
   const registered = await resolve(sources, pathDependency);
 
-  expect(getMock(sources.registry['vba-blocks'].resolve).calls.length).toEqual(
-    0
-  );
+  expect(getMock(sources.registry['vba-blocks'].resolve).calls.length).toEqual(0);
   expect(getMock(sources.path.resolve).calls.length).toEqual(1);
   expect(getMock(sources.git.resolve).calls.length).toEqual(0);
 
@@ -85,9 +77,7 @@ test('should resolve from git using sources', async () => {
   const sources = getSources();
   const registered = await resolve(sources, gitDependency);
 
-  expect(getMock(sources.registry['vba-blocks'].resolve).calls.length).toEqual(
-    0
-  );
+  expect(getMock(sources.registry['vba-blocks'].resolve).calls.length).toEqual(0);
   expect(getMock(sources.path.resolve).calls.length).toEqual(0);
   expect(getMock(sources.git.resolve).calls.length).toEqual(1);
 

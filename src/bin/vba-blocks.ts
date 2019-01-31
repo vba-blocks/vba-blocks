@@ -1,6 +1,6 @@
 import mri from 'mri';
 import * as colors from 'ansi-colors';
-import dedent from 'dedent';
+import dedent from 'dedent/macro';
 import has from '../utils/has';
 import { CliError, unknownCommand, cleanError } from '../errors';
 import { RunError } from '../utils/run';
@@ -21,9 +21,7 @@ if (args.debug) {
   if (debug === true) debug = '*';
   else if (Array.isArray(debug)) debug = debug.join(',');
 
-  const filters = (<string>debug)
-    .split(',')
-    .map(filter => `vba-blocks:${filter}`);
+  const filters = (<string>debug).split(',').map(filter => `vba-blocks:${filter}`);
   const existing = process.env.DEBUG ? process.env.DEBUG.split(',') : [];
 
   process.env.DEBUG = existing.concat(filters).join(',');
