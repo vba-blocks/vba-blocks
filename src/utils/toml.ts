@@ -1,7 +1,14 @@
 import { isString, isNumber, isBoolean, isDate, isObject } from './is';
 
-export { parse } from 'toml';
-export { toToml as convert } from 'tomlify-j0.4';
+export async function parse(value: string): Promise<any> {
+  const { parse: parseToml } = await import('toml');
+  return parseToml(value);
+}
+
+export async function convert(value: any): Promise<string> {
+  const { toToml } = await import('tomlify-j0.4');
+  return toToml(value);
+}
 
 export function toLockfile(value: any, level = 0): string {
   if (isString(value)) {

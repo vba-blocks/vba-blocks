@@ -10,7 +10,7 @@ const help = dedent`
   Options:
     --target=TYPE   Export target of type TYPE [default = target]`;
 
-module.exports = async (args: Args) => {
+export default async function(args: Args) {
   if (args.help) {
     console.log(help);
     return;
@@ -21,4 +21,4 @@ module.exports = async (args: Args) => {
   const addin = <string | undefined>args.addin;
 
   await exportProject({ target, completed, addin });
-};
+}

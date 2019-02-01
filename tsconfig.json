@@ -1,20 +1,18 @@
 {
   "compilerOptions": {
-    "declaration": true,
     "esModuleInterop": true,
     "strict": true,
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
-    "outDir": "typings",
     "rootDir": "src",
     "target": "esnext",
     "lib": ["es2017"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noEmit": true
   },
   "include": ["src/**/*.ts"],
   "exclude": [
     "node_modules",
-    "typings",
     "src/**/__mocks__/*",
     "src/**/__tests__/*"
   ]

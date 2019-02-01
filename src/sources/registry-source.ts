@@ -11,18 +11,13 @@ import {
 } from '../utils/fs';
 import { clone, pull } from '../utils/git';
 import { unzip } from '../utils/zip';
-import { Dependency, RegistryDependency } from '../manifest/dependency';
-import { Registration, getRegistrationId, getRegistrationSource } from './registration';
-import { Source } from './source';
+import { getRegistrationId, getRegistrationSource } from './registration';
 import { dependencyNotFound, dependencyInvalidChecksum, sourceDownloadFailed } from '../errors';
 
-const debug = require('debug')('vba-blocks:registry-source');
+import { Dependency, RegistryDependency } from '../manifest/types';
+import { Source, Registration, RegistryOptions } from './types';
 
-export interface RegistryOptions {
-  name: string;
-  index: string;
-  packages: string;
-}
+const debug = require('debug')('vba-blocks:registry-source');
 
 export default class RegistrySource implements Source {
   name: string;

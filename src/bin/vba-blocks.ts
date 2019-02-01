@@ -1,4 +1,4 @@
-import mri from 'mri';
+import mri, { Args } from 'mri';
 import * as colors from 'ansi-colors';
 import dedent from 'dedent/macro';
 import has from '../utils/has';
@@ -8,7 +8,15 @@ import { RunError } from '../utils/run';
 Error.stackTraceLimit = Infinity;
 const version = 'VERSION';
 
-const commands = ['new', 'init', 'build', 'export', 'run'];
+type Command = (args: Args) => Promise<void>;
+const commands: { [name: string]: () => Promise<Command> } = {
+  new: async () => (await import('./vba-blocks-new')).default,
+  init: async () => (await import('./vba-blocks-init')).default,
+  build: async () => (await import('./vba-blocks-build')).default,
+  export: async () => (await import('./vba-blocks-export')).default,
+  run: async () => (await import('./vba-blocks-run')).default
+};
+
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -78,17 +86,17 @@ async function main() {
     args.help = true;
   }
 
-  if (!commands.includes(command)) {
+  if (!(command in commands)) {
     throw unknownCommand(command);
   }
 
   // Remove command from args
   args._ = args._.slice(1);
 
-  let subcommand;
+  let subcommand: (args: Args) => Promise<void>;
   try {
     debug(`loading "./vba-blocks-${command}.js"`);
-    subcommand = require(`./vba-blocks-${command}.js`);
+    subcommand = await commands[command]();
   } catch (err) {
     throw new Error(`Failed to load command "${command}".\n${err.stack}`);
   }

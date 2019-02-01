@@ -1,12 +1,6 @@
 import { ok } from 'assert';
-import {
-  Dependency,
-  isRegistryDependency,
-  isPathDependency,
-  isGitDependency
-} from '../manifest/dependency';
-import { Registration, getSourceParts } from './registration';
-import { Source } from './source';
+import { isRegistryDependency, isPathDependency, isGitDependency } from '../manifest/dependency';
+import { getSourceParts } from './registration';
 import RegistrySource from './registry-source';
 import PathSource from './path-source';
 import GitSource from '../professional/sources/git-source';
@@ -16,13 +10,10 @@ import {
   sourceNoneMatching
 } from '../errors';
 
-export { Registration, Source, RegistrySource, PathSource, GitSource };
+import { Dependency } from '../manifest/types';
+import { Source, Sources, Registration } from './types';
 
-export interface Sources {
-  registry: { [name: string]: Source };
-  git: Source;
-  path: Source;
-}
+export { RegistrySource, PathSource, GitSource };
 
 export async function resolve(sources: Sources, dependency: Dependency): Promise<Registration[]> {
   if (isRegistryDependency(dependency)) {

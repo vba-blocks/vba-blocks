@@ -1,10 +1,7 @@
 import walk from 'walk-sync';
-import { Target } from '../manifest';
-import { Project } from '../project';
 import { join } from '../utils/path';
 import { copy, remove, ensureDir, pathExists } from '../utils/fs';
 import { unzip } from '../utils/zip';
-import { ProjectInfo } from './build-target';
 import {
   loadFromProject,
   loadFromExport,
@@ -14,11 +11,11 @@ import {
 } from '../build';
 import { exportTargetNotFound } from '../errors';
 
-const IS_VBA = /vba.*\.bin/gi;
+import { Project } from '../types';
+import { Target } from '../manifest/types';
+import { ExportOptions, ProjectInfo } from './types';
 
-export interface ExportOptions {
-  __temp__log_patch?: boolean;
-}
+const IS_VBA = /vba.*\.bin/gi;
 
 /**
  * Export target (with staging directory)

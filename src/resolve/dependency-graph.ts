@@ -1,7 +1,6 @@
-import { Registration } from '../sources';
-import { Dependency } from '../manifest';
-
-export type DependencyGraph = Registration[];
+import { Dependency } from '../manifest/types';
+import { Registration } from '../sources/types';
+import { DependencyGraph } from './types';
 
 export function getRegistration(
   graph: DependencyGraph,

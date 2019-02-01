@@ -1,8 +1,4 @@
 import env from '../env';
-import { Project } from '../project';
-import { Changeset } from './compare-build-graphs';
-import { Component } from './component';
-import { Source } from '../manifest';
 import { writeFile, remove, ensureDir } from '../utils/fs';
 import { join, dirname } from '../utils/path';
 import parallel from '../utils/parallel';
@@ -14,6 +10,10 @@ import {
   applyChanges
 } from '../manifest/patch-manifest';
 import { updatingProject } from '../messages';
+
+import { Project } from '../types';
+import { Changeset, Component } from './types';
+import { Source, Reference } from '../manifest/types';
 
 export default async function applyChangeset(
   project: Project,
@@ -73,7 +73,9 @@ async function updateManifest(
     changes.push(addSource(project.manifest, source));
   }
   for (const component of changeset.components.removed) {
-    const index = project.manifest.src.findIndex(source => source.name === component.name);
+    const index = project.manifest.src.findIndex(
+      (source: Source) => source.name === component.name
+    );
     project.manifest.src.splice(index, 1);
     changes.push(removeSource(project.manifest, component.name));
   }
@@ -87,7 +89,9 @@ async function updateManifest(
     changes.push(addReference(project.manifest, reference));
   }
   for (const reference of changeset.references.removed) {
-    const index = project.manifest.references.findIndex(ref => ref.name === reference.name);
+    const index = project.manifest.references.findIndex(
+      (ref: Reference) => ref.name === reference.name
+    );
     project.manifest.src.splice(index, 1);
     changes.push(removeReference(project.manifest, reference.name));
   }

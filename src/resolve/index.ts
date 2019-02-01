@@ -1,16 +1,17 @@
 import { join } from '../utils/path';
-import { Config } from '../config';
-import { Workspace } from '../workspace';
-import { DependencyGraph, getRegistration } from './dependency-graph';
+import { getRegistration } from './dependency-graph';
 import Resolver from './resolver';
 import solveLatest from './latest-solver';
 import { resolveFailed } from '../errors';
 import env from '../env';
 import { resolvingDependencies } from '../messages';
 
+import { Config, Workspace } from '../types';
+import { DependencyGraph } from './types';
+
 const debug = require('debug')('vba-blocks:resolve');
 
-export { DependencyGraph, getRegistration, Resolver };
+export { getRegistration, Resolver };
 
 export default async function resolve(
   config: Config,
@@ -33,7 +34,7 @@ export default async function resolve(
 
   // Fallback to SAT solver
   try {
-    const { solve: solveSat } = require(join(__dirname, 'sat-solver'));
+    const { solve: solveSat } = await import('./sat-solver');
     return await solveSat(workspace, resolver);
   } catch (err) {
     debug(`solveSat failed with ${err}`);

@@ -1,19 +1,14 @@
-import { Target } from '../manifest';
 import { loadProject, fetchDependencies } from '../project';
 import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
 import { join, sanitize } from '../utils/path';
 import { emptyDir, ensureDir } from '../utils/fs';
 import { exportNoDefault, exportNoMatching } from '../errors';
-import { TargetType } from '../manifest/target';
 import env from '../env';
 import { exportLoadingProject, exportToStaging, exportToProject } from '../messages';
 
-export interface ExportOptions {
-  target?: string;
-  completed?: string;
-  addin?: string;
-}
+import { Target, TargetType } from '../manifest/types';
+import { ExportOptions } from './types';
 
 export default async function exportProject(options: ExportOptions = {}) {
   env.reporter.log(exportLoadingProject());

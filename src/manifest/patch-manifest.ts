@@ -1,6 +1,5 @@
 import dedent from 'dedent/macro';
 import { relative } from '../utils/path';
-import { Manifest, Source, Dependency, Reference, Target } from './';
 import { isRegistryDependency, isPathDependency } from './dependency';
 import {
   patchApplyChanges,
@@ -12,6 +11,8 @@ import {
   patchRemoveReference
 } from '../messages';
 import env from '../env';
+
+import { Manifest, Source, Dependency, Reference, Target } from './types';
 
 export function applyChanges(changes: string[]) {
   if (!changes.length) return;

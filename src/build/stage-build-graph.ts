@@ -1,14 +1,9 @@
-import { Source, Reference } from '../manifest';
-import { BuildGraph } from './build-graph';
 import { join, basename } from '../utils/path';
 import { writeFile } from '../utils/fs';
 import parallel from '../utils/parallel';
 
-export interface ImportGraph {
-  name: string;
-  components: Source[];
-  references: Reference[];
-}
+import { Source, Reference } from '../manifest/types';
+import { BuildGraph, ImportGraph } from './types';
 
 export default async function stageBuildGraph(
   graph: BuildGraph,

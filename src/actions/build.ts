@@ -1,7 +1,5 @@
-import { Target } from '../manifest';
-import { TargetType } from '../manifest/target';
 import { loadProject, fetchDependencies } from '../project';
-import { BuildOptions, buildTarget } from '../targets';
+import { buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
 import { targetNoMatching, targetNoDefault } from '../errors';
 import env from '../env';
@@ -9,6 +7,9 @@ import { buildLoadingProject, buildBuildingTarget, buildWritingLockfile } from '
 import { isRegistryDependency } from '../manifest/dependency';
 import { toDependency } from '../sources/registration';
 import { sanitize, join } from '../utils/path';
+
+import { BuildOptions } from '../targets/types';
+import { Target, TargetType } from '../manifest/types';
 
 export default async function build(options: BuildOptions = {}): Promise<string> {
   env.reporter.log(buildLoadingProject());

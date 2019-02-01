@@ -1,11 +1,7 @@
-import { Messages } from './reporter';
 import env from './env';
-import { Target } from './manifest';
-import { Project } from './project';
 
-export type MessageId = keyof Messages;
-
-// Messages
+import { Target } from './manifest/types';
+import { Messages, MessageId, Project } from './types';
 
 export const buildLoadingProject = () => generateMessage('build-project-loading', {});
 

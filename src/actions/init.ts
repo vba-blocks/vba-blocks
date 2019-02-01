@@ -2,8 +2,7 @@ import env from '../env';
 import { basename, extname, join } from '../utils/path';
 import { pathExists, ensureDir, writeFile } from '../utils/fs';
 import { init as git_init } from '../utils/git';
-import { Manifest, writeManifest } from '../manifest';
-import { TargetType } from '../manifest/target';
+import { writeManifest } from '../manifest';
 import { initProject } from '../project';
 import addTarget from '../targets/add-target';
 import {
@@ -13,14 +12,8 @@ import {
   initTargetRequired
 } from '../errors';
 
-export interface InitOptions {
-  name?: string;
-  dir?: string;
-  target?: string;
-  from?: string;
-  pkg: boolean;
-  git: boolean;
-}
+import { Manifest, TargetType } from '../manifest/types';
+import { InitOptions } from './types';
 
 export default async function init(options: InitOptions) {
   let { name, dir = env.cwd, target: target_type, from, pkg: as_package, git } = options;

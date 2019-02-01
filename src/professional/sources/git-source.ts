@@ -1,7 +1,7 @@
 import { sourceUnsupported } from '../../errors';
-import { Source } from '../../sources/source';
-import { Dependency } from '../../manifest';
-import { Registration } from '../../sources/registration';
+
+import { Source, Registration } from '../../sources/types';
+import { Dependency } from '../../manifest/types';
 
 export default class GitSource implements Source {
   resolve(dependency: Dependency): Registration[] {

@@ -1,5 +1,5 @@
-import { Manifest } from '../manifest';
-import { Workspace } from '../workspace';
+import { Manifest } from '../manifest/types';
+import { Workspace } from '../types';
 
 export async function loadWorkspace(manifest: Manifest): Promise<Workspace> {
   return {

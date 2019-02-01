@@ -3,16 +3,9 @@ import { ok } from 'assert';
 import env from './env';
 import { isString } from './utils/is';
 
-import { Target } from './manifest';
-import { Registration } from './sources';
-import { ErrorMessages } from './reporter';
-
-export type CliErrorCode = keyof ErrorMessages;
-
-export interface CliErrorOptions {
-  code?: CliErrorCode;
-  underlying?: Error;
-}
+import { Target } from './manifest/types';
+import { Registration } from './sources/types';
+import { ErrorMessages, CliErrorCode, CliErrorOptions } from './types';
 
 export class CliError extends Error {
   code?: CliErrorCode;

@@ -2,14 +2,22 @@ import { join, normalize, relative } from '../utils/path';
 import { parse as parseToml, convert as convertToToml } from '../utils/toml';
 import { pathExists, readFile, writeFile } from '../utils/fs';
 import { manifestNotFound } from '../errors';
-import { Version } from './version';
-import { Source, parseSrc } from './source';
-import { Dependency, parseDependencies } from './dependency';
-import { Reference, parseReferences } from './reference';
-import { Target, parseTarget } from './target';
+import { parseSrc } from './source';
+import { parseDependencies } from './dependency';
+import { parseReferences } from './reference';
+import { parseTarget } from './target';
 import { manifestOk, manifestInvalid } from '../errors';
 
-export { Version, Source, Dependency, Reference, Target };
+import {
+  Version,
+  Source,
+  Dependency,
+  Reference,
+  Target,
+  Snapshot,
+  Manifest,
+  ManifestType
+} from './types';
 
 /**
  * @example
@@ -28,31 +36,6 @@ export { Version, Source, Dependency, Reference, Target };
  * from-path = { path = "packages/from-path" }
  * ```
  */
-
-export interface Snapshot {
-  name: string;
-  version: Version;
-  dependencies: Dependency[];
-}
-
-export interface Metadata {
-  authors: string[];
-  publish: boolean;
-  [name: string]: any;
-
-  __temp_defaults?: string[];
-}
-
-export interface Manifest extends Snapshot {
-  type: ManifestType;
-  metadata: Metadata;
-  src: Source[];
-  references: Reference[];
-  target?: Target;
-  dir: string;
-}
-
-export type ManifestType = 'package' | 'project';
 
 const EXAMPLE = `Example vba-block.toml for a package (e.g. library to be shared):
 
@@ -140,7 +123,7 @@ export async function loadManifest(dir: string): Promise<Manifest> {
 
   let parsed;
   try {
-    parsed = parseToml(raw.toString());
+    parsed = await parseToml(raw.toString());
   } catch (err) {
     const message = `Syntax Error: ${file} (${err.line}:${err.column})\n\n${err.message}`;
     throw manifestInvalid(message);
@@ -200,6 +183,6 @@ export async function writeManifest(manifest: Manifest, dir: string) {
     throw new Error(`writeManifest does not currently support references`);
   }
 
-  const toml = convertToToml(value);
+  const toml = await convertToToml(value);
   await writeFile(join(dir, 'vba-block.toml'), toml + '\n');
 }

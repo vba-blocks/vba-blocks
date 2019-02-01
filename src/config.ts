@@ -2,22 +2,10 @@ import { join } from './utils/path';
 import { pathExists, readFile } from './utils/fs';
 import { parse as parseToml } from './utils/toml';
 import env from './env';
-import { Sources, RegistrySource, PathSource, GitSource } from './sources';
+import { RegistrySource, PathSource, GitSource } from './sources';
 
-export type Registry = {} | { [name: string]: { index: string; packages: string } };
-
-export interface Flags {}
-
-export interface Config {
-  registry: Registry;
-  flags: Flags;
-  sources: Sources;
-}
-
-export interface ConfigValue {
-  registry?: Registry;
-  flags?: Flags;
-}
+import { Sources } from './sources/types';
+import { Registry, Flags, Config, ConfigValue } from './types';
 
 const empty: ConfigValue = { registry: {}, flags: {} };
 const defaults: ConfigValue = {
@@ -87,7 +75,7 @@ export async function readConfig(dir: string): Promise<ConfigValue | undefined> 
   if (!(await pathExists(file))) return {};
 
   const raw = await readFile(file);
-  const parsed = parseToml(raw.toString());
+  const parsed = await parseToml(raw.toString());
 
   return parsed;
 }

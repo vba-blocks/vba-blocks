@@ -3,11 +3,7 @@ import { extname, resolve } from '../utils/path';
 import { runMissingFile, runMissingMacro } from '../errors';
 import { extensionToApplication } from '../addin';
 
-export interface RunOptions {
-  file: string;
-  macro: string;
-  arg?: string;
-}
+import { RunOptions } from './types';
 
 export default async function run(options: RunOptions) {
   const { file, macro, arg = '' } = options;

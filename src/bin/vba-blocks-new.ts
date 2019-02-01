@@ -20,7 +20,7 @@ const help = dedent`
   vba-blocks new calculations --package
   `;
 
-module.exports = async (args: Args) => {
+export default async function(args: Args) {
   if (args.help) {
     console.log(help);
     return;
@@ -33,4 +33,4 @@ module.exports = async (args: Args) => {
   const git = 'git' in args ? <boolean>args.git : true;
 
   await create({ name, target, from, pkg, git });
-};
+}

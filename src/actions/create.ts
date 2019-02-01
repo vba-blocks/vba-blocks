@@ -4,13 +4,7 @@ import { pathExists, ensureDir } from '../utils/fs';
 import init from './init';
 import { newNameRequired, newDirExists, newTargetRequired } from '../errors';
 
-export interface CreateOptions {
-  name: string;
-  target?: string;
-  from?: string;
-  pkg: boolean;
-  git: boolean;
-}
+import { CreateOptions } from './types';
 
 export default async function create(options: CreateOptions) {
   if (!options || !options.name) {

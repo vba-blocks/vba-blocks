@@ -1,9 +1,10 @@
-import { Manifest, Reference } from '../manifest';
-import { Project } from '../project';
 import { Component, byComponentName } from './component';
-import { BuildGraph } from './build-graph';
 import { joinCommas } from '../utils/text';
 import { buildInvalid } from '../errors';
+
+import { Manifest, Reference } from '../manifest/types';
+import { Project } from '../types';
+import { BuildGraph } from './types';
 
 export default async function loadFromProject(
   project: Project,

@@ -1,6 +1,4 @@
 import walk from 'walk-sync';
-import { Reference } from '../manifest';
-import { BuildGraph } from './build-graph';
 import { Component, extension_to_type, byComponentName } from './component';
 import { join, extname, basename } from '../utils/path';
 import { pathExists, readJson, readFile } from '../utils/fs';
@@ -8,6 +6,9 @@ import parallel from '../utils/parallel';
 import env from '../env';
 import { unrecognizedComponent } from '../errors';
 import { loadingExport } from '../messages';
+
+import { Reference } from '../manifest/types';
+import { BuildGraph } from './types';
 
 const binary_extensions = ['.frx'];
 

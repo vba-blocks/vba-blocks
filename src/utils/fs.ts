@@ -1,16 +1,16 @@
-import {
-  copy,
-  emptyDir,
-  ensureDir,
-  ensureDirSync,
-  move,
-  pathExists,
-  readFile,
-  readJson,
-  remove,
-  symlink,
-  writeFile
-} from 'fs-extra';
+import { promisify } from 'util';
+import { readFile as _readFile, symlink as _symlink, writeFile as _writeFile } from 'fs';
+import { copy } from 'fs-extra/lib/copy';
+import { emptyDir } from 'fs-extra/lib/empty';
+import { ensureDir, ensureDirSync } from 'fs-extra/lib/mkdirs';
+import { move } from 'fs-extra/lib/move';
+import { pathExists } from 'fs-extra/lib/path-exists';
+import { readJson } from 'fs-extra/lib/json/jsonfile';
+import { remove } from 'fs-extra/lib/remove';
+
+const readFile = promisify(_readFile);
+const symlink = promisify(_symlink);
+const writeFile = promisify(_writeFile);
 
 import hash from './hash';
 

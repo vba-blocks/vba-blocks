@@ -2,18 +2,11 @@ import { join, dirname } from './utils/path';
 import { ensureDir } from './utils/fs';
 import run from './utils/run';
 import env from './env';
-import { Project } from './project';
-import { Target } from './manifest';
-import { ImportGraph } from './build';
 import { addinUnsupportedType } from './errors';
 
-export type Application = 'excel';
-export type Addin = string;
-
-export interface AddinOptions {
-  addin?: string;
-  staging?: boolean;
-}
+import { Target } from './manifest/types';
+import { ImportGraph } from './build/types';
+import { Application, Addin, AddinOptions, Project } from './types';
 
 export const extensions: { [application: string]: string[] } = {
   excel: ['xlsx', 'xlsm', 'xlam']

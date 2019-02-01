@@ -1,13 +1,10 @@
 import { parse as parseQuerystring } from 'querystring';
-import { Snapshot, Dependency } from '../manifest';
 import has from '../utils/has';
 import { isString } from '../utils/is';
 import { sourceUnrecognizedType } from '../errors';
 
-export interface Registration extends Snapshot {
-  id: string;
-  source: string;
-}
+import { Snapshot, Dependency } from '../manifest/types';
+import { Registration } from './types';
 
 export function fromSnapshot(snapshot: Snapshot, source: string): Registration {
   const { name, version, dependencies } = snapshot;

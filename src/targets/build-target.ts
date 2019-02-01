@@ -1,5 +1,3 @@
-import { Project } from '../project';
-import { Manifest, Target } from '../manifest';
 import {
   targetImportFailed,
   targetIsOpen,
@@ -13,15 +11,9 @@ import { join } from '../utils/path';
 import { pathExists, ensureDir, remove, move, emptyDir, copy } from '../utils/fs';
 import { zip } from '../utils/zip';
 
-export interface BuildOptions {
-  target?: string;
-  addin?: string;
-}
-
-export interface ProjectInfo {
-  project: Project;
-  dependencies: Manifest[];
-}
+import { Project } from '../types';
+import { Target } from '../manifest/types';
+import { ProjectInfo, BuildOptions } from './types';
 
 /**
  * Build target:

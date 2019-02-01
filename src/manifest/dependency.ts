@@ -1,31 +1,16 @@
-import { Version } from './version';
 import { join, trailing } from '../utils/path';
 import { isString } from '../utils/is';
 import has from '../utils/has';
 import { manifestOk } from '../errors';
 
-export interface DependencyDetails {
-  name: string;
-  version?: string;
-}
-
-export interface RegistryDependency extends DependencyDetails {
-  registry: string;
-  version: string;
-}
-
-export interface PathDependency extends DependencyDetails {
-  path: string;
-}
-
-export interface GitDependency extends DependencyDetails {
-  git: string;
-  tag?: string;
-  branch?: string;
-  rev?: string;
-}
-
-export type Dependency = RegistryDependency | PathDependency | GitDependency;
+import {
+  Version,
+  DependencyDetails,
+  RegistryDependency,
+  PathDependency,
+  GitDependency,
+  Dependency
+} from './types';
 
 const EXAMPLE = `Example vba-block.toml:
 
