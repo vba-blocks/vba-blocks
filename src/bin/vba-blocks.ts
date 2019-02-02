@@ -6,9 +6,9 @@ import has from '../utils/has';
 import { joinCommas } from '../utils/text';
 import { CliError, ErrorCode, cleanError } from '../errors';
 import { RunError } from '../utils/run';
+import { version } from '../../package.json';
 
 Error.stackTraceLimit = Infinity;
-const version = 'VERSION';
 
 type Command = (args: Args) => Promise<void>;
 const commands: { [name: string]: () => Promise<Command> } = {

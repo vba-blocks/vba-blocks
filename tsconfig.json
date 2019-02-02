@@ -4,6 +4,7 @@
     "strict": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "rootDir": "src",
     "target": "esnext",
     "lib": ["es2017"],

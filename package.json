@@ -4,7 +4,7 @@
   "repository": "https://github.com/vba-blocks/vba-blocks.git",
   "author": "Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)",
   "license": "MIT",
-  "bin": "lib/bin/vba-blocks.js",
+  "bin": "lib/vba-blocks.js",
   "main": "lib/index.js",
   "typings": "typings/index.d.ts",
   "scripts": {
@@ -31,8 +31,7 @@
   },
   "pkg": {
     "scripts": [
-      "lib/bin/*.js",
-      "lib/sat-solver.js"
+      "lib/*.js"
     ]
   },
   "prettier": {
