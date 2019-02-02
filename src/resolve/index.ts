@@ -4,7 +4,7 @@ import Resolver from './resolver';
 import solveLatest from './latest-solver';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
-import { resolvingDependencies } from '../messages';
+import { Message } from '../messages';
 
 import { Config, Workspace } from '../types';
 import { DependencyGraph } from './types';
@@ -18,7 +18,7 @@ export default async function resolve(
   workspace: Workspace,
   preferred: DependencyGraph = []
 ): Promise<DependencyGraph> {
-  env.reporter.log(resolvingDependencies());
+  env.reporter.log(Message.DependenciesResolving, `Resolving dependencies`);
 
   // Load, update, and seed resolver
   const resolver = new Resolver(config);

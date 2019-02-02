@@ -6,13 +6,13 @@ import { join, sanitize } from '../utils/path';
 import { emptyDir, ensureDir } from '../utils/fs';
 import { CliError, ErrorCode } from '../errors';
 import env from '../env';
-import { exportLoadingProject, exportToStaging, exportToProject } from '../messages';
+import { Message } from '../messages';
 
 import { Target, TargetType } from '../manifest/types';
 import { ExportOptions } from './types';
 
 export default async function exportProject(options: ExportOptions = {}) {
-  env.reporter.log(exportLoadingProject());
+  env.reporter.log(Message.ExportProjectLoading, `[1/3] Loading project...`);
 
   const project = await loadProject();
 
@@ -57,7 +57,7 @@ export default async function exportProject(options: ExportOptions = {}) {
   if (!options.completed) {
     staging = join(project.paths.staging, 'export');
 
-    env.reporter.log(exportToStaging(target));
+    env.reporter.log(Message.ExportToStaging, `\n[2/3] Exporting src from "${target.filename}"`);
 
     await ensureDir(staging);
     await emptyDir(staging);
@@ -66,6 +66,6 @@ export default async function exportProject(options: ExportOptions = {}) {
     staging = options.completed;
   }
 
-  env.reporter.log(exportToProject());
+  env.reporter.log(Message.ExportToProject, `\n[3/3] Updating project`);
   await exportTarget(target, { project, dependencies }, staging);
 }

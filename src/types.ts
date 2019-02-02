@@ -1,6 +1,7 @@
-import { Manifest, Target } from './manifest/types';
+import { Manifest } from './manifest/types';
 import { Sources } from './sources/types';
 import { DependencyGraph } from './resolve/types';
+import { Message } from './messages';
 
 export type Application = 'excel';
 export type Addin = string;
@@ -64,37 +65,10 @@ export interface ConfigValue {
   flags?: Flags;
 }
 
-export interface Messages {
-  'build-project-loading': {};
-  'build-target-building': {
-    target: Target;
-    project: Project;
-    dependencies: string[];
-  };
-  'build-lockfile-writing': { skipped: boolean };
-
-  'export-project-loading': {};
-  'export-to-staging': { target: Target };
-  'export-to-project': {};
-
-  'project-updating': {};
-  'dependencies-resolving': {};
-  'dependencies-fetching': {};
-  'export-loading': {};
-  'patch-apply-changes': {};
-  'patch-add-src': {};
-  'patch-remove-src': { name: string };
-  'patch-add-dependency': {};
-  'patch-remove-dependency': { name: string };
-  'patch-add-reference': {};
-  'patch-remove-reference': { name: string };
-}
-
 export interface Reporter {
   silent?: boolean;
-  log: (message: string) => void;
+  log: (id: Message, message: string) => void;
   progress: (name: string) => Progress;
-  messages: { [T in keyof Messages]: (values: Messages[T]) => string };
 }
 
 export interface Progress {
@@ -102,5 +76,3 @@ export interface Progress {
   tick: () => void;
   done: () => void;
 }
-
-export type MessageId = keyof Messages;

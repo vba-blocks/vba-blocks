@@ -9,7 +9,6 @@ import {
   removeReference,
   applyChanges
 } from '../manifest/patch-manifest';
-import { updatingProject } from '../messages';
 
 import { Project } from '../types';
 import { Changeset, Component } from './types';
@@ -20,7 +19,7 @@ export default async function applyChangeset(
   changeset: Changeset,
   options: { __temp__log_patch: boolean } = { __temp__log_patch: true }
 ) {
-  const progress = env.reporter.progress(updatingProject());
+  const progress = env.reporter.progress('Updating src files');
   const start = progress.start;
   progress.start = () => {};
   const done = progress.done;

@@ -4,16 +4,16 @@ import { buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
 import { CliError, ErrorCode } from '../errors';
 import env from '../env';
-import { buildLoadingProject, buildBuildingTarget, buildWritingLockfile } from '../messages';
 import { isRegistryDependency } from '../manifest/dependency';
 import { toDependency } from '../sources/registration';
 import { sanitize, join } from '../utils/path';
+import { Message } from '../messages';
 
 import { BuildOptions } from '../targets/types';
 import { Target, TargetType } from '../manifest/types';
 
 export default async function build(options: BuildOptions = {}): Promise<string> {
-  env.reporter.log(buildLoadingProject());
+  env.reporter.log(Message.BuildProjectLoading, `[1/3] Loading project...`);
 
   const project = await loadProject();
 
@@ -73,13 +73,22 @@ export default async function build(options: BuildOptions = {}): Promise<string>
       return `${registration.id} registry+${dependency.registry}`;
     else return `${registration.id} ${registration.source}`;
   });
-  env.reporter.log(buildBuildingTarget(target, project, display_dependencies));
+  env.reporter.log(
+    Message.BuildTargetBuilding,
+    dedent`
+      \n[2/3] Building target "${target.type}" for "${project.manifest.name}"...
+      ${display_dependencies.length ? `\nDependencies:\n${display_dependencies.join('\n')}` : ''}`
+  );
 
   await buildTarget(target, { project, dependencies }, options);
 
   // Update lockfile (if necessary)
-  env.reporter.log(buildWritingLockfile(!project.has_dirty_lockfile));
-  if (project.has_dirty_lockfile) {
+  const skip = !project.has_dirty_lockfile;
+  env.reporter.log(
+    Message.BuildLockfileWriting,
+    `\n[3/3] Writing lockfile...${skip ? ' (skipped, no changes)' : ''}`
+  );
+  if (!skip) {
     await writeLockfile(project.workspace.root.dir, project);
   }
 

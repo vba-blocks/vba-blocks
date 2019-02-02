@@ -5,7 +5,6 @@ import { pathExists, readJson, readFile } from '../utils/fs';
 import parallel from '../utils/parallel';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
-import { loadingExport } from '../messages';
 
 import { Reference } from '../manifest/types';
 import { BuildGraph } from './types';
@@ -53,7 +52,7 @@ export default async function loadFromExport(staging: string): Promise<BuildGrap
 
       return new Component(type, code, { dependency, binary });
     },
-    { progress: env.reporter.progress(loadingExport()) }
+    { progress: env.reporter.progress('Loading exported components') }
   );
   components.sort(byComponentName);
 
