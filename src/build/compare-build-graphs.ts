@@ -1,19 +1,7 @@
-import { Reference } from '../manifest';
-import { BuildGraph } from './build-graph';
-import { Component, byComponentName } from './component';
+import { byComponentName } from './component';
 
-export interface Changeset {
-  components: {
-    added: Component[];
-    changed: Component[];
-    removed: Component[];
-  };
-  references: {
-    added: Reference[];
-    changed: Reference[];
-    removed: Reference[];
-  };
-}
+import { Reference } from '../manifest/types';
+import { BuildGraph, Changeset, Component } from './types';
 
 export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph): Changeset {
   const changeset: Changeset = {

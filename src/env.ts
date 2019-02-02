@@ -2,25 +2,9 @@ import { homedir } from 'os';
 import { join } from './utils/path';
 import getStaging from './utils/get-staging';
 import isPackaged from './utils/is-packaged';
-import { Reporter, reporter } from './reporter';
+import { reporter } from './reporter';
 
-export interface Env {
-  isWindows: boolean;
-  cwd: string;
-  values: any;
-
-  addins: string;
-  scripts: string;
-  bin: string;
-  cache: string;
-  registry: string;
-  packages: string;
-  sources: string;
-  staging: string;
-
-  reporter: Reporter;
-  silent: boolean;
-}
+import { Env } from './types';
 
 const cache = join(homedir(), '.vba-blocks');
 const env: Env = {

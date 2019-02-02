@@ -4,36 +4,26 @@ import { join, relative, trailing } from '../utils/path';
 import { pathExists, readFile, writeFile } from '../utils/fs';
 import { toLockfile as convertToToml, parse as parseToml } from '../utils/toml';
 import has from '../utils/has';
-import { Snapshot, loadManifest } from '../manifest';
+import { loadManifest } from '../manifest';
+import { isRegistryDependency, isPathDependency, isGitDependency } from '../manifest/dependency';
 import {
-  Dependency,
-  isRegistryDependency,
-  isPathDependency,
-  isGitDependency
-} from '../manifest/dependency';
-import { Workspace } from '../workspace';
-import {
-  Registration,
   getRegistrationId,
   getRegistrationSource,
   getSourceParts,
   toDependency
 } from '../sources/registration';
-import { DependencyGraph, getRegistration } from '../resolve';
-import { lockfileWriteFailed } from '../errors';
+import { getRegistration } from '../resolve';
+import { CliError, ErrorCode } from '../errors';
+
+import { Snapshot, Dependency } from '../manifest/types';
+import { Workspace } from '../types';
+import { Registration } from '../sources/types';
+import { DependencyGraph } from '../resolve/types';
+import { Lockfile } from './types';
 
 const debug = require('debug')('vba-blocks:lockfile');
 const VBA_BLOCKS_VERSION = 'VERSION';
 const LOCKFILE_VERSION = '1';
-
-export interface Lockfile {
-  metadata?: { version: string };
-  workspace: {
-    root: Snapshot;
-    members: Snapshot[];
-  };
-  packages: DependencyGraph;
-}
 
 type DependencyByName = Map<string, Dependency>;
 
@@ -47,7 +37,7 @@ export async function readLockfile(dir: string): Promise<Lockfile | null> {
     if (!(await pathExists(file))) return null;
 
     const toml = await readFile(file, 'utf8');
-    return fromToml(toml, dir);
+    return await fromToml(toml, dir);
   } catch (err) {
     debug('Error reading/parsing lockfile');
     debug(err);
@@ -69,7 +59,7 @@ export async function writeLockfile(dir: string, lockfile: Lockfile): Promise<vo
     const toml = toToml(lockfile, dir);
     await writeFile(file, toml);
   } catch (err) {
-    throw lockfileWriteFailed(file, err);
+    throw new CliError(ErrorCode.LockfileWriteFailed, `Failed to write lockfile to "${file}".`);
   }
 }
 
@@ -129,8 +119,8 @@ export function toToml(lockfile: Lockfile, dir: string): string {
 }
 
 // Load lockfile from toml (including "hydrating" dependencies from packages)
-export function fromToml(toml: string, dir: string): Lockfile {
-  const parsed = parseToml(toml);
+export async function fromToml(toml: string, dir: string): Promise<Lockfile> {
+  const parsed = await parseToml(toml);
   ok(has(parsed, 'root'), 'vba-block.lock is missing [root] field');
 
   const metadata = parsed.metadata;

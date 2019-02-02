@@ -2,13 +2,7 @@ import { manifestOk } from '../errors';
 import { isString } from '../utils/is';
 import { join } from '../utils/path';
 
-export interface Source {
-  name: string;
-  path: string;
-  binary?: string;
-  optional?: boolean;
-  original?: string;
-}
+import { Source } from './types';
 
 const EXAMPLE = `Example vba-block.toml:
 

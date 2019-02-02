@@ -1,12 +1,23 @@
 import { join } from './path';
 import * as fs from 'fs';
-import * as git from 'isomorphic-git';
 
 const debug = require('debug')('vba-blocks:git');
 
-git.plugins.set('fs', fs);
+interface Git {
+  clone(options: { dir: string; url: string; depth?: number }): Promise<void>;
+  pull(options: { dir: string }): Promise<void>;
+  init(options: { dir: string }): Promise<void>;
+}
+
+async function loadGit(): Promise<Git> {
+  const git = await import('isomorphic-git');
+  git.plugins.set('fs', fs);
+
+  return git;
+}
 
 export async function clone(remote: string, name: string, cwd: string) {
+  const git = await loadGit();
   const dir = join(cwd, name);
 
   debug(`clone: ${remote} to ${dir}`);
@@ -14,11 +25,15 @@ export async function clone(remote: string, name: string, cwd: string) {
 }
 
 export async function pull(local: string) {
+  const git = await loadGit();
+
   debug(`pull: ${local}`);
   await git.pull({ dir: local });
 }
 
 export async function init(dir: string) {
+  const git = await loadGit();
+
   debug(`init: ${dir}`);
   await git.init({ dir });
 }

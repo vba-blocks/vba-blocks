@@ -1,17 +1,11 @@
 import { extname, relative } from '../utils/path';
 import { readFile } from '../utils/fs';
 import { BY_LINE, truncate } from '../utils/text';
-import { unrecognizedComponent, componentInvalidNoName } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
-export type ComponentType = 'module' | 'class' | 'form' | 'document';
+import { Component as IComponent, ComponentType, ComponentDetails } from './types';
 
-export interface ComponentDetails {
-  path?: string;
-  dependency?: string;
-  binary?: Buffer;
-}
-
-export class Component {
+export class Component implements IComponent {
   type: ComponentType;
   code: string;
   details: ComponentDetails;
@@ -24,7 +18,12 @@ export class Component {
 
   get name(): string {
     const line = findLine(this.code, 'Attribute VB_Name');
-    if (!line) throw componentInvalidNoName();
+    if (!line) {
+      throw new CliError(
+        ErrorCode.ComponentInvalidNoName,
+        `Invalid component: No attribute VB_Name found.`
+      );
+    }
 
     const [key, value] = line.split('=');
     return JSON.parse(value);
@@ -52,7 +51,10 @@ export class Component {
 
     const type = extension_to_type[extname(path)];
     if (!type) {
-      throw unrecognizedComponent(path);
+      throw new CliError(
+        ErrorCode.ComponentUnrecognized,
+        `Unrecognized component extension "${extname(path)}" (at "${path}").`
+      );
     }
 
     const code = await readFile(path);
@@ -78,13 +80,13 @@ function findLine(code: string, search: string): string | undefined {
   return lines.find(line => line.startsWith(search));
 }
 
-export function byComponentName(a: Component, b: Component): number {
+export function byComponentName(a: IComponent, b: IComponent): number {
   if (a.name < b.name) return -1;
   if (a.name > b.name) return 1;
   return 0;
 }
 
-export function normalizeComponent(component: Component, dir: string): Component {
+export function normalizeComponent(component: IComponent, dir: string): IComponent {
   return {
     type: component.type,
     name: component.name,

@@ -1,9 +1,11 @@
-import { Manifest, Reference } from '../manifest';
-import { Project } from '../project';
+import dedent from 'dedent/macro';
 import { Component, byComponentName } from './component';
-import { BuildGraph } from './build-graph';
 import { joinCommas } from '../utils/text';
-import { buildInvalid } from '../errors';
+import { CliError, ErrorCode } from '../errors';
+
+import { Manifest, Reference } from '../manifest/types';
+import { Project } from '../types';
+import { BuildGraph } from './types';
 
 export default async function loadFromProject(
   project: Project,
@@ -69,6 +71,13 @@ function validateGraph(project: Project, graph: BuildGraph) {
   }
 
   if (errors.length) {
-    throw buildInvalid(errors.join('\n'));
+    throw new CliError(
+      ErrorCode.BuildInvalid,
+      dedent`
+        Invalid build:
+
+        ${errors.join('\n')}
+      `
+    );
   }
 }

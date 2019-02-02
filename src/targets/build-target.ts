@@ -1,27 +1,14 @@
-import { Project } from '../project';
-import { Manifest, Target } from '../manifest';
-import {
-  targetImportFailed,
-  targetIsOpen,
-  targetCreateFailed,
-  targetRestoreFailed,
-  targetNotFound
-} from '../errors';
+import dedent from 'dedent/macro';
+import { CliError, ErrorCode } from '../errors';
 import { importGraph, createDocument } from '../addin';
 import { loadFromProject, stageBuildGraph } from '../build';
 import { join } from '../utils/path';
 import { pathExists, ensureDir, remove, move, emptyDir, copy } from '../utils/fs';
 import { zip } from '../utils/zip';
 
-export interface BuildOptions {
-  target?: string;
-  addin?: string;
-}
-
-export interface ProjectInfo {
-  project: Project;
-  dependencies: Manifest[];
-}
+import { Project } from '../types';
+import { Target } from '../manifest/types';
+import { ProjectInfo, BuildOptions } from './types';
 
 /**
  * Build target:
@@ -65,7 +52,10 @@ export default async function buildTarget(
  */
 export async function createTarget(project: Project, target: Target): Promise<string> {
   if (!(await pathExists(target.path))) {
-    throw targetNotFound(target);
+    throw new CliError(
+      ErrorCode.TargetNotFound,
+      `Target "${target.name}" not found at "${target.path}".`
+    );
   }
 
   const file = join(project.paths.staging, target.filename);
@@ -74,7 +64,11 @@ export async function createTarget(project: Project, target: Target): Promise<st
     await ensureDir(project.paths.staging);
     await zip(target.path!, file);
   } catch (err) {
-    throw targetCreateFailed(target, err);
+    throw new CliError(
+      ErrorCode.TargetCreateFailed,
+      `Failed to create project for target "${target.name}".`,
+      err
+    );
   }
 
   return file;
@@ -106,7 +100,10 @@ export async function importTarget(
   try {
     await importGraph(project, target, import_graph, file, options);
   } catch (err) {
-    throw targetImportFailed(target, err);
+    throw new CliError(
+      ErrorCode.TargetImportFailed,
+      `Failed to import project for target "${target.name}".`
+    );
   } finally {
     await remove(staging);
   }
@@ -129,7 +126,14 @@ export async function backupTarget(project: Project, target: Target) {
     try {
       await move(file, backup);
     } catch (err) {
-      throw targetIsOpen(target, file);
+      throw new CliError(
+        ErrorCode.TargetIsOpen,
+        dedent`
+          Failed to build target "${target.name}", it is currently open.
+
+          Please close "${file}" and try again.
+        `
+      );
     }
   }
 }
@@ -146,6 +150,14 @@ export async function restoreTarget(project: Project, target: Target) {
   try {
     await copy(backup, file);
   } catch (err) {
-    throw targetRestoreFailed(backup, file, err);
+    throw new CliError(
+      ErrorCode.TargetRestoreFailed,
+      dedent`
+        Failed to automatically restore backup from "${backup}" to "${file}".
+
+        The previous version can be moved back manually, if desired.
+      `,
+      err
+    );
   }
 }

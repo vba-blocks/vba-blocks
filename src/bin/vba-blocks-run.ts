@@ -12,12 +12,12 @@ const help = dedent`
     <macro>   Public macro to run in given file (e.g. Tests.RunTests)
     <arg>     Argument to pass to macro (optional)`;
 
-module.exports = async (_args: Args) => {
-  if (_args.help) {
+export default async function(args: Args) {
+  if (args.help) {
     console.log(help);
     return;
   }
 
-  const [file, macro, arg] = _args._;
+  const [file, macro, arg] = args._;
   await run({ file, macro, arg });
-};
+}

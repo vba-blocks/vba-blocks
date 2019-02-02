@@ -1,23 +1,24 @@
-import { join } from '../utils/path';
-import { Config } from '../config';
-import { Workspace } from '../workspace';
-import { DependencyGraph, getRegistration } from './dependency-graph';
+import dedent from 'dedent/macro';
+import { getRegistration } from './dependency-graph';
 import Resolver from './resolver';
 import solveLatest from './latest-solver';
-import { resolveFailed } from '../errors';
 import env from '../env';
-import { resolvingDependencies } from '../messages';
+import { CliError, ErrorCode } from '../errors';
+import { Message } from '../messages';
+
+import { Config, Workspace } from '../types';
+import { DependencyGraph } from './types';
 
 const debug = require('debug')('vba-blocks:resolve');
 
-export { DependencyGraph, getRegistration, Resolver };
+export { getRegistration, Resolver };
 
 export default async function resolve(
   config: Config,
   workspace: Workspace,
   preferred: DependencyGraph = []
 ): Promise<DependencyGraph> {
-  env.reporter.log(resolvingDependencies());
+  env.reporter.log(Message.DependenciesResolving, `Resolving dependencies`);
 
   // Load, update, and seed resolver
   const resolver = new Resolver(config);
@@ -33,7 +34,7 @@ export default async function resolve(
 
   // Fallback to SAT solver
   try {
-    const { solve: solveSat } = require(join(__dirname, 'sat-solver'));
+    const { solve: solveSat } = await import('./sat-solver');
     return await solveSat(workspace, resolver);
   } catch (err) {
     debug(`solveSat failed with ${err}`);
@@ -41,5 +42,12 @@ export default async function resolve(
   }
 
   // TODO Include conflicts with error
-  throw resolveFailed();
+  throw new CliError(
+    ErrorCode.ResolveFailed,
+    dedent`
+      Unable to resolve dependency graph for project.
+
+      There are dependencies that cannot be satisfied.
+    `
+  );
 }

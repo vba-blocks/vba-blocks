@@ -2,31 +2,18 @@ import env from './env';
 import { join, normalize } from './utils/path';
 import { tmpFolder } from './utils/fs';
 import parallel from './utils/parallel';
-import { Config, loadConfig } from './config';
-import { Manifest, loadManifest } from './manifest';
-import { Workspace, loadWorkspace } from './workspace';
+import { loadConfig } from './config';
+import { loadManifest } from './manifest';
+import { loadWorkspace } from './workspace';
 import { fetch } from './sources';
-import resolve, { DependencyGraph } from './resolve';
+import resolve from './resolve';
 import { readLockfile, isLockfileValid } from './lockfile';
-import { fetchingDependencies } from './messages';
+
+import { Manifest } from './manifest/types';
+import { DependencyGraph } from './resolve/types';
+import { Config, Project } from './types';
 
 const debug = require('debug')('vba-blocks:project');
-
-export interface Project {
-  manifest: Manifest;
-  workspace: Workspace;
-  packages: DependencyGraph;
-
-  config: Config;
-  paths: {
-    root: string;
-    dir: string;
-    build: string;
-    backup: string;
-    staging: string;
-  };
-  has_dirty_lockfile: boolean;
-}
 
 /**
  * Load project from given directory / cwd
@@ -90,7 +77,7 @@ export async function fetchDependencies(project: FetchProject): Promise<Manifest
 
       return manifest;
     },
-    { progress: env.reporter.progress(fetchingDependencies()) }
+    { progress: env.reporter.progress('Fetching Dependencies') }
   );
 
   return manifests;

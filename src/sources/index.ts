@@ -1,28 +1,16 @@
 import { ok } from 'assert';
-import {
-  Dependency,
-  isRegistryDependency,
-  isPathDependency,
-  isGitDependency
-} from '../manifest/dependency';
-import { Registration, getSourceParts } from './registration';
-import { Source } from './source';
+import dedent from 'dedent/macro';
+import { isRegistryDependency, isPathDependency, isGitDependency } from '../manifest/dependency';
+import { getSourceParts } from './registration';
 import RegistrySource from './registry-source';
 import PathSource from './path-source';
 import GitSource from '../professional/sources/git-source';
-import {
-  sourceMisconfiguredRegistry,
-  dependencyUnknownSource,
-  sourceNoneMatching
-} from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
-export { Registration, Source, RegistrySource, PathSource, GitSource };
+import { Dependency } from '../manifest/types';
+import { Sources, Registration } from './types';
 
-export interface Sources {
-  registry: { [name: string]: Source };
-  git: Source;
-  path: Source;
-}
+export { RegistrySource, PathSource, GitSource };
 
 export async function resolve(sources: Sources, dependency: Dependency): Promise<Registration[]> {
   if (isRegistryDependency(dependency)) {
@@ -37,11 +25,14 @@ export async function resolve(sources: Sources, dependency: Dependency): Promise
     return sources.git.resolve(dependency);
   }
 
-  throw dependencyUnknownSource((<Dependency>dependency).name);
+  throw new CliError(
+    ErrorCode.DependencyUnknownSource,
+    `No source matches dependency "${(dependency as Dependency).name}".`
+  );
 }
 
 export async function fetch(sources: Sources, registration: Registration): Promise<string> {
-  const { type, value, details } = getSourceParts(registration.source);
+  const { type, value } = getSourceParts(registration.source);
 
   if (type === 'registry') {
     const source = sources.registry[value];
@@ -54,5 +45,18 @@ export async function fetch(sources: Sources, registration: Registration): Promi
     return sources.git.fetch(registration);
   }
 
-  throw sourceNoneMatching(type, registration.source);
+  throw new CliError(
+    ErrorCode.SourceNoneMatching,
+    dedent`
+      No source matches given registration type "${type}"
+      (source = "${registration.source}").
+    `
+  );
+}
+
+function sourceMisconfiguredRegistry(registry: string) {
+  return new CliError(
+    ErrorCode.SourceMisconfiguredRegistry,
+    `No matching registry configured for "${registry}".`
+  );
 }

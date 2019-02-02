@@ -1,13 +1,13 @@
 import walk from 'walk-sync';
-import { Reference } from '../manifest';
-import { BuildGraph } from './build-graph';
 import { Component, extension_to_type, byComponentName } from './component';
 import { join, extname, basename } from '../utils/path';
 import { pathExists, readJson, readFile } from '../utils/fs';
 import parallel from '../utils/parallel';
 import env from '../env';
-import { unrecognizedComponent } from '../errors';
-import { loadingExport } from '../messages';
+import { CliError, ErrorCode } from '../errors';
+
+import { Reference } from '../manifest/types';
+import { BuildGraph } from './types';
 
 const binary_extensions = ['.frx'];
 
@@ -44,12 +44,15 @@ export default async function loadFromExport(staging: string): Promise<BuildGrap
       const dependency = undefined;
 
       if (!type) {
-        throw unrecognizedComponent(file);
+        throw new CliError(
+          ErrorCode.ComponentUnrecognized,
+          `Unrecognized component extension "${extname(file)}" (at "${file}").`
+        );
       }
 
       return new Component(type, code, { dependency, binary });
     },
-    { progress: env.reporter.progress(loadingExport()) }
+    { progress: env.reporter.progress('Loading exported components') }
   );
   components.sort(byComponentName);
 

@@ -1,42 +1,40 @@
+import dedent from 'dedent/macro';
 import env from '../env';
 import { basename, extname, join } from '../utils/path';
 import { pathExists, ensureDir, writeFile } from '../utils/fs';
 import { init as git_init } from '../utils/git';
-import { Manifest, writeManifest } from '../manifest';
-import { TargetType } from '../manifest/target';
+import { writeManifest } from '../manifest';
 import { initProject } from '../project';
 import addTarget from '../targets/add-target';
-import {
-  fromNotFound,
-  initNameRequired,
-  initAlreadyInitialized,
-  initTargetRequired
-} from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
-export interface InitOptions {
-  name?: string;
-  dir?: string;
-  target?: string;
-  from?: string;
-  pkg: boolean;
-  git: boolean;
-}
+import { Manifest, TargetType } from '../manifest/types';
+import { InitOptions } from './types';
 
 export default async function init(options: InitOptions) {
   let { name, dir = env.cwd, target: target_type, from, pkg: as_package, git } = options;
 
   if (await pathExists(join(dir, 'vba-block.toml'))) {
-    throw initAlreadyInitialized();
+    throw new CliError(
+      ErrorCode.InitAlreadyInitialized,
+      `A vba-blocks project already exists in this directory.`
+    );
   }
 
   if (from && !(await pathExists(from))) {
-    throw fromNotFound(from);
+    throw new CliError(ErrorCode.FromNotFound, `The "from" document was not found at "${from}".`);
   }
 
   name = name || (from ? basename(from, extname(from)) : basename(dir));
 
   if (!name) {
-    throw initNameRequired();
+    throw new CliError(
+      ErrorCode.InitNameRequired,
+      dedent`
+        Unable to determine name from current directory or --from.
+        --name NAME is required to initialize this project.
+      `
+    );
   }
   if (!target_type && !from && name.includes('.')) {
     const parts = name.split('.');
@@ -45,7 +43,13 @@ export default async function init(options: InitOptions) {
   }
 
   if (!as_package && !target_type && !from) {
-    throw initTargetRequired();
+    throw new CliError(
+      ErrorCode.InitTargetRequired,
+      dedent`
+        --target or --from is required for vba-blocks projects.
+        (e.g. vba-blocks init --target xlsm)
+      `
+    );
   }
 
   await ensureDir(join(dir, 'src'));

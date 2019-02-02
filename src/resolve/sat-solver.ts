@@ -1,12 +1,15 @@
 import { ok } from 'assert';
 import { satisfies } from 'semver';
-import { Solver, exactlyOne, atMostOne, implies, or } from 'logic-solver';
-import { Workspace } from '../workspace';
-import { Dependency, isRegistryDependency } from '../manifest/dependency';
-import { Registration } from '../sources';
-import { DependencyGraph } from './dependency-graph';
-import Resolver, { Resolution, ResolutionGraph } from './resolver';
+import * as logicSolver from 'logic-solver';
+import { isRegistryDependency } from '../manifest/dependency';
 import unique from '../utils/unique';
+
+import { Workspace } from '../types';
+import { Dependency } from '../manifest/types';
+import { Registration } from '../sources/types';
+import { DependencyGraph, Resolver, Resolution, ResolutionGraph } from './types';
+
+const { Solver, exactlyOne, atMostOne, implies, or } = logicSolver;
 
 export async function solve(workspace: Workspace, resolver: Resolver): Promise<DependencyGraph> {
   const dependencies = workspace.root.dependencies;

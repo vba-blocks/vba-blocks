@@ -1,19 +1,16 @@
-import { TargetType } from '../manifest/target';
 import { loadProject, fetchDependencies } from '../project';
 import addTarget from '../targets/add-target';
-import { targetAddNoType } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
-export interface AddOptions {
-  type: TargetType;
-  from?: string;
-  name?: string;
-  path?: string;
-}
+import { AddOptions } from './types';
 
 export default async function add(options: AddOptions) {
   const { type, from, name, path } = options;
   if (!type) {
-    throw targetAddNoType();
+    throw new CliError(
+      ErrorCode.TargetAddNoType,
+      `target TYPE is required to add a target (vba-blocks target add TYPE).`
+    );
   }
 
   const project = await loadProject();

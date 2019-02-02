@@ -1,13 +1,11 @@
+import dedent from 'dedent/macro';
 import { parse as parseQuerystring } from 'querystring';
-import { Snapshot, Dependency } from '../manifest';
 import has from '../utils/has';
 import { isString } from '../utils/is';
-import { sourceUnrecognizedType } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
-export interface Registration extends Snapshot {
-  id: string;
-  source: string;
-}
+import { Snapshot, Dependency } from '../manifest/types';
+import { Registration } from './types';
 
 export function fromSnapshot(snapshot: Snapshot, source: string): Registration {
   const { name, version, dependencies } = snapshot;
@@ -63,7 +61,13 @@ export function toDependency(registration: Registration): Dependency {
   } else if (type === 'path') {
     return { name, path: value, version };
   } else {
-    throw sourceUnrecognizedType(type);
+    throw new CliError(
+      ErrorCode.SourceUnrecognizedType,
+      dedent`
+        Unrecognized source type "${type}" in registration.
+        ("registry", "path", and "git" are supported)
+      `
+    );
   }
 }
 

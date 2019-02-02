@@ -1,8 +1,8 @@
 import { createWriteStream } from 'fs';
-import { create as createArchive } from 'archiver';
-import decompress from 'decompress';
 
 export async function zip(dir: string, file: string): Promise<void> {
+  const { create: createArchive } = await import('archiver');
+
   return new Promise<void>((resolve, reject) => {
     try {
       const output = createWriteStream(file);
@@ -22,6 +22,9 @@ export async function zip(dir: string, file: string): Promise<void> {
   });
 }
 
+type Decompress = (file: string, dest: string) => Promise<void>;
+
 export async function unzip(file: string, dest: string): Promise<void> {
+  const decompress = ((await import('decompress')) as unknown) as Decompress;
   await decompress(file, dest);
 }

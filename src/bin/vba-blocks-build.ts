@@ -15,7 +15,7 @@ const help = dedent`
     --target=TYPE   Build target of type TYPE
     --open          Open built target`;
 
-module.exports = async (args: Args) => {
+export default async function(args: Args) {
   if (args.help) {
     console.log(help);
     return;
@@ -31,4 +31,4 @@ module.exports = async (args: Args) => {
   if (!!args.open) {
     open(path);
   }
-};
+}

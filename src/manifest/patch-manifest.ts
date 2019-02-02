@@ -1,22 +1,18 @@
 import dedent from 'dedent/macro';
 import { relative } from '../utils/path';
-import { Manifest, Source, Dependency, Reference, Target } from './';
 import { isRegistryDependency, isPathDependency } from './dependency';
-import {
-  patchApplyChanges,
-  patchAddSrc,
-  patchRemoveSrc,
-  patchAddDependency,
-  patchRemoveDependency,
-  patchAddReference,
-  patchRemoveReference
-} from '../messages';
+import { Message } from '../messages';
 import env from '../env';
+
+import { Manifest, Source, Dependency, Reference, Target } from './types';
 
 export function applyChanges(changes: string[]) {
   if (!changes.length) return;
 
-  env.reporter.log(`${patchApplyChanges()}\n\n${changes.join('\n\n')}`);
+  env.reporter.log(
+    Message.PatchApplyChanges,
+    `\nThe following changes need to be applied to vba-block.toml:\n\n${changes.join('\n\n')}`
+  );
 }
 
 export function addSource(manifest: Manifest, source: Source): string {
@@ -28,12 +24,12 @@ export function addSource(manifest: Manifest, source: Source): string {
     : `"${relative_path}"`;
 
   return dedent`
-    ${patchAddSrc()}
+    Add the following to the [src] section:
     ${source.name} = ${details}`;
 }
 
 export function removeSource(_: Manifest, name: string): string {
-  return patchRemoveSrc(name);
+  return `Remove "${name}" from the [src] section`;
 }
 
 export function addDependency(manifest: Manifest, dependency: Dependency): string {
@@ -61,24 +57,24 @@ export function addDependency(manifest: Manifest, dependency: Dependency): strin
   }
 
   return dedent`
-    ${patchAddDependency()}
+    Add the following to the [dependencies] section:
     ${dependency.name} = ${details}`;
 }
 
 export function removeDependency(_: Manifest, name: string): string {
-  return patchRemoveDependency(name);
+  return `Remove "${name}" from the [dependencies] section`;
 }
 
 export function addReference(_manifest: Manifest, reference: Reference): string {
   const details = `{ version = "${reference.version}", guid = "${reference.guid}" }`;
 
   return dedent`
-    ${patchAddReference()}
+    Add the following to the [references] section:
     ${reference.name} = ${details}`;
 }
 
 export function removeReference(_manifest: Manifest, name: string): string {
-  return patchRemoveReference(name);
+  return `Remove "${name}" from the [references] section`;
 }
 
 export function addTarget(manifest: Manifest, target: Target): string {

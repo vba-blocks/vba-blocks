@@ -1,14 +1,24 @@
-import mri from 'mri';
+import mri, { Args } from 'mri';
 import * as colors from 'ansi-colors';
+import meant from 'meant';
 import dedent from 'dedent/macro';
 import has from '../utils/has';
-import { CliError, unknownCommand, cleanError } from '../errors';
+import { joinCommas } from '../utils/text';
+import { CliError, ErrorCode, cleanError } from '../errors';
 import { RunError } from '../utils/run';
+import { version } from '../../package.json';
 
 Error.stackTraceLimit = Infinity;
-const version = 'VERSION';
 
-const commands = ['new', 'init', 'build', 'export', 'run'];
+type Command = (args: Args) => Promise<void>;
+const commands: { [name: string]: () => Promise<Command> } = {
+  new: async () => (await import('./vba-blocks-new')).default,
+  init: async () => (await import('./vba-blocks-init')).default,
+  build: async () => (await import('./vba-blocks-build')).default,
+  export: async () => (await import('./vba-blocks-export')).default,
+  run: async () => (await import('./vba-blocks-run')).default
+};
+
 const args = mri(process.argv.slice(2), {
   alias: {
     v: 'version',
@@ -77,18 +87,34 @@ async function main() {
     args._ = [command];
     args.help = true;
   }
+  command = command.toLowerCase();
 
-  if (!commands.includes(command)) {
-    throw unknownCommand(command);
+  const available = Object.keys(commands);
+  if (!available.includes(command)) {
+    const approximate = meant(command, available);
+    const did_you_mean = approximate.length
+      ? `, did you mean "${meant(command, available)}"?`
+      : '.';
+    const list = joinCommas(available.map(name => `"${name}"`));
+
+    return new CliError(
+      ErrorCode.UnknownCommand,
+      dedent`
+        Unknown command "${command}"${did_you_mean}
+
+        Available commands are ${list}.
+        Try "vba-blocks help" for more information.
+      `
+    );
   }
 
   // Remove command from args
   args._ = args._.slice(1);
 
-  let subcommand;
+  let subcommand: (args: Args) => Promise<void>;
   try {
     debug(`loading "./vba-blocks-${command}.js"`);
-    subcommand = require(`./vba-blocks-${command}.js`);
+    subcommand = await commands[command]();
   } catch (err) {
     throw new Error(`Failed to load command "${command}".\n${err.stack}`);
   }

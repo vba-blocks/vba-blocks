@@ -1,5 +1,6 @@
-import { BuildGraph } from './build-graph';
 import { BY_LINE } from '../utils/text';
+
+import { BuildGraph } from './types';
 
 export async function toCompiled(graph: BuildGraph): Promise<BuildGraph> {
   return graph;

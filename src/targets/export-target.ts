@@ -1,10 +1,8 @@
 import walk from 'walk-sync';
-import { Target } from '../manifest';
-import { Project } from '../project';
+import dedent from 'dedent/macro';
 import { join } from '../utils/path';
 import { copy, remove, ensureDir, pathExists } from '../utils/fs';
 import { unzip } from '../utils/zip';
-import { ProjectInfo } from './build-target';
 import {
   loadFromProject,
   loadFromExport,
@@ -12,13 +10,13 @@ import {
   applyChangeset,
   toSrc
 } from '../build';
-import { exportTargetNotFound } from '../errors';
+import { CliError, ErrorCode } from '../errors';
+
+import { Project } from '../types';
+import { Target } from '../manifest/types';
+import { ExportOptions, ProjectInfo } from './types';
 
 const IS_VBA = /vba.*\.bin/gi;
-
-export interface ExportOptions {
-  __temp__log_patch?: boolean;
-}
 
 /**
  * Export target (with staging directory)
@@ -70,7 +68,13 @@ export async function extractTarget(
   const dest = join(staging, 'target');
 
   if (!(await pathExists(src))) {
-    throw exportTargetNotFound(target, src);
+    throw new CliError(
+      ErrorCode.ExportTargetNotFound,
+      dedent`
+        Could not find built target for type "${target.type}"
+        (checked "${src}").
+      `
+    );
   }
 
   await ensureDir(dest);

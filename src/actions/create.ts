@@ -1,20 +1,22 @@
+import dedent from 'dedent/macro';
 import env from '../env';
 import { join } from '../utils/path';
 import { pathExists, ensureDir } from '../utils/fs';
 import init from './init';
-import { newNameRequired, newDirExists, newTargetRequired } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
-export interface CreateOptions {
-  name: string;
-  target?: string;
-  from?: string;
-  pkg: boolean;
-  git: boolean;
-}
+import { CreateOptions } from './types';
 
 export default async function create(options: CreateOptions) {
   if (!options || !options.name) {
-    throw newNameRequired();
+    throw new CliError(
+      ErrorCode.NewNameRequired,
+      dedent`
+        "name" is required with vba-blocks new (e.g. vba-blocks new project-name).
+
+        Try "vba-blocks new help" for more information.
+      `
+    );
   }
 
   let { name, target, from, pkg, git } = options;
@@ -26,13 +28,24 @@ export default async function create(options: CreateOptions) {
     name = parts.join('.');
   }
   if (!pkg && !target && !from) {
-    throw newTargetRequired();
+    throw new CliError(
+      ErrorCode.NewTargetRequired,
+      dedent`
+        .TYPE, --target, or --from is required for vba-blocks projects.
+        (e.g. vba-blocks new project.name.TYPE)
+
+        Try "vba-blocks new help" for more information.
+      `
+    );
   }
 
   const dir = join(env.cwd, name);
 
   if (await pathExists(dir)) {
-    throw newDirExists(name, dir);
+    throw new CliError(
+      ErrorCode.NewDirExists,
+      `A directory for "${name}" already exists: "${dir}". `
+    );
   }
 
   await ensureDir(dir);
