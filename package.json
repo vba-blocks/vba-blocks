@@ -24,9 +24,8 @@
     "build:addins": "cd addins && node ../scripts/build",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
     "build:clean": "rimraf lib && rimraf dist && rimraf addins/build",
-    "build:actions": "cd installer/actions && cargo build --release",
     "package:zip": "node scripts/zip",
-    "package:win": "yarn build:actions && node scripts/installer",
+    "package:win": "node scripts/installer",
     "package:mac": "node scripts/installer"
   },
   "pkg": {
