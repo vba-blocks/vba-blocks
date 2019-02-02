@@ -1,7 +1,8 @@
+import dedent from 'dedent/macro';
 import { parse as parseQuerystring } from 'querystring';
 import has from '../utils/has';
 import { isString } from '../utils/is';
-import { sourceUnrecognizedType } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
 import { Snapshot, Dependency } from '../manifest/types';
 import { Registration } from './types';
@@ -60,7 +61,13 @@ export function toDependency(registration: Registration): Dependency {
   } else if (type === 'path') {
     return { name, path: value, version };
   } else {
-    throw sourceUnrecognizedType(type);
+    throw new CliError(
+      ErrorCode.SourceUnrecognizedType,
+      dedent`
+        Unrecognized source type "${type}" in registration.
+        ("registry", "path", and "git" are supported)
+      `
+    );
   }
 }
 

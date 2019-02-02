@@ -2,7 +2,7 @@ import { join, dirname } from './utils/path';
 import { ensureDir } from './utils/fs';
 import run from './utils/run';
 import env from './env';
-import { addinUnsupportedType } from './errors';
+import { CliError, ErrorCode } from './errors';
 
 import { Target } from './manifest/types';
 import { ImportGraph } from './build/types';
@@ -111,7 +111,12 @@ export function getTargetInfo(
 export function extensionToApplication(extension: string): Application {
   extension = extension.replace('.', '');
   const application = byExtension[extension];
-  if (!application) throw addinUnsupportedType(extension);
+  if (!application) {
+    throw new CliError(
+      ErrorCode.AddinUnsupportedType,
+      `The target type "${extension} is not currently supported.`
+    );
+  }
 
   return <Application>application;
 }

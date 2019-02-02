@@ -1,153 +1,86 @@
-import * as colors from 'ansi-colors';
 import { ok } from 'assert';
-import env from './env';
+import dedent from 'dedent/macro';
+import * as colors from 'ansi-colors';
 import { isString } from './utils/is';
 
-import { Target } from './manifest/types';
-import { Registration } from './sources/types';
-import { ErrorMessages, CliErrorCode, CliErrorOptions } from './types';
-
 export class CliError extends Error {
-  code?: CliErrorCode;
+  code: ErrorCode;
   underlying?: Error;
 
-  constructor(message: string, options: CliErrorOptions = {}) {
-    if (options.underlying) {
-      const underlying = cleanError(options.underlying);
-      message += `\n\n${colors.dim(underlying.message)}`;
+  constructor(code: ErrorCode, message: string, underlying?: Error) {
+    if (underlying) {
+      const { message: underlying_message } = cleanError(underlying);
+      message += `\n\n${colors.dim(underlying_message)}`;
     }
+
+    // TODO
+    // message += `\nSee https://vba-blocks.com/errors/${code} for more information.`;
 
     super(message);
 
-    this.code = options.code;
-    this.underlying = options.underlying;
+    this.code = code;
+    this.underlying = underlying;
   }
 }
 
-// Errors
+export enum ErrorCode {
+  Unknown = 'unknown',
+  UnknownCommand = 'unknown-command',
+  ManifestNotFound = 'manifest-not-found',
+  ManifestInvalid = 'manifest-invalid',
+  SourceUnsupported = 'source-unsupported',
+  SourceMisconfiguredRegistry = 'source-misconfigured-registry',
+  SourceNoneMatching = 'source-none-matching',
+  SourceDownloadFailed = 'source-download-failed',
+  SourceUnrecognizedType = 'source-unrecognized-type',
+  DependencyNotFound = 'dependency-not-found',
+  DependencyInvalidChecksum = 'dependency-invalid-checksum',
+  DependencyPathNotFound = 'dependency-path-not-found',
+  DependencyUnknownSource = 'dependency-unknown-source',
+  BuildInvalid = 'build-invalid',
+  LockfileWriteFailed = 'lockfile-write-failed',
+  TargetNoMatching = 'target-no-matching',
+  TargetNoDefault = 'target-no-default',
+  TargetNotFound = 'target-not-found',
+  TargetIsOpen = 'target-is-open',
+  TargetCreateFailed = 'target-create-failed',
+  TargetImportFailed = 'target-import-failed',
+  TargetRestoreFailed = 'target-restore-failed',
+  TargetAddNoType = 'target-add-no-type',
+  TargetAlreadyDefined = 'target-already-defined',
+  ResolveFailed = 'resolve-failed',
+  ComponentUnrecognized = 'component-unrecognized',
+  ComponentInvalidNoName = 'component-invalid-no-name',
+  RunScriptNotFound = 'run-script-not-found',
+  NewNameRequired = 'new-name-required',
+  NewTargetRequired = 'new-target-required',
+  NewDirExists = 'new-dir-exists',
+  FromNotFound = 'from-not-found',
+  InitAlreadyInitialized = 'init-already-initialized',
+  InitNameRequired = 'init-name-required',
+  InitTargetRequired = 'init-target-required',
+  ExportNoTarget = 'export-no-target',
+  ExportNoMatching = 'export-no-matching',
+  ExportTargetNotFound = 'export-target-not-found',
+  AddinUnsupportedType = 'addin-unsupported-type',
+  RunMissingFile = 'run-missing-file',
+  RunMissingMacro = 'run-missing-macro'
+}
 
-export const unknownCommand = (command: string) => generateError('unknown-command', { command });
+export function manifestOk(value: any, message: string) {
+  const error = new CliError(
+    ErrorCode.ManifestInvalid,
+    dedent`
+      vba-blocks.toml is invalid:
 
-export const manifestNotFound = (dir: string) => generateError('manifest-not-found', { dir });
+      ${message}
+    `
+  );
 
-export const manifestInvalid = (message: string) => generateError('manifest-invalid', { message });
-
-export const manifestOk = (value: any, message: string) => ok(value, manifestInvalid(message));
-
-export const sourceUnsupported = (type: string) => generateError('source-unsupported', { type });
-
-export const sourceMisconfiguredRegistry = (registry: string) =>
-  generateError('source-misconfigured-registry', { registry });
-
-export const sourceNoneMatching = (type: string, source: string) =>
-  generateError('source-no-matching', { type, source });
-
-export const sourceDownloadFailed = (source: string, underlying: Error) =>
-  generateError('source-download-failed', { source }, underlying);
-
-export const sourceUnrecognizedType = (type: string) =>
-  generateError('source-unrecognized-type', { type });
-
-export const dependencyNotFound = (dependency: string, registry: string) =>
-  generateError('dependency-not-found', { dependency, registry });
-
-export const dependencyInvalidChecksum = (registration: Registration) =>
-  generateError('dependency-invalid-checksum', { registration });
-
-export const dependencyPathNotFound = (dependency: string, path: string) =>
-  generateError('dependency-path-not-found', { dependency, path });
-
-export const dependencyUnknownSource = (dependency: string) =>
-  generateError('dependency-unknown-source', { dependency });
-
-export const buildInvalid = (message: string) => generateError('build-invalid', { message });
-
-export const lockfileWriteFailed = (file: string, underlying: Error) =>
-  generateError('lockfile-write-failed', { file }, underlying);
-
-export const targetNoMatching = (type: string) => generateError('target-no-matching', { type });
-
-export const targetNoDefault = () => generateError('target-no-default', {});
-
-export const targetNotFound = (target: Target) => generateError('target-not-found', { target });
-
-export const targetIsOpen = (target: Target, path: string) =>
-  generateError('target-is-open', { target, path });
-
-export const targetCreateFailed = (target: Target, underlying: Error) =>
-  generateError('target-create-failed', { target }, underlying);
-
-export const targetImportFailed = (target: Target, underlying: Error) =>
-  generateError('target-import-failed', { target }, underlying);
-
-export const targetRestoreFailed = (backup: string, file: string, underlying: Error) =>
-  generateError('target-restore-failed', { backup, file }, underlying);
-
-export const targetAddNoType = () => generateError('target-add-no-type', {});
-
-export const targetAlreadyDefined = () => generateError('target-already-defined', {});
-
-export const resolveFailed = (details?: string) => {
-  const code = 'resolve-failed';
-
-  let formatted = env.reporter.errors[code]({});
-  if (details) {
-    formatted += `\n${details}`;
-  }
-
-  return new CliError(formatted, { code });
-};
-
-export const unrecognizedComponent = (path: string) =>
-  generateError('component-unrecognized', { path });
-
-export const componentInvalidNoName = () => generateError('component-invalid-no-name', {});
-
-export const runScriptNotFound = (path: string) => generateError('run-script-not-found', { path });
-
-export const newNameRequired = () => generateError('new-name-required', {});
-
-export const newTargetRequired = () => generateError('new-target-required', {});
-
-export const newDirExists = (name: string, dir: string) =>
-  generateError('new-dir-exists', { name, dir });
-
-export const fromNotFound = (from: string) => generateError('from-not-found', { from });
-
-export const initAlreadyInitialized = () => generateError('init-already-initialized', {});
-
-export const initNameRequired = () => generateError('init-name-required', {});
-
-export const initTargetRequired = () => generateError('init-target-required', {});
-
-export const exportNoDefault = () => generateError('export-no-target', {});
-
-export const exportNoMatching = (type: string) => generateError('export-no-matching', { type });
-
-export const exportTargetNotFound = (target: Target, path: string) =>
-  generateError('export-target-not-found', { target, path });
-
-export const addinUnsupportedType = (type: string) =>
-  generateError('addin-unsupported-type', { type });
-
-export const runMissingFile = () => generateError('run-missing-file', {});
-
-export const runMissingMacro = () => generateError('run-missing-macro', {});
+  ok(value, error);
+}
 
 // Utils
-
-function generateError<T extends CliErrorCode>(
-  code: T,
-  values: ErrorMessages[T],
-  underlying?: Error
-): CliError {
-  type Message = (values: ErrorMessages[T]) => string;
-
-  const message = <Message>env.reporter.errors[code];
-  const formatted = message(values);
-
-  return new CliError(formatted, { code, underlying });
-}
 
 const MESSAGE_REGEXP = /(^(.|\n)*?(?=\n\s*at\s.*\:\d*\:\d*))/;
 const ERROR_TEXT = 'Error: ';

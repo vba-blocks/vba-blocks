@@ -1,23 +1,14 @@
+import dedent from 'dedent/macro';
 import { join, normalize, relative } from '../utils/path';
 import { parse as parseToml, convert as convertToToml } from '../utils/toml';
 import { pathExists, readFile, writeFile } from '../utils/fs';
-import { manifestNotFound } from '../errors';
 import { parseSrc } from './source';
 import { parseDependencies } from './dependency';
 import { parseReferences } from './reference';
 import { parseTarget } from './target';
-import { manifestOk, manifestInvalid } from '../errors';
+import { CliError, ErrorCode, manifestOk } from '../errors';
 
-import {
-  Version,
-  Source,
-  Dependency,
-  Reference,
-  Target,
-  Snapshot,
-  Manifest,
-  ManifestType
-} from './types';
+import { Target, Manifest, ManifestType } from './types';
 
 /**
  * @example
@@ -116,7 +107,15 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   const file = join(dir, 'vba-block.toml');
 
   if (!(await pathExists(file))) {
-    throw manifestNotFound(dir);
+    throw new CliError(
+      ErrorCode.ManifestNotFound,
+      dedent`
+        vba-blocks.toml not found in "${dir}".
+
+        Try "vba-blocks init" to start a new project in this directory
+        or "cd YOUR_PROJECTs_DIRECTORY" to change to a folder that contains an existing project.
+      `
+    );
   }
 
   const raw = await readFile(file);
@@ -125,8 +124,14 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   try {
     parsed = await parseToml(raw.toString());
   } catch (err) {
-    const message = `Syntax Error: ${file} (${err.line}:${err.column})\n\n${err.message}`;
-    throw manifestInvalid(message);
+    throw new CliError(
+      ErrorCode.ManifestInvalid,
+      dedent`
+        vba-blocks.toml is invalid:
+
+        Syntax Error: ${file} (${err.line}:${err.column})\n\n${err.message}
+      `
+    );
   }
 
   const manifest = parseManifest(parsed, normalize(dir));

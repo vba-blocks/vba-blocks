@@ -1,9 +1,9 @@
-import { join } from '../utils/path';
+import dedent from 'dedent/macro';
 import { getRegistration } from './dependency-graph';
 import Resolver from './resolver';
 import solveLatest from './latest-solver';
-import { resolveFailed } from '../errors';
 import env from '../env';
+import { CliError, ErrorCode } from '../errors';
 import { resolvingDependencies } from '../messages';
 
 import { Config, Workspace } from '../types';
@@ -42,5 +42,12 @@ export default async function resolve(
   }
 
   // TODO Include conflicts with error
-  throw resolveFailed();
+  throw new CliError(
+    ErrorCode.ResolveFailed,
+    dedent`
+      Unable to resolve dependency graph for project.
+
+      There are dependencies that cannot be satisfied.
+    `
+  );
 }

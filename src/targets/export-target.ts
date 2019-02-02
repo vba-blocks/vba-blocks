@@ -1,4 +1,5 @@
 import walk from 'walk-sync';
+import dedent from 'dedent/macro';
 import { join } from '../utils/path';
 import { copy, remove, ensureDir, pathExists } from '../utils/fs';
 import { unzip } from '../utils/zip';
@@ -9,7 +10,7 @@ import {
   applyChangeset,
   toSrc
 } from '../build';
-import { exportTargetNotFound } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
 import { Project } from '../types';
 import { Target } from '../manifest/types';
@@ -67,7 +68,13 @@ export async function extractTarget(
   const dest = join(staging, 'target');
 
   if (!(await pathExists(src))) {
-    throw exportTargetNotFound(target, src);
+    throw new CliError(
+      ErrorCode.ExportTargetNotFound,
+      dedent`
+        Could not find built target for type "${target.type}"
+        (checked "${src}").
+      `
+    );
   }
 
   await ensureDir(dest);

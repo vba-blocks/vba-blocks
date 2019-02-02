@@ -1,10 +1,11 @@
 import { promisify } from 'util';
+import dedent from 'dedent/macro';
 const exec = promisify(require('child_process').exec);
 
 import env from '../env';
 import { join } from './path';
 import { pathExists } from './fs';
-import { runScriptNotFound } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
 const debug = require('debug')('vba-blocks:run');
 
@@ -37,7 +38,14 @@ export default async function run(
   const script = join(env.scripts, env.isWindows ? 'run.vbs' : 'run.applescript');
 
   if (!(await pathExists(script))) {
-    throw runScriptNotFound(script);
+    throw new CliError(
+      ErrorCode.RunScriptNotFound,
+      dedent`
+        Bridge script not found at "${script}".
+
+        This is a fatal error and will require vba-blocks to be re-installed.
+      `
+    );
   }
 
   const parts = [application, file, macro, env.isWindows ? escape(arg) : arg];

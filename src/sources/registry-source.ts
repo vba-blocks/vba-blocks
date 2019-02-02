@@ -1,3 +1,4 @@
+import dedent from 'dedent/macro';
 import env from '../env';
 import { join, dirname, basename, sanitize } from '../utils/path';
 import download from '../utils/download';
@@ -12,7 +13,7 @@ import {
 import { clone, pull } from '../utils/git';
 import { unzip } from '../utils/zip';
 import { getRegistrationId, getRegistrationSource } from './registration';
-import { dependencyNotFound, dependencyInvalidChecksum, sourceDownloadFailed } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
 import { Dependency, RegistryDependency } from '../manifest/types';
 import { Source, Registration, RegistryOptions } from './types';
@@ -45,7 +46,10 @@ export default class RegistrySource implements Source {
     const path = getPath(this.local.index, name);
 
     if (!(await pathExists(path))) {
-      throw dependencyNotFound(name, this.name);
+      throw new CliError(
+        ErrorCode.DependencyNotFound,
+        `Dependency "${name}" not found in registry "${this.name}".`
+      );
     }
 
     const data = await readFile(path, 'utf8');
@@ -71,7 +75,11 @@ export default class RegistrySource implements Source {
       try {
         await download(url, unverifiedFile);
       } catch (err) {
-        throw sourceDownloadFailed(registration.source, err);
+        throw new CliError(
+          ErrorCode.SourceDownloadFailed,
+          `Failed to download "${registration.source}".`,
+          err
+        );
       }
 
       const comparison = await getChecksum(unverifiedFile, algorithm);
@@ -79,7 +87,15 @@ export default class RegistrySource implements Source {
         debug(`Checksum failed for ${unverifiedFile}`);
         debug(`Expected ${hash} (${algorithm}), received ${comparison}`);
 
-        throw dependencyInvalidChecksum(registration);
+        throw new CliError(
+          ErrorCode.DependencyInvalidChecksum,
+          dedent`
+            Dependency "${registration.name}" failed validation.
+
+            The downloaded file signature for ${registration.id}
+            does not match the signature in the registry.
+          `
+        );
       }
 
       await move(unverifiedFile, file);

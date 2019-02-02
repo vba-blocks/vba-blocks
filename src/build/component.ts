@@ -1,7 +1,7 @@
 import { extname, relative } from '../utils/path';
 import { readFile } from '../utils/fs';
 import { BY_LINE, truncate } from '../utils/text';
-import { unrecognizedComponent, componentInvalidNoName } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
 import { Component as IComponent, ComponentType, ComponentDetails } from './types';
 
@@ -18,7 +18,12 @@ export class Component implements IComponent {
 
   get name(): string {
     const line = findLine(this.code, 'Attribute VB_Name');
-    if (!line) throw componentInvalidNoName();
+    if (!line) {
+      throw new CliError(
+        ErrorCode.ComponentInvalidNoName,
+        `Invalid component: No attribute VB_Name found.`
+      );
+    }
 
     const [key, value] = line.split('=');
     return JSON.parse(value);
@@ -46,7 +51,10 @@ export class Component implements IComponent {
 
     const type = extension_to_type[extname(path)];
     if (!type) {
-      throw unrecognizedComponent(path);
+      throw new CliError(
+        ErrorCode.ComponentUnrecognized,
+        `Unrecognized component extension "${extname(path)}" (at "${path}").`
+      );
     }
 
     const code = await readFile(path);

@@ -4,7 +4,7 @@ import { exportTo, createDocument } from '../addin';
 import exportTarget, { extractTarget } from './export-target';
 import buildTarget from './build-target';
 import { applyChanges, addTarget as addTargetToManifest } from '../manifest/patch-manifest';
-import { targetAlreadyDefined } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
 import { Target, TargetType } from '../manifest/types';
 import { AddOptions, ProjectInfo } from './types';
@@ -18,7 +18,10 @@ export default async function addTarget(
   let { from, name = project.manifest.name, path = 'target', __temp__log_patch = true } = options;
 
   if (project.manifest.target) {
-    throw targetAlreadyDefined();
+    throw new CliError(
+      ErrorCode.TargetAlreadyDefined,
+      `A target is already defined for this project.`
+    );
   }
 
   const staging = join(project.paths.staging, 'export');

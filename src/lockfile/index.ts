@@ -13,7 +13,7 @@ import {
   toDependency
 } from '../sources/registration';
 import { getRegistration } from '../resolve';
-import { lockfileWriteFailed } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
 import { Snapshot, Dependency } from '../manifest/types';
 import { Workspace } from '../types';
@@ -59,7 +59,7 @@ export async function writeLockfile(dir: string, lockfile: Lockfile): Promise<vo
     const toml = toToml(lockfile, dir);
     await writeFile(file, toml);
   } catch (err) {
-    throw lockfileWriteFailed(file, err);
+    throw new CliError(ErrorCode.LockfileWriteFailed, `Failed to write lockfile to "${file}".`);
   }
 }
 

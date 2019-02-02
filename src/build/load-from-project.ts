@@ -1,6 +1,7 @@
+import dedent from 'dedent/macro';
 import { Component, byComponentName } from './component';
 import { joinCommas } from '../utils/text';
-import { buildInvalid } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 
 import { Manifest, Reference } from '../manifest/types';
 import { Project } from '../types';
@@ -70,6 +71,13 @@ function validateGraph(project: Project, graph: BuildGraph) {
   }
 
   if (errors.length) {
-    throw buildInvalid(errors.join('\n'));
+    throw new CliError(
+      ErrorCode.BuildInvalid,
+      dedent`
+        Invalid build:
+
+        ${errors.join('\n')}
+      `
+    );
   }
 }

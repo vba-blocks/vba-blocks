@@ -1,7 +1,8 @@
+import dedent from 'dedent/macro';
 import { loadProject, fetchDependencies } from '../project';
 import { buildTarget } from '../targets';
 import { writeLockfile } from '../lockfile';
-import { targetNoMatching, targetNoDefault } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 import env from '../env';
 import { buildLoadingProject, buildBuildingTarget, buildWritingLockfile } from '../messages';
 import { isRegistryDependency } from '../manifest/dependency';
@@ -39,7 +40,10 @@ export default async function build(options: BuildOptions = {}): Promise<string>
     }
 
     if (!target) {
-      throw targetNoMatching(options.target);
+      throw new CliError(
+        ErrorCode.TargetNoMatching,
+        `No matching target found for type "${options.target}" in project.`
+      );
     }
   } else if (project.manifest.target) {
     // Build [target]
@@ -47,7 +51,15 @@ export default async function build(options: BuildOptions = {}): Promise<string>
   }
 
   if (!target) {
-    throw targetNoDefault();
+    throw new CliError(
+      ErrorCode.TargetNoDefault,
+      dedent`
+        No default target(s) found for project.
+
+        Use --target TYPE for a blank target
+        or specify [target] or [targets] in vba-block.toml.
+      `
+    );
   }
 
   // Fetch relevant dependencies

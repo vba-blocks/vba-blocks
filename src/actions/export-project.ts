@@ -1,9 +1,10 @@
+import dedent from 'dedent/macro';
 import { loadProject, fetchDependencies } from '../project';
 import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
 import { join, sanitize } from '../utils/path';
 import { emptyDir, ensureDir } from '../utils/fs';
-import { exportNoDefault, exportNoMatching } from '../errors';
+import { CliError, ErrorCode } from '../errors';
 import env from '../env';
 import { exportLoadingProject, exportToStaging, exportToProject } from '../messages';
 
@@ -16,7 +17,13 @@ export default async function exportProject(options: ExportOptions = {}) {
   const project = await loadProject();
 
   if (!options.target && !project.manifest.target) {
-    throw exportNoDefault();
+    throw new CliError(
+      ErrorCode.ExportNoTarget,
+      dedent`
+        No default target found for project,
+        use --target TYPE to export from a specific target.
+      `
+    );
   }
 
   let target: Target | undefined;
@@ -38,7 +45,10 @@ export default async function exportProject(options: ExportOptions = {}) {
   }
 
   if (!target) {
-    throw exportNoMatching(options.target!);
+    throw new CliError(
+      ErrorCode.ExportNoMatching,
+      `No matching target found for type "${options.target!}" in project.`
+    );
   }
 
   const dependencies = await fetchDependencies(project);

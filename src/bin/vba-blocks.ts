@@ -1,8 +1,10 @@
 import mri, { Args } from 'mri';
 import * as colors from 'ansi-colors';
+import meant from 'meant';
 import dedent from 'dedent/macro';
 import has from '../utils/has';
-import { CliError, unknownCommand, cleanError } from '../errors';
+import { joinCommas } from '../utils/text';
+import { CliError, ErrorCode, cleanError } from '../errors';
 import { RunError } from '../utils/run';
 
 Error.stackTraceLimit = Infinity;
@@ -85,9 +87,25 @@ async function main() {
     args._ = [command];
     args.help = true;
   }
+  command = command.toLowerCase();
 
-  if (!(command in commands)) {
-    throw unknownCommand(command);
+  const available = Object.keys(commands);
+  if (!available.includes(command)) {
+    const approximate = meant(command, available);
+    const did_you_mean = approximate.length
+      ? `, did you mean "${meant(command, available)}"?`
+      : '.';
+    const list = joinCommas(available.map(name => `"${name}"`));
+
+    return new CliError(
+      ErrorCode.UnknownCommand,
+      dedent`
+        Unknown command "${command}"${did_you_mean}
+
+        Available commands are ${list}.
+        Try "vba-blocks help" for more information.
+      `
+    );
   }
 
   // Remove command from args
