@@ -6,10 +6,9 @@
   "license": "MIT",
   "bin": "lib/vba-blocks.js",
   "main": "lib/index.js",
-  "typings": "typings/index.d.ts",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js}\"",
-    "check": "tsc",
+    "typecheck": "tsc",
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
     "build": "rimraf lib && rollup -c",
