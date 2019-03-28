@@ -20,12 +20,12 @@
     "build:pkg:mac": "pkg --targets node10-mac-x64 -o dist/unpacked/bin/vba-blocks .",
     "build:rcedit": "node scripts/rcedit",
     "build:copy": "node scripts/copy",
-    "build:addins": "cd addins && node ../scripts/build",
+    "build:addins": "cd addins && node ../scripts/build-addins",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
-    "build:clean": "rimraf lib && rimraf dist && rimraf addins/build",
     "package:zip": "node scripts/zip",
     "package:win": "node scripts/installer",
-    "package:mac": "node scripts/installer"
+    "package:mac": "node scripts/installer",
+    "clean": "rimraf lib && rimraf dist && rimraf addins/build"
   },
   "pkg": {
     "scripts": [
