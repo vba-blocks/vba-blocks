@@ -2,15 +2,14 @@
 /dist
 /tests/.tmp
 /addins/build
-/installer/vba-blocks.w*
-/installer/actions/target
-/vendor/pkg
+/scripts/vendor
 
 # Ignore temporary Excel files
 **/~$*
 .backup
 
 # OS and other
+.env
 .DS_Store
 node_modules
 package-lock.json

@@ -102,7 +102,8 @@ export async function importTarget(
   } catch (err) {
     throw new CliError(
       ErrorCode.TargetImportFailed,
-      `Failed to import project for target "${target.name}".`
+      `Failed to import project for target "${target.name}".`,
+      err
     );
   } finally {
     await remove(staging);

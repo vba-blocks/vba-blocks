@@ -5,10 +5,9 @@ import babel from 'rollup-plugin-babel';
 import typescript from 'rollup-plugin-typescript';
 import replace from 'rollup-plugin-replace';
 import { terser } from 'rollup-plugin-terser';
-import filesize from 'rollup-plugin-filesize';
 import builtin from 'builtin-modules';
 
-const mode = 'development'; // TODO process.env.NODE_ENV / 'production'
+const mode = process.env.NODE_ENV || 'development';
 
 export default [
   {
@@ -21,7 +20,10 @@ export default [
     plugins: [
       resolve(),
       commonjs({
-        include: 'node_modules/**'
+        include: 'node_modules/**',
+        namedExports: {
+          'ansi-colors': ['redBright', 'dim']
+        }
       }),
       json(),
       babel({ extensions: ['.mjs', '.js', '.ts'] }),
@@ -32,8 +34,14 @@ export default [
       }),
       mode === 'production' && terser(),
       readableStream()
-      // filesize() TODO throwing .length error
-    ].filter(Boolean)
+    ].filter(Boolean),
+    onwarn(warning, warn) {
+      // Ignore known errors
+      if (warning.code === 'CIRCULAR_DEPENDENCY' && /glob/.test(warning.importer)) return;
+      if (warning.code === 'EVAL' && /minisat/.test(warning.id)) return;
+
+      warn(warning);
+    }
   }
 ];
 

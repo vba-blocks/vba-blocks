@@ -94,11 +94,17 @@ Howdy!
 ### Prerequisites
 
 1. `git clone` this repo
-2. Install [node](https://www.nodejs.com/) v8.11.4 or later
-3. Install [yarn](https://www.yarnpkg.com/) v1.9.4 or later
+2. Install [node](https://www.nodejs.com/) v10.15.3 or later
+3. Install [yarn](https://www.yarnpkg.com/) v1.15.2 or later
 4. Install node-gyp dependencies for [Mac](https://github.com/nodejs/node-gyp#on-macos) or [Windows](https://github.com/nodejs/node-gyp#on-windows)
 
 ### Build
 
 1. Run `yarn`
-2. Run `yarn build:win` (Windows) or `yarn build:mac` (Mac)
+2. Run `yarn build`
+3. Run `yarn build:addins`
+
+### Release
+
+1. Run `yarn version`
+2. Run `yarn release`
