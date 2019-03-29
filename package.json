@@ -14,7 +14,8 @@
     "build": "rimraf lib && rollup -c",
     "build:addins": "cd addins && node --no-warnings ../scripts/build-addins",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
-    "package": "node scripts/ensure-vendor && node scripts/create-packages",
+    "version": "node scripts/ensure-vendor && node scripts/create-packages",
+    "release": "node scripts/release",
     "clean": "rimraf lib && rimraf dist && rimraf addins/build"
   },
   "prettier": {
@@ -55,6 +56,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.2.0",
     "@babel/plugin-transform-typescript": "^7.2.0",
     "@babel/preset-typescript": "^7.1.0",
+    "@octokit/rest": "^16.21.1",
     "@types/archiver": "^2",
     "@types/fs-extra": "^5",
     "@types/jest": "^23",
@@ -66,6 +68,8 @@
     "builtin-modules": "^3.0.0",
     "cross-env": "^5",
     "dedent": "https://github.com/timhall/dedent.git",
+    "dotenv": "^7.0.0",
+    "editor": "^1.0.0",
     "jest": "^24",
     "mustache": "^3",
     "npm-run-all": "^4",

@@ -1,5 +1,6 @@
 const { join, relative, basename } = require('path');
 const { createWriteStream } = require('fs');
+const { ensureDir } = require('fs-extra');
 const { create: createArchive } = require('archiver');
 const walkSync = require('walk-sync');
 const {
@@ -16,6 +17,7 @@ main().catch(err => {
 });
 
 async function main() {
+  await ensureDir(dist);
   await windows();
   await mac();
 }
@@ -36,7 +38,7 @@ async function mac() {
 
   const exe = join(root, 'scripts/vendor', `node-${node_version}`, 'node');
   input[exe] = 'node';
-  console.log(input);
+
   await zip(input, file);
 }
 
