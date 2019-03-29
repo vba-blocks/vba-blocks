@@ -1,8 +1,17 @@
-const { join } = require('path');
+const { promisify } = require('util');
+const { get: httpsGet } = require('https');
+const { join, dirname, basename } = require('path');
 const { createWriteStream } = require('fs');
+const { ensureDir, pathExists, move, remove } = require('fs-extra');
 const { create: createArchive } = require('archiver');
+const tmpDir = promisify(require('tmp').dir);
+const decompress = require('decompress');
+
 const { version } = require('../package.json');
-const is_windows = process.platform === 'win32';
+const dist = join(__dirname, '../dist');
+const unpacked = join(dist, 'unpacked');
+const vendor = join(__dirname, '../vendor');
+const node = join(vendor, 'node');
 
 main().catch(err => {
   console.error(err);
@@ -10,30 +19,118 @@ main().catch(err => {
 });
 
 async function main() {
-  if (!is_windows) return;
+  await downloadNode();
 
-  const dist = join(__dirname, '../dist');
-  const unpacked = join(dist, 'unpacked');
-  const file = join(dist, `vba-blocks-v${version}.zip`);
+  await full('win');
+  await full('mac');
+  await patch('win');
+  await patch('mac');
+}
+
+async function downloadNode() {
+  if (await pathExists(node)) return;
+
+  const version = 'v10.15.3';
+  const base = `https://nodejs.org/dist/${version}/`;
+  const windows = `node-${version}-win-x86.zip`;
+  const mac = `node-${version}-darwin-x64.tar.gz`;
+
+  console.log(`Downloading node ${version}...`);
+
+  const dir = await tmpDir();
+  await Promise.all([
+    download(`${base}${windows}`, join(dir, windows)),
+    download(`${base}${mac}`, join(dir, mac))
+  ]);
+
+  console.log('Unzipping node');
+
+  const filename = file => {
+    file.path = basename(file.path);
+    return file;
+  };
+
+  await ensureDir(node);
+  await Promise.all([
+    decompress(join(dir, windows), node, {
+      filter: file => /node\.exe$/.test(file.path),
+      map: filename
+    }),
+    decompress(join(dir, mac), node, {
+      filter: file => /node$/.test(file.path),
+      map: filename
+    })
+  ]);
+
+  await remove(dir);
+}
+
+async function full(target) {
+  const file = join(dist, `vba-blocks-v${version}-${target}.zip`);
+  const node_exe = target === 'win' ? 'node.exe' : 'node';
+  await zip({ directories: [unpacked], files: [join(node, node_exe)] }, file);
+}
+
+async function patch(target) {
+  // const file = join(dist, `vba-blocks-v${version}-${target}.patch`);
+  // TODO
+}
+
+async function zip(options, dest) {
+  if (Array.isArray(options)) options = { directories: options };
+  if (typeof options === 'string') options = { directories: [options] };
+
+  const { directories = [], files = [] } = options;
 
   return new Promise((resolve, reject) => {
     try {
-      const output = createWriteStream(file);
+      const output = createWriteStream(dest);
       const archive = createArchive('zip');
 
-      output.on('close', () => {
-        console.log(`Done - ${file}`);
-        resolve();
-      });
+      output.on('close', resolve);
       output.on('error', reject);
 
       archive.pipe(output);
       archive.on('error', reject);
 
-      archive.directory(unpacked, '/');
+      for (const dir of directories) {
+        archive.directory(dir, '/');
+      }
+      for (const file of files) {
+        archive.file(file, { name: basename(file) });
+      }
+
       archive.finalize();
     } catch (err) {
       reject(err);
     }
+  });
+}
+
+async function download(url, dest) {
+  await ensureDir(dirname(dest));
+
+  return new Promise((resolve, reject) => {
+    httpsGet(url, response => {
+      try {
+        const code = response.statusCode;
+        if (code && code >= 400) {
+          reject(new Error(`${code} ${response.statusMessage}`));
+        } else if (code && code >= 300) {
+          const location = response.headers.location;
+          const redirect = Array.isArray(location) ? location[0] : location;
+
+          download(redirect, dest).then(resolve, reject);
+        } else {
+          const file = createWriteStream(dest);
+          response
+            .pipe(file)
+            .on('finish', () => resolve())
+            .on('error', reject);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }).on('error', reject);
   });
 }

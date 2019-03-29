@@ -2,9 +2,7 @@
 /dist
 /tests/.tmp
 /addins/build
-/installer/vba-blocks.w*
-/installer/actions/target
-/vendor/pkg
+/vendor/node
 
 # Ignore temporary Excel files
 **/~$*

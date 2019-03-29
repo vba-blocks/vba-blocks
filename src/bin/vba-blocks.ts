@@ -43,7 +43,7 @@ const help = dedent`
 
   Usage: vba-blocks [command] [options]
 
-  Commands
+  Commands:
     - new           Create a new project / package in a new directory
     - init          Initialize a new project / package in the current directory
     - build         Build project from manifest

@@ -20,7 +20,10 @@ export default [
     plugins: [
       resolve(),
       commonjs({
-        include: 'node_modules/**'
+        include: 'node_modules/**',
+        namedExports: {
+          'ansi-colors': ['redBright', 'dim']
+        }
       }),
       json(),
       babel({ extensions: ['.mjs', '.js', '.ts'] }),
@@ -35,7 +38,6 @@ export default [
     onwarn(warning, warn) {
       // Ignore known errors
       if (warning.code === 'CIRCULAR_DEPENDENCY' && /glob/.test(warning.importer)) return;
-      if (warning.code === 'MISSING_EXPORT' && /ansi-colors/.test(warning.exporter)) return;
       if (warning.code === 'EVAL' && /minisat/.test(warning.id)) return;
 
       warn(warning);

@@ -5,6 +5,5 @@ case `uname` in
   *CYGWIN*) basedir=`cygpath -w "$basedir"`;;
 esac
 
-"$basedir/../node/node" "$basedir/../lib/vba-blocks.js" "$@"
-
+"$basedir/../node" --no-warnings "$basedir/../lib/vba-blocks.js" "$@"
 exit $?

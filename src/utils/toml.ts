@@ -6,7 +6,7 @@ export async function parse(value: string): Promise<any> {
 }
 
 export async function convert(value: any): Promise<string> {
-  const { toToml } = await import('tomlify-j0.4');
+  const { toToml } = (await import('tomlify-j0.4')).default;
   return toToml(value);
 }
 

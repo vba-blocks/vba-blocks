@@ -12,25 +12,10 @@
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
     "build": "rimraf lib && rollup -c",
-    "build:win": "run-s build:clean build build:addins build:rcedit build:pkg:win build:copy",
-    "rebuild:win": "run-s build build:pkg:win build:copy",
-    "build:mac": "run-s build:clean build build:addins build:pkg:mac build:copy",
-    "rebuild:mac": "run-s build build:pkg:mac build:copy",
-    "build:pkg:win": "cross-env PKG_CACHE_PATH=./vendor/pkg pkg --targets node10.4-win-x86 -o dist/unpacked/bin/vba-blocks.exe .",
-    "build:pkg:mac": "pkg --targets node10-mac-x64 -o dist/unpacked/bin/vba-blocks .",
-    "build:rcedit": "node scripts/rcedit",
-    "build:copy": "node scripts/copy",
-    "build:addins": "cd addins && node ../scripts/build-addins",
+    "build:addins": "cd addins && node --no-warnings ../scripts/build-addins",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
-    "package:zip": "node scripts/zip",
-    "package:win": "node scripts/installer",
-    "package:mac": "node scripts/installer",
+    "package": "node scripts/copy && node scripts/zip",
     "clean": "rimraf lib && rimraf dist && rimraf addins/build"
-  },
-  "pkg": {
-    "scripts": [
-      "lib/*.js"
-    ]
   },
   "prettier": {
     "singleQuote": true,
@@ -84,7 +69,6 @@
     "jest": "^24",
     "mustache": "^3",
     "npm-run-all": "^4",
-    "pkg": "^4",
     "prettier": "^1",
     "rimraf": "^2",
     "rollup": "^1",
