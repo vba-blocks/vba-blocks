@@ -10,8 +10,10 @@ const decompress = require('decompress');
 const { version } = require('../package.json');
 const dist = join(__dirname, '../dist');
 const unpacked = join(dist, 'unpacked');
-const vendor = join(__dirname, '../vendor');
-const node = join(vendor, 'node');
+
+const node_version = 'v10.15.3';
+const vendor = join(__dirname, 'vendor');
+const node = join(vendor, `node-${node_version}`);
 
 main().catch(err => {
   console.error(err);
@@ -21,21 +23,18 @@ main().catch(err => {
 async function main() {
   await downloadNode();
 
-  await full('win');
-  await full('mac');
-  await patch('win');
-  await patch('mac');
+  await createZip('win');
+  await createZip('mac');
 }
 
 async function downloadNode() {
   if (await pathExists(node)) return;
 
-  const version = 'v10.15.3';
-  const base = `https://nodejs.org/dist/${version}/`;
-  const windows = `node-${version}-win-x86.zip`;
-  const mac = `node-${version}-darwin-x64.tar.gz`;
+  const base = `https://nodejs.org/dist/${node_version}/`;
+  const windows = `node-${node_version}-win-x86.zip`;
+  const mac = `node-${node_version}-darwin-x64.tar.gz`;
 
-  console.log(`Downloading node ${version}...`);
+  console.log(`Downloading node ${node_version}...`);
 
   const dir = await tmpDir();
   await Promise.all([
@@ -65,15 +64,10 @@ async function downloadNode() {
   await remove(dir);
 }
 
-async function full(target) {
+async function createZip(target) {
   const file = join(dist, `vba-blocks-v${version}-${target}.zip`);
   const node_exe = target === 'win' ? 'node.exe' : 'node';
   await zip({ directories: [unpacked], files: [join(node, node_exe)] }, file);
-}
-
-async function patch(target) {
-  // const file = join(dist, `vba-blocks-v${version}-${target}.patch`);
-  // TODO
 }
 
 async function zip(options, dest) {
