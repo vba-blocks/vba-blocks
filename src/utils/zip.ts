@@ -1,4 +1,5 @@
 import { createWriteStream } from 'fs';
+import { __default } from './interop';
 
 export async function zip(dir: string, file: string): Promise<void> {
   const { create: createArchive } = (await import('archiver')).default;
@@ -23,6 +24,6 @@ export async function zip(dir: string, file: string): Promise<void> {
 }
 
 export async function unzip(file: string, dest: string): Promise<void> {
-  const decompress = (await import('decompress')).default;
+  const decompress = __default(await import('decompress'));
   await decompress(file, dest);
 }

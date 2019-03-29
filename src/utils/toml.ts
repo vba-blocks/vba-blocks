@@ -1,4 +1,5 @@
 import { isString, isNumber, isBoolean, isDate, isObject } from './is';
+import { __default } from './interop';
 
 export async function parse(value: string): Promise<any> {
   const { parse: parseToml } = await import('toml');
@@ -6,7 +7,7 @@ export async function parse(value: string): Promise<any> {
 }
 
 export async function convert(value: any): Promise<string> {
-  const { toToml } = (await import('tomlify-j0.4')).default;
+  const { toToml } = __default(await import('tomlify-j0.4'));
   return toToml(value);
 }
 
