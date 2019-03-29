@@ -1,15 +1,9 @@
 const { promisify } = require('util');
+const { join, dirname } = require('path');
 const { get: httpsGet } = require('https');
-const { join, dirname, basename } = require('path');
-const { createWriteStream } = require('fs');
-const { ensureDir, pathExists, move, remove } = require('fs-extra');
-const { create: createArchive } = require('archiver');
+const { ensureDir, pathExists, remove } = require('fs-extra');
 const tmpDir = promisify(require('tmp').dir);
 const decompress = require('decompress');
-
-const { version } = require('../package.json');
-const dist = join(__dirname, '../dist');
-const unpacked = join(dist, 'unpacked');
 
 const node_version = 'v10.15.3';
 const vendor = join(__dirname, 'vendor');
@@ -22,9 +16,6 @@ main().catch(err => {
 
 async function main() {
   await downloadNode();
-
-  await createZip('win');
-  await createZip('mac');
 }
 
 async function downloadNode() {
@@ -64,43 +55,6 @@ async function downloadNode() {
   await remove(dir);
 }
 
-async function createZip(target) {
-  const file = join(dist, `vba-blocks-v${version}-${target}.zip`);
-  const node_exe = target === 'win' ? 'node.exe' : 'node';
-  await zip({ directories: [unpacked], files: [join(node, node_exe)] }, file);
-}
-
-async function zip(options, dest) {
-  if (Array.isArray(options)) options = { directories: options };
-  if (typeof options === 'string') options = { directories: [options] };
-
-  const { directories = [], files = [] } = options;
-
-  return new Promise((resolve, reject) => {
-    try {
-      const output = createWriteStream(dest);
-      const archive = createArchive('zip');
-
-      output.on('close', resolve);
-      output.on('error', reject);
-
-      archive.pipe(output);
-      archive.on('error', reject);
-
-      for (const dir of directories) {
-        archive.directory(dir, '/');
-      }
-      for (const file of files) {
-        archive.file(file, { name: basename(file) });
-      }
-
-      archive.finalize();
-    } catch (err) {
-      reject(err);
-    }
-  });
-}
-
 async function download(url, dest) {
   await ensureDir(dirname(dest));
 
@@ -128,3 +82,9 @@ async function download(url, dest) {
     }).on('error', reject);
   });
 }
+
+module.exports = {
+  versions: {
+    node: node_version
+  }
+};

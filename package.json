@@ -14,7 +14,7 @@
     "build": "rimraf lib && rollup -c",
     "build:addins": "cd addins && node --no-warnings ../scripts/build-addins",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
-    "package": "node scripts/copy && node scripts/zip",
+    "package": "node scripts/ensure-vendor && node scripts/create-packages",
     "clean": "rimraf lib && rimraf dist && rimraf addins/build"
   },
   "prettier": {
