@@ -43,7 +43,7 @@ async function main() {
   console.log('Uploading packages');
   await Promise.all([
     uploadAsset(join(__dirname, '../dist', `vba-blocks-win.zip`), release),
-    uploadAsset(join(__dirname, '../dist', `vba-blocks-mac.zip`), release)
+    uploadAsset(join(__dirname, '../dist', `vba-blocks-mac.tar.gz`), release)
   ]);
 
   console.log('Done!');

@@ -7,7 +7,6 @@ const {
   versions: { node: node_version }
 } = require('./ensure-vendor');
 
-const { version } = require('../package.json');
 const root = join(__dirname, '../');
 const dist = join(root, 'dist');
 
@@ -33,13 +32,13 @@ async function windows() {
 }
 
 async function mac() {
-  const file = join(dist, `vba-blocks-mac.zip`);
+  const file = join(dist, `vba-blocks-mac.tar.gz`);
   const input = getInput('darwin');
 
   const exe = join(root, 'scripts/vendor', `node-${node_version}`, 'node');
   input[exe] = 'node';
 
-  await zip(input, file);
+  await zip(input, file, 'tar', { gzip: true });
 }
 
 function getInput(platform) {
@@ -69,11 +68,11 @@ function getInput(platform) {
   return input;
 }
 
-async function zip(input, dest) {
+async function zip(input, dest, type = 'zip', options = {}) {
   return new Promise((resolve, reject) => {
     try {
       const output = createWriteStream(dest);
-      const archive = createArchive('zip');
+      const archive = createArchive(type, options);
 
       output.on('close', resolve);
       output.on('error', reject);
