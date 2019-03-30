@@ -23,7 +23,7 @@ async function main() {
 }
 
 async function windows() {
-  const file = join(dist, `vba-blocks-v${version}-win.zip`);
+  const file = join(dist, `vba-blocks-win.zip`);
   const input = getInput('win32');
 
   const exe = join(root, 'scripts/vendor', `node-${node_version}`, 'node.exe');
@@ -33,7 +33,7 @@ async function windows() {
 }
 
 async function mac() {
-  const file = join(dist, `vba-blocks-v${version}-mac.zip`);
+  const file = join(dist, `vba-blocks-mac.zip`);
   const input = getInput('darwin');
 
   const exe = join(root, 'scripts/vendor', `node-${node_version}`, 'node');
