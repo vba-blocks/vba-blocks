@@ -1,4 +1,4 @@
-const { join, relative, basename } = require('path');
+const { join, relative, basename, extname } = require('path');
 const { createWriteStream } = require('fs');
 const { ensureDir } = require('fs-extra');
 const { create: createArchive } = require('archiver');
@@ -7,7 +7,6 @@ const {
   versions: { node: node_version }
 } = require('./ensure-vendor');
 
-const { version } = require('../package.json');
 const root = join(__dirname, '../');
 const dist = join(root, 'dist');
 
@@ -23,23 +22,17 @@ async function main() {
 }
 
 async function windows() {
-  const file = join(dist, `vba-blocks-v${version}-win.zip`);
+  const file = join(dist, `vba-blocks-win.zip`);
   const input = getInput('win32');
-
-  const exe = join(root, 'scripts/vendor', `node-${node_version}`, 'node.exe');
-  input[exe] = 'node.exe';
 
   await zip(input, file);
 }
 
 async function mac() {
-  const file = join(dist, `vba-blocks-v${version}-mac.zip`);
+  const file = join(dist, `vba-blocks-mac.tar.gz`);
   const input = getInput('darwin');
 
-  const exe = join(root, 'scripts/vendor', `node-${node_version}`, 'node');
-  input[exe] = 'node';
-
-  await zip(input, file);
+  await zip(input, file, 'tar', { gzip: true });
 }
 
 function getInput(platform) {
@@ -52,28 +45,32 @@ function getInput(platform) {
   const isShell = path => !isCmd(path) && !isPowershell(path);
   const compatibleBin = path =>
     platform === 'win32' ? isCmd(path) || isPowershell(path) : isShell(path);
+  const compatibleExe = path =>
+    platform === 'win32' ? extname(path) === '.exe' : extname(path) === '';
 
   const lib = ls(join(root, 'lib'));
   const addins = ls(join(root, 'addins/build')).filter(ignoreBackup);
   const run_scripts = ls(join(root, 'run-scripts')).filter(compatibleRunScript);
-  const bin = ls(join(root, 'scripts/bin')).filter(compatibleBin);
+  const bin = ls(join(root, 'bin')).filter(compatibleBin);
+  const vendor = ls(join(root, 'vendor')).filter(compatibleExe);
 
   const input = {};
-  for (const file of addins.concat(run_scripts).concat(lib)) {
+  for (const file of addins
+    .concat(run_scripts)
+    .concat(lib)
+    .concat(bin)
+    .concat(vendor)) {
     input[file] = relative(root, file);
-  }
-  for (const file of bin) {
-    input[file] = join('bin', basename(file));
   }
 
   return input;
 }
 
-async function zip(input, dest) {
+async function zip(input, dest, type = 'zip', options = {}) {
   return new Promise((resolve, reject) => {
     try {
       const output = createWriteStream(dest);
-      const archive = createArchive('zip');
+      const archive = createArchive(type, options);
 
       output.on('close', resolve);
       output.on('error', reject);

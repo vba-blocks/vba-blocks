@@ -1,13 +1,13 @@
 const { promisify } = require('util');
-const { join, dirname } = require('path');
+const { join, dirname, basename } = require('path');
 const { get: httpsGet } = require('https');
+const { createWriteStream } = require('fs');
 const { ensureDir, pathExists, remove } = require('fs-extra');
 const tmpDir = promisify(require('tmp').dir);
 const decompress = require('decompress');
 
 const node_version = 'v10.15.3';
-const vendor = join(__dirname, 'vendor');
-const node = join(vendor, `node-${node_version}`);
+const vendor = join(__dirname, '../vendor');
 
 main().catch(err => {
   console.error(err);
@@ -19,7 +19,7 @@ async function main() {
 }
 
 async function downloadNode() {
-  if (await pathExists(node)) return;
+  if (await pathExists(join(vendor))) return;
 
   const base = `https://nodejs.org/dist/${node_version}/`;
   const windows = `node-${node_version}-win-x86.zip`;
@@ -40,13 +40,13 @@ async function downloadNode() {
     return file;
   };
 
-  await ensureDir(node);
+  await ensureDir(vendor);
   await Promise.all([
-    decompress(join(dir, windows), node, {
+    decompress(join(dir, windows), vendor, {
       filter: file => /node\.exe$/.test(file.path),
       map: filename
     }),
-    decompress(join(dir, mac), node, {
+    decompress(join(dir, mac), vendor, {
       filter: file => /node$/.test(file.path),
       map: filename
     })

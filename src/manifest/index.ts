@@ -159,9 +159,9 @@ export async function writeManifest(manifest: Manifest, dir: string) {
 
   value.src = {};
   manifest.src.forEach(source => {
-    let { path, optional } = source;
+    let { name, path, optional } = source;
     path = relative(manifest.dir, path);
-    value.src[source.name] = optional ? { path, optional } : path;
+    value.src[name] = optional ? { path, optional } : path;
   });
 
   if (manifest.target) {
@@ -185,7 +185,11 @@ export async function writeManifest(manifest: Manifest, dir: string) {
     throw new Error(`writeManifest does not currently support dependencies`);
   }
   if (manifest.references.length) {
-    throw new Error(`writeManifest does not currently support references`);
+    value.references = {};
+    manifest.references.forEach(reference => {
+      let { name, version, guid, optional } = reference;
+      value.references[name] = optional ? { version, guid, optional } : { version, guid };
+    });
   }
 
   const toml = await convertToToml(value);

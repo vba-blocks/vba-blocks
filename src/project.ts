@@ -77,7 +77,7 @@ export async function fetchDependencies(project: FetchProject): Promise<Manifest
 
       return manifest;
     },
-    { progress: env.reporter.progress('Fetching Dependencies') }
+    { progress: env.reporter.progress('Fetching dependencies') }
   );
 
   return manifests;

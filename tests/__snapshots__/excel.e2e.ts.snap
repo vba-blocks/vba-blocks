@@ -102,6 +102,9 @@ ThisWorkbook = \\"src/ThisWorkbook.cls\\"
 
 Add the following to the [src] section:
 Validation = \\"src/Validation.bas\\"
+
+Add the following to the [references] section:
+VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
 "
 `;
 
@@ -166,6 +169,9 @@ ThisWorkbook = \\"src/ThisWorkbook.cls\\"
 
 Add the following to the [src] section:
 Validation = \\"src/Validation.bas\\"
+
+Add the following to the [references] section:
+VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
 "
 `;
 
@@ -227,6 +233,12 @@ Sheet2 = \\"src/Sheet2.cls\\"
 Sheet3 = \\"src/Sheet3.cls\\"
 ThisWorkbook = \\"src/ThisWorkbook.cls\\"
 Validation = \\"src/Validation.bas\\"
+
+[references]
+
+[references.VBIDE]
+version = \\"5.3\\"
+guid = \\"{0002E157-0000-0000-C000-000000000046}\\"
 ",
 }
 `;

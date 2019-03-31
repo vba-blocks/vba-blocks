@@ -2,7 +2,7 @@
 /dist
 /tests/.tmp
 /addins/build
-/scripts/vendor
+/vendor
 
 # Ignore temporary Excel files
 **/~$*

@@ -13,60 +13,88 @@ A package manager and build tool for VBA.
 
 Create a new folder with a blank/generated vba-blocks project inside
 
+Create a folder "project-name" with a blank xlsm project:
+
+```shellsession
+$ vba-blocks new project-name.xlsm
 ```
-# Create a folder "project-name" with a blank xlsm project
-> vba-blocks new project-name.xlsm
 
-# (equivalent to above)
-> vba-blocks new project-name --target xlsm
+(equivalent to above)
 
-# Create a folder "from-existing" with a project from an existing workbook
-> vba-blocks new from-existing --from existing.xlsm
+```shellsession
+$ vba-blocks new project-name --target xlsm
+```
 
-# Create a blank package for sharing as a library between projects
-> vba-blocks new json-converter --package
+Create a folder "from-existing" with a project from an existing workbook:
+
+```shellsession
+$ vba-blocks new from-existing --from existing.xlsm
+```
+
+Create a blank package for sharing as a library between projects:
+
+```shellsession
+$ vba-blocks new json-converter --package
 ```
 
 ### `init`
 
 Create a blank/generated vba-blocks project in the current folder
 
+Create a blank xlsm project with the current folder's name:
+
+```shellsession
+$ vba-blocks init --target xlsm
 ```
-# Create a blank xlsm project with current folder's name
-> vba-blocks init --target xlsm
 
-# Create a project from an existing workbook
-> vba-blocks init --from existing.xlsm
+Create a project from an existing workbook:
 
-# Create a blank package
-> vba-blocks init --package
+```shellsession
+$ vba-blocks init --from existing.xlsm
+```
+
+Create a blank package:
+
+```shellsession
+$ vba-blocks init --package
 ```
 
 ### `build`
 
 Build an Excel workbook from the project's source. The built file is located in the `build/` folder and if a previously built file is found it is moved to `/.backup` to protect against losing any previously saved work.
 
+Build a project:
+
+```shellsession
+$ vba-blocks build
 ```
-# Build a project
-> vba-blocks build
 
-# Build and open a project for editing
-> vba-blocks build --open
+Build and open a project for editing:
 
-# Build a package using a blank target
-> vba-blocks build --target xlsm
+```shellsession
+$ vba-blocks build --open
+```
+
+Build a package using a blank target:
+
+```shellsession
+$ vba-blocks build --target xlsm
 ```
 
 ### `export`
 
 Once you've completed your edits and are ready to commit your changes, export your project with `vba-blocks export`.
 
-```
-# Export a project
-> vba-blocks export
+Export a project:
 
-# Export a previously built package
-> vba-blocks export --target xlsm
+```shellsession
+$ vba-blocks export
+```
+
+Export a previously-built package:
+
+```shellsession
+$ vba-blocks export --target xlsm
 ```
 
 ### `run`
@@ -83,10 +111,9 @@ Public Function RunTests(Value As Variant) As String
 End Function
 ```
 
-```
-> vba-blocks run build/example.xlsm Tests.RunTests
+```shellsession
+$ vba-blocks run build/example.xlsm Tests.RunTests
 Howdy!
-
 ```
 
 ## Development
