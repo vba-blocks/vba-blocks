@@ -23,16 +23,6 @@ Attribute VB_Name = "Installer"
 ' @license MIT (http://www.opensource.org/licenses/mit-license.php)
 '' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
 
-' TODO Add reference to VBIDE for proper typing of VBProject and friends
-
-' --------------------------------------------- '
-' Constants and Private Variables
-' --------------------------------------------- '
-
-' ============================================= '
-' Public Methods
-' ============================================= '
-
 ''
 ' @method Import
 ' @param {VBProject} Project
@@ -40,7 +30,7 @@ Attribute VB_Name = "Installer"
 ' @param {String} FullPath
 ' @param {Boolean} [Overwrite = False]
 ''
-Public Sub Import(Project As Object, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
+Public Sub Import(Project As VBProject, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
     Precheck Project
 
     If Not FileSystem.FileExists(FullPath) Then
@@ -48,7 +38,7 @@ Public Sub Import(Project As Object, ComponentName As String, FullPath As String
             "Component file not found. No component file found at path: """ & FullPath & """."
     End If
 
-    Dim ExistingComponent As Object ' VBComponent
+    Dim ExistingComponent As VBComponent
     Set ExistingComponent = GetComponent(Project, ComponentName)
 
     If Not ExistingComponent Is Nothing Then
@@ -57,8 +47,7 @@ Public Sub Import(Project As Object, ComponentName As String, FullPath As String
                 "Existing component found. A module with the name """ & ModuleName & """ is already part of the project. " & _
                 "Use `Installer.Import(Project, ComponentName, FullPath, Overwrite:=True)` to overwrite an existing module."
         Else
-            ' vbext_ct_Document = 100
-            If ExistingComponent.Type = 100 Then
+            If ExistingComponent.Type = vbext_ComponentType.vbext_ct_Document Then
                 ' For ThisWorkbook and Sheets, can't remove and then import
                 ' Instead, overwrite with imported module
                 Dim ImportedComponent As Object
@@ -95,7 +84,7 @@ End Sub
 ' @param {String} FullPath
 ' @param {Boolean} [Overwrite = False]
 ''
-Public Sub Export(Project As Object, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
+Public Sub Export(Project As VBProject, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
     Precheck Project
 
     If Not Overwrite And FileSystem.FileExists(FullPath) Then
@@ -104,7 +93,7 @@ Public Sub Export(Project As Object, ComponentName As String, FullPath As String
             "Use `Installer.Export(Project, ComponentName, FullPath, Overwrite:=True)` to overwrite an existing file."""
     End If
 
-    Dim Component As Object ' VBComponent
+    Dim Component As VBComponent
     Set Component = GetComponent(Project, ComponentName)
 
     If Component Is Nothing Then
@@ -128,10 +117,10 @@ End Sub
 ' @param {VBProject} Project
 ' @param {String} ComponentName
 ''
-Public Sub Remove(Project As Object, ComponentName As String)
+Public Sub Remove(Project As VBProject, ComponentName As String)
     Precheck Project
 
-    Dim Component As Object ' VBComponent
+    Dim Component As VBComponent
     Set Component = GetComponent(Project, ComponentName)
 
     If Component Is Nothing Then
@@ -156,7 +145,7 @@ End Sub
 ' @param {Long} MajorVersion
 ' @param {Long} MinorVersion
 ''
-Public Sub AddReference(Project As Object, Guid As String, MajorVersion As Long, MinorVersion As Long)
+Public Sub AddReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long)
     Precheck Project
 
     If Not GetReference(Project, Guid, MajorVersion, MinorVersion) Is Nothing Then
@@ -181,10 +170,10 @@ End Sub
 ' @param {Long} MajorVersion
 ' @param {Long} MinorVersion
 ''
-Public Sub RemoveReference(Project As Object, Guid As String, MajorVersion As Long, MinorVersion As Long)
+Public Sub RemoveReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long)
     Precheck Project
 
-    Dim ExistingReference As Object ' Reference
+    Dim ExistingReference As Reference
     Set ExistingReference = GetReference(Project, Guid, MajorVersion, MinorVersion)
 
     If ExistingReference Is Nothing Then
@@ -206,17 +195,15 @@ End Sub
 ' Private Methods
 ' ============================================= '
 
-' (VBProject, String) => VBComponent
-Private Function GetComponent(Project As Object, ComponentName As String) As Object
+Private Function GetComponent(Project As VBProject, ComponentName As String) As VBComponent
     On Error Resume Next
     Set GetComponent = Project.VBComponents(ComponentName)
 
     On Error GoTo 0
 End Function
 
-' (VBProject, String, Long, Long) => Reference
-Private Function GetReference(Project As Object, Guid As String, MajorVersion As Long, MinorVersion As Long) As Object
-    Dim Ref As Object ' Reference
+Private Function GetReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long) As Reference
+    Dim Ref As Reference
     For Each Ref In Project.References
         If Ref.Guid = Guid And Ref.Major = MajorVersion And Ref.Minor = MinorVersion Then
             Set GetReference = Ref
@@ -224,8 +211,7 @@ Private Function GetReference(Project As Object, Guid As String, MajorVersion As
     Next Ref
 End Function
 
-' (VBProject)
-Private Sub Precheck(Project As Object)
+Private Sub Precheck(Project As VBProject)
     If Not VbaIsTrusted(Project) Then
         Err.Raise 10100, "Installer", _
             "VBA Project access is disabled. To enable:" & vbNewLine & _
@@ -241,16 +227,13 @@ Private Sub Precheck(Project As Object)
     End If
 End Sub
 
-' (VBProject)
-Private Function VbaIsUnlocked(Project As Object) As Boolean
-    ' vbext_ProjectProtection.vbext_pp_none = 0
-    If Project.Protection = 0 Then
+Private Function VbaIsUnlocked(Project As VBProject) As Boolean
+    If Project.Protection = vbext_ProjectProtection.vbext_pp_none Then
         VbaIsUnlocked = True
     End If
 End Function
 
-' (VBProject)
-Private Function VbaIsTrusted(Project As Object) As Boolean
+Private Function VbaIsTrusted(Project As VBProject) As Boolean
     On Error Resume Next
 
     Dim ComponentCount As Long
