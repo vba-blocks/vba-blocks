@@ -8,6 +8,7 @@ import { terser } from 'rollup-plugin-terser';
 import builtin from 'builtin-modules';
 
 const mode = process.env.NODE_ENV || 'development';
+const { version } = require('./package.json');
 
 export default [
   {
@@ -30,7 +31,8 @@ export default [
       typescript(),
       replace({
         'process.env.NODE_ENV': JSON.stringify(mode),
-        'process.env.READABLE_STREAM': '"disable"'
+        'process.env.READABLE_STREAM': '"disable"',
+        _VERSION_: version
       }),
       mode === 'production' && terser(),
       readableStream()

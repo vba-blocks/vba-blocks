@@ -22,7 +22,7 @@ import { DependencyGraph } from '../resolve/types';
 import { Lockfile } from './types';
 
 const debug = require('debug')('vba-blocks:lockfile');
-const VBA_BLOCKS_VERSION = 'VERSION';
+const VBA_BLOCKS_VERSION = '_VERSION_';
 const LOCKFILE_VERSION = '1';
 
 type DependencyByName = Map<string, Dependency>;
