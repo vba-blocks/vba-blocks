@@ -4,27 +4,8 @@ A package manager and build tool for VBA.
 
 ## Installation
 
-For Windows:
-
-Open powershell and run the following to install vba-blocks:
-
-```shellsession
-> iwr https://vba-blocks.com/install.ps1 | iex
-```
-
-For Mac:
-
-Open terminal and run the following to install vba-blocks:
-
-```shellsession
-$ curl -fsSL https://vba-blocks.com/install.sh | sh
-```
-
-:rocket: You're ready to go! Open a new command-line session (cmd / terminal) and try:
-
-```shellsession
-$ vba-blocks --help
-```
+1. Download and install the [latest release](https://github.com/vba-blocks/vba-blocks/releases) for your platform (Windows or Mac)
+2. :rocket: You're ready to go! Open a new command-line session (cmd / terminal) and try `vba-blocks help`
 
 ## Usage
 
