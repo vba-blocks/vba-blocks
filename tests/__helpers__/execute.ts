@@ -35,8 +35,8 @@ export async function execute(
   cwd: string,
   command: string
 ): Promise<{ stdout: string; stderr: string }> {
-  const bin = resolve(__dirname, '../../dist/unpacked/bin/vba-blocks');
-  const result = await exec(`${bin} ${command}`, { cwd });
+  const bin = resolve(__dirname, '../../lib/vba-blocks');
+  const result = await exec(`node --no-warnings ${bin} ${command}`, { cwd });
 
   // Give Office time to clean up
   await wait();

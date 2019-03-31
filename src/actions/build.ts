@@ -57,7 +57,7 @@ export default async function build(options: BuildOptions = {}): Promise<string>
         No default target(s) found for project.
 
         Use --target TYPE for a blank target
-        or specify [target] or [targets] in vba-block.toml.
+        or specify 'project.target' in vba-block.toml.
       `
     );
   }
