@@ -27,10 +27,11 @@ export interface TmpOptions {
 
 async function tmpFile(options: TmpOptions = {}): Promise<string> {
   const { dir, prefix = 'vba-blocks-', template } = options;
+  const { file: tmpFile } = await import('tmp');
 
   return new Promise<string>((resolve, reject) => {
     // Defer requiring tmp as it adds process listeners that can cause warnings
-    require('tmp').file({ prefix, dir, template }, (err: any, path: string) => {
+    tmpFile({ prefix, dir, template }, (err: any, path: string) => {
       if (err) return reject(err);
       resolve(path);
     });
@@ -39,9 +40,10 @@ async function tmpFile(options: TmpOptions = {}): Promise<string> {
 
 async function tmpFolder(options: TmpOptions = {}): Promise<string> {
   const { dir, prefix = 'vba-blocks-', template } = options;
+  const { dir: tmpDir } = await import('tmp');
 
   return new Promise<string>((resolve, reject) => {
-    require('tmp').dir({ prefix, dir, template }, (err: any, path: string) => {
+    tmpDir({ prefix, dir, template }, (err: any, path: string) => {
       if (err) return reject(err);
       resolve(path);
     });
