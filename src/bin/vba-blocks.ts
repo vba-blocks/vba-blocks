@@ -4,9 +4,11 @@ import meant from 'meant';
 import dedent from 'dedent/macro';
 import has from '../utils/has';
 import { joinCommas } from '../utils/text';
-import { CliError, ErrorCode, cleanError } from '../errors';
 import { RunError } from '../utils/run';
+import { __default } from '../utils/interop';
+import { CliError, ErrorCode, cleanError } from '../errors';
 import { version } from '../../package.json';
+// Can't import debug here to allow --debug flag handling
 
 Error.stackTraceLimit = Infinity;
 
@@ -36,7 +38,6 @@ if (args.debug) {
 
   process.env.DEBUG = existing.concat(filters).join(',');
 }
-const debug = require('debug')('vba-blocks:main');
 
 const help = dedent`
   vba-blocks v${version}
@@ -67,6 +68,8 @@ main()
   .catch(handleError);
 
 async function main() {
+  const debug = __default(await import('debug'))('vba-blocks:main');
+
   let [command] = args._;
 
   if (!command) {
@@ -132,7 +135,7 @@ function isRunError(error: Error | RunError): error is RunError {
 }
 
 export function handleError(err: Error | CliError) {
-  const { message, stack } = cleanError(err);
+  const { message } = cleanError(err);
 
   console.error(`${colors.redBright('ERROR')} ${message}`);
 
@@ -145,12 +148,16 @@ export function handleError(err: Error | CliError) {
   //   );
   // }
 
-  debug(err);
-  if (isCliError(err) && err.underlying) {
-    debug('underlying', err.underlying);
-  }
-  if (isRunError(err)) {
-    debug('result', err.result);
+  // Couldn't import debug, so log directly if debugging anything
+  if (process.env.DEBUG) {
+    console.error(err);
+
+    if (isCliError(err) && err.underlying) {
+      console.error('underlying', err.underlying);
+    }
+    if (isRunError(err)) {
+      console.error('result', err.result);
+    }
   }
 
   process.exit(1);

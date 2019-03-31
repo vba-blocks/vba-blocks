@@ -7,7 +7,7 @@ import { join } from './path';
 import { pathExists } from './fs';
 import { CliError, ErrorCode } from '../errors';
 
-const debug = require('debug')('vba-blocks:run');
+const debug = env.debug('vba-blocks:run');
 
 export interface RunResult {
   success: boolean;

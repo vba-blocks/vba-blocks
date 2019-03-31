@@ -18,7 +18,7 @@ import { CliError, ErrorCode } from '../errors';
 import { Dependency, RegistryDependency } from '../manifest/types';
 import { Source, Registration, RegistryOptions } from './types';
 
-const debug = require('debug')('vba-blocks:registry-source');
+const debug = env.debug('vba-blocks:registry-source');
 
 export default class RegistrySource implements Source {
   name: string;

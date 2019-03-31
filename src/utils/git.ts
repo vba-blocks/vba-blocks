@@ -1,7 +1,8 @@
 import { join } from './path';
 import * as fs from 'fs';
+import env from '../env';
 
-const debug = require('debug')('vba-blocks:git');
+const debug = env.debug('vba-blocks:git');
 
 interface Git {
   clone(options: { dir: string; url: string; depth?: number }): Promise<void>;

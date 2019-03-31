@@ -47,6 +47,7 @@ export interface Env {
   staging: string;
 
   reporter: Reporter;
+  debug: (id: string) => (...values: any[]) => void;
   silent: boolean;
 }
 

@@ -8,7 +8,6 @@ import { terser } from 'rollup-plugin-terser';
 import builtin from 'builtin-modules';
 
 const mode = process.env.NODE_ENV || 'development';
-const { version } = require('./package.json');
 
 export default [
   {
@@ -31,11 +30,11 @@ export default [
       typescript(),
       replace({
         'process.env.NODE_ENV': JSON.stringify(mode),
-        'process.env.READABLE_STREAM': '"disable"',
-        _VERSION_: version
+        'process.env.READABLE_STREAM': '"disable"'
       }),
       mode === 'production' && terser(),
-      readableStream()
+      readableStream(),
+      debug()
     ].filter(Boolean),
     onwarn(warning, warn) {
       // Ignore known errors
@@ -84,6 +83,21 @@ function readableStream() {
       }
 
       return null;
+    }
+  };
+}
+
+function debug() {
+  const isBrowser = /debug[\\,\/]src[\\,\/]browser\.js/;
+
+  return {
+    name: 'debug',
+    load(id) {
+      if (isBrowser.test(id)) {
+        return {
+          code: `module.exports = {};`
+        };
+      }
     }
   };
 }

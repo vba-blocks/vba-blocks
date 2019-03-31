@@ -4,6 +4,7 @@ import { join, relative, trailing } from '../utils/path';
 import { pathExists, readFile, writeFile } from '../utils/fs';
 import { toLockfile as convertToToml, parse as parseToml } from '../utils/toml';
 import has from '../utils/has';
+import env from '../env';
 import { loadManifest } from '../manifest';
 import { isRegistryDependency, isPathDependency, isGitDependency } from '../manifest/dependency';
 import {
@@ -14,6 +15,7 @@ import {
 } from '../sources/registration';
 import { getRegistration } from '../resolve';
 import { CliError, ErrorCode } from '../errors';
+import { version } from '../../package.json';
 
 import { Snapshot, Dependency } from '../manifest/types';
 import { Workspace } from '../types';
@@ -21,8 +23,8 @@ import { Registration } from '../sources/types';
 import { DependencyGraph } from '../resolve/types';
 import { Lockfile } from './types';
 
-const debug = require('debug')('vba-blocks:lockfile');
-const VBA_BLOCKS_VERSION = '_VERSION_';
+const debug = env.debug('vba-blocks:lockfile');
+const VBA_BLOCKS_VERSION = version;
 const LOCKFILE_VERSION = '1';
 
 type DependencyByName = Map<string, Dependency>;

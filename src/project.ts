@@ -13,7 +13,7 @@ import { Manifest } from './manifest/types';
 import { DependencyGraph } from './resolve/types';
 import { Config, Project } from './types';
 
-const debug = require('debug')('vba-blocks:project');
+const debug = env.debug('vba-blocks:project');
 
 /**
  * Load project from given directory / cwd

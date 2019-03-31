@@ -9,7 +9,7 @@ import { Message } from '../messages';
 import { Config, Workspace } from '../types';
 import { DependencyGraph } from './types';
 
-const debug = require('debug')('vba-blocks:resolve');
+const debug = env.debug('vba-blocks:resolve');
 
 export { getRegistration, Resolver };
 

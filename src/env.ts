@@ -1,4 +1,5 @@
 import { homedir } from 'os';
+import _debug from 'debug';
 import { join } from './utils/path';
 import getStaging from './utils/get-staging';
 import { reporter } from './reporter';
@@ -29,6 +30,7 @@ const env: Env = {
   staging: getStaging(cache),
 
   reporter,
+  debug: id => _debug(id),
   silent: false
 };
 
