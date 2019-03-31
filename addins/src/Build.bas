@@ -174,11 +174,10 @@ End Function
 
 Private Function InArray(Value As Variant, Values As Variant) As Boolean
     Dim i As Long
-    For i = UBound(Values) To UBound(Values)
+    For i = LBound(Values) To UBound(Values)
         If Values(i) = Value Then
             InArray = True
             Exit Function
         End If
     Next i
-
 End Function
