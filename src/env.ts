@@ -5,8 +5,13 @@ import { reporter } from './reporter';
 
 import { Env } from './types';
 
-// TODO This should go in AppData
-const cache = join(homedir(), '.vba-blocks');
+const is_windows = process.platform === 'win32';
+
+const cache = is_windows
+  ? process.env.LOCALAPPDATA
+    ? join(process.env.LOCALAPPDATA, 'vba-blocks')
+    : join(homedir(), '.vba-blocks') // Fallback to "hidden" directory in home directory (not actually hidden)
+  : join(homedir(), 'Library', 'Caches', 'vba-blocks');
 const root = join(__dirname, '../');
 
 const env: Env = {
