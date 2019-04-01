@@ -12,6 +12,7 @@
     "test": "jest",
     "e2e": "jest --config e2e.config.js --runInBand",
     "build": "rimraf lib && rollup -c",
+    "build:dev": "cross-env NODE_ENV=development rollup -c",
     "build:addins": "cd addins && node --no-warnings ../scripts/build-addins",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
     "version": "yarn build && node scripts/ensure-vendor && node scripts/create-packages",

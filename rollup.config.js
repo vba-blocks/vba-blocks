@@ -6,9 +6,8 @@ import typescript from 'rollup-plugin-typescript';
 import replace from 'rollup-plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 import builtin from 'builtin-modules';
-import mri from 'mri';
 
-const mode = mri(process.argv.slice(2)).mode || 'development';
+const mode = process.env.NODE_ENV || 'production';
 
 export default [
   {
