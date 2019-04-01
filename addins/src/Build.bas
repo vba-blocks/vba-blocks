@@ -96,7 +96,7 @@ Public Function ExportTo(Info As Variant) As String
     Dim Ref As Object ' Reference
     Dim RefInfo As Dictionary
     Dim BuiltInReferences As Variant
-    BuiltInReferences = Array("stdole", "office")
+    BuiltInReferences = Array("stdole", "office", "msforms")
     For Each Ref In Document.VBProject.References
         If Not Ref.BuiltIn And Not InArray(VBA.LCase$(Ref.Name), BuiltInReferences) Then
             Set RefInfo = New Dictionary
