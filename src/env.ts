@@ -1,4 +1,4 @@
-import { homedir } from 'os';
+import envPaths from 'env-paths';
 import _debug from 'debug';
 import { join } from './utils/path';
 import getStaging from './utils/get-staging';
@@ -6,13 +6,9 @@ import { reporter } from './reporter';
 
 import { Env } from './types';
 
-const is_windows = process.platform === 'win32';
+const paths = envPaths('vba-blocks', { suffix: '' });
 
-const cache = is_windows
-  ? process.env.LOCALAPPDATA
-    ? join(process.env.LOCALAPPDATA, 'vba-blocks')
-    : join(homedir(), '.vba-blocks') // Fallback to "hidden" directory in home directory (not actually hidden)
-  : join(homedir(), 'Library', 'Caches', 'vba-blocks');
+const cache = paths.cache;
 const root = join(__dirname, '../');
 
 const env: Env = {
@@ -20,10 +16,10 @@ const env: Env = {
   cwd: process.cwd(),
   values: process.env,
 
+  ...paths, // data, config, cache, log, temp
   addins: join(root, 'addins/build'),
   scripts: join(root, 'run-scripts'),
   bin: join(root, 'bin'),
-  cache,
   registry: join(cache, 'registry'),
   packages: join(cache, 'packages'),
   sources: join(cache, 'sources'),

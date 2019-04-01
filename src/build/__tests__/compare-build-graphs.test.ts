@@ -9,7 +9,8 @@ import {
 import { normalizeComponent } from '../component';
 import loadFromProject from '../load-from-project';
 import loadFromExport from '../load-from-export';
-import compareBuildGraphs, { Changeset } from '../compare-build-graphs';
+import compareBuildGraphs from '../compare-build-graphs';
+import { Changeset } from '../types';
 
 afterAll(reset);
 

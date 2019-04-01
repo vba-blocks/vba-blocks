@@ -27,7 +27,7 @@ Public Function Validate(Args As Variant) As String
     Dim References As New Collection
     Dim Reference As Object
     For Each Reference In ThisWorkbook.VBProject.References
-        If Not Reference.BuiltIn And Reference.Name <> "stdole" And Reference.Name <> "Office" Then
+        If Not Reference.BuiltIn And Reference.Name <> "stdole" And Reference.Name <> "Office" And Reference.Name <> "MSForms" Then
             References.Add Reference
         End If
     Next Reference

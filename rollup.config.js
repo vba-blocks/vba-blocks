@@ -6,8 +6,9 @@ import typescript from 'rollup-plugin-typescript';
 import replace from 'rollup-plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 import builtin from 'builtin-modules';
+import mri from 'mri';
 
-const mode = process.env.NODE_ENV || 'development';
+const mode = mri(process.argv.slice(2)).mode || 'development';
 
 export default [
   {
@@ -19,22 +20,24 @@ export default [
     external: [...builtin],
     plugins: [
       resolve(),
+      replace({
+        'process.env.NODE_ENV': JSON.stringify(mode),
+        'process.env.READABLE_STREAM': '"disable"',
+        'require.cache': '{}'
+      }),
       commonjs({
         include: 'node_modules/**',
         namedExports: {
-          'ansi-colors': ['redBright', 'dim']
+          'ansi-colors': ['redBright', 'greenBright', 'dim']
         }
       }),
       json(),
       babel({ extensions: ['.mjs', '.js', '.ts'] }),
       typescript(),
-      replace({
-        'process.env.NODE_ENV': JSON.stringify(mode),
-        'process.env.READABLE_STREAM': '"disable"'
-      }),
       mode === 'production' && terser(),
       readableStream(),
-      debug()
+      debug(),
+      workerThreads()
     ].filter(Boolean),
     onwarn(warning, warn) {
       // Ignore known errors
@@ -96,6 +99,26 @@ function debug() {
       if (isBrowser.test(id)) {
         return {
           code: `module.exports = {};`
+        };
+      }
+    }
+  };
+}
+
+function workerThreads() {
+  const isWorkerThreads = /worker_threads/;
+
+  return {
+    name: 'worker_threads',
+    resolveId(importee) {
+      if (isWorkerThreads.test(importee)) {
+        return importee;
+      }
+    },
+    load(id) {
+      if (isWorkerThreads.test(id)) {
+        return {
+          code: `export const threadId = 0;`
         };
       }
     }

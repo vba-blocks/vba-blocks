@@ -7,8 +7,11 @@ import { joinCommas } from '../utils/text';
 import { RunError } from '../utils/run';
 import { __default } from '../utils/interop';
 import { CliError, ErrorCode, cleanError } from '../errors';
+import { updateAvailable, updateVersion, checkForUpdate } from '../installer';
 import { version } from '../../package.json';
 // Can't import debug here to allow --debug flag handling
+
+import { Message } from '../messages';
 
 Error.stackTraceLimit = Infinity;
 
@@ -56,8 +59,14 @@ const help = dedent`
     -h, --help      Output usage information
     -v, --version   Output the version number
 
-  Use "vba-blocks help COMMAND" for help on specific commands.
+  Use 'vba-blocks help COMMAND' for help on specific commands.
   Visit https://vba-blocks.com to learn more about vba-blocks.`;
+
+const updateAvailableMessage = () => dedent`
+  \n${colors.greenBright('New Update!')} ${updateVersion()!}
+
+  A new version of vba-blocks is available.
+  Visit https://vba-blocks.com/update for more information.`;
 
 process.title = 'vba-blocks';
 process.on('unhandledRejection', handleError);
@@ -68,13 +77,20 @@ main()
   .catch(handleError);
 
 async function main() {
-  const debug = __default(await import('debug'))('vba-blocks:main');
+  const env = (await import('../env')).default;
+  const debug = env.debug('vba-blocks:main');
 
   let [command] = args._;
 
   if (!command) {
     if (args.version) console.log(version);
-    else console.log(help);
+    else {
+      console.log(help);
+
+      if (updateAvailable()) {
+        env.reporter.log(Message.UpdateAvailable, updateAvailableMessage());
+      }
+    }
 
     return;
   }
@@ -123,7 +139,11 @@ async function main() {
   }
 
   debug(`starting "${command}" with args ${JSON.stringify(args)}`);
-  await subcommand(args);
+  const [has_update_available] = await Promise.all([checkForUpdate(), subcommand(args)]);
+
+  if (has_update_available) {
+    env.reporter.log(Message.UpdateAvailable, updateAvailableMessage());
+  }
 }
 
 function isCliError(error: Error | CliError): error is CliError {

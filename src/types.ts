@@ -37,10 +37,15 @@ export interface Env {
   cwd: string;
   values: any;
 
+  data: string;
+  config: string;
+  cache: string;
+  log: string;
+  temp: string;
+
   addins: string;
   scripts: string;
   bin: string;
-  cache: string;
   registry: string;
   packages: string;
   sources: string;
