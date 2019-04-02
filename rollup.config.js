@@ -14,7 +14,8 @@ export default [
     input: ['src/index.ts', 'src/bin/vba-blocks.ts'],
     output: {
       format: 'cjs',
-      dir: 'lib'
+      dir: 'lib',
+      sourcemap: true
     },
     external: [...builtin],
     plugins: [
