@@ -1,4 +1,4 @@
-import { gt } from 'semver';
+import { gt as semverGreaterThan } from 'semver';
 import { differenceInCalendarDays } from 'date-fns';
 import { getLatestRelease } from './utils/github';
 import env from './env';
@@ -14,16 +14,14 @@ export function updateVersion(): string | undefined {
 export function updateAvailable(): boolean {
   // Previously checked version is greater
   const latest_known_version = cache.latest_version;
-  return !!latest_known_version && gt(latest_known_version, current_version);
+  return !!latest_known_version && semverGreaterThan(latest_known_version, current_version);
 }
 
 export async function checkForUpdate(): Promise<boolean> {
-  if (updateAvailable()) return true;
-
   // Only check for new version once per day
   const last_checked = cache.latest_version_checked;
   if (last_checked && differenceInCalendarDays(new Date(last_checked), Date.now()) < 1)
-    return false;
+    return updateAvailable();
 
   // Allow skipping from the outside
   // set VBA_BLOCKS_SKIP_UPDATE_CHECK=1
@@ -40,7 +38,7 @@ export async function checkForUpdate(): Promise<boolean> {
     });
     cache.latest_version = latest_version;
 
-    return gt(latest_version, current_version);
+    return semverGreaterThan(latest_version, current_version);
   } catch (error) {
     debug('Error loading latest release');
     debug(error);
