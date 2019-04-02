@@ -1,4 +1,6 @@
 export enum Message {
+  UpdateAvailable = 'update-available',
+
   BuildProjectLoading = 'build-project-loading',
   BuildTargetBuilding = 'build-target-building',
   BuildLockfileWriting = 'build-lockfile-writing',

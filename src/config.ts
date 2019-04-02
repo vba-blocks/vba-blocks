@@ -21,14 +21,14 @@ const defaults: ConfigValue = {
 /**
  * Load config, from local, user, and environment values
  *
- * - Load ~/.vba-blocks/config.toml (user)
+ * - env:config/config.toml (user)
  * - Search for .vba-blocks/config.toml up from cwd (local)
  * - Load VBA_BLOCKS_* from environment (override)
  */
 export async function loadConfig(): Promise<Config> {
   const user: ConfigValue = {
     ...empty,
-    ...((await readConfig(env.cache)) || {})
+    ...((await readConfig(env.config)) || {})
   };
 
   const dir = await findConfig(env.cwd);
