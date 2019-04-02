@@ -1,7 +1,7 @@
 import Conf from 'conf';
 import env from './env';
 
-class Cache extends Conf {
+export class Cache extends Conf {
   constructor(cwd = env.data) {
     super({ configName: 'cache', fileExtension: 'json', cwd });
   }
