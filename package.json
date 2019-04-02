@@ -1,6 +1,6 @@
 {
   "name": "vba-blocks",
-  "version": "0.2.0-alpha.3",
+  "version": "0.2.0-alpha.4",
   "repository": "https://github.com/vba-blocks/vba-blocks.git",
   "author": "Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "build:dev": "cross-env NODE_ENV=development rollup -c",
     "build:addins": "cd addins && node --no-warnings ../scripts/build-addins",
     "build:bootstrap": "cd scripts/bootstrap && node ../../lib/bin/vba-blocks build",
-    "version": "yarn build && node scripts/ensure-vendor && node scripts/create-packages",
+    "version": "yarn build && yarn build:addins && node scripts/ensure-vendor && node scripts/create-packages",
     "release": "node scripts/release",
     "clean": "rimraf lib && rimraf dist && rimraf addins/build"
   },
