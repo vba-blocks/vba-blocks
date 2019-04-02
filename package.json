@@ -91,9 +91,5 @@
     "rollup-plugin-typescript": "^1.0.0",
     "tslib": "^1.9.3",
     "typescript": "^3"
-  },
-  "optionalDependencies": {
-    "fileicon": "^0.2",
-    "rcedit": "^1"
   }
 }
