@@ -13,6 +13,5 @@ export async function getLatestRelease(options: { owner: string; repo: string })
   const response = await fetch(url, { headers });
   const release: Release = await response.json();
 
-  console.log('release', release);
   return release;
 }
