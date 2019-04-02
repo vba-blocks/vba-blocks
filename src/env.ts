@@ -23,7 +23,7 @@ const env: Env = {
   registry: join(cache, 'registry'),
   packages: join(cache, 'packages'),
   sources: join(cache, 'sources'),
-  staging: getStaging(cache),
+  staging: getStaging(paths.temp),
 
   reporter,
   debug: id => _debug(id),
