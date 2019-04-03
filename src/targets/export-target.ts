@@ -9,7 +9,7 @@ import {
   applyChangeset,
   toSrc
 } from '../build';
-import transformTarget from './transform-target';
+import { filterTarget, mapTarget } from './transform-target';
 import { CliError, ErrorCode } from '../errors';
 
 import { Project } from '../types';
@@ -76,7 +76,7 @@ export async function extractTarget(
   }
 
   await ensureDir(dest);
-  await unzip(src, dest, { plugins: [transformTarget()] });
+  await unzip(src, dest, { filter: filterTarget, map: mapTarget });
 
   return dest;
 }

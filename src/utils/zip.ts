@@ -29,6 +29,7 @@ export interface UnzipOptions {
   plugins?: UnzipPlugin[];
   strip?: number;
 }
+export type UnzipPlugin = (buffer: Buffer) => Promise<UnzipFile[]>;
 
 export interface UnzipFile {
   data: Buffer;
@@ -38,15 +39,8 @@ export interface UnzipFile {
   type: string;
 }
 
-export type UnzipPlugin = (buffer: Buffer) => Promise<UnzipFile[]>;
-
 export async function unzip(file: string, dest: string, options?: UnzipOptions): Promise<void> {
   const decompress = __default(await import('decompress'));
-
-  if (!options) {
-    const decompressUnzip = __default(await import('decompress-unzip'));
-    options = { plugins: [decompressUnzip()] };
-  }
 
   await decompress(file, dest, options);
 }

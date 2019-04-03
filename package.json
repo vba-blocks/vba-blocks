@@ -39,7 +39,6 @@
     "date-fns": "^2.0.0-alpha.27",
     "debug": "^4",
     "decompress": "^4",
-    "decompress-unzip": "^4.0.1",
     "env-paths": "^2.2.0",
     "fs-extra": "^7",
     "isomorphic-git": "^0.47",
@@ -53,7 +52,8 @@
     "tmp": "^0.0",
     "toml": "^2",
     "tomlify-j0.4": "^3",
-    "walk-sync": "^1"
+    "walk-sync": "^1",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
