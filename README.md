@@ -33,7 +33,9 @@ For more recent versions of Office for Mac, you will need to trust access to the
  </ol>
 </details>
 
-:rocket: You're ready to go! Open a new command-line session (cmd / terminal) and try `vba-blocks --help`
+If you run into any issues during installation, please see the [known issues](https://github.com/vba-blocks/installer#known-issues) for the installer or [create a new issue](https://github.com/vba-blocks/installer/issues/new) with details about what's happening.
+
+:rocket: You're ready to go! Open a new command-line session (cmd / terminal) and try `vba --help`
 
 ## Usage
 
@@ -44,25 +46,25 @@ Create a new folder with a blank/generated vba-blocks project inside
 Create a folder "project-name" with a blank xlsm project:
 
 ```shellsession
-$ vba-blocks new project-name.xlsm
+$ vba new project-name.xlsm
 ```
 
 (equivalent to above)
 
 ```shellsession
-$ vba-blocks new project-name --target xlsm
+$ vba new project-name --target xlsm
 ```
 
 Create a folder "from-existing" with a project from an existing workbook:
 
 ```shellsession
-$ vba-blocks new from-existing --from existing.xlsm
+$ vba new from-existing --from existing.xlsm
 ```
 
 Create a blank package for sharing as a library between projects:
 
 ```shellsession
-$ vba-blocks new json-converter --package
+$ vba new json-converter --package
 ```
 
 ### `init`
@@ -72,19 +74,19 @@ Create a blank/generated vba-blocks project in the current folder
 Create a blank xlsm project with the current folder's name:
 
 ```shellsession
-$ vba-blocks init --target xlsm
+$ vba init --target xlsm
 ```
 
 Create a project from an existing workbook:
 
 ```shellsession
-$ vba-blocks init --from existing.xlsm
+$ vba init --from existing.xlsm
 ```
 
 Create a blank package:
 
 ```shellsession
-$ vba-blocks init --package
+$ vba init --package
 ```
 
 ### `build`
@@ -94,19 +96,19 @@ Build an Excel workbook from the project's source. The built file is located in 
 Build a project:
 
 ```shellsession
-$ vba-blocks build
+$ vba build
 ```
 
 Build and open a project for editing:
 
 ```shellsession
-$ vba-blocks build --open
+$ vba build --open
 ```
 
 Build a package using a blank target:
 
 ```shellsession
-$ vba-blocks build --target xlsm
+$ vba build --target xlsm
 ```
 
 ### `export`
@@ -116,13 +118,13 @@ Once you've completed your edits and are ready to commit your changes, export yo
 Export a project:
 
 ```shellsession
-$ vba-blocks export
+$ vba export
 ```
 
 Export a previously-built package:
 
 ```shellsession
-$ vba-blocks export --target xlsm
+$ vba export --target xlsm
 ```
 
 ### `run`
@@ -140,7 +142,7 @@ End Function
 ```
 
 ```shellsession
-$ vba-blocks run build/example.xlsm Tests.RunTests
+$ vba run build/example.xlsm Tests.RunTests
 Howdy!
 ```
 
