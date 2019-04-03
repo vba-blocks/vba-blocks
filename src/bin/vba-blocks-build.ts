@@ -1,8 +1,8 @@
 import { Args } from 'mri';
+import open from 'open';
 import dedent from 'dedent/macro';
 import time from 'pretty-hrtime';
 import build from '../actions/build';
-import open from '../utils/open';
 
 const help = dedent`
   Build project from manifest.
@@ -29,6 +29,6 @@ export default async function(args: Args) {
   console.log(`Done. ${time(process.hrtime(start))}`);
 
   if (!!args.open) {
-    open(path);
+    await open(path);
   }
 }
