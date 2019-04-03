@@ -1,9 +1,4 @@
 Attribute VB_Name = "Build"
-Private Const vbext_ct_StdModule = 1
-Private Const vbext_ct_ClassModule = 2
-Private Const vbext_ct_MSForm = 3
-Private Const vbext_ct_Document = 100
-
 Public Function ImportGraph(Graph As Variant) As String
     On Error GoTo ErrorHandling
 
@@ -61,16 +56,16 @@ Public Function ExportTo(Info As Variant) As String
     Staging = Values("staging")
 
     ' Iterate through all components in document and export directly to staging
-    Dim Component As Object ' VBComponent
+    Dim Component As VBComponent
     Dim Path As String
     For Each Component In Document.VBProject.VBComponents
         Dim Extension As String
         Select Case Component.Type
-        Case vbext_ct_StdModule
+        Case vbext_ComponentType.vbext_ct_StdModule
             Extension = ".bas"
-        Case vbext_ct_ClassModule, vbext_ct_Document
+        Case vbext_ComponentType.vbext_ct_ClassModule, vbext_ComponentType.vbext_ct_Document
             Extension = ".cls"
-        Case vbext_ct_MSForm
+        Case vbext_ComponentType.vbext_ct_MSForm
             Extension = ".frm"
         Case Else
             ' The only other component type for Excel is vbext_ct_ActiveXDesigner = 11
@@ -80,7 +75,7 @@ Public Function ExportTo(Info As Variant) As String
 
         ' Avoid exporting built-in modules / classes that are blank
         ' User-added modules / classes that are blank are assumed to be intentional
-        If Extension <> "" And Not (Component.Type = vbext_ct_Document And ComponentIsBlank(Component)) Then
+        If Extension <> "" And Not (Component.Type = vbext_ComponentType.vbext_ct_Document And ComponentIsBlank(Component)) Then
             Path = FileSystem.JoinPath(Staging, Component.Name & Extension)
             Installer.Export Document.VBProject, Component.Name, Path, Overwrite:=True
         End If
@@ -93,7 +88,7 @@ Public Function ExportTo(Info As Variant) As String
     Project("name") = Document.VBProject.Name
     Set Project("references") = New Collection
 
-    Dim Ref As Object ' Reference
+    Dim Ref As Reference
     Dim RefInfo As Dictionary
     Dim BuiltInReferences As Variant
     BuiltInReferences = Array("stdole", "office", "msforms")
@@ -142,7 +137,6 @@ Public Function CreateDocument(Info As Variant) As String
 
     Dim Values As Dictionary
     Dim DocumentPath As String
-    Dim Document As Object
     Dim App As New OfficeApplication
 
     Set Values = JsonConverter.ParseJson(Info)
@@ -157,7 +151,7 @@ ErrorHandling:
     CreateDocument = Output.Result
 End Function
 
-Private Function ComponentIsBlank(Component As Object) As Boolean
+Private Function ComponentIsBlank(Component As VBComponent) As Boolean
     Dim LineNumber As Long
     Dim Line As String
 
