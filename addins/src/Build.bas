@@ -1,4 +1,12 @@
 Attribute VB_Name = "Build"
+''
+' Primary build tooling for import, export, and create
+'
+' @module Build
+' @author tim.hall.engr@gmail.com
+' @license MIT (http://www.opensource.org/licenses/mit-license.php)
+'' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
+
 Public Function ImportGraph(Graph As Variant) As String
     On Error GoTo ErrorHandling
 
@@ -150,6 +158,10 @@ ErrorHandling:
     Output.Errors.Add Err.Number & ": " & Err.Description
     CreateDocument = Output.Result
 End Function
+
+' ============================================= '
+' Private Methods
+' ============================================= '
 
 Private Function ComponentIsBlank(Component As VBComponent) As Boolean
     Dim LineNumber As Long

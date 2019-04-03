@@ -52,7 +52,8 @@
     "tmp": "^0.0",
     "toml": "^2",
     "tomlify-j0.4": "^3",
-    "walk-sync": "^1"
+    "walk-sync": "^1",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",

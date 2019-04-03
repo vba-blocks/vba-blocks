@@ -1,4 +1,12 @@
 Attribute VB_Name = "Output"
+''
+' Standard result stdout
+'
+' @module Output
+' @author tim.hall.engr@gmail.com
+' @license MIT (http://www.opensource.org/licenses/mit-license.php)
+'' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
+
 Public Messages As New Collection
 Public Warnings As New Collection
 Public Errors As New Collection
