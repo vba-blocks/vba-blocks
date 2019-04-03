@@ -1,7 +1,20 @@
 # Test and build vba-blocks
+#
+# - [x] src
+# - [ ] add-ins (one day)
+# - [ ] end-to-end (one day)
 
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - src/**/*
+    - package.json
+    - rollup.config.js
+    - tsconfig.json
+    - yarn.lock
 
 pool:
   vmImage: 'Ubuntu-16.04'
