@@ -1,6 +1,7 @@
 import { parseXml, convertXml, findElementByName } from '../../utils/xml';
-import { UnzipFile } from '../../utils/zip';
 import env from '../../env';
+
+import { UnzipFile } from '../../utils/zip';
 
 const debug = env.debug('vba-blocks:target.transforms.core-xml');
 const CORE_XML = /docProps[\/,\\]core\.xml/i;
