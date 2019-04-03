@@ -15,5 +15,5 @@ steps:
 - script: |
     yarn install
     yarn test
-    yarn build
+    yarn build:dev
   displayName: 'Install, test, and build vba-blocks'
