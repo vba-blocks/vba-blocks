@@ -1,4 +1,3 @@
-import walk from 'walk-sync';
 import dedent from 'dedent/macro';
 import { join } from '../utils/path';
 import { copy, remove, ensureDir, pathExists } from '../utils/fs';
@@ -10,13 +9,12 @@ import {
   applyChangeset,
   toSrc
 } from '../build';
+import transformTarget from './transform-target';
 import { CliError, ErrorCode } from '../errors';
 
 import { Project } from '../types';
 import { Target } from '../manifest/types';
 import { ExportOptions, ProjectInfo } from './types';
-
-const IS_VBA = /vba.*\.bin/gi;
 
 /**
  * Export target (with staging directory)
@@ -78,13 +76,7 @@ export async function extractTarget(
   }
 
   await ensureDir(dest);
-  await unzip(src, dest);
-
-  // Remove compiled VBA from dest
-  const extracted = walk(dest, { directories: false });
-  const compiled = extracted.filter(file => IS_VBA.test(file)).map(file => join(dest, file));
-
-  await Promise.all(compiled.map(async file => await remove(file)));
+  await unzip(src, dest, { plugins: [transformTarget()] });
 
   return dest;
 }

@@ -39,6 +39,7 @@
     "date-fns": "^2.0.0-alpha.27",
     "debug": "^4",
     "decompress": "^4",
+    "decompress-unzip": "^4.0.1",
     "env-paths": "^2.2.0",
     "fs-extra": "^7",
     "isomorphic-git": "^0.47",
