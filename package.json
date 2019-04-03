@@ -8,9 +8,10 @@
   "main": "lib/index.js",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js}\"",
-    "typecheck": "tsc",
-    "test": "jest",
-    "e2e": "jest --config e2e.config.js --runInBand",
+    "test": "run-s test:tsc test:unit",
+    "test:tsc": "tsc",
+    "test:unit": "jest",
+    "test:e2e": "jest --config e2e.config.js --runInBand",
     "build": "rimraf lib && rollup -c",
     "build:dev": "cross-env NODE_ENV=development rollup -c",
     "build:addins": "cd addins && node --no-warnings ../scripts/build-addins",

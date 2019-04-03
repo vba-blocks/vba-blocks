@@ -11,7 +11,7 @@ export function pipeFilter<TValue>(
   ...fns: FilterFn<TValue>[]
 ): (value: TValue, index: number, values: TValue[]) => boolean {
   return (value, index, values) =>
-    fns.reduce((result, fn) => {
+    fns.reduce<boolean>((result, fn) => {
       if (!result) return result;
       return fn(value, index, values);
     }, true);
