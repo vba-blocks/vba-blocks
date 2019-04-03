@@ -15,6 +15,7 @@ export default function transformWorkbookXml(file: UnzipFile): UnzipFile {
   // 1. workbook > mc:AlternateContent > mc:Choice > x15ac:absPath -> Replace 'url' with empty string
   // 2. workbook > bookViews > workbookView -> Remove (maybe bookViews too)
   // 3. workbook > fileVersion -> Remove
+  // 4. workbook > calcPr -> Set calcId="0"
   const workbook = findElementByName(xml.elements, 'workbook');
   if (workbook) {
     const alternate_content = findElementByName(workbook.elements, 'mc:AlternateContent');
@@ -33,6 +34,11 @@ export default function transformWorkbookXml(file: UnzipFile): UnzipFile {
     const file_version = findElementByName(workbook.elements, 'fileVersion');
     if (file_version) {
       workbook.elements = without(workbook.elements!, file_version);
+    }
+
+    const calc_pr = findElementByName(workbook.elements, 'calcPr');
+    if (calc_pr) {
+      calc_pr.attributes!.calcId = '0';
     }
   } else {
     debug('Warning: workbook not found, unable to transform workbook.xml');
