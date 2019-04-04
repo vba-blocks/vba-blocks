@@ -89,7 +89,11 @@ export async function createDocument(
   target: Target,
   options: AddinOptions = {}
 ): Promise<string> {
-  const { application, addin, file: path } = getTargetInfo(project, target, options);
+  const { application, addin, file } = getTargetInfo(project, target, options);
+
+  // For Mac, stage target to avoid permission prompts and then copy to build directory
+  const use_staging = !env.isWindows && !options.staging;
+  let path = !use_staging ? file : join(project.paths.staging, target.filename);
 
   await ensureDir(dirname(path));
   await run(
@@ -101,7 +105,13 @@ export async function createDocument(
     })
   );
 
-  return path;
+  // For Mac, then copy staged to build directory
+  if (use_staging) {
+    await ensureDir(dirname(file));
+    await copy(path, file);
+  }
+
+  return file;
 }
 
 /**
