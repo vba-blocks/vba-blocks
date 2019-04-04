@@ -13,28 +13,36 @@ on run argv
 		set addin to POSIX file (item 2 of argv)
 		set command to (item 3 of argv)
 		set arg to (item 4 of argv)
-		
+
 		if appname is "excel" then
-      set workbook_name to name of (info for addin)
+			set workbook_name to name of (info for addin)
+			tell application "System Events" to set excel_was_open to (first process whose name is "Microsoft Excel")
+
+			tell application "Microsoft Excel" to activate
+
+			if not excel_was_open then
+				tell application "System Events"
+					set excel to (first process whose name is "Microsoft Excel")
+					set visible of excel to false
+				end tell
+			end if
 
 			tell application "Microsoft Excel"
-				activate
-				
-				set was_open to (exists workbook workbook_name)
-				if not was_open then
+				set workbook_was_open to (exists workbook workbook_name)
+				if not workbook_was_open then
 					open workbook workbook file name addin without notify
 				end if
-				
+
 				set output to output & (run VB macro command arg1 arg)
-				
-				if not was_open then
+
+				if not workbook_was_open then
 					close workbook workbook_name saving yes
 				end if
 			end tell
 		end if
 	else
-		set result to result & "ERROR #1: Invalid Input"
+		set output to output & "ERROR #1: Invalid Input"
 	end if
-	
+
 	return output
 end run
