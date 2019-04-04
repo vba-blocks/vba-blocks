@@ -1,8 +1,4 @@
 # Test and build vba-blocks
-#
-# - [x] src
-# - [ ] add-ins (one day)
-# - [ ] end-to-end (one day)
 
 trigger:
   branches:

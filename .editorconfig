@@ -10,5 +10,6 @@ charset = utf-8
 indent_size = 4
 end_of_line = crlf
 
-[*.rs]
+[*.applescript]
+indent_style = tab
 indent_size = 4
