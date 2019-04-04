@@ -14,7 +14,7 @@ const binary_extensions = ['.frx'];
 export default async function loadFromExport(staging: string): Promise<BuildGraph> {
   const files = walk(staging, { directories: false })
     .filter(file => {
-      return file !== 'project.json' && !file.startsWith('target');
+      return file !== 'project.json' && !file.startsWith('target') && !file.startsWith('staged');
     })
     .map(file => join(staging, file));
   const { name, references } = await readInfo(staging);

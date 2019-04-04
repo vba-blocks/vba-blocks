@@ -1,5 +1,5 @@
 import dedent from 'dedent/macro';
-import { join } from '../utils/path';
+import { join, dirname } from '../utils/path';
 import { copy, remove, ensureDir, pathExists } from '../utils/fs';
 import { unzip } from '../utils/zip';
 import {
@@ -10,6 +10,7 @@ import {
   toSrc
 } from '../build';
 import { filterTarget, mapTarget } from './transform-target';
+import env from '../env';
 import { CliError, ErrorCode } from '../errors';
 
 import { Project } from '../types';
@@ -62,7 +63,7 @@ export async function extractTarget(
   target: Target,
   staging: string
 ): Promise<string> {
-  const src = join(project.paths.build, target.filename);
+  let src = join(project.paths.build, target.filename);
   const dest = join(staging, 'target');
 
   if (!(await pathExists(src))) {
@@ -73,6 +74,17 @@ export async function extractTarget(
         (checked "${src}").
       `
     );
+  }
+
+  // For Mac, stage target to avoid permission prompts
+  if (!env.isWindows) {
+    const staged = join(staging, 'staged', target.filename);
+    if (!(await pathExists(staged))) {
+      await ensureDir(dirname(staged));
+      await copy(src, staged);
+    }
+
+    src = staged;
   }
 
   await ensureDir(dest);

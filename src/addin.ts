@@ -1,5 +1,5 @@
 import { join, dirname } from './utils/path';
-import { ensureDir } from './utils/fs';
+import { ensureDir, pathExists, copy } from './utils/fs';
 import run from './utils/run';
 import env from './env';
 import { CliError, ErrorCode } from './errors';
@@ -57,7 +57,18 @@ export async function exportTo(
   staging: string,
   options: AddinOptions = {}
 ): Promise<void> {
-  const { application, addin, file } = getTargetInfo(project, target);
+  let { application, addin, file } = getTargetInfo(project, target);
+
+  // For Mac, stage target to avoid permission prompts
+  if (!env.isWindows) {
+    const staged = join(staging, 'staged', target.filename);
+    if (!(await pathExists(staged))) {
+      await ensureDir(dirname(staged));
+      await copy(file, staged);
+    }
+
+    file = staged;
+  }
 
   await run(
     application,

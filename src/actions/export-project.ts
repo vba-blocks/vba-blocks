@@ -3,7 +3,7 @@ import { loadProject, fetchDependencies } from '../project';
 import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
 import { join, sanitize } from '../utils/path';
-import { emptyDir, ensureDir } from '../utils/fs';
+import { emptyDir, ensureDir, remove } from '../utils/fs';
 import { CliError, ErrorCode } from '../errors';
 import env from '../env';
 import { Message } from '../messages';
@@ -54,18 +54,25 @@ export default async function exportProject(options: ExportOptions = {}) {
   const dependencies = await fetchDependencies(project);
   let staging: string;
 
-  if (!options.completed) {
-    staging = join(project.paths.staging, 'export');
+  try {
+    if (!options.completed) {
+      staging = join(project.paths.staging, 'export');
 
-    env.reporter.log(Message.ExportToStaging, `\n[2/3] Exporting src from "${target.filename}"`);
+      env.reporter.log(Message.ExportToStaging, `\n[2/3] Exporting src from "${target.filename}"`);
 
-    await ensureDir(staging);
-    await emptyDir(staging);
-    await exportTo(project, target, staging, options);
-  } else {
-    staging = options.completed;
+      await ensureDir(staging);
+      await emptyDir(staging);
+      await exportTo(project, target, staging, options);
+    } else {
+      staging = options.completed;
+    }
+
+    env.reporter.log(Message.ExportToProject, `\n[3/3] Updating project`);
+    await exportTarget(target, { project, dependencies }, staging);
+  } catch (err) {
+    throw err;
+  } finally {
+    // @ts-ignore Variable is used before being assigned
+    if (staging) await remove(staging);
   }
-
-  env.reporter.log(Message.ExportToProject, `\n[3/3] Updating project`);
-  await exportTarget(target, { project, dependencies }, staging);
 }
