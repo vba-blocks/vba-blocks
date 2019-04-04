@@ -16,16 +16,6 @@ on run argv
 
 		if appname is "excel" then
 			set workbook_name to name of (info for addin)
-			tell application "System Events" to set excel_was_open to (first process whose name is "Microsoft Excel")
-
-			tell application "Microsoft Excel" to activate
-
-			if not excel_was_open then
-				tell application "System Events"
-					set excel to (first process whose name is "Microsoft Excel")
-					set visible of excel to false
-				end tell
-			end if
 
 			tell application "Microsoft Excel"
 				set workbook_was_open to (exists workbook workbook_name)
