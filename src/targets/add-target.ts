@@ -28,53 +28,57 @@ export default async function addTarget(
   await ensureDir(staging);
   await emptyDir(staging);
 
-  let target: Target;
-  if (from) {
-    // For from, use
-    // - use name of file for name of target
-    // - copy file to build/
-    // - run standard export on file
-    from = resolve(from);
-    name = basename(from, extname(from));
+  try {
+    let target: Target;
+    if (from) {
+      // For from, use
+      // - use name of file for name of target
+      // - copy file to build/
+      // - run standard export on file
+      from = resolve(from);
+      name = basename(from, extname(from));
 
-    target = project.manifest.target = {
-      name,
-      type,
-      path: join(project.paths.dir, path),
-      filename: `${sanitize(name)}.${type}`
-    };
+      target = project.manifest.target = {
+        name,
+        type,
+        path: join(project.paths.dir, path),
+        filename: `${sanitize(name)}.${type}`
+      };
 
-    await copy(from, join(project.paths.build, target.filename));
-    await exportTo(project, target, staging);
-    await exportTarget(target, info, staging, { __temp__log_patch });
-  } else {
-    // For standard add-target, don't want to remove any existing src
-    // - create blank document
-    // - extract target only
-    // - rebuild target
-    target = project.manifest.target = {
-      name,
-      type,
-      path: join(project.paths.dir, path),
-      filename: `${sanitize(name)}.${type}`
-    };
+      await copy(from, join(project.paths.build, target.filename));
+      await exportTo(project, target, staging);
+      await exportTarget(target, info, staging, { __temp__log_patch });
+    } else {
+      // For standard add-target, don't want to remove any existing src
+      // - create blank document
+      // - extract target only
+      // - rebuild target
+      target = project.manifest.target = {
+        name,
+        type,
+        path: join(project.paths.dir, path),
+        filename: `${sanitize(name)}.${type}`
+      };
 
-    await createDocument(project, target);
+      await createDocument(project, target);
 
-    const extracted = await extractTarget(project, target, staging);
-    await remove(target.path);
-    await copy(extracted, target.path);
+      const extracted = await extractTarget(project, target, staging);
+      await remove(target.path);
+      await copy(extracted, target.path);
 
-    await buildTarget(target, info);
+      await buildTarget(target, info);
+    }
+
+    if (__temp__log_patch) {
+      applyChanges([addTargetToManifest(project.manifest, target)]);
+    }
+
+    // TODO Write directly to manifest once patching is ready
+    // await writeManifest(project.manifest, project.paths.dir);
+  } catch (err) {
+    throw err;
+  } finally {
+    // Finally, cleanup staging
+    await remove(staging);
   }
-
-  if (__temp__log_patch) {
-    applyChanges([addTargetToManifest(project.manifest, target)]);
-  }
-
-  // TODO Write directly to manifest once patching is ready
-  // await writeManifest(project.manifest, project.paths.dir);
-
-  // Finally, cleanup staging
-  await remove(staging);
 }
