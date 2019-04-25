@@ -278,7 +278,11 @@ Object {
 exports[`throws for invalid syntax 1`] = `
 "vba-blocks.toml is invalid:
 
-Syntax Error: fixtures/projects/invalid-manifest/vba-block.toml (2:5)
+Syntax Error: fixtures/projects/invalid-manifest/vba-block.toml (2:6)
 
-Expected \\"=\\", [ \\\\t] or [A-Za-z0-9_\\\\-] but \\":\\" found."
+Error parsing TOML (2, 7):
+
+name: Package Name
+      ^
+Expected \\"=\\" for key-value, found Package"
 `;

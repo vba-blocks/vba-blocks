@@ -52,8 +52,7 @@
     "sanitize-filename": "^1",
     "semver": "^5",
     "tmp": "^0.0",
-    "toml": "^2",
-    "tomlify-j0.4": "^3",
+    "toml-patch": "^0.2.1",
     "walk-sync": "^1",
     "xml-js": "^1.6.11"
   },
