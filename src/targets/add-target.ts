@@ -3,11 +3,11 @@ import { copy, ensureDir, emptyDir, remove } from '../utils/fs';
 import { exportTo, createDocument } from '../addin';
 import exportTarget, { extractTarget } from './export-target';
 import buildTarget from './build-target';
-import { applyChanges, addTarget as addTargetToManifest } from '../manifest/patch-manifest';
 import { CliError, ErrorCode } from '../errors';
 
 import { Target, TargetType } from '../manifest/types';
 import { AddOptions, ProjectInfo } from './types';
+import { writeManifest } from '../manifest';
 
 export default async function addTarget(
   type: TargetType,
@@ -15,7 +15,7 @@ export default async function addTarget(
   options: AddOptions = {}
 ) {
   const { project } = info;
-  let { from, name = project.manifest.name, path = 'target', __temp__log_patch = true } = options;
+  let { from, name = project.manifest.name, path = 'target' } = options;
 
   if (project.manifest.target) {
     throw new CliError(
@@ -47,7 +47,7 @@ export default async function addTarget(
 
       await copy(from, join(project.paths.build, target.filename));
       await exportTo(project, target, staging);
-      await exportTarget(target, info, staging, { __temp__log_patch });
+      await exportTarget(target, info, staging);
     } else {
       // For standard add-target, don't want to remove any existing src
       // - create blank document
@@ -69,12 +69,7 @@ export default async function addTarget(
       await buildTarget(target, info);
     }
 
-    if (__temp__log_patch) {
-      applyChanges([addTargetToManifest(project.manifest, target)]);
-    }
-
-    // TODO Write directly to manifest once patching is ready
-    // await writeManifest(project.manifest, project.paths.dir);
+    await writeManifest(project.manifest, project.paths.dir);
   } catch (err) {
     throw err;
   } finally {

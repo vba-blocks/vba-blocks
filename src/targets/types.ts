@@ -10,7 +10,6 @@ export interface AddOptions {
   from?: string;
   name?: string;
   path?: string;
-  __temp__log_patch?: boolean;
 }
 
 export interface BuildOptions {
@@ -18,6 +17,4 @@ export interface BuildOptions {
   addin?: string;
 }
 
-export interface ExportOptions {
-  __temp__log_patch?: boolean;
-}
+export interface ExportOptions {}

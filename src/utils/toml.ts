@@ -11,6 +11,11 @@ export async function convert(value: any): Promise<string> {
   return stringify(value);
 }
 
+export async function patch(existing: string, updated: any): Promise<string> {
+  const { patch: patchTOML } = await import('toml-patch');
+  return patchTOML(existing, updated);
+}
+
 export function toLockfile(value: any, level = 0): string {
   if (isString(value)) {
     return `"${value}"`;

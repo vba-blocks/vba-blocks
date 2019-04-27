@@ -15,12 +15,9 @@ test('should apply changeset for project', async () => {
   const after = await loadFromExport(standardChangesExport);
   const changeset = compareBuildGraphs(before, after);
 
-  mock(console.log).clear();
   await applyChangeset(project, changeset);
 
-  expect(mock(console.log).calls).toMatchSnapshot();
-
-  mock(console.log).restore();
+  expect(project.manifest).toMatchSnapshot();
 });
 
 interface Mock {

@@ -32,7 +32,6 @@ export default async function exportTarget(
   options: ExportOptions = {}
 ) {
   const { project, dependencies } = info;
-  const { __temp__log_patch = true } = options;
 
   // Extract target to staging
   let extracted: string;
@@ -46,7 +45,7 @@ export default async function exportTarget(
   const transformed_build_graph = await toSrc(exported_build_graph);
 
   const changeset = compareBuildGraphs(project_build_graph, transformed_build_graph);
-  await applyChangeset(project, changeset, { __temp__log_patch });
+  await applyChangeset(project, changeset);
 
   // Move target to dest
   if (!target.blank) {

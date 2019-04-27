@@ -1,9 +1,9 @@
 import dedent from 'dedent/macro';
 import { join, normalize, relative } from '../utils/path';
-import { parse as parseToml, convert as convertToToml } from '../utils/toml';
+import { parse as parseToml, convert as convertToToml, patch as patchToml } from '../utils/toml';
 import { pathExists, readFile, writeFile } from '../utils/fs';
 import { parseSrc } from './source';
-import { parseDependencies } from './dependency';
+import { parseDependencies, isRegistryDependency, isPathDependency } from './dependency';
 import { parseReferences } from './reference';
 import { parseTarget } from './target';
 import { CliError, ErrorCode, manifestOk } from '../errors';
@@ -140,6 +140,21 @@ export async function loadManifest(dir: string): Promise<Manifest> {
 }
 
 export async function writeManifest(manifest: Manifest, dir: string) {
+  const value = manifestToValue(manifest);
+  const path = join(dir, 'vba-block.toml');
+  let toml: string;
+
+  if (await pathExists(path)) {
+    const existing = await readFile(path, 'utf8');
+    toml = await patchToml(existing, value);
+  } else {
+    toml = await convertToToml(value);
+  }
+
+  await writeFile(path, toml);
+}
+
+function manifestToValue(manifest: Manifest): any {
   const {
     type,
     name,
@@ -180,18 +195,31 @@ export async function writeManifest(manifest: Manifest, dir: string) {
     value[type].target = target;
   }
 
-  // TODO dependencies and references
   if (manifest.dependencies.length) {
-    throw new Error(`writeManifest does not currently support dependencies`);
+    value.dependencies = {};
+    manifest.dependencies.forEach(dependency => {
+      if (isRegistryDependency(dependency)) {
+        const { name, registry, version } = dependency;
+        value.dependencies[name] = registry ? { version, registry } : version;
+      } else if (isPathDependency(dependency)) {
+        const { name, path } = dependency;
+        value.dependencies[name] = path;
+      } else {
+        const { name, git, tag, branch, rev } = dependency;
+        value.dependencies[name] = { name, git };
+        if (tag) value.dependencies[name].tag = tag;
+        if (branch) value.dependencies[name].branch = branch;
+        if (rev) value.dependencies[name].rev = rev;
+      }
+    });
   }
   if (manifest.references.length) {
     value.references = {};
     manifest.references.forEach(reference => {
-      let { name, version, guid, optional } = reference;
+      const { name, version, guid, optional } = reference;
       value.references[name] = optional ? { version, guid, optional } : { version, guid };
     });
   }
 
-  const toml = await convertToToml(value);
-  await writeFile(join(dir, 'vba-block.toml'), toml + '\n');
+  return value;
 }
