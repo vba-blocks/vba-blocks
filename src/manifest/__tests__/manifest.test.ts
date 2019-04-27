@@ -1,6 +1,5 @@
-import { Manifest, parseManifest, loadManifest } from '../';
-import { isPathDependency } from '../dependency';
-import { relative } from '../../utils/path';
+import { parseManifest, loadManifest } from '../';
+import { normalizeManifest } from '../../__helpers__/manifest';
 import { dir as FIXTURES, standard, invalidManifest } from '../../../tests/__fixtures__';
 
 const BASE_MANIFEST: {
@@ -15,7 +14,7 @@ const BASE_MANIFEST: {
 };
 
 test('loads valid package metadata', () => {
-  expect(normalize(parseManifest(BASE_MANIFEST, FIXTURES))).toMatchSnapshot();
+  expect(normalizeManifest(parseManifest(BASE_MANIFEST, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid package metadata', () => {
@@ -36,7 +35,7 @@ test('loads valid sources', () => {
     }
   };
 
-  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
+  expect(normalizeManifest(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid sources', () => {
@@ -69,7 +68,7 @@ test('loads valid dependencies', () => {
     }
   };
 
-  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
+  expect(normalizeManifest(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid dependencies', () => {
@@ -89,7 +88,7 @@ test('load valid references', () => {
     }
   };
 
-  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
+  expect(normalizeManifest(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('throws for invalid references', () => {
@@ -117,16 +116,16 @@ test('loads valid target', () => {
   };
   value.package.target = 'xlsm';
 
-  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
+  expect(normalizeManifest(parseManifest(value, FIXTURES))).toMatchSnapshot();
 
   value.package.target = { type: 'xlam', name: 'addin', path: 'targets/xlam' };
 
-  expect(normalize(parseManifest(value, FIXTURES))).toMatchSnapshot();
+  expect(normalizeManifest(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
 test('loads and parses manifest', async () => {
   const manifest = await loadManifest(standard);
-  expect(normalize(manifest, standard)).toMatchSnapshot();
+  expect(normalizeManifest(manifest, standard)).toMatchSnapshot();
 });
 
 test('throws for invalid syntax', async () => {
@@ -138,29 +137,3 @@ test('throws for invalid syntax', async () => {
     expect(err.message.replace(FIXTURES, 'fixtures')).toMatchSnapshot();
   }
 });
-
-function normalize(manifest: Manifest, relativeTo: string = FIXTURES): Manifest {
-  manifest.dir = normalizePath(manifest.dir, relativeTo);
-
-  for (const src of manifest.src) {
-    src.path = normalizePath(src.path, relativeTo);
-
-    if (src.binary) {
-      src.binary = normalizePath(src.binary, relativeTo);
-    }
-  }
-  if (manifest.target) {
-    manifest.target.path = normalizePath(manifest.target.path, relativeTo);
-  }
-  for (const dependency of manifest.dependencies) {
-    if (isPathDependency(dependency)) {
-      dependency.path = normalizePath(dependency.path, relativeTo);
-    }
-  }
-
-  return manifest;
-}
-
-function normalizePath(path: string, relativeTo: string = FIXTURES): string {
-  return relative(relativeTo, path);
-}

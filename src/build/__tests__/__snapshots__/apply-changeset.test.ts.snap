@@ -9,7 +9,7 @@ Object {
       "version": "^4",
     },
   ],
-  "dir": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex",
+  "dir": "projects/complex",
   "metadata": Object {
     "__temp_defaults": Array [
       "publish",
@@ -34,43 +34,43 @@ Object {
     Object {
       "name": "ThisWorkbook",
       "optional": false,
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex/src/ThisWorkbook.cls",
+      "path": "projects/complex/src/ThisWorkbook.cls",
     },
     Object {
       "name": "Sheet1",
       "optional": false,
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex/src/Sheet1.cls",
+      "path": "projects/complex/src/Sheet1.cls",
     },
     Object {
       "name": "Sheet2",
       "optional": false,
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex/src/Sheet2.cls",
+      "path": "projects/complex/src/Sheet2.cls",
     },
     Object {
       "name": "Sheet3",
       "optional": false,
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex/src/Sheet3.cls",
+      "path": "projects/complex/src/Sheet3.cls",
     },
     Object {
-      "binary": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex/src/UserForm1.frx",
+      "binary": "projects/complex/src/UserForm1.frx",
       "name": "UserForm1",
       "optional": false,
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex/src/UserForm1.frm",
+      "path": "projects/complex/src/UserForm1.frm",
     },
     Object {
       "name": "Class1",
       "optional": false,
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex/src/Class1.cls",
+      "path": "projects/complex/src/Class1.cls",
     },
     Object {
       "name": "Added",
-      "path": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex/src/Added.bas",
+      "path": "projects/complex/src/Added.bas",
     },
   ],
   "target": Object {
     "filename": "complex.xlsm",
     "name": "complex",
-    "path": "C:/dev/vba-blocks/tests/__fixtures__/projects/complex/targets/xlsm",
+    "path": "projects/complex/targets/xlsm",
     "type": "xlsm",
   },
   "type": "project",

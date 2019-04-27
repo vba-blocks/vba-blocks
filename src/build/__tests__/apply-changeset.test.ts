@@ -1,5 +1,6 @@
 import { setup, reset } from '../../../tests/__helpers__/project';
 import { complex, standardChangesExport } from '../../../tests/__fixtures__';
+import { normalizeManifest } from '../../__helpers__/manifest';
 import loadFromProject from '../load-from-project';
 import loadFromExport from '../load-from-export';
 import compareBuildGraphs from '../compare-build-graphs';
@@ -17,7 +18,7 @@ test('should apply changeset for project', async () => {
 
   await applyChangeset(project, changeset);
 
-  expect(project.manifest).toMatchSnapshot();
+  expect(normalizeManifest(project.manifest)).toMatchSnapshot();
 });
 
 interface Mock {
