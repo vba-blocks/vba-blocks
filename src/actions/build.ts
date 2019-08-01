@@ -54,10 +54,15 @@ export default async function build(options: BuildOptions = {}): Promise<string>
     throw new CliError(
       ErrorCode.TargetNoDefault,
       dedent`
-        No default target(s) found for project.
+        No default target found for project.
 
         Use --target TYPE for a blank target
         or specify 'project.target' in vba-block.toml.
+
+        Example vba-block.toml:
+
+        [project]
+        target = "xlsm"
       `
     );
   }

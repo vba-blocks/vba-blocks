@@ -14,7 +14,7 @@ export default async function create(options: CreateOptions) {
       dedent`
         "name" is required with vba-blocks new (e.g. vba-blocks new project-name).
 
-        Try "vba-blocks new help" for more information.
+        Try "vba-blocks help new" for more information.
       `
     );
   }
@@ -34,7 +34,7 @@ export default async function create(options: CreateOptions) {
         .TYPE, --target, or --from is required for vba-blocks projects.
         (e.g. vba-blocks new project.name.TYPE)
 
-        Try "vba-blocks new help" for more information.
+        Try "vba-blocks help new" for more information.
       `
     );
   }
