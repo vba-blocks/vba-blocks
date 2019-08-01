@@ -41,7 +41,7 @@
     "decompress": "^4",
     "env-paths": "^2.2.0",
     "fs-extra": "^7",
-    "isomorphic-git": "^0.47",
+    "isomorphic-git": "^0.58.1",
     "logic-solver": "^2",
     "meant": "^1.0.1",
     "mri": "^1",

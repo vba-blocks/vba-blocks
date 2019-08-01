@@ -11,6 +11,9 @@ interface Git {
 }
 
 async function loadGit(): Promise<Git> {
+  const fetch = await import('node-fetch');
+  (global as any).fetch = fetch.default;
+
   const git = await import('isomorphic-git');
   git.plugins.set('fs', fs);
 
