@@ -16,6 +16,7 @@
     "build:addins": "cd addins && node --no-warnings ../scripts/build-addins",
     "build:bootstrap": "cd scripts/bootstrap && node --no-warnings ../../lib/vba-blocks build",
     "version": "yarn build && yarn build:addins && node scripts/ensure-vendor && node scripts/create-packages",
+    "postversion": "git push && git push --tags",
     "release": "node scripts/release",
     "clean": "rimraf lib && rimraf dist && rimraf addins/build"
   },
