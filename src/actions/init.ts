@@ -72,11 +72,7 @@ export default async function init(options: InitOptions) {
   }
   if (target_type) {
     const dependencies: Manifest[] = [];
-    await addTarget(
-      <TargetType>target_type,
-      { project, dependencies },
-      { from, __temp__log_patch: false }
-    );
+    await addTarget(<TargetType>target_type, { project, dependencies }, { from });
   }
 
   await writeManifest(project.manifest, project.paths.dir);

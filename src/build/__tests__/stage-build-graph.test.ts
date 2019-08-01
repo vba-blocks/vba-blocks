@@ -3,7 +3,8 @@ import { dir, complex, standardImport } from '../../../tests/__fixtures__';
 import { relative } from '../../utils/path';
 import { pathExists } from '../../utils/fs';
 import loadFromProject from '../load-from-project';
-import stageBuildGraph, { ImportGraph } from '../stage-build-graph';
+import stageBuildGraph from '../stage-build-graph';
+import { ImportGraph } from '../types';
 
 afterEach(reset);
 

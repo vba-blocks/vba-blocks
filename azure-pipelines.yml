@@ -23,6 +23,16 @@ steps:
 
 - script: |
     yarn install
+  displayName: 'Install'
+
+- script: |
+    yarn typecheck
+  displayName: 'Typecheck'
+
+- script: |
     yarn test
+  displayName: 'Test'
+
+- script: |
     yarn build:dev
-  displayName: 'Install, test, and build vba-blocks'
+  displayName: 'Build'

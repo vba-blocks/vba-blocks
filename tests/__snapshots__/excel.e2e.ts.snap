@@ -59,7 +59,20 @@ Object {
   "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "targets/xlsm/xl/worksheets/sheet2.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "vba-block.toml": "[project]
+  "vba-block.toml": "
+
+[references]
+VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
+
+[src]
+Class1 = \\"src/Class1.cls\\"
+Dictionary = \\"src/Dictionary.cls\\"
+JsonConverter = \\"src/JsonConverter.bas\\"
+Sheet1 = \\"src/Sheet1.cls\\"
+Sheet2 = \\"src/Sheet2.cls\\"
+Sheet3 = \\"src/Sheet3.cls\\"
+ThisWorkbook = \\"src/ThisWorkbook.cls\\"
+Validation = \\"src/Validation.bas\\"                                                                                                                                                                                                                      [project]
 name = \\"empty\\"
 target = { type = \\"xlsm\\", path = \\"targets/xlsm\\" }
 ",
@@ -76,35 +89,6 @@ Fetching dependencies
 [3/3] Updating project
 Loading exported components
 Updating src files
-
-The following changes need to be applied to vba-block.toml:
-
-Add the following to the [src] section:
-Class1 = \\"src/Class1.cls\\"
-
-Add the following to the [src] section:
-Dictionary = \\"src/Dictionary.cls\\"
-
-Add the following to the [src] section:
-JsonConverter = \\"src/JsonConverter.bas\\"
-
-Add the following to the [src] section:
-Sheet1 = \\"src/Sheet1.cls\\"
-
-Add the following to the [src] section:
-Sheet2 = \\"src/Sheet2.cls\\"
-
-Add the following to the [src] section:
-Sheet3 = \\"src/Sheet3.cls\\"
-
-Add the following to the [src] section:
-ThisWorkbook = \\"src/ThisWorkbook.cls\\"
-
-Add the following to the [src] section:
-Validation = \\"src/Validation.bas\\"
-
-Add the following to the [references] section:
-VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
 "
 `;
 
@@ -129,12 +113,23 @@ Object {
   "targets/xlsm/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "targets/xlsm/xl/worksheets/sheet2.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "vba-block.toml": "[project]
+  "vba-block.toml": "
+
+[references]
+VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
+
+[src]
+Class1 = \\"src/Class1.cls\\"
+Sheet1 = \\"src/Sheet1.cls\\"
+Sheet2 = \\"src/Sheet2.cls\\"
+Sheet3 = \\"src/Sheet3.cls\\"
+ThisWorkbook = \\"src/ThisWorkbook.cls\\"
+Validation = \\"src/Validation.bas\\"                                                                                                                                              [project]
 name = \\"json\\"
 target = { type = \\"xlsm\\", path = \\"targets/xlsm\\" }
 
 [dependencies]
-json = \\"^2\\"
+json = { version = \\"^2\\", registry = \\"vba-blocks\\" }
 ",
 }
 `;
@@ -149,29 +144,6 @@ Fetching dependencies
 [3/3] Updating project
 Loading exported components
 Updating src files
-
-The following changes need to be applied to vba-block.toml:
-
-Add the following to the [src] section:
-Class1 = \\"src/Class1.cls\\"
-
-Add the following to the [src] section:
-Sheet1 = \\"src/Sheet1.cls\\"
-
-Add the following to the [src] section:
-Sheet2 = \\"src/Sheet2.cls\\"
-
-Add the following to the [src] section:
-Sheet3 = \\"src/Sheet3.cls\\"
-
-Add the following to the [src] section:
-ThisWorkbook = \\"src/ThisWorkbook.cls\\"
-
-Add the following to the [src] section:
-Validation = \\"src/Validation.bas\\"
-
-Add the following to the [references] section:
-VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
 "
 `;
 
@@ -219,10 +191,7 @@ name = \\"existing-target\\"
 version = \\"0.0.0\\"
 authors = []
 license = \\"UNLICENSED\\"
-
-[project.target]
-type = \\"xlsm\\"
-name = \\"standard\\"
+target = { type = \\"xlsm\\", name = \\"standard\\" }
 
 [src]
 Class1 = \\"src/Class1.cls\\"
@@ -235,10 +204,7 @@ ThisWorkbook = \\"src/ThisWorkbook.cls\\"
 Validation = \\"src/Validation.bas\\"
 
 [references]
-
-[references.VBIDE]
-version = \\"5.3\\"
-guid = \\"{0002E157-0000-0000-C000-000000000046}\\"
+VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
 ",
 }
 `;

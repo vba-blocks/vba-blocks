@@ -1,5 +1,6 @@
 import { setup, reset } from '../../../tests/__helpers__/project';
 import { complex, standardChangesExport } from '../../../tests/__fixtures__';
+import { normalizeManifest } from '../../__helpers__/manifest';
 import loadFromProject from '../load-from-project';
 import loadFromExport from '../load-from-export';
 import compareBuildGraphs from '../compare-build-graphs';
@@ -15,12 +16,9 @@ test('should apply changeset for project', async () => {
   const after = await loadFromExport(standardChangesExport);
   const changeset = compareBuildGraphs(before, after);
 
-  mock(console.log).clear();
   await applyChangeset(project, changeset);
 
-  expect(mock(console.log).calls).toMatchSnapshot();
-
-  mock(console.log).restore();
+  expect(normalizeManifest(project.manifest)).toMatchSnapshot();
 });
 
 interface Mock {

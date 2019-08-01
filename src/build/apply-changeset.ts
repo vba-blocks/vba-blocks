@@ -1,29 +1,21 @@
 import env from '../env';
-import { writeFile, remove, ensureDir } from '../utils/fs';
+import { writeFile, remove, ensureDir, readFile } from '../utils/fs';
 import { join, dirname } from '../utils/path';
 import parallel from '../utils/parallel';
-import {
-  addSource,
-  removeSource,
-  addReference,
-  removeReference,
-  applyChanges
-} from '../manifest/patch-manifest';
+import { writeManifest } from '../manifest';
 
 import { Project } from '../types';
 import { Changeset, Component } from './types';
 import { Source, Reference } from '../manifest/types';
 
-export default async function applyChangeset(
-  project: Project,
-  changeset: Changeset,
-  options: { __temp__log_patch: boolean } = { __temp__log_patch: true }
-) {
+export default async function applyChangeset(project: Project, changeset: Changeset) {
   const progress = env.reporter.progress('Updating src files');
   const start = progress.start;
-  progress.start = () => {};
   const done = progress.done;
+
+  progress.start = () => {};
   progress.done = () => {};
+
   start();
 
   // Update src directory
@@ -52,16 +44,12 @@ export default async function applyChangeset(
     { progress }
   );
 
-  await updateManifest(project, changeset, options);
+  await updateManifest(project, changeset);
 
   done();
 }
 
-async function updateManifest(
-  project: Project,
-  changeset: Changeset,
-  options: { __temp__log_patch: boolean } = { __temp__log_patch: true }
-) {
+async function updateManifest(project: Project, changeset: Changeset) {
   const changes: string[] = [];
   for (const component of changeset.components.added) {
     const source: Source = {
@@ -69,14 +57,12 @@ async function updateManifest(
       path: join(project.paths.dir, `src/${component.filename}`)
     };
     project.manifest.src.push(source);
-    changes.push(addSource(project.manifest, source));
   }
   for (const component of changeset.components.removed) {
     const index = project.manifest.src.findIndex(
       (source: Source) => source.name === component.name
     );
     project.manifest.src.splice(index, 1);
-    changes.push(removeSource(project.manifest, component.name));
   }
 
   for (let reference of changeset.references.added) {
@@ -85,19 +71,15 @@ async function updateManifest(
     reference = Object.assign({}, reference, { details: undefined });
 
     project.manifest.references.push(reference);
-    changes.push(addReference(project.manifest, reference));
   }
   for (const reference of changeset.references.removed) {
     const index = project.manifest.references.findIndex(
       (ref: Reference) => ref.name === reference.name
     );
-    project.manifest.src.splice(index, 1);
-    changes.push(removeReference(project.manifest, reference.name));
+    project.manifest.references.splice(index, 1);
   }
 
-  if (options.__temp__log_patch) {
-    applyChanges(changes);
-  }
+  await writeManifest(project.manifest, project.paths.dir);
 }
 
 async function writeComponent(path: string, component: Component) {

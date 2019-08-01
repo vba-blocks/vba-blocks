@@ -2,13 +2,18 @@ import { isString, isNumber, isBoolean, isDate, isObject } from './is';
 import { __default } from './interop';
 
 export async function parse(value: string): Promise<any> {
-  const { parse: parseToml } = await import('toml');
+  const { parse: parseToml } = await import('toml-patch');
   return parseToml(value);
 }
 
 export async function convert(value: any): Promise<string> {
-  const { toToml } = __default(await import('tomlify-j0.4'));
-  return toToml(value);
+  const { stringify } = await import('toml-patch');
+  return stringify(value);
+}
+
+export async function patch(existing: string, updated: any): Promise<string> {
+  const { patch: patchTOML } = await import('toml-patch');
+  return patchTOML(existing, updated);
 }
 
 export function toLockfile(value: any, level = 0): string {

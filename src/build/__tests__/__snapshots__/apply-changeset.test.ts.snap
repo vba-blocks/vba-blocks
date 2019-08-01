@@ -1,21 +1,79 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`should apply changeset for project 1`] = `
-Array [
-  Array [
-    "Updating src files",
+Object {
+  "dependencies": Array [
+    Object {
+      "name": "web",
+      "registry": "vba-blocks",
+      "version": "^4",
+    },
   ],
-  Array [
-    "
-The following changes need to be applied to vba-block.toml:
-
-Add the following to the [src] section:
-Added = \\"src/Added.bas\\"
-
-Remove \\"Validation\\" from the [src] section
-
-Add the following to the [references] section:
-VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }",
+  "dir": "projects/complex",
+  "metadata": Object {
+    "__temp_defaults": Array [
+      "publish",
+    ],
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "publish": false,
+  },
+  "name": "complex",
+  "references": Array [
+    Object {
+      "details": undefined,
+      "guid": "{0002E157-0000-0000-C000-000000000046}",
+      "major": 5,
+      "minor": 3,
+      "name": "VBIDE",
+      "version": "5.3",
+    },
   ],
-]
+  "src": Array [
+    Object {
+      "name": "ThisWorkbook",
+      "optional": false,
+      "path": "projects/complex/src/ThisWorkbook.cls",
+    },
+    Object {
+      "name": "Sheet1",
+      "optional": false,
+      "path": "projects/complex/src/Sheet1.cls",
+    },
+    Object {
+      "name": "Sheet2",
+      "optional": false,
+      "path": "projects/complex/src/Sheet2.cls",
+    },
+    Object {
+      "name": "Sheet3",
+      "optional": false,
+      "path": "projects/complex/src/Sheet3.cls",
+    },
+    Object {
+      "binary": "projects/complex/src/UserForm1.frx",
+      "name": "UserForm1",
+      "optional": false,
+      "path": "projects/complex/src/UserForm1.frm",
+    },
+    Object {
+      "name": "Class1",
+      "optional": false,
+      "path": "projects/complex/src/Class1.cls",
+    },
+    Object {
+      "name": "Added",
+      "path": "projects/complex/src/Added.bas",
+    },
+  ],
+  "target": Object {
+    "filename": "complex.xlsm",
+    "name": "complex",
+    "path": "projects/complex/targets/xlsm",
+    "type": "xlsm",
+  },
+  "type": "project",
+  "version": "0.0.0",
+}
 `;
