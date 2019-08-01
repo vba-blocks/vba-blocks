@@ -149,10 +149,7 @@ Updating src files
 
 exports[`new should create blank package 1`] = `
 Object {
-  "vba-block.toml": "
-
-
-[package]
+  "vba-block.toml": "[package]
 name = \\"blank-package\\"
 version = \\"0.0.0\\"
 authors = []
@@ -189,11 +186,7 @@ Object {
   "target/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "target/xl/worksheets/sheet2.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "target/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "vba-block.toml": "
-
-
-
-[project]
+  "vba-block.toml": "[project]
 name = \\"existing-target\\"
 version = \\"0.0.0\\"
 authors = []
@@ -230,10 +223,7 @@ Object {
   "target/xl/theme/theme1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<a:theme xmlns:a=\\"http://schemas.openxmlformats.org/drawingml/2006/main\\" name=\\"Office Theme\\"><a:themeElements><a:clrScheme name=\\"Office\\">...",
   "target/xl/workbook.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?><workbook xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/2006/relati...",
   "target/xl/worksheets/sheet1.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
-  "vba-block.toml": "
-
-
-[project]
+  "vba-block.toml": "[project]
 name = \\"blank-target\\"
 version = \\"0.0.0\\"
 authors = []

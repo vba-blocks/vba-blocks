@@ -4692,10 +4692,10 @@ to-utf8@0.0.1:
   resolved "https://registry.yarnpkg.com/to-utf8/-/to-utf8-0.0.1.tgz#d17aea72ff2fba39b9e43601be7b3ff72e089852"
   integrity sha1-0Xrqcv8vujm55DYBvns/9y4ImFI=
 
-toml-patch@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/toml-patch/-/toml-patch-0.2.2.tgz#9ccbe0a6e3e0e36de08f3879a9a246e3e0cf5e63"
-  integrity sha512-g4dV6AgBSzC6GX5pgyk7jg5hiJjH3yHuAUc989tUE/C6JPkdlJlRB+YG2r79q1TBbR6gPR6lF9eV9Xl/L2Mb2w==
+toml-patch@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/toml-patch/-/toml-patch-0.2.3.tgz#5d6e5884755089c06622aa5fee7458d995520e8a"
+  integrity sha512-SQI/j7f2S/iQZmoWBWNUMTfVmPbhP3+YCqxB/q8iOjdnXBk29HDARHzjCazmwftZaylYuMSrTTrvJiESVyzJzw==
 
 tough-cookie@^2.3.3, tough-cookie@^2.3.4:
   version "2.5.0"
