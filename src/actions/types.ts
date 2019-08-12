@@ -24,9 +24,10 @@ export interface InitOptions {
 }
 
 export interface RunOptions {
-  file: string;
+  target?: string;
+  file?: string;
   macro: string;
-  arg?: string;
+  args: string[];
 }
 
 export interface AddOptions {

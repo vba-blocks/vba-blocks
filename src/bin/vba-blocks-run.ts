@@ -5,12 +5,13 @@ import run from '../actions/run';
 const help = dedent`
   Run macro in given workbook or add-in.
 
-  Usage vba-blocks run <file> <macro> <arg>
+  Usage vba-blocks run <macro> [<arg>...] [options]
 
   Options:
-    <file>    Full path to workbook or name of add-in
-    <macro>   Public macro to run in given file (e.g. Tests.RunTests)
-    <arg>     Argument to pass to macro (optional)`;
+    <macro>         Public macro to run in given file (e.g. Tests.RunTests)
+    <arg>           Arguments to pass to macro (optional)
+    --target=TYPE   Run in pre-built target of type TYPE
+    --file=PATH     Full path to workbook or name of add-in`;
 
 export default async function(args: Args) {
   if (args.help) {
@@ -18,6 +19,9 @@ export default async function(args: Args) {
     return;
   }
 
-  const [file, macro, arg] = args._;
-  await run({ file, macro, arg });
+  const [macro, ...macro_args] = args._;
+  const target = args.target as string | undefined;
+  let file = args.file as string | undefined;
+
+  await run({ target, file, macro, args: macro_args });
 }

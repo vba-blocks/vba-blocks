@@ -4,7 +4,7 @@ A package manager and build tool for VBA.
 
 ## Installation
 
-__Windows__
+**Windows**
 
 In powershell, run the following:
 
@@ -12,7 +12,7 @@ In powershell, run the following:
 iwr https://vba-blocks.com/install.ps1 | iex
 ```
 
-__Mac__
+**Mac**
 
 In terminal, run the following:
 
@@ -113,7 +113,7 @@ vba build --target xlsm
 
 ### `export`
 
-Once you've completed your edits and are ready to commit your changes, export your project with `vba-blocks export`.
+Once you've completed your edits and are ready to commit your changes, export your project with `vba export`.
 
 Export a project:
 
@@ -129,21 +129,21 @@ vba export --target xlsm
 
 ### `run`
 
-`vba-blocks run` is a useful utility function for running a public macro in the given workbook and if it returns a string value, outputing it to the console.
+`vba run` is a useful utility function for running a public macro in the given workbook and if it returns a string value, outputing it to the console.
 
 ```vb
 ' File: build/example.xlsm
-' Module: Tests
-Public Function RunTests(Value As Variant) As String
+' Module: Messages
+Public Function SayHi(Name As Variant) As String
   ' (currently, a single Variant input argument is required)
 
-  RunTests = "Howdy!"
+  SayHi = "Howdy " & Name & "!"
 End Function
 ```
 
 ```txt
-vba run build/example.xlsm Tests.RunTests
-Howdy!
+vba run Messages.SayHi Tim
+Howdy Tim!
 ```
 
 ## Development
