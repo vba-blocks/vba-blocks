@@ -150,12 +150,13 @@ Attribute VB_Exposed...",
     Object {
       "binary_path": undefined,
       "code": "Attribute VB_Name = \\"Validation\\"
-Public Function Validate(Args As Variant) As String
+Public Function Validate() As String
     On Error GoTo ErrorHandling
 
     Dim Errors As New Collection
 
-    If ThisWorkbook.VBProject.VBComponents.Count <> 8 ...",
+    If ThisWorkbook.VBProject.VBComponents.Count <> 8 Then
+        Err...",
       "details": Object {
         "dependency": undefined,
         "path": undefined,
@@ -359,12 +360,13 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1
     Object {
       "binary_path": undefined,
       "code": "Attribute VB_Name = \\"Validation\\"
-Public Function Validate(Args As Variant) As String
+Public Function Validate() As String
     On Error GoTo ErrorHandling
 
     Dim Errors As New Collection
 
-    If ThisWorkbook.VBProject.VBComponents.Count <> 9 ...",
+    If ThisWorkbook.VBProject.VBComponents.Count <> 9 Then
+        Err...",
       "details": Object {
         "dependency": undefined,
         "path": "projects/complex/src/Validation.bas",

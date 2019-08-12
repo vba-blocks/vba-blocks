@@ -1,26 +1,35 @@
 Dim App
 Dim Addin
 Dim Command
-Dim Arg
+Dim Args()
+
+If WScript.Arguments.Count < 3 Then
+  Fail "ERROR #1: Invalid Input (appname, file, and macro are required"
+Else If WScript.Arguments.Count > 13 Then
+  Fail "ERROR #2: Invalid Input (only 10 arguments are supported)"
+End If
 
 App = WScript.Arguments(0)
 File = WScript.Arguments(1)
 Command = WScript.Arguments(2)
-Arg = Unescape(WScript.Arguments(3))
 
-Run App, File, Command, Arg
+For i = 3 To WScript.Arguments.Count - 1
+  Args(i - 3) = Unescape(WScript.Arguments(i))
+Next
+
+Run App, File, Command, Args
 WScript.Quit 0
 
-Function Run(App, File, Command, Arg)
+Function Run(App, File, Command, Args)
   Dim Instance
   Dim Result
 
   Select Case App
   Case "excel"
     Set Instance = New Excel
-    Result = Instance.Run(File, Command, Arg)
+    Result = Instance.Run(File, Command, Args)
   Case Else
-    Fail "Unsupported App: " & App
+    Fail "ERROR #3: Unsupported App """ & App & """"
   End Select
 
   PrintLn Result
@@ -39,14 +48,14 @@ Class Excel
     OpenExcel
   End Sub
 
-  Public Function Run(File, Command, Arg)
+  Public Function Run(File, Command, Args)
     On Error Resume Next
 
     OpenWorkbook(File)
-    Run = App.Run("'" & Workbook.Name & "'!" & Command, Arg)
+    Run = RunMacro(App, Command, Args)
 
     If Err.Number <> 0 Then
-      Fail "Failed to run command: " & Err.Description
+      Fail "ERROR #4: Failed to run command - " & Err.Description
     End If
   End Function
 
@@ -59,7 +68,7 @@ Class Excel
       Set App = CreateObject("Excel.Application")
 
       If Err.Number <> 0 Then
-        Fail "Failed to open Excel: " & Err.Description
+        Fail "ERROR #5: Failed to open Excel - " & Err.Description
       End If
 
       App.Visible = False
@@ -92,7 +101,7 @@ Class Excel
     Set Workbook = App.Workbooks.Open(Path)
 
     If Err.Number <> 0 Then
-      Fail "Failed to open workbook: " & Err.Description
+      Fail "ERROR #6: Failed to open workbook - " & Err.Description
     End If
   End Sub
 
@@ -107,6 +116,32 @@ Class Excel
     End If
   End Sub
 End Class
+
+Function RunMacro(App, Command, Args)
+  If Args.Count = 0 Then
+    RunMacro = App.Run(Command)
+  Else If WScript.Arguments.Count = 1 Then
+    RunMacro = App.Run(Command, Args(0))
+  Else If WScript.Arguments.Count = 2 Then
+    RunMacro = App.Run(Command, Args(0), Args(1))
+  Else If WScript.Arguments.Count = 3 Then
+    RunMacro = App.Run(Command, Args(0), Args(1), Args(2))
+  Else If WScript.Arguments.Count = 4 Then
+    RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3))
+  Else If WScript.Arguments.Count = 5 Then
+    RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4))
+  Else If WScript.Arguments.Count = 6 Then
+    RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5))
+  Else If WScript.Arguments.Count = 7 Then
+    RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5), Args(6))
+  Else If WScript.Arguments.Count = 8 Then
+    RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5), Args(6), Args(7))
+  Else If WScript.Arguments.Count = 9 Then
+    RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5), Args(6), Args(7), Args(8))
+  Else If WScript.Arguments.Count = 10 Then
+    RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5), Args(6), Args(7), Args(8), Args(9))
+  End If
+End Function
 
 ' General
 ' -------

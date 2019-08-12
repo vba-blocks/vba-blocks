@@ -1,5 +1,5 @@
 Attribute VB_Name = "Validation"
-Public Function Validate(Args As Variant) As String
+Public Function Validate() As String
     On Error GoTo ErrorHandling
 
     Dim Errors As New Collection

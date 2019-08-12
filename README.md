@@ -129,14 +129,12 @@ vba export --target xlsm
 
 ### `run`
 
-`vba run` is a useful utility function for running a public macro in the given workbook and if it returns a string value, outputing it to the console.
+`vba run` is a useful utility function for running a public macro in the given workbook, passing up to 10 arguments, and if it returns a string value, outputing it to the console.
 
 ```vb
 ' File: build/example.xlsm
 ' Module: Messages
 Public Function SayHi(Name As Variant) As String
-  ' (currently, a single Variant input argument is required)
-
   SayHi = "Howdy " & Name & "!"
 End Function
 ```

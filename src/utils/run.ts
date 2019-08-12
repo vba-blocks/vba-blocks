@@ -33,7 +33,7 @@ export default async function run(
   application: string,
   file: string,
   macro: string,
-  arg: string
+  args: string[]
 ): Promise<RunResult> {
   const script = join(env.scripts, env.isWindows ? 'run.vbs' : 'run.applescript');
 
@@ -48,12 +48,13 @@ export default async function run(
     );
   }
 
-  const parts = [application, file, macro, env.isWindows ? escape(arg) : arg];
+  const formatted_args = env.isWindows ? args.map(escape) : args;
+  const parts = [application, file, macro, ...formatted_args];
   const command = env.isWindows
     ? `cscript //Nologo "${script}" ${parts.map(part => `"${part}"`).join(' ')}`
     : `osascript '${script}' ${parts.map(part => `'${part}'`).join(' ')}`;
 
-  debug('params:', { application, file, macro, arg });
+  debug('params:', { application, file, macro, args });
   debug('command:', command);
 
   let result;

@@ -8,7 +8,7 @@
   "main": "lib/index.js",
   "scripts": {
     "format": "prettier --write \"**/*.{ts,js}\"",
-    "test": "jest",
+    "test": "jest --runInBand",
     "typecheck": "tsc",
     "test:e2e": "jest --config e2e.config.js --runInBand",
     "build": "rimraf lib && rollup -c && node scripts/ensure-vendor",

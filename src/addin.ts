@@ -35,17 +35,14 @@ export async function importGraph(
   const { application, addin } = getTargetInfo(project, target);
   const { name, components, references } = graph;
 
-  await run(
-    application,
-    options.addin || addin,
-    'Build.ImportGraph',
+  await run(application, options.addin || addin, 'Build.ImportGraph', [
     JSON.stringify({
       file,
       name,
       src: components,
       references
     })
-  );
+  ]);
 }
 
 /**
@@ -70,15 +67,12 @@ export async function exportTo(
     file = staged;
   }
 
-  await run(
-    application,
-    options.addin || addin,
-    'Build.ExportTo',
+  await run(application, options.addin || addin, 'Build.ExportTo', [
     JSON.stringify({
       file,
       staging
     })
-  );
+  ]);
 }
 
 /**
@@ -96,14 +90,11 @@ export async function createDocument(
   let path = !use_staging ? file : join(project.paths.staging, target.filename);
 
   await ensureDir(dirname(path));
-  await run(
-    application,
-    options.addin || addin,
-    'Build.CreateDocument',
+  await run(application, options.addin || addin, 'Build.CreateDocument', [
     JSON.stringify({
       path
     })
-  );
+  ]);
 
   // For Mac, then copy staged to build directory
   if (use_staging) {
