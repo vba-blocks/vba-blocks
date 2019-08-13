@@ -1,5 +1,5 @@
 Attribute VB_Name = "Validation"
-Public Function Validate(Args As Variant) As String
+Public Function Validate() As String
     On Error GoTo ErrorHandling
 
     Dim Errors As New Collection
@@ -12,13 +12,13 @@ Public Function Validate(Args As Variant) As String
     Dim Components() As Variant
     Dim Index As Long
     Dim Component As Object
-    
+
     ComponentNames = Array("Sheet1", "Sheet2", "Sheet3", "ThisWorkbook", "Class1")
     Components = Array(Sheet1, Sheet2, Sheet3, ThisWorkbook, New Class1)
-    
+
     For Index = 0 To UBound(Components)
         Set Component = Components(Index)
-        
+
         If Not Component.IsValid Then
             Errors.Add "Component """ & ComponentNames(Index) & """ is not valid"
         End If
@@ -28,9 +28,9 @@ Public Function Validate(Args As Variant) As String
         Validate = "{""success"":true,""errors"":[]}"
         Exit Function
     End If
-    
+
 ErrorHandling:
-    
+
     If Err.Number <> 0 Then
         Errors.Add Err.Description
     End If
@@ -41,14 +41,14 @@ End Function
 Private Function JoinCollection(Values As Collection, Optional Separator = ",") As String
     Dim Result As String
     Dim Value As Variant
-    
+
     For Each Value In Values
         If Result <> "" Then
             Result = Result & Separator
         End If
-        
+
         Result = Result & Value
     Next Value
-    
+
     JoinCollection = Result
 End Function
