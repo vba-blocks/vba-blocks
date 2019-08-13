@@ -7,12 +7,13 @@ import { move } from 'fs-extra/lib/move';
 import { pathExists } from 'fs-extra/lib/path-exists';
 import { readJson } from 'fs-extra/lib/json/jsonfile';
 import { remove } from 'fs-extra/lib/remove';
+import hash from './hash';
+
+export { readFileSync, watch } from 'fs';
 
 const readFile = promisify(_readFile);
 const symlink = promisify(_symlink);
 const writeFile = promisify(_writeFile);
-
-import hash from './hash';
 
 async function checksum(file: string, algorithm = 'sha256'): Promise<string> {
   const data = await readFile(file);

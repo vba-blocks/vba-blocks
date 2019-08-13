@@ -32,5 +32,6 @@ export default async function run(options: RunOptions) {
 
   const application = extensionToApplication(extname(file));
   const { stdout } = await runMacro(application, resolve(file), macro, args);
-  console.log(stdout);
+
+  if (stdout && stdout.trim().length) console.log(stdout);
 }

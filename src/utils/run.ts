@@ -5,9 +5,12 @@ const exec = promisify(require('child_process').exec);
 import env from '../env';
 import { join } from './path';
 import { pathExists } from './fs';
+import stdoutFile from './stdout-file';
 import { CliError, ErrorCode } from '../errors';
+import parallel from './parallel';
 
 const debug = env.debug('vba-blocks:run');
+const SPECIAL_FILE_STDOUT = env.isWindows ? 'CON' : '/dev/stdout';
 
 export interface RunResult {
   success: boolean;
@@ -48,7 +51,13 @@ export default async function run(
     );
   }
 
-  const formatted_args = env.isWindows ? args.map(escape) : args;
+  const formatted_args = await parallel(args, async arg => {
+    if (arg === SPECIAL_FILE_STDOUT) {
+      return await stdoutFile();
+    }
+
+    return env.isWindows ? escape(arg) : arg;
+  });
   const parts = [application, file, macro, ...formatted_args];
   const command = env.isWindows
     ? `cscript //Nologo "${script}" ${parts.map(part => `"${part}"`).join(' ')}`
