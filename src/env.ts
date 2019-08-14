@@ -1,5 +1,4 @@
 import envPaths from 'env-paths';
-import _debug from 'debug';
 import { join } from './utils/path';
 import getStaging from './utils/get-staging';
 import { reporter } from './reporter';
@@ -26,7 +25,19 @@ const env: Env = {
   staging: getStaging(paths.temp),
 
   reporter,
-  debug: id => _debug(id),
+  debug: id => {
+    // Late-bind debug to allow loading --debug first
+    let debug: (...args: any[]) => any;
+
+    return (...args) => {
+      if (!debug) {
+        const _debug = require('debug');
+        debug = _debug(id);
+      }
+
+      return debug(...args);
+    };
+  },
   silent: false
 };
 

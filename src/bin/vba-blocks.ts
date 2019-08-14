@@ -8,12 +8,13 @@ import { RunError } from '../utils/run';
 import { __default } from '../utils/interop';
 import { CliError, ErrorCode, cleanError } from '../errors';
 import { updateAvailable, updateVersion, checkForUpdate } from '../installer';
+import env from '../env';
 import { version } from '../../package.json';
-// Can't import debug here to allow --debug flag handling
-
 import { Message } from '../messages';
 
 Error.stackTraceLimit = Infinity;
+
+const debug = env.debug('vba-blocks:main');
 
 type Command = (args: Args) => Promise<void>;
 const commands: { [name: string]: () => Promise<Command> } = {
@@ -77,9 +78,6 @@ main()
   .catch(handleError);
 
 async function main() {
-  const env = (await import('../env')).default;
-  const debug = env.debug('vba-blocks:main');
-
   let [command] = args._;
 
   if (!command) {
