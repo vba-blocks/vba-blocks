@@ -3,14 +3,30 @@ import { isString } from '../utils/is';
 import has from '../utils/has';
 import { manifestOk } from '../errors';
 
-import {
-  Version,
-  DependencyDetails,
-  RegistryDependency,
-  PathDependency,
-  GitDependency,
-  Dependency
-} from './types';
+export type Version = string;
+
+export interface DependencyDetails {
+  name: string;
+  version?: Version;
+}
+
+export interface RegistryDependency extends DependencyDetails {
+  registry: string;
+  version: Version;
+}
+
+export interface PathDependency extends DependencyDetails {
+  path: string;
+}
+
+export interface GitDependency extends DependencyDetails {
+  git: string;
+  tag?: string;
+  branch?: string;
+  rev?: string;
+}
+
+export type Dependency = RegistryDependency | PathDependency | GitDependency;
 
 const EXAMPLE = `Example vba-block.toml:
 

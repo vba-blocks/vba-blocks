@@ -5,9 +5,8 @@ import { pathExists, readJson, readFile } from '../utils/fs';
 import parallel from '../utils/parallel';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
-
-import { Reference } from '../manifest/types';
-import { BuildGraph } from './types';
+import { Reference } from '../manifest/reference';
+import { BuildGraph } from './build-graph';
 
 const binary_extensions = ['.frx'];
 

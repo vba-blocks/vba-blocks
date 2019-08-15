@@ -1,9 +1,7 @@
 import { join, basename } from '../utils/path';
 import { writeFile } from '../utils/fs';
 import parallel from '../utils/parallel';
-
-import { Source, Reference } from '../manifest/types';
-import { BuildGraph, ImportGraph } from './types';
+import { BuildGraph, ImportGraph } from './build-graph';
 
 export default async function stageBuildGraph(
   graph: BuildGraph,

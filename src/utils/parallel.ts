@@ -1,6 +1,5 @@
 import { ok } from 'assert';
-
-import { Progress } from '../types';
+import { Progress } from '../reporter';
 
 export interface ParallelOptions {
   concurrency?: number;

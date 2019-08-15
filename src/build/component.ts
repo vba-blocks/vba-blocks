@@ -3,9 +3,15 @@ import { readFile } from '../utils/fs';
 import { BY_LINE, truncate } from '../utils/text';
 import { CliError, ErrorCode } from '../errors';
 
-import { Component as IComponent, ComponentType, ComponentDetails } from './types';
+export type ComponentType = 'module' | 'class' | 'form' | 'document';
 
-export class Component implements IComponent {
+export interface ComponentDetails {
+  path?: string;
+  dependency?: string;
+  binary?: Buffer;
+}
+
+export class Component {
   type: ComponentType;
   code: string;
   details: ComponentDetails;
@@ -80,13 +86,13 @@ function findLine(code: string, search: string): string | undefined {
   return lines.find(line => line.startsWith(search));
 }
 
-export function byComponentName(a: IComponent, b: IComponent): number {
+export function byComponentName(a: Component, b: Component): number {
   if (a.name < b.name) return -1;
   if (a.name > b.name) return 1;
   return 0;
 }
 
-export function normalizeComponent(component: IComponent, dir: string): IComponent {
+export function normalizeComponent(component: Component, dir: string): Component {
   return {
     type: component.type,
     name: component.name,

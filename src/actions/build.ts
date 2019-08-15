@@ -8,8 +8,7 @@ import { toDependency } from '../sources/registration';
 import { getTarget } from '../targets';
 import { join } from '../utils/path';
 import { Message } from '../messages';
-
-import { BuildOptions } from '../targets/types';
+import { BuildOptions } from '../targets/build-target';
 
 export default async function build(options: BuildOptions = {}): Promise<string> {
   env.reporter.log(Message.BuildProjectLoading, `[1/3] Loading project...`);

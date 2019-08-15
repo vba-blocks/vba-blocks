@@ -5,7 +5,7 @@ import { join } from '../../src/utils/path';
 import { loadConfig } from '../../src/config';
 import { loadProject, fetchDependencies } from '../../src/project';
 import { loadManifest } from '../../src/manifest';
-import { loadWorkspace } from '../../src/workspace';
+import { loadWorkspace } from '../../src/professional/workspace';
 import { cache } from '../__fixtures__';
 
 jest.mock('../../src/utils/fs');

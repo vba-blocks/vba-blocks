@@ -3,9 +3,13 @@ import { parse as parseQuerystring } from 'querystring';
 import has from '../utils/has';
 import { isString } from '../utils/is';
 import { CliError, ErrorCode } from '../errors';
+import { Snapshot } from '../manifest';
+import { Dependency } from '../manifest/dependency';
 
-import { Snapshot, Dependency } from '../manifest/types';
-import { Registration } from './types';
+export interface Registration extends Snapshot {
+  id: string;
+  source: string;
+}
 
 export function fromSnapshot(snapshot: Snapshot, source: string): Registration {
   const { name, version, dependencies } = snapshot;

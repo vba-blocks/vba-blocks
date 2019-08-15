@@ -1,9 +1,31 @@
 import envPaths from 'env-paths';
 import { join } from './utils/path';
 import getStaging from './utils/get-staging';
-import { reporter } from './reporter';
+import { Reporter, reporter } from './reporter';
 
-import { Env } from './types';
+export interface Env {
+  isWindows: boolean;
+  cwd: string;
+  values: any;
+
+  data: string;
+  config: string;
+  cache: string;
+  log: string;
+  temp: string;
+
+  addins: string;
+  scripts: string;
+  bin: string;
+  registry: string;
+  packages: string;
+  sources: string;
+  staging: string;
+
+  reporter: Reporter;
+  debug: (id: string) => (...values: any[]) => void;
+  silent: boolean;
+}
 
 const paths = envPaths('vba-blocks', { suffix: '' });
 

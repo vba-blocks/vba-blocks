@@ -1,10 +1,10 @@
 import { satisfies } from 'semver';
 import unique from '../utils/unique';
-
-import { Workspace } from '../types';
-import { Dependency } from '../manifest/types';
-import { Registration } from '../sources/types';
-import { DependencyGraph, Resolver, Resolution } from './types';
+import { Workspace } from '../professional/workspace';
+import { Dependency } from '../manifest/dependency';
+import { Registration } from '../sources/registration';
+import { DependencyGraph } from './dependency-graph';
+import Resolver, { Resolution } from './resolver';
 
 export default async function solve(
   workspace: Workspace,

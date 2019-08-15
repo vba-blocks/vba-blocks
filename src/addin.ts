@@ -3,10 +3,17 @@ import { ensureDir, pathExists, copy } from './utils/fs';
 import run from './utils/run';
 import env from './env';
 import { CliError, ErrorCode } from './errors';
+import { Target } from './manifest/target';
+import { ImportGraph } from './build/build-graph';
+import { Project } from './project';
 
-import { Target } from './manifest/types';
-import { ImportGraph } from './build/types';
-import { Application, Addin, AddinOptions, Project } from './types';
+export type Application = 'excel';
+export type Addin = string;
+
+export interface AddinOptions {
+  addin?: string;
+  staging?: boolean;
+}
 
 export const extensions: { [application: string]: string[] } = {
   excel: ['xlsx', 'xlsm', 'xlam']

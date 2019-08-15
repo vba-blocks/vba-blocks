@@ -16,12 +16,20 @@ import {
 import { getRegistration } from '../resolve';
 import { CliError, ErrorCode } from '../errors';
 import { version } from '../../package.json';
+import { Dependency } from '../manifest/dependency';
+import { Workspace } from '../professional/workspace';
+import { Registration } from '../sources/registration';
+import { DependencyGraph } from '../resolve/dependency-graph';
+import { Snapshot } from '../manifest';
 
-import { Snapshot, Dependency } from '../manifest/types';
-import { Workspace } from '../types';
-import { Registration } from '../sources/types';
-import { DependencyGraph } from '../resolve/types';
-import { Lockfile } from './types';
+export interface Lockfile {
+  metadata?: { version: string };
+  workspace: {
+    root: Snapshot;
+    members: Snapshot[];
+  };
+  packages: DependencyGraph;
+}
 
 const debug = env.debug('vba-blocks:lockfile');
 const VBA_BLOCKS_VERSION = version;

@@ -1,9 +1,8 @@
 import dedent from 'dedent/macro';
 import { CliError, ErrorCode } from '../errors';
 import { sanitize, join } from '../utils/path';
-
-import { Project } from '../types';
-import { Target, TargetType } from '../manifest/types';
+import { Project } from '../project';
+import { Target, TargetType } from '../manifest/target';
 
 export default function getTarget(project: Project, target_type: string | undefined): Target {
   let target: Target | undefined;

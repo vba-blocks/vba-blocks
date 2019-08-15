@@ -1,12 +1,20 @@
 import { isRegistryDependency } from '../manifest/dependency';
 import { resolve } from '../sources';
+import { DependencyGraph } from './dependency-graph';
+import { Dependency } from '../manifest/dependency';
+import { Config } from '../config';
+import { Registration } from '../sources/registration';
 
-import { Config } from '../types';
-import { Dependency } from '../manifest/types';
-import { Registration } from '../sources/types';
-import { DependencyGraph, Resolver as IResolver, Resolution, ResolutionGraph } from './types';
+export interface Resolution {
+  name: string;
+  range: string[];
+  preferred?: Registration;
+  registered: Registration[];
+}
+export type ResolutionGraph = Map<string, Resolution>;
+export type ResolutionGraphEntry = [string, Resolution];
 
-export default class Resolver implements IResolver {
+export default class Resolver implements Iterable<ResolutionGraphEntry> {
   config: Config;
   graph: ResolutionGraph;
   loading: Map<string, Promise<Registration[]>>;

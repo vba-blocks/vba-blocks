@@ -12,10 +12,11 @@ import {
 import { filterTarget, mapTarget } from './transform-target';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
+import { Project } from '../project';
+import { Target } from '../manifest/target';
+import { ProjectInfo } from './project-info';
 
-import { Project } from '../types';
-import { Target } from '../manifest/types';
-import { ExportOptions, ProjectInfo } from './types';
+export interface ExportOptions {}
 
 /**
  * Export target (with staging directory)

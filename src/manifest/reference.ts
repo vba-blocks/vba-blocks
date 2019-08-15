@@ -1,6 +1,18 @@
 import { manifestOk } from '../errors';
 
-import { Reference } from './types';
+export interface ReferenceDetails {
+  dependency?: string;
+}
+
+export interface Reference {
+  name: string;
+  version: string;
+  guid: string;
+  major: number;
+  minor: number;
+  optional?: boolean;
+  details?: ReferenceDetails;
+}
 
 const VERSION_REGEX = /^(\d+)\.(\d+)$/;
 const GUID_REGEX = /\{.{8}-.{4}-.{4}-.{4}-.{12}\}/;

@@ -7,8 +7,35 @@ import { parseDependencies, isRegistryDependency, isPathDependency } from './dep
 import { parseReferences } from './reference';
 import { parseTarget } from './target';
 import { CliError, ErrorCode, manifestOk } from '../errors';
+import { Target } from './target';
+import { Version, Dependency } from './dependency';
+import { Source } from './source';
+import { Reference } from './reference';
 
-import { Target, Manifest, ManifestType } from './types';
+export interface Snapshot {
+  name: string;
+  version: Version;
+  dependencies: Dependency[];
+}
+
+export interface Metadata {
+  authors: string[];
+  publish: boolean;
+  [name: string]: any;
+
+  __temp_defaults?: string[];
+}
+
+export type ManifestType = 'package' | 'project';
+
+export interface Manifest extends Snapshot {
+  type: ManifestType;
+  metadata: Metadata;
+  src: Source[];
+  references: Reference[];
+  target?: Target;
+  dir: string;
+}
 
 /**
  * @example

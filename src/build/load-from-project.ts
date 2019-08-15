@@ -2,10 +2,10 @@ import dedent from 'dedent/macro';
 import { Component, byComponentName } from './component';
 import { joinCommas } from '../utils/text';
 import { CliError, ErrorCode } from '../errors';
-
-import { Manifest, Reference } from '../manifest/types';
-import { Project } from '../types';
-import { BuildGraph } from './types';
+import { Manifest } from '../manifest';
+import { Reference } from '../manifest/reference';
+import { Project } from '../project';
+import { BuildGraph } from './build-graph';
 
 export default async function loadFromProject(
   project: Project,

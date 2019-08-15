@@ -1,4 +1,4 @@
-import { Manifest } from '../manifest/types';
+import { Manifest } from '../manifest';
 import { isPathDependency } from '../manifest/dependency';
 import { relative } from '../utils/path';
 import { dir as FIXTURES } from '../../tests/__fixtures__';

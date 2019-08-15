@@ -5,9 +5,15 @@ import exportTarget, { extractTarget } from './export-target';
 import buildTarget from './build-target';
 import { CliError, ErrorCode } from '../errors';
 
-import { Target, TargetType } from '../manifest/types';
-import { AddOptions, ProjectInfo } from './types';
+import { Target, TargetType } from '../manifest/target';
+import { ProjectInfo } from './project-info';
 import { writeManifest } from '../manifest';
+
+export interface AddOptions {
+  from?: string;
+  name?: string;
+  path?: string;
+}
 
 export default async function addTarget(
   type: TargetType,

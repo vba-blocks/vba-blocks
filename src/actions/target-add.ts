@@ -1,8 +1,14 @@
 import { loadProject, fetchDependencies } from '../project';
 import addTarget from '../targets/add-target';
 import { CliError, ErrorCode } from '../errors';
+import { TargetType } from '../manifest/target';
 
-import { AddOptions } from './types';
+export interface AddOptions {
+  type: TargetType;
+  from?: string;
+  name?: string;
+  path?: string;
+}
 
 export default async function add(options: AddOptions) {
   const { type, from, name, path } = options;

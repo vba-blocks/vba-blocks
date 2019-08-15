@@ -2,7 +2,15 @@ import has from '../utils/has';
 import { isString } from '../utils/is';
 import { join, sanitize } from '../utils/path';
 
-import { Target } from './types';
+export type TargetType = 'xlsx' | 'xlsm' | 'xlam';
+
+export interface Target {
+  name: string;
+  type: TargetType;
+  path: string;
+  filename: string;
+  blank?: boolean;
+}
 
 export function parseTarget(value: any, pkgName: string, dir: string): Target {
   if (isString(value)) value = { type: value };

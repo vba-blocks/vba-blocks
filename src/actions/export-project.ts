@@ -7,9 +7,13 @@ import { emptyDir, ensureDir, remove } from '../utils/fs';
 import { CliError, ErrorCode } from '../errors';
 import env from '../env';
 import { Message } from '../messages';
+import { Target, TargetType } from '../manifest/target';
 
-import { Target, TargetType } from '../manifest/types';
-import { ExportOptions } from './types';
+export interface ExportOptions {
+  target?: string;
+  completed?: string;
+  addin?: string;
+}
 
 export default async function exportProject(options: ExportOptions = {}) {
   env.reporter.log(Message.ExportProjectLoading, `[1/3] Loading project...`);

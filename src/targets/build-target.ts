@@ -5,10 +5,14 @@ import { loadFromProject, stageBuildGraph } from '../build';
 import { join } from '../utils/path';
 import { pathExists, ensureDir, remove, move, emptyDir, copy } from '../utils/fs';
 import { zip } from '../utils/zip';
+import { Project } from '../project';
+import { Target } from '../manifest/target';
+import { ProjectInfo } from './project-info';
 
-import { Project } from '../types';
-import { Target } from '../manifest/types';
-import { ProjectInfo, BuildOptions } from './types';
+export interface BuildOptions {
+  target?: string;
+  addin?: string;
+}
 
 /**
  * Build target:

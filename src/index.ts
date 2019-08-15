@@ -1,7 +1,7 @@
 export { default as env } from './env';
 export { loadConfig } from './config';
 export { loadProject, fetchDependencies } from './project';
-export { loadWorkspace } from './workspace';
+export { loadWorkspace } from './professional/workspace';
 
 export { default as resolveDependencies } from './resolve';
 export { resolve as resolveDependency, fetch as fetchDependency } from './sources';

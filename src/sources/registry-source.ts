@@ -14,11 +14,17 @@ import { clone, pull } from '../utils/git';
 import { unzip } from '../utils/zip';
 import { getRegistrationId, getRegistrationSource } from './registration';
 import { CliError, ErrorCode } from '../errors';
-
-import { Dependency, RegistryDependency } from '../manifest/types';
-import { Source, Registration, RegistryOptions } from './types';
+import { Dependency, RegistryDependency } from '../manifest/dependency';
+import { Source } from './source';
+import { Registration } from './registration';
 
 const debug = env.debug('vba-blocks:registry-source');
+
+export interface RegistryOptions {
+  name: string;
+  index: string;
+  packages: string;
+}
 
 export default class RegistrySource implements Source {
   name: string;

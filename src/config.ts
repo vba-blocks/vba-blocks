@@ -3,9 +3,22 @@ import { pathExists, readFile } from './utils/fs';
 import { parse as parseToml } from './utils/toml';
 import env from './env';
 import { RegistrySource, PathSource, GitSource } from './sources';
+import { Sources } from './sources';
 
-import { Sources } from './sources/types';
-import { Registry, Flags, Config, ConfigValue } from './types';
+export type Registry = {} | { [name: string]: { index: string; packages: string } };
+
+export interface Flags {}
+
+export interface Config {
+  registry: Registry;
+  flags: Flags;
+  sources: Sources;
+}
+
+export interface ConfigValue {
+  registry?: Registry;
+  flags?: Flags;
+}
 
 const empty: ConfigValue = { registry: {}, flags: {} };
 const defaults: ConfigValue = {

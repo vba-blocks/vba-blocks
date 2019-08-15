@@ -1,5 +1,9 @@
-import { Manifest } from '../manifest/types';
-import { Workspace } from '../types';
+import { Manifest } from '../manifest';
+
+export interface Workspace {
+  root: Manifest;
+  members: Manifest[];
+}
 
 export async function loadWorkspace(manifest: Manifest): Promise<Workspace> {
   return {

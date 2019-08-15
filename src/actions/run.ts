@@ -2,10 +2,15 @@ import runMacro from '../utils/run';
 import { extname, join, resolve } from '../utils/path';
 import { CliError, ErrorCode } from '../errors';
 import { extensionToApplication } from '../addin';
-
-import { RunOptions } from './types';
 import { loadProject } from '../project';
 import { getTarget } from '../targets';
+
+export interface RunOptions {
+  target?: string;
+  file?: string;
+  macro: string;
+  args: string[];
+}
 
 export default async function run(options: RunOptions) {
   let { target: target_type, file, macro, args = [''] } = options;

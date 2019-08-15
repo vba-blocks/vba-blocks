@@ -4,16 +4,31 @@ import { tmpFolder } from './utils/fs';
 import parallel from './utils/parallel';
 import { loadConfig } from './config';
 import { loadManifest } from './manifest';
-import { loadWorkspace } from './workspace';
+import { Workspace, loadWorkspace } from './professional/workspace';
 import { fetch } from './sources';
 import resolve from './resolve';
 import { readLockfile, isLockfileValid } from './lockfile';
-
-import { Manifest } from './manifest/types';
-import { DependencyGraph } from './resolve/types';
-import { Config, Project } from './types';
+import { Manifest } from './manifest';
+import { DependencyGraph } from './resolve/dependency-graph';
+import { Config } from './config';
 
 const debug = env.debug('vba-blocks:project');
+
+export interface Project {
+  manifest: Manifest;
+  workspace: Workspace;
+  packages: DependencyGraph;
+
+  config: Config;
+  paths: {
+    root: string;
+    dir: string;
+    build: string;
+    backup: string;
+    staging: string;
+  };
+  has_dirty_lockfile: boolean;
+}
 
 /**
  * Load project from given directory / cwd

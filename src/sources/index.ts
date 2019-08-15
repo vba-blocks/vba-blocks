@@ -6,11 +6,17 @@ import RegistrySource from './registry-source';
 import PathSource from './path-source';
 import GitSource from '../professional/sources/git-source';
 import { CliError, ErrorCode } from '../errors';
-
-import { Dependency } from '../manifest/types';
-import { Sources, Registration } from './types';
+import { Source } from './source';
+import { Dependency } from '../manifest/dependency';
+import { Registration } from './registration';
 
 export { RegistrySource, PathSource, GitSource };
+
+export interface Sources {
+  registry: { [name: string]: Source };
+  git: Source;
+  path: Source;
+}
 
 export async function resolve(sources: Sources, dependency: Dependency): Promise<Registration[]> {
   if (isRegistryDependency(dependency)) {

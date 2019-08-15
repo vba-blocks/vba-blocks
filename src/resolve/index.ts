@@ -5,9 +5,9 @@ import solveLatest from './latest-solver';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
 import { Message } from '../messages';
-
-import { Config, Workspace } from '../types';
-import { DependencyGraph } from './types';
+import { Config } from '../config';
+import { Workspace } from '../professional/workspace';
+import { DependencyGraph } from './dependency-graph';
 
 const debug = env.debug('vba-blocks:resolve');
 

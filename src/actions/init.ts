@@ -7,9 +7,17 @@ import { writeManifest } from '../manifest';
 import { initProject } from '../project';
 import addTarget from '../targets/add-target';
 import { CliError, ErrorCode } from '../errors';
+import { Manifest } from '../manifest';
+import { TargetType } from '../manifest/target';
 
-import { Manifest, TargetType } from '../manifest/types';
-import { InitOptions } from './types';
+export interface InitOptions {
+  name?: string;
+  dir?: string;
+  target?: string;
+  from?: string;
+  pkg: boolean;
+  git: boolean;
+}
 
 export default async function init(options: InitOptions) {
   let { name, dir = env.cwd, target: target_type, from, pkg: as_package, git } = options;

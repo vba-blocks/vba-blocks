@@ -5,7 +5,13 @@ import { pathExists, ensureDir } from '../utils/fs';
 import init from './init';
 import { CliError, ErrorCode } from '../errors';
 
-import { CreateOptions } from './types';
+export interface CreateOptions {
+  name: string;
+  target?: string;
+  from?: string;
+  pkg: boolean;
+  git: boolean;
+}
 
 export default async function create(options: CreateOptions) {
   if (!options || !options.name) {
