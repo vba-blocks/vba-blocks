@@ -1,8 +1,8 @@
 import { satisfies } from 'semver';
-import unique from '../utils/unique';
-import { Workspace } from '../professional/workspace';
 import { Dependency } from '../manifest/dependency';
+import { Workspace } from '../professional/workspace';
 import { Registration } from '../sources/registration';
+import unique from '../utils/unique';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution } from './resolver';
 

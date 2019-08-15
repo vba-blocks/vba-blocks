@@ -1,7 +1,7 @@
-import { extname, relative } from '../utils/path';
-import { readFile } from '../utils/fs';
-import { BY_LINE, truncate } from '../utils/text';
 import { CliError, ErrorCode } from '../errors';
+import { readFile } from '../utils/fs';
+import { extname, relative } from '../utils/path';
+import { BY_LINE, truncate } from '../utils/text';
 
 export type ComponentType = 'module' | 'class' | 'form' | 'document';
 

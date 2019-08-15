@@ -1,5 +1,5 @@
-import { Project } from '../project';
 import { Manifest } from '../manifest';
+import { Project } from '../project';
 
 export interface ProjectInfo {
   project: Project;

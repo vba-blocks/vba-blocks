@@ -1,15 +1,13 @@
-import { promisify } from 'util';
 import { readFile as _readFile, symlink as _symlink, writeFile as _writeFile } from 'fs';
 import { copy } from 'fs-extra/lib/copy';
 import { emptyDir } from 'fs-extra/lib/empty';
+import { readJson } from 'fs-extra/lib/json/jsonfile';
 import { ensureDir, ensureDirSync } from 'fs-extra/lib/mkdirs';
 import { move } from 'fs-extra/lib/move';
 import { pathExists } from 'fs-extra/lib/path-exists';
-import { readJson } from 'fs-extra/lib/json/jsonfile';
 import { remove } from 'fs-extra/lib/remove';
+import { promisify } from 'util';
 import hash from './hash';
-
-export { readFileSync, watch } from 'fs';
 
 const readFile = promisify(_readFile);
 const symlink = promisify(_symlink);
@@ -58,6 +56,7 @@ async function tmpFolder(options: TmpOptions = {}): Promise<string> {
 // (for mocking only)
 function reset() {}
 
+export { readFileSync, watch } from 'fs';
 export {
   checksum,
   copy,

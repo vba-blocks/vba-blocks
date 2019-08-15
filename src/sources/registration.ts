@@ -1,10 +1,10 @@
 import dedent from 'dedent/macro';
 import { parse as parseQuerystring } from 'querystring';
-import has from '../utils/has';
-import { isString } from '../utils/is';
 import { CliError, ErrorCode } from '../errors';
 import { Snapshot } from '../manifest';
 import { Dependency } from '../manifest/dependency';
+import has from '../utils/has';
+import { isString } from '../utils/is';
 
 export interface Registration extends Snapshot {
   id: string;

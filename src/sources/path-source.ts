@@ -1,10 +1,14 @@
-import { getSourceParts, getRegistrationId, getRegistrationSource } from './registration';
-import { loadManifest } from '../manifest';
-import { pathExists } from '../utils/fs';
 import { CliError, ErrorCode } from '../errors';
+import { loadManifest } from '../manifest';
 import { Dependency, PathDependency } from '../manifest/dependency';
+import { pathExists } from '../utils/fs';
+import {
+  getRegistrationId,
+  getRegistrationSource,
+  getSourceParts,
+  Registration
+} from './registration';
 import { Source } from './source';
-import { Registration } from './registration';
 
 export default class PathSource implements Source {
   async resolve(dependency: Dependency): Promise<Registration[]> {

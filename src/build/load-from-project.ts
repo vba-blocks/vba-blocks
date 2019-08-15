@@ -1,11 +1,11 @@
 import dedent from 'dedent/macro';
-import { Component, byComponentName } from './component';
-import { joinCommas } from '../utils/text';
 import { CliError, ErrorCode } from '../errors';
 import { Manifest } from '../manifest';
 import { Reference } from '../manifest/reference';
 import { Project } from '../project';
+import { joinCommas } from '../utils/text';
 import { BuildGraph } from './build-graph';
+import { byComponentName, Component } from './component';
 
 export default async function loadFromProject(
   project: Project,

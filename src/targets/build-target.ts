@@ -1,12 +1,12 @@
 import dedent from 'dedent/macro';
-import { CliError, ErrorCode } from '../errors';
-import { importGraph, createDocument } from '../addin';
+import { createDocument, importGraph } from '../addin';
 import { loadFromProject, stageBuildGraph } from '../build';
-import { join } from '../utils/path';
-import { pathExists, ensureDir, remove, move, emptyDir, copy } from '../utils/fs';
-import { zip } from '../utils/zip';
-import { Project } from '../project';
+import { CliError, ErrorCode } from '../errors';
 import { Target } from '../manifest/target';
+import { Project } from '../project';
+import { copy, emptyDir, ensureDir, move, pathExists, remove } from '../utils/fs';
+import { join } from '../utils/path';
+import { zip } from '../utils/zip';
 import { ProjectInfo } from './project-info';
 
 export interface BuildOptions {

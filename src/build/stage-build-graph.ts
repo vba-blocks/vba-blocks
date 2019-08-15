@@ -1,6 +1,6 @@
-import { join, basename } from '../utils/path';
 import { writeFile } from '../utils/fs';
 import parallel from '../utils/parallel';
+import { basename, join } from '../utils/path';
 import { BuildGraph, ImportGraph } from './build-graph';
 
 export default async function stageBuildGraph(

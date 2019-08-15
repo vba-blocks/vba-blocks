@@ -1,15 +1,12 @@
-export { default as env } from './env';
-export { loadConfig } from './config';
-export { loadProject, fetchDependencies } from './project';
-export { loadWorkspace } from './professional/workspace';
-
-export { default as resolveDependencies } from './resolve';
-export { resolve as resolveDependency, fetch as fetchDependency } from './sources';
-export { default as run } from './utils/run';
-export { addins } from './addin';
-
 export { default as build } from './actions/build';
 export { default as exportProject } from './actions/export-project';
-
-export { checksum } from './utils/fs';
+export { addins } from './addin';
+export { loadConfig } from './config';
+export { default as env } from './env';
 export { parseManifest } from './manifest';
+export { loadWorkspace } from './professional/workspace';
+export { fetchDependencies, loadProject } from './project';
+export { default as resolveDependencies } from './resolve';
+export { fetch as fetchDependency, resolve as resolveDependency } from './sources';
+export { checksum } from './utils/fs';
+export { default as run } from './utils/run';

@@ -1,13 +1,12 @@
 import dedent from 'dedent/macro';
-import { getRegistration } from './dependency-graph';
-import Resolver from './resolver';
-import solveLatest from './latest-solver';
+import { Config } from '../config';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
 import { Message } from '../messages';
-import { Config } from '../config';
 import { Workspace } from '../professional/workspace';
-import { DependencyGraph } from './dependency-graph';
+import { DependencyGraph, getRegistration } from './dependency-graph';
+import solveLatest from './latest-solver';
+import Resolver from './resolver';
 
 const debug = env.debug('vba-blocks:resolve');
 

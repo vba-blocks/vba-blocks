@@ -1,7 +1,7 @@
-import { loadProject, fetchDependencies } from '../project';
-import addTarget from '../targets/add-target';
 import { CliError, ErrorCode } from '../errors';
 import { TargetType } from '../manifest/target';
+import { fetchDependencies, loadProject } from '../project';
+import addTarget from '../targets/add-target';
 
 export interface AddOptions {
   type: TargetType;

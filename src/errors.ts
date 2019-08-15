@@ -1,6 +1,6 @@
+import * as colors from 'ansi-colors';
 import { ok } from 'assert';
 import dedent from 'dedent/macro';
-import * as colors from 'ansi-colors';
 import { isString } from './utils/is';
 
 export class CliError extends Error {

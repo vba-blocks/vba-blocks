@@ -1,8 +1,8 @@
 import dedent from 'dedent/macro';
 import { CliError, ErrorCode } from '../../errors';
-import { Source } from '../../sources/source';
-import { Registration } from '../../sources/registration';
 import { Dependency } from '../../manifest/dependency';
+import { Registration } from '../../sources/registration';
+import { Source } from '../../sources/source';
 
 const message = dedent`
   git dependencies are not support.

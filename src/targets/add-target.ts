@@ -1,13 +1,12 @@
-import { basename, extname, join, sanitize, resolve } from '../utils/path';
-import { copy, ensureDir, emptyDir, remove } from '../utils/fs';
-import { exportTo, createDocument } from '../addin';
-import exportTarget, { extractTarget } from './export-target';
-import buildTarget from './build-target';
+import { createDocument, exportTo } from '../addin';
 import { CliError, ErrorCode } from '../errors';
-
-import { Target, TargetType } from '../manifest/target';
-import { ProjectInfo } from './project-info';
 import { writeManifest } from '../manifest';
+import { Target, TargetType } from '../manifest/target';
+import { copy, emptyDir, ensureDir, remove } from '../utils/fs';
+import { basename, extname, join, resolve, sanitize } from '../utils/path';
+import buildTarget from './build-target';
+import exportTarget, { extractTarget } from './export-target';
+import { ProjectInfo } from './project-info';
 
 export interface AddOptions {
   from?: string;

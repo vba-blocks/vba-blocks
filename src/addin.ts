@@ -1,11 +1,11 @@
-import { join, dirname } from './utils/path';
-import { ensureDir, pathExists, copy } from './utils/fs';
-import run from './utils/run';
+import { ImportGraph } from './build/build-graph';
 import env from './env';
 import { CliError, ErrorCode } from './errors';
 import { Target } from './manifest/target';
-import { ImportGraph } from './build/build-graph';
 import { Project } from './project';
+import { copy, ensureDir, pathExists } from './utils/fs';
+import { dirname, join } from './utils/path';
+import run from './utils/run';
 
 export type Application = 'excel';
 export type Addin = string;

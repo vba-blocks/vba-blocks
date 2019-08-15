@@ -1,7 +1,7 @@
 import envPaths from 'env-paths';
-import { join } from './utils/path';
-import getStaging from './utils/get-staging';
 import { Reporter, reporter } from './reporter';
+import getStaging from './utils/get-staging';
+import { join } from './utils/path';
 
 export interface Env {
   isWindows: boolean;

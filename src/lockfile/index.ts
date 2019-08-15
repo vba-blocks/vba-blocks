@@ -1,26 +1,29 @@
 import { ok } from 'assert';
 import { satisfies as satisfiesSemver } from 'semver';
-import { join, relative, trailing } from '../utils/path';
-import { pathExists, readFile, writeFile } from '../utils/fs';
-import { toLockfile as convertToToml, parse as parseToml } from '../utils/toml';
-import has from '../utils/has';
+import { version } from '../../package.json';
 import env from '../env';
-import { loadManifest } from '../manifest';
-import { isRegistryDependency, isPathDependency, isGitDependency } from '../manifest/dependency';
+import { CliError, ErrorCode } from '../errors';
+import { loadManifest, Snapshot } from '../manifest';
+import {
+  Dependency,
+  isGitDependency,
+  isPathDependency,
+  isRegistryDependency
+} from '../manifest/dependency';
+import { Workspace } from '../professional/workspace';
+import { getRegistration } from '../resolve';
+import { DependencyGraph } from '../resolve/dependency-graph';
 import {
   getRegistrationId,
   getRegistrationSource,
   getSourceParts,
+  Registration,
   toDependency
 } from '../sources/registration';
-import { getRegistration } from '../resolve';
-import { CliError, ErrorCode } from '../errors';
-import { version } from '../../package.json';
-import { Dependency } from '../manifest/dependency';
-import { Workspace } from '../professional/workspace';
-import { Registration } from '../sources/registration';
-import { DependencyGraph } from '../resolve/dependency-graph';
-import { Snapshot } from '../manifest';
+import { pathExists, readFile, writeFile } from '../utils/fs';
+import has from '../utils/has';
+import { join, relative, trailing } from '../utils/path';
+import { parse as parseToml, toLockfile as convertToToml } from '../utils/toml';
 
 export interface Lockfile {
   metadata?: { version: string };

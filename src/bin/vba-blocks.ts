@@ -1,16 +1,15 @@
-import mri, { Args } from 'mri';
 import * as colors from 'ansi-colors';
-import meant from 'meant';
 import dedent from 'dedent/macro';
-import has from '../utils/has';
-import { joinCommas } from '../utils/text';
-import { RunError } from '../utils/run';
-import { __default } from '../utils/interop';
-import { CliError, ErrorCode, cleanError } from '../errors';
-import { updateAvailable, updateVersion, checkForUpdate } from '../installer';
-import env from '../env';
+import meant from 'meant';
+import mri, { Args } from 'mri';
 import { version } from '../../package.json';
+import env from '../env';
+import { cleanError, CliError, ErrorCode } from '../errors';
+import { checkForUpdate, updateAvailable, updateVersion } from '../installer';
 import { Message } from '../messages';
+import has from '../utils/has';
+import { RunError } from '../utils/run';
+import { joinCommas } from '../utils/text';
 
 Error.stackTraceLimit = Infinity;
 

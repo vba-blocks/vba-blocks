@@ -1,9 +1,8 @@
-import { isRegistryDependency } from '../manifest/dependency';
-import { resolve } from '../sources';
-import { DependencyGraph } from './dependency-graph';
-import { Dependency } from '../manifest/dependency';
 import { Config } from '../config';
+import { Dependency, isRegistryDependency } from '../manifest/dependency';
+import { resolve } from '../sources';
 import { Registration } from '../sources/registration';
+import { DependencyGraph } from './dependency-graph';
 
 export interface Resolution {
   name: string;

@@ -1,16 +1,18 @@
 import dedent from 'dedent/macro';
-import { join, normalize, relative } from '../utils/path';
-import { parse as parseToml, convert as convertToToml, patch as patchToml } from '../utils/toml';
-import { pathExists, readFile, writeFile } from '../utils/fs';
-import { parseSrc } from './source';
-import { parseDependencies, isRegistryDependency, isPathDependency } from './dependency';
-import { parseReferences } from './reference';
-import { parseTarget } from './target';
 import { CliError, ErrorCode, manifestOk } from '../errors';
-import { Target } from './target';
-import { Version, Dependency } from './dependency';
-import { Source } from './source';
-import { Reference } from './reference';
+import { pathExists, readFile, writeFile } from '../utils/fs';
+import { join, normalize, relative } from '../utils/path';
+import { convert as convertToToml, parse as parseToml, patch as patchToml } from '../utils/toml';
+import {
+  Dependency,
+  isPathDependency,
+  isRegistryDependency,
+  parseDependencies,
+  Version
+} from './dependency';
+import { parseReferences, Reference } from './reference';
+import { parseSrc, Source } from './source';
+import { parseTarget, Target } from './target';
 
 export interface Snapshot {
   name: string;

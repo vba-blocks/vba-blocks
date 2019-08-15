@@ -1,5 +1,5 @@
-import { Args } from 'mri';
 import dedent from 'dedent/macro';
+import { Args } from 'mri';
 import exportProject from '../actions/export-project';
 
 const help = dedent`

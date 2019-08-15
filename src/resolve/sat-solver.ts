@@ -1,12 +1,10 @@
 import { ok } from 'assert';
-import { satisfies } from 'semver';
 import * as logicSolver from 'logic-solver';
-import { isRegistryDependency } from '../manifest/dependency';
-import unique from '../utils/unique';
-
+import { satisfies } from 'semver';
+import { Dependency, isRegistryDependency } from '../manifest/dependency';
 import { Workspace } from '../professional/workspace';
-import { Dependency } from '../manifest/dependency';
 import { Registration } from '../sources/registration';
+import unique from '../utils/unique';
 import { DependencyGraph } from './dependency-graph';
 import Resolver, { Resolution, ResolutionGraph } from './resolver';
 

@@ -1,14 +1,17 @@
 import { ok } from 'assert';
 import dedent from 'dedent/macro';
-import { isRegistryDependency, isPathDependency, isGitDependency } from '../manifest/dependency';
-import { getSourceParts } from './registration';
-import RegistrySource from './registry-source';
-import PathSource from './path-source';
-import GitSource from '../professional/sources/git-source';
 import { CliError, ErrorCode } from '../errors';
+import {
+  Dependency,
+  isGitDependency,
+  isPathDependency,
+  isRegistryDependency
+} from '../manifest/dependency';
+import GitSource from '../professional/sources/git-source';
+import PathSource from './path-source';
+import { getSourceParts, Registration } from './registration';
+import RegistrySource from './registry-source';
 import { Source } from './source';
-import { Dependency } from '../manifest/dependency';
-import { Registration } from './registration';
 
 export { RegistrySource, PathSource, GitSource };
 

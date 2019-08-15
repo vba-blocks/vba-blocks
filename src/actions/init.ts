@@ -1,14 +1,13 @@
 import dedent from 'dedent/macro';
 import env from '../env';
-import { basename, extname, join } from '../utils/path';
-import { pathExists, ensureDir, writeFile } from '../utils/fs';
-import { init as git_init } from '../utils/git';
-import { writeManifest } from '../manifest';
+import { CliError, ErrorCode } from '../errors';
+import { Manifest, writeManifest } from '../manifest';
+import { TargetType } from '../manifest/target';
 import { initProject } from '../project';
 import addTarget from '../targets/add-target';
-import { CliError, ErrorCode } from '../errors';
-import { Manifest } from '../manifest';
-import { TargetType } from '../manifest/target';
+import { ensureDir, pathExists, writeFile } from '../utils/fs';
+import { init as git_init } from '../utils/git';
+import { basename, extname, join } from '../utils/path';
 
 export interface InitOptions {
   name?: string;

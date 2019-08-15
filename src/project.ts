@@ -1,16 +1,14 @@
+import { Config, loadConfig } from './config';
 import env from './env';
-import { join, normalize } from './utils/path';
+import { isLockfileValid, readLockfile } from './lockfile';
+import { loadManifest, Manifest } from './manifest';
+import { loadWorkspace, Workspace } from './professional/workspace';
+import resolve from './resolve';
+import { DependencyGraph } from './resolve/dependency-graph';
+import { fetch } from './sources';
 import { tmpFolder } from './utils/fs';
 import parallel from './utils/parallel';
-import { loadConfig } from './config';
-import { loadManifest } from './manifest';
-import { Workspace, loadWorkspace } from './professional/workspace';
-import { fetch } from './sources';
-import resolve from './resolve';
-import { readLockfile, isLockfileValid } from './lockfile';
-import { Manifest } from './manifest';
-import { DependencyGraph } from './resolve/dependency-graph';
-import { Config } from './config';
+import { join, normalize } from './utils/path';
 
 const debug = env.debug('vba-blocks:project');
 

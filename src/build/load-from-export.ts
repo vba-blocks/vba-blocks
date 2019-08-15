@@ -1,12 +1,12 @@
 import walk from 'walk-sync';
-import { Component, extension_to_type, byComponentName } from './component';
-import { join, extname, basename } from '../utils/path';
-import { pathExists, readJson, readFile } from '../utils/fs';
-import parallel from '../utils/parallel';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
 import { Reference } from '../manifest/reference';
+import { pathExists, readFile, readJson } from '../utils/fs';
+import parallel from '../utils/parallel';
+import { basename, extname, join } from '../utils/path';
 import { BuildGraph } from './build-graph';
+import { byComponentName, Component, extension_to_type } from './component';
 
 const binary_extensions = ['.frx'];
 

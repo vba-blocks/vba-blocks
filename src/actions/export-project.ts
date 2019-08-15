@@ -1,13 +1,13 @@
 import dedent from 'dedent/macro';
-import { loadProject, fetchDependencies } from '../project';
-import { exportTarget } from '../targets';
 import { exportTo } from '../addin';
-import { join, sanitize } from '../utils/path';
-import { emptyDir, ensureDir, remove } from '../utils/fs';
-import { CliError, ErrorCode } from '../errors';
 import env from '../env';
-import { Message } from '../messages';
+import { CliError, ErrorCode } from '../errors';
 import { Target, TargetType } from '../manifest/target';
+import { Message } from '../messages';
+import { fetchDependencies, loadProject } from '../project';
+import { exportTarget } from '../targets';
+import { emptyDir, ensureDir, remove } from '../utils/fs';
+import { join, sanitize } from '../utils/path';
 
 export interface ExportOptions {
   target?: string;

@@ -1,6 +1,6 @@
-import { join } from './path';
 import * as fs from 'fs';
 import env from '../env';
+import { join } from './path';
 
 const debug = env.debug('vba-blocks:git');
 

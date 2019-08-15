@@ -1,9 +1,9 @@
-import { gt as semverGreaterThan } from 'semver';
 import { differenceInCalendarDays } from 'date-fns';
-import { getLatestRelease } from './utils/github';
-import env from './env';
-import cache from './cache';
+import { gt as semverGreaterThan } from 'semver';
 import { version as current_version } from '../package.json';
+import cache from './cache';
+import env from './env';
+import { getLatestRelease } from './utils/github';
 
 const debug = env.debug('vba-blocks:installer');
 

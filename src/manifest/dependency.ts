@@ -1,7 +1,7 @@
-import { join, trailing } from '../utils/path';
-import { isString } from '../utils/is';
-import has from '../utils/has';
 import { manifestOk } from '../errors';
+import has from '../utils/has';
+import { isString } from '../utils/is';
+import { join, trailing } from '../utils/path';
 
 export type Version = string;
 

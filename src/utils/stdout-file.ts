@@ -1,7 +1,7 @@
-import { readFileSync, tmpFile, watch } from './fs';
-import { basename } from './path';
-import Observable from './observable';
 import env from '../env';
+import { readFileSync, tmpFile, watch } from './fs';
+import Observable from './observable';
+import { basename } from './path';
 
 const debug = env.debug('vba-blocks:stdout-file');
 

@@ -1,6 +1,6 @@
+import dedent from 'dedent/macro';
 import { Args } from 'mri';
 import open from 'open';
-import dedent from 'dedent/macro';
 import time from 'pretty-hrtime';
 import build from '../actions/build';
 

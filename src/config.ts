@@ -1,9 +1,8 @@
-import { join } from './utils/path';
-import { pathExists, readFile } from './utils/fs';
-import { parse as parseToml } from './utils/toml';
 import env from './env';
-import { RegistrySource, PathSource, GitSource } from './sources';
-import { Sources } from './sources';
+import { GitSource, PathSource, RegistrySource, Sources } from './sources';
+import { pathExists, readFile } from './utils/fs';
+import { join } from './utils/path';
+import { parse as parseToml } from './utils/toml';
 
 export type Registry = {} | { [name: string]: { index: string; packages: string } };
 

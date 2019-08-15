@@ -1,13 +1,13 @@
 import env from '../env';
-import { writeFile, remove, ensureDir, readFile } from '../utils/fs';
-import { join, dirname } from '../utils/path';
-import parallel from '../utils/parallel';
 import { writeManifest } from '../manifest';
+import { Reference } from '../manifest/reference';
+import { Source } from '../manifest/source';
 import { Project } from '../project';
+import { ensureDir, remove, writeFile } from '../utils/fs';
+import parallel from '../utils/parallel';
+import { dirname, join } from '../utils/path';
 import { Changeset } from './changeset';
 import { Component } from './component';
-import { Source } from '../manifest/source';
-import { Reference } from '../manifest/reference';
 
 export default async function applyChangeset(project: Project, changeset: Changeset) {
   const progress = env.reporter.progress('Updating src files');

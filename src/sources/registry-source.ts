@@ -1,22 +1,21 @@
 import dedent from 'dedent/macro';
 import env from '../env';
-import { join, dirname, basename, sanitize } from '../utils/path';
+import { CliError, ErrorCode } from '../errors';
+import { Dependency, RegistryDependency } from '../manifest/dependency';
 import download from '../utils/download';
 import {
   checksum as getChecksum,
   ensureDir,
-  pathExists,
   move,
+  pathExists,
   readFile,
   tmpFile
 } from '../utils/fs';
 import { clone, pull } from '../utils/git';
+import { basename, dirname, join, sanitize } from '../utils/path';
 import { unzip } from '../utils/zip';
-import { getRegistrationId, getRegistrationSource } from './registration';
-import { CliError, ErrorCode } from '../errors';
-import { Dependency, RegistryDependency } from '../manifest/dependency';
+import { getRegistrationId, getRegistrationSource, Registration } from './registration';
 import { Source } from './source';
-import { Registration } from './registration';
 
 const debug = env.debug('vba-blocks:registry-source');
 

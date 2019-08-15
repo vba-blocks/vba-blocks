@@ -1,9 +1,9 @@
-import runMacro from '../utils/run';
-import { extname, join, resolve } from '../utils/path';
-import { CliError, ErrorCode } from '../errors';
 import { extensionToApplication } from '../addin';
+import { CliError, ErrorCode } from '../errors';
 import { loadProject } from '../project';
 import { getTarget } from '../targets';
+import { extname, join, resolve } from '../utils/path';
+import runMacro from '../utils/run';
 
 export interface RunOptions {
   target?: string;

@@ -1,13 +1,14 @@
-import { promisify } from 'util';
+import { exec as _exec } from 'child_process';
 import dedent from 'dedent/macro';
-const exec = promisify(require('child_process').exec);
-
+import { promisify } from 'util';
 import env from '../env';
-import { join } from './path';
-import { pathExists } from './fs';
-import stdoutFile from './stdout-file';
 import { CliError, ErrorCode } from '../errors';
+import { pathExists } from './fs';
 import parallel from './parallel';
+import { join } from './path';
+import stdoutFile from './stdout-file';
+
+const exec = promisify(_exec);
 
 const debug = env.debug('vba-blocks:run');
 const SPECIAL_FILE_STDOUT = env.isWindows ? 'CON' : '/dev/stdout';

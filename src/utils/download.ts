@@ -1,7 +1,7 @@
-import fetch from 'node-fetch';
-import { dirname } from './path';
 import { createWriteStream } from 'fs';
+import fetch from 'node-fetch';
 import { ensureDir } from './fs';
+import { dirname } from './path';
 
 export default async function download(url: string, dest: string): Promise<void> {
   await ensureDir(dirname(dest));

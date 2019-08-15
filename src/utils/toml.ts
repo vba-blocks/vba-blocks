@@ -1,5 +1,4 @@
-import { isString, isNumber, isBoolean, isDate, isObject } from './is';
-import { __default } from './interop';
+import { isBoolean, isDate, isNumber, isObject, isString } from './is';
 
 export async function parse(value: string): Promise<any> {
   const { parse: parseToml } = await import('toml-patch');
