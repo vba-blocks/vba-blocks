@@ -17,7 +17,7 @@ export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph
     }
   };
 
-  // First, cache before BuildGraph by name
+  // First, cache _before_ BuildGraph by name
   const by_name = {
     components: new Map<string, Component>(),
     references: new Map<string, Reference>()
@@ -33,17 +33,16 @@ export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph
   for (const component of after.components) {
     const name = component.name;
 
-    const previous = by_name.components.get(name);
+    const before_component = by_name.components.get(name);
     by_name.components.delete(name);
 
-    if (previous && previous.details.dependency) {
+    if (before_component && before.from_dependencies.components.has(before_component)) {
       // Ignore dependencies
       continue;
-    } else if (!previous) {
+    } else if (!before_component) {
       changeset.components.added.push(component);
-    } else if (component.code !== previous.code) {
-      component.details.path = previous.details.path;
-      component.details.dependency = previous.details.dependency;
+    } else if (component.code !== before_component.code) {
+      component.details.path = before_component.details.path;
 
       changeset.components.changed.push(component);
     }
@@ -60,21 +59,19 @@ export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph
   for (const reference of after.references) {
     const name = reference.name;
 
-    const previous = by_name.references.get(name);
+    const before_reference = by_name.references.get(name);
     by_name.references.delete(name);
 
-    if (previous && previous.details!.dependency) {
+    if (before_reference && before.from_dependencies.references.has(before_reference)) {
       // Ignore dependencies
       continue;
-    } else if (!previous) {
+    } else if (!before_reference) {
       changeset.references.added.push(reference);
     } else if (
-      reference.guid !== previous.guid ||
-      reference.major !== previous.major ||
-      reference.minor !== previous.minor
+      reference.guid !== before_reference.guid ||
+      reference.major !== before_reference.major ||
+      reference.minor !== before_reference.minor
     ) {
-      reference.details!.dependency = previous.details!.dependency;
-
       changeset.references.changed.push(reference);
     }
   }

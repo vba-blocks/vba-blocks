@@ -3,15 +3,11 @@
 exports[`load valid references 1`] = `
 Object {
   "dependencies": Array [],
-  "dir": ".",
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [
@@ -20,8 +16,6 @@ Object {
       "major": 1,
       "minor": 0,
       "name": "a",
-      "optional": true,
-      "version": "1.0",
     },
   ],
   "src": Array [],
@@ -40,15 +34,11 @@ Object {
       "version": "^2",
     },
   ],
-  "dir": ".",
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "standard",
   "references": Array [
@@ -57,39 +47,31 @@ Object {
       "major": 5,
       "minor": 3,
       "name": "VBIDE",
-      "optional": false,
-      "version": "5.3",
     },
   ],
   "src": Array [
     Object {
       "name": "ThisWorkbook",
-      "optional": false,
       "path": "src/ThisWorkbook.cls",
     },
     Object {
       "name": "Sheet1",
-      "optional": false,
       "path": "src/Sheet1.cls",
     },
     Object {
       "name": "Sheet2",
-      "optional": false,
       "path": "src/Sheet2.cls",
     },
     Object {
       "name": "Sheet3",
-      "optional": false,
       "path": "src/Sheet3.cls",
     },
     Object {
       "name": "Validation",
-      "optional": false,
       "path": "src/Validation.bas",
     },
     Object {
       "name": "Class1",
-      "optional": false,
       "path": "src/Class1.cls",
     },
   ],
@@ -123,34 +105,30 @@ Object {
     },
     Object {
       "branch": "master",
-      "git": "https://github.com/VBA-tools/VBA-Web",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
       "name": "d",
     },
     Object {
       "branch": "next",
-      "git": "https://github.com/VBA-tools/VBA-Web",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
       "name": "e",
     },
     Object {
-      "git": "https://github.com/VBA-tools/VBA-Web",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
       "name": "f",
       "tag": "v1.0.0",
     },
     Object {
-      "git": "https://github.com/VBA-tools/VBA-Web",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
       "name": "g",
       "rev": "a1b2c3d4",
     },
   ],
-  "dir": ".",
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],
@@ -164,15 +142,11 @@ Object {
 exports[`loads valid package metadata 1`] = `
 Object {
   "dependencies": Array [],
-  "dir": ".",
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],
@@ -186,32 +160,25 @@ Object {
 exports[`loads valid sources 1`] = `
 Object {
   "dependencies": Array [],
-  "dir": ".",
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],
   "src": Array [
     Object {
       "name": "A",
-      "optional": false,
       "path": "src/a.bas",
     },
     Object {
       "name": "B",
-      "optional": false,
       "path": "src/b.cls",
     },
     Object {
       "name": "C",
-      "optional": true,
       "path": "src/c.frm",
     },
   ],
@@ -224,15 +191,11 @@ Object {
 exports[`loads valid target 1`] = `
 Object {
   "dependencies": Array [],
-  "dir": ".",
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],
@@ -251,15 +214,11 @@ Object {
 exports[`loads valid target 2`] = `
 Object {
   "dependencies": Array [],
-  "dir": ".",
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],

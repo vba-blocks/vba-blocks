@@ -1,5 +1,6 @@
-import { resolve, fetch, Sources, Registration } from '../';
-import { RegistryDependency, PathDependency, GitDependency } from '../../manifest/dependency';
+import { fetch, resolve, Sources } from '../';
+import { GitDependency, PathDependency, RegistryDependency } from '../../manifest/dependency';
+import { Registration } from '../registration';
 
 const gitDependency: GitDependency = {
   name: 'a',

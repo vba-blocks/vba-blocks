@@ -38,10 +38,6 @@ export default async function loadFromExport(staging: string): Promise<BuildGrap
       const code = await readFile(file);
       const binary = <Buffer | undefined>(binaries[name] && (await readFile(binaries[name])));
 
-      // TODO There should be a way to encode this,
-      // but for now just rely on project's BuildGraph
-      const dependency = undefined;
-
       if (!type) {
         throw new CliError(
           ErrorCode.ComponentUnrecognized,
@@ -49,7 +45,7 @@ export default async function loadFromExport(staging: string): Promise<BuildGrap
         );
       }
 
-      return new Component(type, code, { dependency, binary });
+      return new Component(type, code, { binary });
     },
     { progress: env.reporter.progress('Loading exported components') }
   );
@@ -58,7 +54,11 @@ export default async function loadFromExport(staging: string): Promise<BuildGrap
   return {
     name,
     components,
-    references
+    references,
+    from_dependencies: {
+      components: new Map(),
+      references: new Map()
+    }
   };
 }
 
@@ -71,18 +71,9 @@ async function readInfo(staging: string): Promise<ProjectInfo> {
   const path = join(staging, 'project.json');
   if (!(await pathExists(path))) return { name: 'VBAProject', references: [] };
 
-  const { name, references } = await readJson(path);
+  const info = await readJson(path);
 
-  return {
-    name,
-    references: references.map((reference: Reference) => {
-      // TODO There should be a way to encode this,
-      // but for now just rely on project's BuildGraph
-      reference.details = { dependency: undefined };
-
-      return reference;
-    })
-  };
+  return info;
 }
 
 function isBinary(file: string): boolean {

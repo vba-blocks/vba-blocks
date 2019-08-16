@@ -7,28 +7,52 @@ import {
   Dependency,
   isPathDependency,
   isRegistryDependency,
-  parseDependencies,
-  Version
+  parseDependencies
 } from './dependency';
 import { parseReferences, Reference } from './reference';
 import { parseSrc, Source } from './source';
 import { parseTarget, Target } from './target';
+import { DEFAULT_VERSION, Version } from './version';
 
+/*
+  # Manifest
+
+  The parsed vba-block.toml manifest.
+  package/project, src, dependencies, etc are all parsed and put in a consistent form
+
+  ```toml
+  [package]
+  name = "package-name"
+  version = "1.0.0"
+  authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
+
+  [src]
+  A = "src/a.bas"
+  B = { path = "src/b.cls" }
+
+  [dependencies]
+  dictionary = "^1"
+  from-path = { path = "packages/from-path" }
+```
+*/
+
+/**
+ * Snapshot is the minimal manifest needed to support both Manifest
+ * and info loaded during dependency resolution
+ */
 export interface Snapshot {
   name: string;
   version: Version;
   dependencies: Dependency[];
 }
 
-export interface Metadata {
-  authors: string[];
-  publish: boolean;
-  [name: string]: any;
-
-  __temp_defaults?: string[];
-}
-
 export type ManifestType = 'package' | 'project';
+
+export interface Metadata {
+  authors?: string[];
+  publish?: boolean;
+  [name: string]: any;
+}
 
 export interface Manifest extends Snapshot {
   type: ManifestType;
@@ -36,26 +60,7 @@ export interface Manifest extends Snapshot {
   src: Source[];
   references: Reference[];
   target?: Target;
-  dir: string;
 }
-
-/**
- * @example
- * ```toml
- * [package]
- * name = "package-name"
- * version = "1.0.0"
- * authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
- *
- * [src]
- * A = "src/a.bas"
- * B = { path = "src/b.cls" }
- *
- * [dependencies]
- * dictionary = "^1"
- * from-path = { path = "packages/from-path" }
- * ```
- */
 
 const EXAMPLE = `Example vba-block.toml for a package (e.g. library to be shared):
 
@@ -76,27 +81,21 @@ export function parseManifest(value: any, dir: string): Manifest {
     `A [package] or [project] section is required. \n\n${EXAMPLE}`
   );
 
-  const defaults = [];
-  let type: ManifestType,
-    name: string,
-    version: string,
-    authors: string[],
-    publish: boolean,
-    target: Target | undefined;
+  let type: ManifestType;
+  let name: string;
+  let version: string;
+  let authors: string[] | undefined;
+  let publish: boolean | undefined;
+  let target: Target | undefined;
+
   if (value.project) {
     type = 'project';
     name = value.project.name;
-    version = value.project.version || '0.0.0';
-    authors = value.project.authors || [];
-    publish = false;
+    version = value.project.version || DEFAULT_VERSION;
+    authors = value.project.authors;
 
     manifestOk(name, `[project] name is a required field. \n\n${EXAMPLE}`);
     manifestOk(value.project.target, `[project] target is a required field. \n\n${EXAMPLE}`);
-
-    // Store defaults to distinguish from user-set values
-    if (!value.project.version) defaults.push('version');
-    if (!value.project.authors) defaults.push('authors');
-    defaults.push('publish');
 
     target = parseTarget(value.project.target, name, dir);
   } else {
@@ -104,13 +103,11 @@ export function parseManifest(value: any, dir: string): Manifest {
     name = value.package.name;
     version = value.package.version;
     authors = value.package.authors;
-    publish = value.package.publish || false;
+    publish = value.package.publish;
 
     manifestOk(name, `[package] name is a required field. \n\n${EXAMPLE}`);
     manifestOk(version, `[package] version is a required field. \n\n${EXAMPLE}`);
     manifestOk(authors, `[package] authors is a required field. \n\n${EXAMPLE}`);
-
-    if (!('publish' in value.package)) defaults.push('publish');
 
     target = value.package.target && parseTarget(value.package.target, name, dir);
   }
@@ -123,12 +120,11 @@ export function parseManifest(value: any, dir: string): Manifest {
     type,
     name,
     version,
-    metadata: { authors, publish, __temp_defaults: defaults },
+    metadata: { authors, publish },
     src,
     dependencies,
     references,
-    target,
-    dir
+    target
   };
 }
 
@@ -142,7 +138,7 @@ export async function loadManifest(dir: string): Promise<Manifest> {
         vba-blocks.toml not found in "${dir}".
 
         Try "vba-blocks init" to start a new project in this directory
-        or "cd YOUR_PROJECTs_DIRECTORY" to change to a folder that contains an existing project.
+        or "cd YOUR_PROJECTS_DIRECTORY" to change to a folder that contains an existing project.
       `
     );
   }
@@ -169,7 +165,7 @@ export async function loadManifest(dir: string): Promise<Manifest> {
 }
 
 export async function writeManifest(manifest: Manifest, dir: string) {
-  const value = manifestToValue(manifest);
+  const value = manifestToValue(manifest, dir);
   const path = join(dir, 'vba-block.toml');
   let toml: string;
 
@@ -183,18 +179,18 @@ export async function writeManifest(manifest: Manifest, dir: string) {
   await writeFile(path, toml);
 }
 
-function manifestToValue(manifest: Manifest): any {
+function manifestToValue(manifest: Manifest, dir: string): any {
   const {
     type,
     name,
     version,
-    metadata: { authors, publish, __temp_defaults: defaults = [], ...metadata }
+    metadata: { authors, publish, ...metadata }
   } = manifest;
 
   const values: any = { name };
-  if (!defaults.includes('version')) values.version = version;
-  if (!defaults.includes('authors')) values.authors = authors;
-  if (!defaults.includes('publish')) values.publish = publish;
+  if (version !== DEFAULT_VERSION) values.version = version;
+  if (authors != null) values.authors = authors;
+  if (publish != null) values.publish = publish;
   Object.assign(values, metadata);
 
   const value: any = {
@@ -203,14 +199,14 @@ function manifestToValue(manifest: Manifest): any {
 
   value.src = {};
   manifest.src.forEach(source => {
-    let { name, path, optional } = source;
-    path = relative(manifest.dir, path);
-    value.src[name] = optional ? { path, optional } : path;
+    let { name, path } = source;
+    path = relative(dir, path);
+    value.src[name] = path;
   });
 
   if (manifest.target) {
     let { name, type: target_type, path } = manifest.target;
-    path = relative(manifest.dir, path);
+    path = relative(dir, path);
 
     let target: string | { type: string; name?: string; path?: string };
     if (name !== manifest.name || path !== 'target') {
@@ -245,8 +241,9 @@ function manifestToValue(manifest: Manifest): any {
   if (manifest.references.length) {
     value.references = {};
     manifest.references.forEach(reference => {
-      const { name, version, guid, optional } = reference;
-      value.references[name] = optional ? { version, guid, optional } : { version, guid };
+      const { name, guid, major, minor } = reference;
+      const version = `${major}.${minor}`;
+      value.references[name] = { version, guid };
     });
   }
 

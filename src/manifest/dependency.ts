@@ -1,9 +1,25 @@
 import { manifestOk } from '../errors';
 import has from '../utils/has';
 import { isString } from '../utils/is';
-import { join, trailing } from '../utils/path';
+import { extname, join, trailing } from '../utils/path';
+import { Version } from './version';
 
-export type Version = string;
+/*
+  # Dependency
+
+  Three types of dependencies: registry, path, and git
+
+  - registry: version | { version, registry? }
+
+    Registry (default = "vba-blocks"):
+    index + packages are loading in config and used for resolve and fetching
+
+  - path: path
+  - git: { git, branch?, tag?, rev? }
+
+    Where git is path to git remote and revision is pulled from
+    master, branch, tag, or rev
+*/
 
 export interface DependencyDetails {
   name: string;
@@ -32,7 +48,7 @@ const EXAMPLE = `Example vba-block.toml:
 
   [dependencies]
   a = "^1.0.0"
-  b = { version = "^0.1.0", optional = true }
+  b = { version = "^0.1.0" }
   c = { path = "packages/c" }
   d = { git = "https://github.com/author/d" }
   e = { git = "https://github.com/author/e", branch = "next" }
@@ -49,7 +65,7 @@ export function parseDependencies(value: any, dir: string): Dependency[] {
 export function parseDependency(name: string, value: Version | any, dir: string): Dependency {
   if (isString(value)) value = { version: value };
 
-  const {
+  let {
     registry = 'vba-blocks',
     version,
     path,
@@ -69,19 +85,19 @@ export function parseDependency(name: string, value: Version | any, dir: string)
 
   manifestOk(
     version || path || git,
-    `Invalid dependency "${name}", no version, path, or git specified. ${EXAMPLE}`
+    `Invalid dependency "${name}", no version, path, or git specified. \n\n${EXAMPLE}`
   );
 
-  const details = { name };
-
   if (version) {
-    return { ...details, registry, version };
+    return { name, registry, version };
   } else if (path) {
-    return { ...details, path: trailing(join(dir, path)) };
+    return { name, path: trailing(join(dir, path)) };
   } else {
-    if (rev) return { ...details, git: git!, rev };
-    else if (tag) return { ...details, git: git!, tag };
-    else return { ...details, git: git!, branch };
+    git = ensureGitUrl(git!);
+
+    if (rev) return { name, git, rev };
+    else if (tag) return { name, git, tag };
+    else return { name, git, branch };
   }
 }
 
@@ -95,4 +111,10 @@ export function isPathDependency(dependency: Dependency): dependency is PathDepe
 
 export function isGitDependency(dependency: Dependency): dependency is GitDependency {
   return has(dependency, 'git');
+}
+
+function ensureGitUrl(value: string): string {
+  if (extname(value!) === '.git') return value;
+
+  return `${value}.git`;
 }

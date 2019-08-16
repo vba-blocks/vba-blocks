@@ -4,8 +4,14 @@ import { Target, TargetType } from '../manifest/target';
 import { Project } from '../project';
 import { sanitize } from '../utils/path';
 
-export default function getTarget(project: Project, target_type: string | undefined): Target {
+export interface TargetInfo {
+  target: Target;
+  blank_target: boolean;
+}
+
+export default function getTarget(project: Project, target_type: string | undefined): TargetInfo {
   let target: Target | undefined;
+  let blank_target = false;
   if (target_type) {
     if (project.manifest.target) {
       // For defined target, --target TYPE must match target.type
@@ -21,9 +27,9 @@ export default function getTarget(project: Project, target_type: string | undefi
         type,
         name,
         path: 'target',
-        filename: `${sanitize(name)}.${type}`,
-        blank: true
+        filename: `${sanitize(name)}.${type}`
       };
+      blank_target = true;
     }
 
     if (!target) {
@@ -54,5 +60,5 @@ export default function getTarget(project: Project, target_type: string | undefi
     );
   }
 
-  return target;
+  return { target, blank_target };
 }

@@ -4,7 +4,7 @@ import { Manifest } from '../manifest';
 import { Reference } from '../manifest/reference';
 import { Project } from '../project';
 import { joinCommas } from '../utils/text';
-import { BuildGraph } from './build-graph';
+import { BuildGraph, FromDependences } from './build-graph';
 import { byComponentName, Component } from './component';
 
 export default async function loadFromProject(
@@ -15,14 +15,18 @@ export default async function loadFromProject(
   const loading_components: Promise<Component>[] = [];
   const references: Reference[] = [];
   const found_references: { [name_guid: string]: boolean } = {};
+  const from_dependencies: FromDependences = { components: new Map(), references: new Map() };
 
   // Load components and references from project and dependencies
   for (const manifest of manifests) {
     for (const source of manifest.src) {
       loading_components.push(
-        Component.load(source.path, {
-          dependency: manifest === project.manifest ? undefined : manifest.name,
-          binary_path: source.binary
+        Component.load(source.path, { binary_path: source.binary }).then(component => {
+          if (manifest !== project.manifest) {
+            from_dependencies.components.set(component, manifest.name);
+          }
+
+          return component;
         })
       );
     }
@@ -30,14 +34,17 @@ export default async function loadFromProject(
       const name_guid = `${reference.name}_${reference.guid}`;
       if (found_references[name_guid]) continue;
 
-      const dependency = manifest === project.manifest ? undefined : manifest.name;
-      references.push(Object.assign({ details: { dependency } }, reference));
+      references.push(reference);
+      if (manifest !== project.manifest) {
+        from_dependencies.references.set(reference, manifest.name);
+      }
+
       found_references[name_guid] = true;
     }
   }
 
   const components = (await Promise.all(loading_components)).sort(byComponentName);
-  const graph = { name: 'VBAProject', components, references };
+  const graph = { name: 'VBAProject', components, references, from_dependencies };
 
   validateGraph(project, graph);
   return graph;
@@ -50,7 +57,10 @@ function validateGraph(project: Project, graph: BuildGraph) {
 
   for (const component of graph.components) {
     if (!components_by_name[component.name]) components_by_name[component.name] = [];
-    components_by_name[component.name].push(component.details.dependency || project.manifest.name);
+
+    const manifest_name =
+      graph.from_dependencies.components.get(component) || project.manifest.name;
+    components_by_name[component.name].push(manifest_name);
   }
   for (const reference of graph.references) {
     if (!references_by_name[reference.name]) references_by_name[reference.name] = [];
@@ -65,7 +75,7 @@ function validateGraph(project: Project, graph: BuildGraph) {
   }
   for (const [name, references] of Object.entries(references_by_name)) {
     if (references.length > 1) {
-      const versions = references.map(reference => reference.version);
+      const versions = references.map(reference => `${reference.major}.${reference.minor}`);
       errors.push(`Reference "${name}" has multiple versions: ${joinCommas(versions)}`);
     }
   }

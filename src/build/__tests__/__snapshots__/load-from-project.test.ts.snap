@@ -3,6 +3,10 @@
 exports[`should load BuildGraph from empty project 1`] = `
 Object {
   "components": Array [],
+  "from_dependencies": Object {
+    "components": Object {},
+    "references": Object {},
+  },
   "name": "VBAProject",
   "references": Array [],
 }
@@ -23,7 +27,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = Fa...",
       "details": Object {
-        "dependency": undefined,
         "path": "projects/complex/src/Class1.cls",
       },
       "filename": "Class1.cls",
@@ -42,7 +45,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed ...",
       "details": Object {
-        "dependency": "dictionary",
         "path": ".vba-blocks/sources/vba-blocks/dictionary-v1.4.1/Dictionary.cls",
       },
       "filename": "Dictionary.cls",
@@ -61,7 +63,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_E...",
       "details": Object {
-        "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/IWebAuthenticator.cls",
       },
       "filename": "IWebAuthenticator.cls",
@@ -83,7 +84,6 @@ Attribute VB_E...",
 ' @class JsonConverter
 ' @autho...",
       "details": Object {
-        "dependency": "json",
         "path": ".vba-blocks/sources/vba-blocks/json-v2.3.0/JsonConverter.bas",
       },
       "filename": "JsonConverter.bas",
@@ -102,7 +102,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = Tru...",
       "details": Object {
-        "dependency": undefined,
         "path": "projects/complex/src/Sheet1.cls",
       },
       "filename": "Sheet1.cls",
@@ -121,7 +120,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = Tru...",
       "details": Object {
-        "dependency": undefined,
         "path": "projects/complex/src/Sheet2.cls",
       },
       "filename": "Sheet2.cls",
@@ -140,7 +138,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = Tru...",
       "details": Object {
-        "dependency": undefined,
         "path": "projects/complex/src/Sheet3.cls",
       },
       "filename": "Sheet3.cls",
@@ -159,7 +156,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed...",
       "details": Object {
-        "dependency": undefined,
         "path": "projects/complex/src/ThisWorkbook.cls",
       },
       "filename": "ThisWorkbook.cls",
@@ -176,7 +172,6 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1
    ClientTop       =   465
    ClientWidth     =...",
       "details": Object {
-        "dependency": undefined,
         "path": "projects/complex/src/UserForm1.frm",
       },
       "filename": "UserForm1.frm",
@@ -194,7 +189,6 @@ Public Function Validate() As String
     If ThisWorkbook.VBProject.VBComponents.Count <> 9 Then
         Err...",
       "details": Object {
-        "dependency": undefined,
         "path": "projects/complex/src/Validation.bas",
       },
       "filename": "Validation.bas",
@@ -213,7 +207,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed =...",
       "details": Object {
-        "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebClient.cls",
       },
       "filename": "WebClient.cls",
@@ -232,7 +225,6 @@ Attribute VB_Exposed =...",
 ' - Logging
 ' -...",
       "details": Object {
-        "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebHelpers.bas",
       },
       "filename": "WebHelpers.bas",
@@ -251,7 +243,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed ...",
       "details": Object {
-        "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebRequest.cls",
       },
       "filename": "WebRequest.cls",
@@ -270,7 +261,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed...",
       "details": Object {
-        "dependency": "web",
         "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebResponse.cls",
       },
       "filename": "WebResponse.cls",
@@ -278,6 +268,18 @@ Attribute VB_Exposed...",
       "type": "class",
     },
   ],
+  "from_dependencies": Object {
+    "components": Object {
+      "Dictionary": "dictionary",
+      "IWebAuthenticator": "web",
+      "JsonConverter": "json",
+      "WebClient": "web",
+      "WebHelpers": "web",
+      "WebRequest": "web",
+      "WebResponse": "web",
+    },
+    "references": Object {},
+  },
   "name": "VBAProject",
   "references": Array [],
 }

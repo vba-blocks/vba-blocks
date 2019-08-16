@@ -9,20 +9,15 @@ Object {
       "version": "^4",
     },
   ],
-  "dir": "projects/complex",
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "complex",
   "references": Array [
     Object {
-      "details": undefined,
       "guid": "{0002E157-0000-0000-C000-000000000046}",
       "major": 5,
       "minor": 3,
@@ -33,33 +28,27 @@ Object {
   "src": Array [
     Object {
       "name": "ThisWorkbook",
-      "optional": false,
       "path": "projects/complex/src/ThisWorkbook.cls",
     },
     Object {
       "name": "Sheet1",
-      "optional": false,
       "path": "projects/complex/src/Sheet1.cls",
     },
     Object {
       "name": "Sheet2",
-      "optional": false,
       "path": "projects/complex/src/Sheet2.cls",
     },
     Object {
       "name": "Sheet3",
-      "optional": false,
       "path": "projects/complex/src/Sheet3.cls",
     },
     Object {
       "binary": "projects/complex/src/UserForm1.frx",
       "name": "UserForm1",
-      "optional": false,
       "path": "projects/complex/src/UserForm1.frm",
     },
     Object {
       "name": "Class1",
-      "optional": false,
       "path": "projects/complex/src/Class1.cls",
     },
     Object {

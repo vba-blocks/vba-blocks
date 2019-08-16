@@ -153,7 +153,6 @@ Object {
 name = \\"blank-package\\"
 version = \\"0.0.0\\"
 authors = []
-publish = true
 license = \\"UNLICENSED\\"
 
 [src]

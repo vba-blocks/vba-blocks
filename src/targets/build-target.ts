@@ -31,7 +31,7 @@ export default async function buildTarget(
 
   // Build fresh target in staging directory
   // (for no target path, create blank target)
-  const staged = !target.blank
+  const staged = !info.blank_target
     ? await createTarget(project, target)
     : await createDocument(project, target, { staging: true });
 

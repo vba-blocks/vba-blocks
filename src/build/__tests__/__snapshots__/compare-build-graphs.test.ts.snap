@@ -10,7 +10,6 @@ Object {
 ' (added)
 ",
         "details": Object {
-          "dependency": undefined,
           "path": undefined,
         },
         "filename": "Added.bas",
@@ -31,7 +30,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed...",
         "details": Object {
-          "dependency": undefined,
           "path": "projects/complex/src/ThisWorkbook.cls",
         },
         "filename": "ThisWorkbook.cls",
@@ -51,7 +49,6 @@ Public Function Validate() As String
     If ThisWorkbook.VBProject.VBComponents.Count <> 9 Then
         Err...",
         "details": Object {
-          "dependency": undefined,
           "path": "projects/complex/src/Validation.bas",
         },
         "filename": "Validation.bas",
@@ -63,9 +60,6 @@ Public Function Validate() As String
   "references": Object {
     "added": Array [
       Object {
-        "details": Object {
-          "dependency": undefined,
-        },
         "guid": "{0002E157-0000-0000-C000-000000000046}",
         "major": 5,
         "minor": 3,

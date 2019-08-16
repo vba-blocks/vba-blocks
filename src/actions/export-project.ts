@@ -31,6 +31,7 @@ export default async function exportProject(options: ExportOptions = {}) {
   }
 
   let target: Target | undefined;
+  let blank_target = false;
   if (project.manifest.target) {
     if (!options.target || options.target === project.manifest.target.type) {
       target = project.manifest.target;
@@ -43,9 +44,9 @@ export default async function exportProject(options: ExportOptions = {}) {
       type,
       name,
       path: `targets/${type}`,
-      filename: `${sanitize(name)}.${type}`,
-      blank: true
+      filename: `${sanitize(name)}.${type}`
     };
+    blank_target = true;
   }
 
   if (!target) {
@@ -72,7 +73,7 @@ export default async function exportProject(options: ExportOptions = {}) {
     }
 
     env.reporter.log(Message.ExportToProject, `\n[3/3] Updating project`);
-    await exportTarget(target, { project, dependencies }, staging);
+    await exportTarget(target, { project, dependencies, blank_target }, staging);
   } catch (err) {
     throw err;
   } finally {
