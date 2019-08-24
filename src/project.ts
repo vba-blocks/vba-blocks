@@ -130,9 +130,12 @@ export async function initProject(
       authors,
       license
     },
-    dependencies: [],
     src: [],
-    references: []
+    dependencies: [],
+    references: [],
+    devSrc: [],
+    devDependencies: [],
+    devReferences: []
   };
 
   const workspace = await loadWorkspace(manifest, dir);

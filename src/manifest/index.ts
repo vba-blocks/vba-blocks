@@ -59,6 +59,9 @@ export interface Manifest extends Snapshot {
   metadata: Metadata;
   src: Source[];
   references: Reference[];
+  devSrc: Source[];
+  devDependencies: Dependency[];
+  devReferences: Reference[];
   target?: Target;
 }
 
@@ -116,6 +119,10 @@ export function parseManifest(value: any, dir: string): Manifest {
   const dependencies = parseDependencies(value.dependencies || {}, dir);
   const references = parseReferences(value.references || {});
 
+  const devSrc = parseSrc(value['dev-src'] || {}, dir);
+  const devDependencies = parseDependencies(value['dev-dependencies'] || {}, dir);
+  const devReferences = parseReferences(value['dev-references'] || {});
+
   return {
     type,
     name,
@@ -124,6 +131,9 @@ export function parseManifest(value: any, dir: string): Manifest {
     src,
     dependencies,
     references,
+    devSrc,
+    devDependencies,
+    devReferences,
     target
   };
 }

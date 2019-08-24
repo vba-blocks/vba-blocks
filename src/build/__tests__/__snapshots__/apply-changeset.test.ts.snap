@@ -9,6 +9,9 @@ Object {
       "version": "^4",
     },
   ],
+  "devDependencies": Array [],
+  "devReferences": Array [],
+  "devSrc": Array [],
   "metadata": Object {
     "authors": Array [
       "Tim Hall",

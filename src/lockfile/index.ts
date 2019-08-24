@@ -10,6 +10,7 @@ import {
   isPathDependency,
   isRegistryDependency
 } from '../manifest/dependency';
+import { DEFAULT_VERSION } from '../manifest/version';
 import { Workspace } from '../professional/workspace';
 import { getRegistration } from '../resolve';
 import { DependencyGraph } from '../resolve/dependency-graph';
@@ -196,6 +197,10 @@ function prepareManifest(manifest: Snapshot, packages: DependencyGraph, dir: str
   const dependencies = manifest.dependencies.map(dependency =>
     toDependencyId(dependency, packages, dir)
   );
+
+  if (version === DEFAULT_VERSION) {
+    return { name, dependencies };
+  }
 
   return {
     name,
