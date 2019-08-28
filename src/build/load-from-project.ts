@@ -3,15 +3,25 @@ import { CliError, ErrorCode } from '../errors';
 import { Manifest } from '../manifest';
 import { Reference } from '../manifest/reference';
 import { Project } from '../project';
+import { BuildOptions } from '../targets/build-target';
 import { joinCommas } from '../utils/text';
 import { BuildGraph, FromDependences } from './build-graph';
 import { byComponentName, Component } from './component';
 
 export default async function loadFromProject(
   project: Project,
-  dependencies: Manifest[]
+  dependencies: Manifest[],
+  options: BuildOptions = {}
 ): Promise<BuildGraph> {
-  const manifests = [project.manifest, ...dependencies];
+  let included_dependencies = dependencies;
+  if (options.release) {
+    const dev_dependencies = project.manifest.devDependencies.map(dependency => dependency.name);
+    included_dependencies = dependencies.filter(manifest => {
+      return !dev_dependencies.includes(manifest.name);
+    });
+  }
+
+  const manifests = [project.manifest, ...included_dependencies];
   const loading_components: Promise<Component>[] = [];
   const references: Reference[] = [];
   const found_references: { [name_guid: string]: boolean } = {};
@@ -39,6 +49,19 @@ export default async function loadFromProject(
         from_dependencies.references.set(reference, manifest.name);
       }
 
+      found_references[name_guid] = true;
+    }
+  }
+
+  if (options.release) {
+    for (const source of project.manifest.devSrc) {
+      loading_components.push(Component.load(source.path, { binary_path: source.binary }));
+    }
+    for (const reference of project.manifest.references) {
+      const name_guid = `${reference.name}_${reference.guid}`;
+      if (found_references[name_guid]) continue;
+
+      references.push(reference);
       found_references[name_guid] = true;
     }
   }

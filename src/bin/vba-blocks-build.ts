@@ -13,6 +13,7 @@ const help = dedent`
 
   Options:
     --target=TYPE   Build target of type TYPE
+    --release       Exclude dev-* items from build
     --open          Open built target`;
 
 export default async function(args: Args) {

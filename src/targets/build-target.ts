@@ -10,6 +10,7 @@ import { zip } from '../utils/zip';
 import { ProjectInfo } from './project-info';
 
 export interface BuildOptions {
+  release?: boolean;
   target?: string;
   addin?: string;
 }
@@ -98,7 +99,7 @@ export async function importTarget(
   await ensureDir(staging);
   await emptyDir(staging);
 
-  const build_graph = await loadFromProject(project, dependencies);
+  const build_graph = await loadFromProject(project, dependencies, options);
   const import_graph = await stageBuildGraph(build_graph, staging);
 
   try {
