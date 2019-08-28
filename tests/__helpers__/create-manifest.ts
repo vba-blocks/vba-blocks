@@ -1,9 +1,15 @@
-import { Manifest, Dependency } from '../../src/manifest';
-import { RegistryDependency } from '../../src/manifest/dependency';
-import { dir as FIXTURES } from '../__fixtures__';
+import { Manifest } from '../../src/manifest';
+import { Dependency, RegistryDependency } from '../../src/manifest/dependency';
 
 export default function createManifest(options: any): Manifest {
-  const { package: pkg, project, src = [], references = [], dir = FIXTURES } = options;
+  const {
+    package: pkg,
+    project,
+    src = [],
+    references = [],
+    devSrc = [],
+    devReferences = []
+  } = options;
 
   const { name = 'testing', version = '0.0.0', authors = [], publish = false, target } =
     pkg || project;
@@ -11,6 +17,10 @@ export default function createManifest(options: any): Manifest {
     options.dependencies && !Array.isArray(options.dependencies)
       ? toDependencies(options.dependencies)
       : options.dependencies || [];
+  const devDependencies =
+    options.devDependencies && !Array.isArray(options.devDependencies)
+      ? toDependencies(options.devDependencies)
+      : options.devDependencies || [];
 
   return {
     type: pkg ? 'package' : 'project',
@@ -20,8 +30,10 @@ export default function createManifest(options: any): Manifest {
     src,
     dependencies,
     references,
-    target,
-    dir
+    devSrc,
+    devDependencies,
+    devReferences,
+    target
   };
 }
 

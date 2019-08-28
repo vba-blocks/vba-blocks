@@ -1,36 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`load valid references 1`] = `
-Object {
-  "dependencies": Array [],
-  "dir": ".",
-  "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
-    "authors": Array [
-      "Tim Hall",
-    ],
-    "publish": false,
-  },
-  "name": "package-name",
-  "references": Array [
-    Object {
-      "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
-      "major": 1,
-      "minor": 0,
-      "name": "a",
-      "optional": true,
-      "version": "1.0",
-    },
-  ],
-  "src": Array [],
-  "target": undefined,
-  "type": "package",
-  "version": "1.0.0",
-}
-`;
-
 exports[`loads and parses manifest 1`] = `
 Object {
   "dependencies": Array [
@@ -40,15 +9,14 @@ Object {
       "version": "^2",
     },
   ],
-  "dir": ".",
+  "devDependencies": Array [],
+  "devReferences": Array [],
+  "devSrc": Array [],
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "standard",
   "references": Array [
@@ -57,39 +25,31 @@ Object {
       "major": 5,
       "minor": 3,
       "name": "VBIDE",
-      "optional": false,
-      "version": "5.3",
     },
   ],
   "src": Array [
     Object {
       "name": "ThisWorkbook",
-      "optional": false,
       "path": "src/ThisWorkbook.cls",
     },
     Object {
       "name": "Sheet1",
-      "optional": false,
       "path": "src/Sheet1.cls",
     },
     Object {
       "name": "Sheet2",
-      "optional": false,
       "path": "src/Sheet2.cls",
     },
     Object {
       "name": "Sheet3",
-      "optional": false,
       "path": "src/Sheet3.cls",
     },
     Object {
       "name": "Validation",
-      "optional": false,
       "path": "src/Validation.bas",
     },
     Object {
       "name": "Class1",
-      "optional": false,
       "path": "src/Class1.cls",
     },
   ],
@@ -101,6 +61,124 @@ Object {
   },
   "type": "project",
   "version": "0.0.0",
+}
+`;
+
+exports[`loads valid [dev-dependencies] 1`] = `
+Object {
+  "dependencies": Array [],
+  "devDependencies": Array [
+    Object {
+      "name": "a",
+      "registry": "vba-blocks",
+      "version": "^1.0.0",
+    },
+    Object {
+      "name": "b",
+      "registry": "vba-blocks",
+      "version": "^2.0.0",
+    },
+    Object {
+      "name": "c",
+      "path": "packages/d",
+    },
+    Object {
+      "branch": "master",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
+      "name": "d",
+    },
+    Object {
+      "branch": "next",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
+      "name": "e",
+    },
+    Object {
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
+      "name": "f",
+      "tag": "v1.0.0",
+    },
+    Object {
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
+      "name": "g",
+      "rev": "a1b2c3d4",
+    },
+  ],
+  "devReferences": Array [],
+  "devSrc": Array [],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "publish": undefined,
+  },
+  "name": "package-name",
+  "references": Array [],
+  "src": Array [],
+  "target": undefined,
+  "type": "package",
+  "version": "1.0.0",
+}
+`;
+
+exports[`loads valid [dev-references] 1`] = `
+Object {
+  "dependencies": Array [],
+  "devDependencies": Array [],
+  "devReferences": Array [
+    Object {
+      "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
+      "major": 1,
+      "minor": 0,
+      "name": "a",
+    },
+  ],
+  "devSrc": Array [],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "publish": undefined,
+  },
+  "name": "package-name",
+  "references": Array [],
+  "src": Array [],
+  "target": undefined,
+  "type": "package",
+  "version": "1.0.0",
+}
+`;
+
+exports[`loads valid [dev-src] 1`] = `
+Object {
+  "dependencies": Array [],
+  "devDependencies": Array [],
+  "devReferences": Array [],
+  "devSrc": Array [
+    Object {
+      "name": "A",
+      "path": "src/a.bas",
+    },
+    Object {
+      "name": "B",
+      "path": "src/b.cls",
+    },
+    Object {
+      "name": "C",
+      "path": "src/c.frm",
+    },
+  ],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "publish": undefined,
+  },
+  "name": "package-name",
+  "references": Array [],
+  "src": Array [],
+  "target": undefined,
+  "type": "package",
+  "version": "1.0.0",
 }
 `;
 
@@ -123,34 +201,33 @@ Object {
     },
     Object {
       "branch": "master",
-      "git": "https://github.com/VBA-tools/VBA-Web",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
       "name": "d",
     },
     Object {
       "branch": "next",
-      "git": "https://github.com/VBA-tools/VBA-Web",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
       "name": "e",
     },
     Object {
-      "git": "https://github.com/VBA-tools/VBA-Web",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
       "name": "f",
       "tag": "v1.0.0",
     },
     Object {
-      "git": "https://github.com/VBA-tools/VBA-Web",
+      "git": "https://github.com/VBA-tools/VBA-Web.git",
       "name": "g",
       "rev": "a1b2c3d4",
     },
   ],
-  "dir": ".",
+  "devDependencies": Array [],
+  "devReferences": Array [],
+  "devSrc": Array [],
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],
@@ -164,15 +241,14 @@ Object {
 exports[`loads valid package metadata 1`] = `
 Object {
   "dependencies": Array [],
-  "dir": ".",
+  "devDependencies": Array [],
+  "devReferences": Array [],
+  "devSrc": Array [],
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],
@@ -183,35 +259,59 @@ Object {
 }
 `;
 
-exports[`loads valid sources 1`] = `
+exports[`loads valid references 1`] = `
 Object {
   "dependencies": Array [],
-  "dir": ".",
+  "devDependencies": Array [],
+  "devReferences": Array [],
+  "devSrc": Array [],
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
+  },
+  "name": "package-name",
+  "references": Array [
+    Object {
+      "guid": "{420B2830-E718-11CF-893D-00A0C9054228}",
+      "major": 1,
+      "minor": 0,
+      "name": "a",
+    },
+  ],
+  "src": Array [],
+  "target": undefined,
+  "type": "package",
+  "version": "1.0.0",
+}
+`;
+
+exports[`loads valid sources 1`] = `
+Object {
+  "dependencies": Array [],
+  "devDependencies": Array [],
+  "devReferences": Array [],
+  "devSrc": Array [],
+  "metadata": Object {
+    "authors": Array [
+      "Tim Hall",
+    ],
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],
   "src": Array [
     Object {
       "name": "A",
-      "optional": false,
       "path": "src/a.bas",
     },
     Object {
       "name": "B",
-      "optional": false,
       "path": "src/b.cls",
     },
     Object {
       "name": "C",
-      "optional": true,
       "path": "src/c.frm",
     },
   ],
@@ -224,15 +324,14 @@ Object {
 exports[`loads valid target 1`] = `
 Object {
   "dependencies": Array [],
-  "dir": ".",
+  "devDependencies": Array [],
+  "devReferences": Array [],
+  "devSrc": Array [],
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],
@@ -251,15 +350,14 @@ Object {
 exports[`loads valid target 2`] = `
 Object {
   "dependencies": Array [],
-  "dir": ".",
+  "devDependencies": Array [],
+  "devReferences": Array [],
+  "devSrc": Array [],
   "metadata": Object {
-    "__temp_defaults": Array [
-      "publish",
-    ],
     "authors": Array [
       "Tim Hall",
     ],
-    "publish": false,
+    "publish": undefined,
   },
   "name": "package-name",
   "references": Array [],

@@ -26,17 +26,12 @@ export interface ExportOptions {}
  * 3. Export build graph to src
  * 4. Move extracted to target to src
  */
-export default async function exportTarget(
-  target: Target,
-  info: ProjectInfo,
-  staging: string,
-  options: ExportOptions = {}
-) {
-  const { project, dependencies } = info;
+export default async function exportTarget(target: Target, info: ProjectInfo, staging: string) {
+  const { project, dependencies, blank_target } = info;
 
   // Extract target to staging
   let extracted: string;
-  if (!target.blank) {
+  if (!blank_target) {
     extracted = await extractTarget(project, target, staging);
   }
 
@@ -49,7 +44,7 @@ export default async function exportTarget(
   await applyChangeset(project, changeset);
 
   // Move target to dest
-  if (!target.blank) {
+  if (!blank_target) {
     await remove(target.path);
     await copy(extracted!, target.path);
   }

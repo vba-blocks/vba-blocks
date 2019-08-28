@@ -40,8 +40,8 @@ export async function loadProject(dir: string = env.cwd): Promise<Project> {
   const manifest = await loadManifest(dir);
 
   const config = await loadConfig();
-  const workspace = await loadWorkspace(manifest);
-  const lockfile = await readLockfile(workspace.root.dir);
+  const workspace = await loadWorkspace(manifest, dir);
+  const lockfile = await readLockfile(workspace.paths.root);
 
   // Resolve packages from lockfile or from sources
   const has_dirty_lockfile = !lockfile || !(await isLockfileValid(lockfile, workspace));
@@ -52,10 +52,10 @@ export async function loadProject(dir: string = env.cwd): Promise<Project> {
     : await resolve(config, workspace, lockfile ? lockfile.packages : []);
 
   const paths = {
-    root: workspace.root.dir,
-    dir: manifest.dir,
-    build: join(manifest.dir, 'build'),
-    backup: join(manifest.dir, 'build', '.backup'),
+    root: workspace.paths.root,
+    dir,
+    build: join(dir, 'build'),
+    backup: join(dir, 'build', '.backup'),
     staging: await tmpFolder({ dir: env.staging })
   };
 
@@ -119,7 +119,6 @@ export async function initProject(
   const version = '0.0.0';
   const authors: string[] = [];
   const license = 'UNLICENSED';
-  const __temp_defaults: string[] = type === 'package' ? [] : ['publish'];
 
   // Manually generate manifest and project
   // (may be included in project in the future)
@@ -129,17 +128,17 @@ export async function initProject(
     version,
     metadata: {
       authors,
-      publish: type === 'package',
-      license,
-      __temp_defaults
+      license
     },
-    dependencies: [],
     src: [],
+    dependencies: [],
     references: [],
-    dir
+    devSrc: [],
+    devDependencies: [],
+    devReferences: []
   };
 
-  const workspace = await loadWorkspace(manifest);
+  const workspace = await loadWorkspace(manifest, dir);
 
   const project: Project = {
     manifest,
@@ -147,7 +146,7 @@ export async function initProject(
     packages: [],
     config,
     paths: {
-      root: workspace.root.dir,
+      root: workspace.paths.root,
       dir,
       build: join(dir, 'build'),
       backup: join(dir, 'build', '.backup'),

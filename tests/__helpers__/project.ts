@@ -1,11 +1,10 @@
-import env from '../../src/env';
-import { reset as resetFs } from '../../src/utils/fs';
-import { pull } from '../../src/utils/git';
-import { join } from '../../src/utils/path';
 import { loadConfig } from '../../src/config';
-import { loadProject, fetchDependencies } from '../../src/project';
+import env from '../../src/env';
 import { loadManifest } from '../../src/manifest';
 import { loadWorkspace } from '../../src/professional/workspace';
+import { fetchDependencies, loadProject } from '../../src/project';
+import { reset as resetFs } from '../../src/utils/fs';
+import { join } from '../../src/utils/path';
 import { cache } from '../__fixtures__';
 
 jest.mock('../../src/utils/fs');
@@ -42,7 +41,7 @@ export async function setupWorkspace(cwd: string) {
 
   const manifest = await loadManifest(cwd);
   const config = await loadConfig();
-  const workspace = await loadWorkspace(manifest);
+  const workspace = await loadWorkspace(manifest, cwd);
 
   return {
     manifest,

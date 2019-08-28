@@ -7,7 +7,7 @@ export async function toCompiled(graph: BuildGraph): Promise<BuildGraph> {
 
 export async function toSrc(graph: BuildGraph): Promise<BuildGraph> {
   // First, normalize line-endings to CRLF
-  const { name, references } = graph;
+  const { name, references, from_dependencies } = graph;
   const components = graph.components.map(component => {
     const code = component.code;
     const lines = code.split(BY_LINE);
@@ -17,5 +17,5 @@ export async function toSrc(graph: BuildGraph): Promise<BuildGraph> {
     return component;
   });
 
-  return { name, components, references };
+  return { name, components, references, from_dependencies };
 }

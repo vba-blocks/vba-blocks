@@ -10,7 +10,7 @@ export default async function solve(
   workspace: Workspace,
   resolver: Resolver
 ): Promise<DependencyGraph> {
-  const dependencies = workspace.root.dependencies;
+  const dependencies = workspace.root.dependencies.concat(workspace.root.devDependencies);
   await resolveDependencies(dependencies, resolver);
 
   const graph = [];

@@ -5,7 +5,7 @@ import { Registration } from '../../sources/registration';
 import { Source } from '../../sources/source';
 
 const message = dedent`
-  git dependencies are not support.
+  git dependencies are not currently supported.
 
   Upgrade to Professional Edition (coming soon) for git dependencies and more.
 `;

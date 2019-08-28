@@ -1,7 +1,7 @@
 import { standardExport } from '../../../tests/__fixtures__';
-import { setupEnvironment, reset } from '../../../tests/__helpers__/project';
-import { normalizeBuildGraph } from './load-from-project.test';
+import { reset, setupEnvironment } from '../../../tests/__helpers__/project';
 import loadFromExport from '../load-from-export';
+import { normalizeBuildGraph } from '../__helpers__/build-graph';
 
 afterAll(reset);
 

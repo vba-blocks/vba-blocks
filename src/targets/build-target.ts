@@ -10,6 +10,7 @@ import { zip } from '../utils/zip';
 import { ProjectInfo } from './project-info';
 
 export interface BuildOptions {
+  release?: boolean;
   target?: string;
   addin?: string;
 }
@@ -31,7 +32,7 @@ export default async function buildTarget(
 
   // Build fresh target in staging directory
   // (for no target path, create blank target)
-  const staged = !target.blank
+  const staged = !info.blank_target
     ? await createTarget(project, target)
     : await createDocument(project, target, { staging: true });
 
@@ -98,7 +99,7 @@ export async function importTarget(
   await ensureDir(staging);
   await emptyDir(staging);
 
-  const build_graph = await loadFromProject(project, dependencies);
+  const build_graph = await loadFromProject(project, dependencies, options);
   const import_graph = await stageBuildGraph(build_graph, staging);
 
   try {

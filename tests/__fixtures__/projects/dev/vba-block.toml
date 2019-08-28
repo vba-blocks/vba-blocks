@@ -1,0 +1,16 @@
+[project]
+name = "dev"
+target = "xlsm"
+
+[src]
+Validation = "src/Validation.bas"
+
+[dependencies]
+dictionary = "^1"
+
+[dev-src]
+TestClass = "src/TestClass.cls"
+TestModule = "src/TestModule.bas"
+
+[dev-dependencies]
+json = "^2"

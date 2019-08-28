@@ -13,7 +13,7 @@ export default async function build(options: BuildOptions = {}): Promise<string>
   env.reporter.log(Message.BuildProjectLoading, `[1/3] Loading project...`);
 
   const project = await loadProject();
-  const target = getTarget(project, options.target);
+  const { target, blank_target } = getTarget(project, options.target);
 
   // Fetch relevant dependencies
   const dependencies = await fetchDependencies(project);
@@ -33,7 +33,7 @@ export default async function build(options: BuildOptions = {}): Promise<string>
       ${display_dependencies.length ? `\nDependencies:\n${display_dependencies.join('\n')}` : ''}`
   );
 
-  await buildTarget(target, { project, dependencies }, options);
+  await buildTarget(target, { project, dependencies, blank_target }, options);
 
   // Update lockfile (if necessary)
   const skip = !project.has_dirty_lockfile;
@@ -42,8 +42,8 @@ export default async function build(options: BuildOptions = {}): Promise<string>
     `\n[3/3] Writing lockfile...${skip ? ' (skipped, no changes)' : ''}`
   );
   if (!skip) {
-    await writeLockfile(project.workspace.root.dir, project);
+    await writeLockfile(project.paths.root, project);
   }
 
-  return join(project.manifest.dir, 'build', target.filename);
+  return join(project.paths.dir, 'build', target.filename);
 }

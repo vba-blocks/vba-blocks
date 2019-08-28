@@ -51,7 +51,6 @@ export default async function applyChangeset(project: Project, changeset: Change
 }
 
 async function updateManifest(project: Project, changeset: Changeset) {
-  const changes: string[] = [];
   for (const component of changeset.components.added) {
     const source: Source = {
       name: component.name,
@@ -67,10 +66,6 @@ async function updateManifest(project: Project, changeset: Changeset) {
   }
 
   for (let reference of changeset.references.added) {
-    // Remove "details" from reference
-    // TODO maybe details should live on wrapper object
-    reference = Object.assign({}, reference, { details: undefined });
-
     project.manifest.references.push(reference);
   }
   for (const reference of changeset.references.removed) {

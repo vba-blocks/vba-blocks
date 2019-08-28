@@ -1,6 +1,6 @@
-import { parseManifest, loadManifest } from '../';
+import { loadManifest, parseManifest } from '../';
+import { dir as FIXTURES, invalidManifest, standard } from '../../../tests/__fixtures__';
 import { normalizeManifest } from '../../__helpers__/manifest';
-import { dir as FIXTURES, standard, invalidManifest } from '../../../tests/__fixtures__';
 
 const BASE_MANIFEST: {
   package: {
@@ -29,6 +29,19 @@ test('loads valid sources', () => {
   const value = {
     ...BASE_MANIFEST,
     src: {
+      A: 'src/a.bas',
+      B: { path: 'src/b.cls' },
+      C: { path: 'src/c.frm', optional: true }
+    }
+  };
+
+  expect(normalizeManifest(parseManifest(value, FIXTURES))).toMatchSnapshot();
+});
+
+test('loads valid [dev-src]', () => {
+  const value = {
+    ...BASE_MANIFEST,
+    ['dev-src']: {
       A: 'src/a.bas',
       B: { path: 'src/b.cls' },
       C: { path: 'src/c.frm', optional: true }
@@ -71,15 +84,47 @@ test('loads valid dependencies', () => {
   expect(normalizeManifest(parseManifest(value, FIXTURES))).toMatchSnapshot();
 });
 
+test('loads valid [dev-dependencies]', () => {
+  const value = {
+    ...BASE_MANIFEST,
+    'dev-dependencies': {
+      a: '^1.0.0',
+      b: { version: '^2.0.0' },
+      c: { path: 'packages/d' },
+      d: { git: 'https://github.com/VBA-tools/VBA-Web' },
+      e: { git: 'https://github.com/VBA-tools/VBA-Web', branch: 'next' },
+      f: { git: 'https://github.com/VBA-tools/VBA-Web', tag: 'v1.0.0' },
+      g: { git: 'https://github.com/VBA-tools/VBA-Web', rev: 'a1b2c3d4' }
+    }
+  };
+
+  expect(normalizeManifest(parseManifest(value, FIXTURES))).toMatchSnapshot();
+});
+
 test('throws for invalid dependencies', () => {
   const value: any = { ...BASE_MANIFEST, dependencies: { a: {} } };
   expect(() => parseManifest(value, FIXTURES)).toThrow();
 });
 
-test('load valid references', () => {
+test('loads valid references', () => {
   const value = {
     ...BASE_MANIFEST,
     references: {
+      a: {
+        version: '1.0',
+        guid: '{420B2830-E718-11CF-893D-00A0C9054228}',
+        optional: true
+      }
+    }
+  };
+
+  expect(normalizeManifest(parseManifest(value, FIXTURES))).toMatchSnapshot();
+});
+
+test('loads valid [dev-references]', () => {
+  const value = {
+    ...BASE_MANIFEST,
+    ['dev-references']: {
       a: {
         version: '1.0',
         guid: '{420B2830-E718-11CF-893D-00A0C9054228}',

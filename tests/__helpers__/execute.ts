@@ -1,13 +1,12 @@
+import { copy, ensureDirSync, readFile, remove } from 'fs-extra';
 import { promisify } from 'util';
-import { copy, remove, ensureDirSync, readFile } from 'fs-extra';
+import { run as _run } from 'vba-blocks';
 import walkSync from 'walk-sync';
-import { join, resolve, extname, basename } from '../../src/utils/path';
 import { tmpFolder } from '../../src/utils/fs';
+import { basename, extname, join, resolve } from '../../src/utils/path';
 import { RunResult } from '../../src/utils/run';
 import { truncate } from '../../src/utils/text';
 const exec = promisify(require('child_process').exec);
-
-import { run as _run } from '../../';
 
 export { RunResult };
 
@@ -39,7 +38,7 @@ export async function execute(
   const result = await exec(`${bin} ${command}`, { cwd });
 
   // Give Office time to clean up
-  await wait();
+  await wait(500);
 
   return result;
 }
@@ -71,14 +70,14 @@ export async function run(
   application: string,
   file: string,
   macro: string,
-  arg: string = ''
+  args: string[] = []
 ): Promise<RunResult> {
   let result;
   try {
-    result = await _run(application, file, macro, arg);
+    result = await _run(application, file, macro, args);
 
     // Give Office time to clean up
-    await wait();
+    await wait(500);
   } catch (err) {
     result = err.result;
   }
@@ -86,7 +85,7 @@ export async function run(
   return result;
 }
 
-async function wait(ms = 500) {
+async function wait(ms: number) {
   return new Promise(resolve => {
     setTimeout(() => resolve(), ms);
   });

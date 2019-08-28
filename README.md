@@ -111,6 +111,12 @@ Build a package using a blank target:
 vba build --target xlsm
 ```
 
+Build a project, excluding any development src, dependencies, or references:
+
+```txt
+vba build --release
+```
+
 ### `export`
 
 Once you've completed your edits and are ready to commit your changes, export your project with `vba export`.
@@ -132,8 +138,7 @@ vba export --target xlsm
 `vba run` is a useful utility function for running a public macro in the given workbook, passing up to 10 arguments, and if it returns a string value, outputing it to the console.
 
 ```vb
-' File: build/example.xlsm
-' Module: Messages
+' (Module: Messages.bas)
 Public Function SayHi(Name As Variant) As String
   SayHi = "Howdy " & Name & "!"
 End Function
@@ -143,6 +148,77 @@ End Function
 vba run Messages.SayHi Tim
 Howdy Tim!
 ```
+
+## Manifest (vba-block.toml)
+
+### [project] or [package]
+
+- `name` (_required_)
+- `version` (_required_ for `[package]`)
+- `authors` (_required_ for `[package]`)
+- `target` (_required_ for `[project]`)
+
+```toml
+[project]
+name = "awesome-excel-project"
+target = "xlsm"
+```
+
+```toml
+[package]
+name = "awesome-vba-package"
+authors = ["Me <me@email.com>"]
+version = "0.1.0"
+```
+
+### [src]
+
+`name = "path"` or
+
+- `path`
+
+```toml
+[src]
+A = "src/A.bas"
+B = "src/B.cls"
+C = { path = "src/C.bas" }
+```
+
+### [dependencies]
+
+`name = "version"` or
+
+- `version`
+- `path`
+- `git` (and `branch`, `tag`, or `rev`)
+
+```toml
+[dependencies]
+a = "1" # Equivalent to ^1
+b = "=2.0.0" # Precisely 2.0.0
+c = { version = "3" }
+
+d = { path = "./packages/d" }
+
+e = { git = "https://..." } # master
+f = { git = "https://...", branch = "dev" }
+g = { git = "https://", tag = "bugfix" }
+h = { git = "https://", rev = "abc1234" }
+```
+
+### [references]
+
+- `version` (`"MAJOR.MINOR"`)
+- `guid` (`"{...}"`)
+
+```toml
+[references]
+Scripting = { version = "1.0", guid = "{...}" }
+```
+
+### [dev-src,dependencies,references]
+
+`[dev-src]`, `[dev-dependencies]`, and `[dev-references]` are included during development and are excluded when building with the `--release` flag (i.e. `vba build --release`)
 
 ## Development
 

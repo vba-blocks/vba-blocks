@@ -1,13 +1,12 @@
 import { CliError, ErrorCode } from '../errors';
 import { readFile } from '../utils/fs';
-import { extname, relative } from '../utils/path';
-import { BY_LINE, truncate } from '../utils/text';
+import { extname } from '../utils/path';
+import { BY_LINE } from '../utils/text';
 
 export type ComponentType = 'module' | 'class' | 'form' | 'document';
 
 export interface ComponentDetails {
   path?: string;
-  dependency?: string;
   binary?: Buffer;
 }
 
@@ -49,11 +48,8 @@ export class Component {
     return `${this.name}${extension}`;
   }
 
-  static async load(
-    path: string,
-    details: { dependency?: string; binary_path?: string } = {}
-  ): Promise<Component> {
-    const { dependency, binary_path } = details;
+  static async load(path: string, details: { binary_path?: string } = {}): Promise<Component> {
+    const { binary_path } = details;
 
     const type = extension_to_type[extname(path)];
     if (!type) {
@@ -66,7 +62,7 @@ export class Component {
     const code = await readFile(path);
     const binary = <Buffer | undefined>(binary_path && (await readFile(binary_path)));
 
-    return new Component(type, code, { path, dependency, binary });
+    return new Component(type, code, { path, binary });
   }
 }
 
@@ -90,18 +86,4 @@ export function byComponentName(a: Component, b: Component): number {
   if (a.name < b.name) return -1;
   if (a.name > b.name) return 1;
   return 0;
-}
-
-export function normalizeComponent(component: Component, dir: string): Component {
-  return {
-    type: component.type,
-    name: component.name,
-    code: truncate(component.code, 200),
-    details: {
-      path: component.details.path && relative(dir, component.details.path),
-      dependency: component.details.dependency
-    },
-    binary_path: component.binary_path,
-    filename: component.filename
-  };
 }

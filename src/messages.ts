@@ -19,5 +19,8 @@ export enum Message {
   PatchAddDependency = 'patch-add-dependency',
   PatchRemoveDependency = 'patch-remove-dependency',
   PatchAddReference = 'patch-add-reference',
-  PatchRemoveReference = 'patch-remove-reference'
+  PatchRemoveReference = 'patch-remove-reference',
+
+  RegistrySourceLocalOnly = 'registry-source-local-only',
+  RegistrySourceSkipPull = 'registry-source-skip-pull'
 }

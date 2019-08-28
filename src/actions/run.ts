@@ -17,9 +17,9 @@ export default async function run(options: RunOptions) {
 
   if (!file) {
     const project = await loadProject();
-    const target = getTarget(project, target_type);
+    const { target } = getTarget(project, target_type);
 
-    file = join(project.manifest.dir, 'build', target.filename);
+    file = join(project.paths.dir, 'build', target.filename);
   }
 
   if (!file) {
