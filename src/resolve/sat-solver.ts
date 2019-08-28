@@ -11,7 +11,7 @@ import Resolver, { Resolution, ResolutionGraph } from './resolver';
 const { Solver, exactlyOne, atMostOne, implies, or } = logicSolver;
 
 export async function solve(workspace: Workspace, resolver: Resolver): Promise<DependencyGraph> {
-  const dependencies = workspace.root.dependencies;
+  const dependencies = workspace.root.dependencies.concat(workspace.root.devDependencies);
 
   await resolveDependencies(dependencies, resolver);
   const required = await optimizeResolved(resolver.graph, dependencies);
