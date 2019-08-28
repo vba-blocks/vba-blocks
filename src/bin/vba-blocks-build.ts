@@ -25,8 +25,9 @@ export default async function(args: Args) {
   const start = process.hrtime();
   const target = <string | undefined>args.target;
   const addin = <string | undefined>args.addin;
+  const release = !!args.release;
 
-  const path = await build({ target, addin });
+  const path = await build({ target, addin, release });
   console.log(`Done. ${time(process.hrtime(start))}`);
 
   if (!!args.open) {
