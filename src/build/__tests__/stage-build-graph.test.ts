@@ -1,10 +1,10 @@
-import { setup, reset } from '../../../tests/__helpers__/project';
-import { dir, complex, standardImport } from '../../../tests/__fixtures__';
-import { relative } from '../../utils/path';
+import { complex, dir, standardImport } from '../../../tests/__fixtures__';
+import { reset, setup } from '../../../tests/__helpers__/project';
 import { pathExists } from '../../utils/fs';
+import { relative } from '../../utils/path';
+import { ImportGraph } from '../build-graph';
 import loadFromProject from '../load-from-project';
 import stageBuildGraph from '../stage-build-graph';
-import { ImportGraph } from '../types';
 
 afterEach(reset);
 

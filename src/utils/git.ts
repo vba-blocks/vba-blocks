@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import env from '../env';
+import { pathExists } from './fs';
 import { join } from './path';
 
 const debug = env.debug('vba-blocks:git');
@@ -40,4 +41,8 @@ export async function init(dir: string) {
 
   debug(`init: ${dir}`);
   await git.init({ dir });
+}
+
+export async function isGitRepository(dir: string): Promise<boolean> {
+  return await pathExists(join(dir, '.git'));
 }

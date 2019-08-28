@@ -64,7 +64,8 @@ export enum ErrorCode {
   ExportTargetNotFound = 'export-target-not-found',
   AddinUnsupportedType = 'addin-unsupported-type',
   RunMissingFile = 'run-missing-file',
-  RunMissingMacro = 'run-missing-macro'
+  RunMissingMacro = 'run-missing-macro',
+  RegistryCloneFailed = 'registry-clone-failed'
 }
 
 export function manifestOk(value: any, message: string) {

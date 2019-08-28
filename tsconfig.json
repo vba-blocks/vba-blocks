@@ -5,16 +5,16 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "rootDir": "src",
     "target": "esnext",
     "lib": ["es2017"],
     "skipLibCheck": true,
-    "noEmit": true
+    "noEmit": true,
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "vba-blocks": ["./lib"]
+    }
   },
-  "include": ["src/**/*.ts"],
-  "exclude": [
-    "node_modules",
-    "src/**/__mocks__/*",
-    "src/**/__tests__/*"
-  ]
+  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules", "src/**/__mocks__/*"]
 }

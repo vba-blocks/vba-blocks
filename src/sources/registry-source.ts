@@ -2,6 +2,7 @@ import dedent from 'dedent/macro';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
 import { Dependency, RegistryDependency } from '../manifest/dependency';
+import { Message } from '../messages';
 import download from '../utils/download';
 import {
   checksum as getChecksum,
@@ -11,7 +12,7 @@ import {
   readFile,
   tmpFile
 } from '../utils/fs';
-import { clone, pull } from '../utils/git';
+import { clone, isGitRepository, pull } from '../utils/git';
 import { basename, dirname, join, sanitize } from '../utils/path';
 import { unzip } from '../utils/zip';
 import { getRegistrationId, getRegistrationSource, Registration } from './registration';
@@ -29,9 +30,9 @@ export default class RegistrySource implements Source {
   name: string;
   local: { index: string; packages: string };
   remote: { index: string; packages: string };
-  sources: string;
-  pulling?: Promise<void>;
-  up_to_date: boolean;
+  private sources: string;
+  private pulling?: Promise<void>;
+  private up_to_date: boolean;
 
   constructor({ name, index, packages }: RegistryOptions) {
     this.name = name;
@@ -40,6 +41,7 @@ export default class RegistrySource implements Source {
       packages: join(env.packages, name)
     };
     this.remote = { index, packages };
+
     this.sources = join(env.sources, name);
     this.up_to_date = false;
   }
@@ -125,13 +127,43 @@ export default class RegistrySource implements Source {
 }
 
 export async function pullIndex(local: string, remote: string) {
-  if (!(await pathExists(local))) {
-    const dir = dirname(local);
-    await ensureDir(dir);
-    await clone(remote, basename(local), dir);
+  const has_local_directory = await pathExists(local);
+  if (has_local_directory && !isGitRepository(local)) {
+    // For local registry, skip clone + pull
+    // if directory exists without git repository
+    env.reporter.log(
+      Message.RegistrySourceLocalOnly,
+      '(local registry is not a git repository, skipping pull)'
+    );
+    return;
   }
 
-  await pull(local);
+  if (!has_local_directory) {
+    await ensureDir(dirname(local));
+
+    try {
+      await clone(remote, basename(local), dirname(local));
+    } catch (err) {
+      throw new CliError(
+        ErrorCode.RegistryCloneFailed,
+        `Failed to clone registry from ${remote}`,
+        err
+      );
+    }
+  }
+
+  try {
+    await pull(local);
+  } catch (err) {
+    debug('Pull failed', err);
+
+    // If pull fails (but repository exists)
+    // treat as offline and still attempt to resolve
+    env.reporter.log(
+      Message.RegistrySourceSkipPull,
+      '(failed to update local registry, resolving with previously loaded values)'
+    );
+  }
 }
 
 export function parseRegistration(registry: string, value: any): Registration {
