@@ -80,7 +80,7 @@ Object {
     },
     Object {
       "name": "c",
-      "path": "/Users/tim/dev/vba-blocks/tests/__fixtures__/packages/d/",
+      "path": "packages/d",
     },
     Object {
       "branch": "master",
@@ -156,15 +156,15 @@ Object {
   "devSrc": Array [
     Object {
       "name": "A",
-      "path": "/Users/tim/dev/vba-blocks/tests/__fixtures__/src/a.bas",
+      "path": "src/a.bas",
     },
     Object {
       "name": "B",
-      "path": "/Users/tim/dev/vba-blocks/tests/__fixtures__/src/b.cls",
+      "path": "src/b.cls",
     },
     Object {
       "name": "C",
-      "path": "/Users/tim/dev/vba-blocks/tests/__fixtures__/src/c.frm",
+      "path": "src/c.frm",
     },
   ],
   "metadata": Object {
