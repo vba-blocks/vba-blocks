@@ -158,17 +158,63 @@ Howdy Tim!
 - `authors` (_required_ for `[package]`)
 - `target` (_required_ for `[project]`)
 
+```toml
+[project]
+name = "awesome-excel-project"
+target = "xlsm"
+```
+
+```toml
+[package]
+name = "awesome-vba-package"
+authors = ["Me <me@email.com>"]
+version = "0.1.0"
+```
+
 ### [src]
 
-...
+`name = "path"` or
+
+- `path`
+
+```toml
+[src]
+A = "src/A.bas"
+B = "src/B.cls"
+C = { path = "src/C.bas" }
+```
 
 ### [dependencies]
 
-...
+`name = "version"` or
+
+- `version`
+- `path`
+- `git` (and `branch`, `tag`, or `rev`)
+
+```toml
+[dependencies]
+a = "1" # Equivalent to ^1
+b = "=2.0.0" # Precisely 2.0.0
+c = { version = "3" }
+
+d = { path = "./packages/d" }
+
+e = { git = "https://..." } # master
+f = { git = "https://...", branch = "dev" }
+g = { git = "https://", tag = "bugfix" }
+h = { git = "https://", rev = "abc1234" }
+```
 
 ### [references]
 
-...
+- `version` (`"MAJOR.MINOR"`)
+- `guid` (`"{...}"`)
+
+```toml
+[references]
+Scripting = { version = "1.0", guid = "{...}" }
+```
 
 ### [dev-src,dependencies,references]
 
