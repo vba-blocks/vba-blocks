@@ -26,7 +26,7 @@ test('should load BuildGraph with devDependencies', async () => {
   expect(normalizeBuildGraph(graph)).toMatchSnapshot();
 });
 
-test('should ignore BuildGraph for --release', async () => {
+test('should ignore dev-* for --release', async () => {
   const { project, dependencies } = await setup(dev);
   const graph = await loadFromProject(project, dependencies, { release: true });
 

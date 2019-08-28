@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`should ignore BuildGraph for --release 1`] = `
+exports[`should ignore dev-* for --release 1`] = `
 Object {
   "components": Array [
     Object {
@@ -20,35 +20,6 @@ Attribute VB_Exposed ...",
       "filename": "Dictionary.cls",
       "name": "Dictionary",
       "type": "class",
-    },
-    Object {
-      "binary_path": undefined,
-      "code": "VERSION 1.0 CLASS
-BEGIN
-  MultiUse = -1  'True
-END
-Attribute VB_Name = \\"TestClass\\"
-Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = False
-Attribute VB_PredeclaredId = False
-Attribute VB_Exposed =...",
-      "details": Object {
-        "path": "projects/dev/src/TestClass.cls",
-      },
-      "filename": "TestClass.cls",
-      "name": "TestClass",
-      "type": "class",
-    },
-    Object {
-      "binary_path": undefined,
-      "code": "Attribute VB_Name = \\"TestModule\\"
-",
-      "details": Object {
-        "path": "projects/dev/src/TestModule.bas",
-      },
-      "filename": "TestModule.bas",
-      "name": "TestModule",
-      "type": "module",
     },
     Object {
       "binary_path": undefined,
@@ -398,6 +369,35 @@ Attribute VB_Exposed ...",
       },
       "filename": "JsonConverter.bas",
       "name": "JsonConverter",
+      "type": "module",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = \\"TestClass\\"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = False
+Attribute VB_Exposed =...",
+      "details": Object {
+        "path": "projects/dev/src/TestClass.cls",
+      },
+      "filename": "TestClass.cls",
+      "name": "TestClass",
+      "type": "class",
+    },
+    Object {
+      "binary_path": undefined,
+      "code": "Attribute VB_Name = \\"TestModule\\"
+",
+      "details": Object {
+        "path": "projects/dev/src/TestModule.bas",
+      },
+      "filename": "TestModule.bas",
+      "name": "TestModule",
       "type": "module",
     },
     Object {

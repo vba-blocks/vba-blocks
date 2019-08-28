@@ -53,11 +53,11 @@ export default async function loadFromProject(
     }
   }
 
-  if (options.release) {
+  if (!options.release) {
     for (const source of project.manifest.devSrc) {
       loading_components.push(Component.load(source.path, { binary_path: source.binary }));
     }
-    for (const reference of project.manifest.references) {
+    for (const reference of project.manifest.devReferences) {
       const name_guid = `${reference.name}_${reference.guid}`;
       if (found_references[name_guid]) continue;
 
