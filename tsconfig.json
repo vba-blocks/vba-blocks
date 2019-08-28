@@ -15,6 +15,6 @@
       "vba-blocks": ["./lib"]
     }
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts", "src/debug.js"],
   "exclude": ["node_modules", "src/**/__mocks__/*"]
 }

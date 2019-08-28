@@ -53,7 +53,7 @@ const env: Env = {
 
     return (...args) => {
       if (!debug) {
-        const _debug = require('debug');
+        const _debug = require('./debug').default;
         debug = _debug(id);
       }
 
