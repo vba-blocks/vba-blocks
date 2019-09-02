@@ -11,7 +11,7 @@ const mode = process.env.NODE_ENV || 'production';
 
 export default [
   {
-    input: ['src/index.ts', 'src/bin/vba-blocks.ts', 'src/debug.js'],
+    input: ['src/index.ts', 'src/bin/vba-blocks.ts', 'src/debug.ts'],
     output: {
       format: 'cjs',
       dir: 'lib',
