@@ -151,7 +151,7 @@ function isRunError(error: Error | RunError): error is RunError {
   return has(error, 'result');
 }
 
-export function handleError(err: Error | CliError) {
+export function handleError(err: Error | CliError | any, _promise?: Promise<any>) {
   const { message } = cleanError(err);
 
   console.error(`${colors.redBright('ERROR')} ${message}`);
