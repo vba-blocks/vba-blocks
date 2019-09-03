@@ -113,6 +113,27 @@ export function isGitDependency(dependency: Dependency): dependency is GitDepend
   return has(dependency, 'git');
 }
 
+export function formatDependencies(dependencies: Dependency[]): object {
+  const value: { [name: string]: any } = {};
+  dependencies.forEach(dependency => {
+    if (isRegistryDependency(dependency)) {
+      const { name, registry, version } = dependency;
+      value[name] = registry !== 'vba-blocks' ? { version, registry } : version;
+    } else if (isPathDependency(dependency)) {
+      const { name, path } = dependency;
+      value[name] = path;
+    } else {
+      const { name, git, tag, branch, rev } = dependency;
+      value[name] = { name, git };
+      if (tag) value[name].tag = tag;
+      if (branch) value[name].branch = branch;
+      if (rev) value[name].rev = rev;
+    }
+  });
+
+  return value;
+}
+
 function ensureGitUrl(value: string): string {
   if (extname(value!) === '.git') return value;
 

@@ -1,5 +1,7 @@
 import {
   complex,
+  dev,
+  devExport,
   dir,
   standard,
   standardChangesExport,
@@ -37,6 +39,16 @@ test('should find added, changed, and removed between build graphs', async () =>
   expect(normalizeChangeset(changeset)).toMatchSnapshot();
 
   // TODO finds UserForm1 as changed, look into why
+});
+
+test('should find no changes for dev-src', async () => {
+  const { project, dependencies } = await setup(dev);
+
+  const before = await loadFromProject(project, dependencies);
+  const after = await loadFromExport(devExport);
+
+  const changeset = compareBuildGraphs(before, after);
+  expect(normalizeChangeset(changeset)).toMatchSnapshot();
 });
 
 export function normalizeChangeset(changeset: Changeset): Changeset {

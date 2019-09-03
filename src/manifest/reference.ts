@@ -57,3 +57,14 @@ export function parseReference(name: string, value: any): Reference {
 
   return { name, guid, major, minor };
 }
+
+export function formatReferences(references: Reference[]): object {
+  const value: { [name: string]: object } = {};
+  references.forEach(reference => {
+    const { name, guid, major, minor } = reference;
+    const version = `${major}.${minor}`;
+    value[name] = { version, guid };
+  });
+
+  return value;
+}

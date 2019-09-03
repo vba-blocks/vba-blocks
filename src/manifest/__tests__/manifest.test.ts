@@ -1,5 +1,5 @@
-import { loadManifest, parseManifest } from '../';
-import { dir as FIXTURES, invalidManifest, standard } from '../../../tests/__fixtures__';
+import { formatManifest, loadManifest, parseManifest } from '../';
+import { dev, dir as FIXTURES, invalidManifest, standard } from '../../../tests/__fixtures__';
 import { normalizeManifest } from '../../__helpers__/manifest';
 
 const BASE_MANIFEST: {
@@ -181,4 +181,11 @@ test('throws for invalid syntax', async () => {
   } catch (err) {
     expect(err.message.replace(FIXTURES, 'fixtures')).toMatchSnapshot();
   }
+});
+
+test('should format manifest for export', async () => {
+  const manifest = await loadManifest(dev);
+  const converted = formatManifest(manifest, FIXTURES);
+
+  expect(converted).toMatchSnapshot();
 });

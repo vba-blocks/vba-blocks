@@ -1,6 +1,6 @@
 import { manifestOk } from '../errors';
 import { isString } from '../utils/is';
-import { join } from '../utils/path';
+import { join, relative } from '../utils/path';
 
 /*
   # Source
@@ -37,4 +37,15 @@ export function parseSource(name: string, value: string | any, dir: string): Sou
   if (binary) source.binary = join(dir, binary);
 
   return source;
+}
+
+export function formatSrc(src: Source[], dir: string): object {
+  const value: { [name: string]: string } = {};
+  src.forEach(source => {
+    let { name, path } = source;
+    path = relative(dir, path);
+    value[name] = path;
+  });
+
+  return value;
 }

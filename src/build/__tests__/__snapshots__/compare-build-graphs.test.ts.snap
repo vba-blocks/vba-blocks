@@ -72,3 +72,18 @@ Public Function Validate() As String
   },
 }
 `;
+
+exports[`should find no changes for dev-src 1`] = `
+Object {
+  "components": Object {
+    "added": Array [],
+    "changed": Array [],
+    "removed": Array [],
+  },
+  "references": Object {
+    "added": Array [],
+    "changed": Array [],
+    "removed": Array [],
+  },
+}
+`;

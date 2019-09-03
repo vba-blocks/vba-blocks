@@ -1,10 +1,10 @@
-import { setup, reset } from '../../../tests/__helpers__/project';
 import { complex, standardChangesExport } from '../../../tests/__fixtures__';
+import { reset, setup } from '../../../tests/__helpers__/project';
 import { normalizeManifest } from '../../__helpers__/manifest';
-import loadFromProject from '../load-from-project';
-import loadFromExport from '../load-from-export';
-import compareBuildGraphs from '../compare-build-graphs';
 import applyChangeset from '../apply-changeset';
+import compareBuildGraphs from '../compare-build-graphs';
+import loadFromExport from '../load-from-export';
+import loadFromProject from '../load-from-project';
 
 afterEach(reset);
 
@@ -20,23 +20,3 @@ test('should apply changeset for project', async () => {
 
   expect(normalizeManifest(project.manifest)).toMatchSnapshot();
 });
-
-interface Mock {
-  calls: any[][];
-  restore: () => void;
-  clear: () => void;
-}
-
-function mock(value: any): Mock {
-  return {
-    get calls() {
-      return value.mock.calls;
-    },
-    restore() {
-      return value.mockRestore();
-    },
-    clear() {
-      return value.mockClear();
-    }
-  };
-}

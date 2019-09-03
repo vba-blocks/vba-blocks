@@ -1,18 +1,25 @@
 import dedent from 'dedent/macro';
 import { CliError, ErrorCode, manifestOk } from '../errors';
 import { pathExists, readFile, writeFile } from '../utils/fs';
-import { join, normalize, relative } from '../utils/path';
+import { join, normalize } from '../utils/path';
 import { convert as convertToToml, parse as parseToml, patch as patchToml } from '../utils/toml';
-import {
-  Dependency,
-  isPathDependency,
-  isRegistryDependency,
-  parseDependencies
-} from './dependency';
-import { parseReferences, Reference } from './reference';
-import { parseSrc, Source } from './source';
-import { parseTarget, Target } from './target';
+import { Dependency, formatDependencies, parseDependencies } from './dependency';
+import { formatReferences, parseReferences, Reference } from './reference';
+import { formatSrc, parseSrc, Source } from './source';
+import { formatTarget, parseTarget, Target } from './target';
 import { DEFAULT_VERSION, Version } from './version';
+
+/**
+ * Snapshot is the minimal manifest needed to support both Manifest
+ * and info loaded during dependency resolution
+ */
+export interface Snapshot {
+  name: string;
+  version: Version;
+  dependencies: Dependency[];
+}
+
+export type ManifestType = 'package' | 'project';
 
 /*
   # Manifest
@@ -35,19 +42,6 @@ import { DEFAULT_VERSION, Version } from './version';
   from-path = { path = "packages/from-path" }
 ```
 */
-
-/**
- * Snapshot is the minimal manifest needed to support both Manifest
- * and info loaded during dependency resolution
- */
-export interface Snapshot {
-  name: string;
-  version: Version;
-  dependencies: Dependency[];
-}
-
-export type ManifestType = 'package' | 'project';
-
 export interface Metadata {
   authors?: string[];
   publish?: boolean;
@@ -175,7 +169,7 @@ export async function loadManifest(dir: string): Promise<Manifest> {
 }
 
 export async function writeManifest(manifest: Manifest, dir: string) {
-  const value = manifestToValue(manifest, dir);
+  const value = formatManifest(manifest, dir);
   const path = join(dir, 'vba-block.toml');
   let toml: string;
 
@@ -189,7 +183,7 @@ export async function writeManifest(manifest: Manifest, dir: string) {
   await writeFile(path, toml);
 }
 
-function manifestToValue(manifest: Manifest, dir: string): any {
+export function formatManifest(manifest: Manifest, dir: string): object {
   const {
     type,
     name,
@@ -207,54 +201,27 @@ function manifestToValue(manifest: Manifest, dir: string): any {
     [type]: values
   };
 
-  value.src = {};
-  manifest.src.forEach(source => {
-    let { name, path } = source;
-    path = relative(dir, path);
-    value.src[name] = path;
-  });
-
   if (manifest.target) {
-    let { name, type: target_type, path } = manifest.target;
-    path = relative(dir, path);
-
-    let target: string | { type: string; name?: string; path?: string };
-    if (name !== manifest.name || path !== 'target') {
-      target = { type: target_type };
-      if (name !== manifest.name) target.name = name;
-      if (path !== 'target') target.path = path;
-    } else {
-      target = target_type;
-    }
-
-    value[type].target = target;
+    value[type].target = formatTarget(manifest.target, manifest.name, dir);
   }
+
+  value.src = formatSrc(manifest.src, dir);
 
   if (manifest.dependencies.length) {
-    value.dependencies = {};
-    manifest.dependencies.forEach(dependency => {
-      if (isRegistryDependency(dependency)) {
-        const { name, registry, version } = dependency;
-        value.dependencies[name] = registry ? { version, registry } : version;
-      } else if (isPathDependency(dependency)) {
-        const { name, path } = dependency;
-        value.dependencies[name] = path;
-      } else {
-        const { name, git, tag, branch, rev } = dependency;
-        value.dependencies[name] = { name, git };
-        if (tag) value.dependencies[name].tag = tag;
-        if (branch) value.dependencies[name].branch = branch;
-        if (rev) value.dependencies[name].rev = rev;
-      }
-    });
+    value.dependencies = formatDependencies(manifest.dependencies);
   }
   if (manifest.references.length) {
-    value.references = {};
-    manifest.references.forEach(reference => {
-      const { name, guid, major, minor } = reference;
-      const version = `${major}.${minor}`;
-      value.references[name] = { version, guid };
-    });
+    value.references = formatReferences(manifest.references);
+  }
+
+  if (manifest.devSrc) {
+    value['dev-src'] = formatSrc(manifest.devSrc, dir);
+  }
+  if (manifest.devDependencies.length) {
+    value['dev-dependencies'] = formatDependencies(manifest.devDependencies);
+  }
+  if (manifest.devReferences.length) {
+    value['dev-references'] = formatReferences(manifest.devReferences);
   }
 
   return value;

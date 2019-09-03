@@ -9,11 +9,22 @@ import { BuildGraph } from './build-graph';
 import { byComponentName, Component, extension_to_type } from './component';
 
 const binary_extensions = ['.frx'];
+const ignoreFile = (file: string) => {
+  // Ignore hidden files (e.g. .DS_Store)
+  const has_extension = extname(file) !== '';
+
+  return !has_extension;
+};
 
 export default async function loadFromExport(staging: string): Promise<BuildGraph> {
   const files = walk(staging, { directories: false })
     .filter(file => {
-      return file !== 'project.json' && !file.startsWith('target') && !file.startsWith('staged');
+      return (
+        file !== 'project.json' &&
+        !file.startsWith('target') &&
+        !file.startsWith('staged') &&
+        !ignoreFile(file)
+      );
     })
     .map(file => join(staging, file));
   const { name, references } = await readInfo(staging);
