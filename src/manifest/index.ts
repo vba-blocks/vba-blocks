@@ -214,7 +214,7 @@ export function formatManifest(manifest: Manifest, dir: string): object {
     value.references = formatReferences(manifest.references);
   }
 
-  if (manifest.devSrc) {
+  if (manifest.devSrc.length) {
     value['dev-src'] = formatSrc(manifest.devSrc, dir);
   }
   if (manifest.devDependencies.length) {
