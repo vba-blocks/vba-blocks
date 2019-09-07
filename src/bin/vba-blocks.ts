@@ -20,6 +20,7 @@ const commands: { [name: string]: () => Promise<Command> } = {
   new: async () => (await import('./vba-blocks-new')).default,
   init: async () => (await import('./vba-blocks-init')).default,
   build: async () => (await import('./vba-blocks-build')).default,
+  test: async () => (await import('./vba-blocks-test')).default,
   export: async () => (await import('./vba-blocks-export')).default,
   run: async () => (await import('./vba-blocks-run')).default
 };
@@ -51,6 +52,7 @@ const help = dedent`
     - new           Create a new project / package in a new directory
     - init          Initialize a new project / package in the current directory
     - build         Build project from manifest
+    - test          Run tests for built target
     - export        Export src from built target
     - run           Run macro in document / add-in
     - help          Outputs this message or the help of the given command
