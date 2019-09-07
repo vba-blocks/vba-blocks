@@ -162,6 +162,7 @@ license = \\"UNLICENSED\\"
 
 exports[`new should create from existing 1`] = `
 Object {
+  ".editorconfig": "[*]{LF}trim_trailing_whitespace = true{LF}insert_final_newline = true{LF}charset = utf-8{LF}{LF}[*.{bas,cls}]{LF}end_of_line = crlf",
   ".gitattributes": "* text=auto{LF}*.bas text eol=crlf{LF}*.cls text eol=crlf",
   ".gitignore": "/build",
   "build/standard.xlsm": "<TODO>",
@@ -210,6 +211,7 @@ VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\
 
 exports[`new should create with blank target 1`] = `
 Object {
+  ".editorconfig": "[*]{LF}trim_trailing_whitespace = true{LF}insert_final_newline = true{LF}charset = utf-8{LF}{LF}[*.{bas,cls}]{LF}end_of_line = crlf",
   ".gitattributes": "* text=auto{LF}*.bas text eol=crlf{LF}*.cls text eol=crlf",
   ".gitignore": "/build",
   "build/blank-target.xlsm": "<TODO>",

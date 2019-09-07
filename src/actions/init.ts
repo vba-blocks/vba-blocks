@@ -68,6 +68,18 @@ export default async function init(options: InitOptions) {
       join(dir, '.gitattributes'),
       `* text=auto\n*.bas text eol=crlf\n*.cls text eol=crlf`
     );
+    await writeFile(
+      join(dir, '.editorconfig'),
+      dedent`
+        [*]
+        trim_trailing_whitespace = true
+        insert_final_newline = true
+        charset = utf-8
+
+        [*.{bas,cls}]
+        end_of_line = crlf
+      `
+    );
   }
 
   const project = await initProject(name, dir, {

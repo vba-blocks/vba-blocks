@@ -1,21 +1,12 @@
-import { BY_LINE } from '../utils/text';
+import asyncFlow from '../utils/async-flow';
 import { BuildGraph } from './build-graph';
+import * as editorConfig from './transforms/editor-config';
 
-export async function toCompiled(graph: BuildGraph): Promise<BuildGraph> {
-  return graph;
-}
+const transforms = [editorConfig];
 
-export async function toSrc(graph: BuildGraph): Promise<BuildGraph> {
-  // First, normalize line-endings to CRLF
-  const { name, references, from_dependencies } = graph;
-  const components = graph.components.map(component => {
-    const code = component.code;
-    const lines = code.split(BY_LINE);
-
-    component.code = lines.join('\r\n');
-
-    return component;
-  });
-
-  return { name, components, references, from_dependencies };
-}
+export const toCompiled = asyncFlow<BuildGraph>(
+  ...transforms.map(transform => transform.toCompiled).filter(Boolean)
+);
+export const toSrc = asyncFlow<BuildGraph>(
+  ...transforms.map(transform => transform.toSrc).filter(Boolean)
+);
