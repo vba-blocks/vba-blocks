@@ -40,6 +40,7 @@
     "date-fns": "^2",
     "debug": "^4",
     "decompress": "^4",
+    "editorconfig": "^0.15.3",
     "env-paths": "^2",
     "fs-extra": "^7",
     "isomorphic-git": "^0.58",

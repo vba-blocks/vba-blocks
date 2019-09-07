@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "target": "esnext",
-    "lib": ["es2017"],
+    "lib": ["es2019"],
     "skipLibCheck": true,
     "noEmit": true,
     "rootDir": "src",

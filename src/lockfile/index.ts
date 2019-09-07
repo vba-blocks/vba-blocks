@@ -1,5 +1,4 @@
 import { ok } from 'assert';
-import { version } from '../../package.json';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
 import { Manifest, Snapshot } from '../manifest';
@@ -22,7 +21,6 @@ import { parse as parseToml, toLockfile as convertToLockfileToml } from '../util
 import { Lockfile, LOCKFILE_VERSION } from './lockfile';
 
 const debug = env.debug('vba-blocks:lockfile');
-const VBA_BLOCKS_VERSION = version;
 
 type DependencyByName = Map<string, Dependency>;
 
