@@ -61,6 +61,8 @@ Object {
   "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "vba-block.toml": "
 
+[dev-src]
+
 [references]
 VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
 
@@ -115,6 +117,8 @@ Object {
   "targets/xlsm/xl/worksheets/sheet3.xml": "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" standalone=\\"yes\\"?>{CR}{LF}<worksheet xmlns=\\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\\" xmlns:r=\\"http://schemas.openxmlformats.org/officeDocument/20...",
   "vba-block.toml": "
 
+[dev-src]
+
 [references]
 VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
 
@@ -129,7 +133,7 @@ name = \\"json\\"
 target = { type = \\"xlsm\\", path = \\"targets/xlsm\\" }
 
 [dependencies]
-json = { version = \\"^2\\", registry = \\"vba-blocks\\" }
+json = \\"^2\\"
 ",
 }
 `;
@@ -156,6 +160,8 @@ authors = []
 license = \\"UNLICENSED\\"
 
 [src]
+
+[dev-src]
 ",
 }
 `;
@@ -204,6 +210,8 @@ Validation = \\"src/Validation.bas\\"
 
 [references]
 VBIDE = { version = \\"5.3\\", guid = \\"{0002E157-0000-0000-C000-000000000046}\\" }
+
+[dev-src]
 ",
 }
 `;
@@ -230,6 +238,8 @@ license = \\"UNLICENSED\\"
 target = \\"xlsm\\"
 
 [src]
+
+[dev-src]
 ",
 }
 `;
