@@ -23,7 +23,8 @@ export default async function(args: Args) {
     return;
   }
 
+  const test_args = args._;
   const target = args.target as string | undefined;
 
-  await test({ target });
+  await test({ target, args: test_args });
 }
