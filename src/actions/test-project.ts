@@ -1,5 +1,5 @@
 import env from '../env';
-import run from './run';
+import run from './run-macro';
 
 export interface TestOptions {
   target?: string;

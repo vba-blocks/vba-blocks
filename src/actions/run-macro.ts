@@ -3,7 +3,7 @@ import { CliError, ErrorCode } from '../errors';
 import { loadProject } from '../project';
 import { getTarget } from '../targets';
 import { extname, join, resolve } from '../utils/path';
-import runMacro from '../utils/run';
+import runMacro, { RunResult } from '../utils/run';
 
 export interface RunOptions {
   target?: string;
@@ -12,7 +12,7 @@ export interface RunOptions {
   args: string[];
 }
 
-export default async function run(options: RunOptions) {
+export default async function run(options: RunOptions): Promise<RunResult> {
   let { target: target_type, file, macro, args = [''] } = options;
 
   if (!file) {
@@ -36,7 +36,10 @@ export default async function run(options: RunOptions) {
   }
 
   const application = extensionToApplication(extname(file));
-  const { stdout } = await runMacro(application, resolve(file), macro, args);
+  const result = await runMacro(application, resolve(file), macro, args);
+  const { stdout } = result;
 
   if (stdout && stdout.trim().length) console.log(stdout);
+
+  return result;
 }

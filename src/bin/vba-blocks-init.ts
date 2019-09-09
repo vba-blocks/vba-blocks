@@ -1,6 +1,6 @@
 import dedent from 'dedent/macro';
 import { Args } from 'mri';
-import init from '../actions/init';
+import init from '../actions/init-project';
 
 const help = dedent`
   Initialize a new project in the current directory

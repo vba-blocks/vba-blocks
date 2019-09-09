@@ -1,6 +1,6 @@
 import dedent from 'dedent/macro';
 import { Args } from 'mri';
-import test from '../actions/test';
+import test from '../actions/test-project';
 
 const help = dedent`
   Run tests for built target.

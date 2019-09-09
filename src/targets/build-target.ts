@@ -1,5 +1,4 @@
 import dedent from 'dedent/macro';
-import { isRunError } from 'src/utils/run';
 import { createDocument, importGraph } from '../addin';
 import { loadFromProject, stageBuildGraph } from '../build';
 import { CliError, ErrorCode } from '../errors';
@@ -7,6 +6,7 @@ import { Target } from '../manifest/target';
 import { Project } from '../project';
 import { copy, emptyDir, ensureDir, move, pathExists, remove } from '../utils/fs';
 import { join } from '../utils/path';
+import { isRunError } from '../utils/run';
 import { zip } from '../utils/zip';
 import { ProjectInfo } from './project-info';
 

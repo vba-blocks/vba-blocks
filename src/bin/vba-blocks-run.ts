@@ -1,6 +1,6 @@
 import dedent from 'dedent/macro';
 import { Args } from 'mri';
-import run from '../actions/run';
+import run from '../actions/run-macro';
 
 const help = dedent`
   Run macro in given workbook or add-in.
