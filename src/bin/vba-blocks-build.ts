@@ -2,7 +2,7 @@ import dedent from 'dedent/macro';
 import { Args } from 'mri';
 import open from 'open';
 import time from 'pretty-hrtime';
-import build from '../actions/build';
+import build from '../actions/build-project';
 
 const help = dedent`
   Build project from manifest.

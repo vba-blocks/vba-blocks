@@ -4,11 +4,10 @@ import meant from 'meant';
 import mri, { Args } from 'mri';
 import { version } from '../../package.json';
 import env from '../env';
-import { cleanError, CliError, ErrorCode } from '../errors';
+import { cleanError, CliError, ErrorCode, isCliError } from '../errors';
 import { checkForUpdate, updateAvailable, updateVersion } from '../installer';
 import { Message } from '../messages';
-import has from '../utils/has';
-import { RunError } from '../utils/run';
+import { isRunError } from '../utils/run';
 import { joinCommas } from '../utils/text';
 
 Error.stackTraceLimit = Infinity;
@@ -20,6 +19,7 @@ const commands: { [name: string]: () => Promise<Command> } = {
   new: async () => (await import('./vba-blocks-new')).default,
   init: async () => (await import('./vba-blocks-init')).default,
   build: async () => (await import('./vba-blocks-build')).default,
+  test: async () => (await import('./vba-blocks-test')).default,
   export: async () => (await import('./vba-blocks-export')).default,
   run: async () => (await import('./vba-blocks-run')).default
 };
@@ -51,6 +51,7 @@ const help = dedent`
     - new           Create a new project / package in a new directory
     - init          Initialize a new project / package in the current directory
     - build         Build project from manifest
+    - test          Run tests for built target
     - export        Export src from built target
     - run           Run macro in document / add-in
     - help          Outputs this message or the help of the given command
@@ -141,14 +142,6 @@ async function main() {
   if (has_update_available) {
     env.reporter.log(Message.UpdateAvailable, updateAvailableMessage());
   }
-}
-
-function isCliError(error: Error | CliError): error is CliError {
-  return has(error, 'underlying');
-}
-
-function isRunError(error: Error | RunError): error is RunError {
-  return has(error, 'result');
 }
 
 export function handleError(err: Error | CliError | any, _promise?: Promise<any>) {

@@ -6,6 +6,7 @@ import { Target } from '../manifest/target';
 import { Project } from '../project';
 import { copy, emptyDir, ensureDir, move, pathExists, remove } from '../utils/fs';
 import { join } from '../utils/path';
+import { isRunError } from '../utils/run';
 import { zip } from '../utils/zip';
 import { ProjectInfo } from './project-info';
 
@@ -14,6 +15,13 @@ export interface BuildOptions {
   target?: string;
   addin?: string;
 }
+
+const isCreateDocumentError = (message: string) => /1004/.test(message);
+const targetIsOpen = (target: Target, file: string) => dedent`
+  Failed to build target "${target.name}", it is currently open.
+
+  Please close "${file}" and try again.
+`;
 
 /**
  * Build target:
@@ -32,9 +40,19 @@ export default async function buildTarget(
 
   // Build fresh target in staging directory
   // (for no target path, create blank target)
-  const staged = !info.blank_target
-    ? await createTarget(project, target)
-    : await createDocument(project, target, { staging: true });
+  let staged;
+  try {
+    staged = !info.blank_target
+      ? await createTarget(project, target)
+      : await createDocument(project, target, { staging: true });
+  } catch (error) {
+    // Error "1004: Method 'CreateDocument' of object 'OfficeApplication' failed"
+    // occurs when trying to create a document with the same name on Mac
+    if (!isRunError(error) || !error.result.errors.some(isCreateDocumentError)) throw error;
+
+    const file = join(project.paths.build, target.filename);
+    throw new CliError(ErrorCode.TargetIsOpen, targetIsOpen(target, file));
+  }
 
   await importTarget(target, info, staged, options);
 
@@ -132,14 +150,7 @@ export async function backupTarget(project: Project, target: Target) {
     try {
       await move(file, backup);
     } catch (err) {
-      throw new CliError(
-        ErrorCode.TargetIsOpen,
-        dedent`
-          Failed to build target "${target.name}", it is currently open.
-
-          Please close "${file}" and try again.
-        `
-      );
+      throw new CliError(ErrorCode.TargetIsOpen, targetIsOpen(target, file));
     }
   }
 }

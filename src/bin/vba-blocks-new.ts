@@ -1,6 +1,6 @@
 import dedent from 'dedent/macro';
 import { Args } from 'mri';
-import create from '../actions/create';
+import create from '../actions/create-project';
 
 const help = dedent`
   Create a new project / package in a new directory

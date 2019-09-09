@@ -3,7 +3,7 @@ import env from '../env';
 import { CliError, ErrorCode } from '../errors';
 import { ensureDir, pathExists } from '../utils/fs';
 import { join } from '../utils/path';
-import init from './init';
+import init from './init-project';
 
 export interface CreateOptions {
   name: string;
