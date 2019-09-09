@@ -1,4 +1,4 @@
-export { default as buildProjecg } from './actions/build-project';
+export { default as buildProject } from './actions/build-project';
 export { default as createProject } from './actions/create-project';
 export { default as exportProject } from './actions/export-project';
 export { default as initProject } from './actions/init-project';

@@ -8,5 +8,5 @@ main().catch(err => {
 });
 
 async function main() {
-  await vba.build({ addin: join(__dirname, 'bootstrap/build/bootstrap.xlsm') });
+  await vba.buildProject({ addin: join(__dirname, 'bootstrap/build/bootstrap.xlsm') });
 }
