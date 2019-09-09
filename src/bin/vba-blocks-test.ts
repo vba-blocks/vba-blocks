@@ -10,7 +10,7 @@ const help = dedent`
   Windows: "vba run Tests.Run CON"
   Mac:     "vba run Tests.Run /dev/stdout"
 
-  For more information, see https://vba-blocks.com/docs/testing
+  For more information, see https://vba-blocks.com/guides/testing
 
   Usage vba-blocks test [options]
 
