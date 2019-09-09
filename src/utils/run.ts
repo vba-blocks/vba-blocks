@@ -4,6 +4,7 @@ import { promisify } from 'util';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
 import { pathExists } from './fs';
+import has from './has';
 import parallel from './parallel';
 import { join } from './path';
 import stdoutFile from './stdout-file';
@@ -31,6 +32,10 @@ export class RunError extends Error {
 
     this.result = result;
   }
+}
+
+export function isRunError(error: Error | RunError): error is RunError {
+  return has(error, 'result');
 }
 
 export default async function run(

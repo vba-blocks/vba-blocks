@@ -1,6 +1,7 @@
 import * as colors from 'ansi-colors';
 import { ok } from 'assert';
 import dedent from 'dedent/macro';
+import has from './utils/has';
 import { isString } from './utils/is';
 
 export class CliError extends Error {
@@ -21,6 +22,10 @@ export class CliError extends Error {
     this.code = code;
     this.underlying = underlying;
   }
+}
+
+export function isCliError(error: Error | CliError): error is CliError {
+  return has(error, 'underlying');
 }
 
 export enum ErrorCode {

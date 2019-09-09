@@ -4,11 +4,10 @@ import meant from 'meant';
 import mri, { Args } from 'mri';
 import { version } from '../../package.json';
 import env from '../env';
-import { cleanError, CliError, ErrorCode } from '../errors';
+import { cleanError, CliError, ErrorCode, isCliError } from '../errors';
 import { checkForUpdate, updateAvailable, updateVersion } from '../installer';
 import { Message } from '../messages';
-import has from '../utils/has';
-import { RunError } from '../utils/run';
+import { isRunError } from '../utils/run';
 import { joinCommas } from '../utils/text';
 
 Error.stackTraceLimit = Infinity;
@@ -143,14 +142,6 @@ async function main() {
   if (has_update_available) {
     env.reporter.log(Message.UpdateAvailable, updateAvailableMessage());
   }
-}
-
-function isCliError(error: Error | CliError): error is CliError {
-  return has(error, 'underlying');
-}
-
-function isRunError(error: Error | RunError): error is RunError {
-  return has(error, 'result');
 }
 
 export function handleError(err: Error | CliError | any, _promise?: Promise<any>) {
