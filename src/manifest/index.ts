@@ -208,7 +208,7 @@ export function formatManifest(manifest: Manifest, dir: string): object {
   value.src = formatSrc(manifest.src, dir);
 
   if (manifest.dependencies.length) {
-    value.dependencies = formatDependencies(manifest.dependencies);
+    value.dependencies = formatDependencies(manifest.dependencies, dir);
   }
   if (manifest.references.length) {
     value.references = formatReferences(manifest.references);
@@ -218,7 +218,7 @@ export function formatManifest(manifest: Manifest, dir: string): object {
     value['dev-src'] = formatSrc(manifest.devSrc, dir);
   }
   if (manifest.devDependencies.length) {
-    value['dev-dependencies'] = formatDependencies(manifest.devDependencies);
+    value['dev-dependencies'] = formatDependencies(manifest.devDependencies, dir);
   }
   if (manifest.devReferences.length) {
     value['dev-references'] = formatReferences(manifest.devReferences);

@@ -1,7 +1,7 @@
 import { manifestOk } from '../errors';
 import has from '../utils/has';
 import { isString } from '../utils/is';
-import { extname, join, trailing } from '../utils/path';
+import { extname, join, relative, trailing } from '../utils/path';
 import { Version } from './version';
 
 /*
@@ -113,15 +113,17 @@ export function isGitDependency(dependency: Dependency): dependency is GitDepend
   return has(dependency, 'git');
 }
 
-export function formatDependencies(dependencies: Dependency[]): object {
+export function formatDependencies(dependencies: Dependency[], dir: string): object {
   const value: { [name: string]: any } = {};
   dependencies.forEach(dependency => {
     if (isRegistryDependency(dependency)) {
       const { name, registry, version } = dependency;
       value[name] = registry !== 'vba-blocks' ? { version, registry } : version;
     } else if (isPathDependency(dependency)) {
-      const { name, path } = dependency;
-      value[name] = path;
+      let { name, path } = dependency;
+      path = relative(dir, path);
+
+      value[name] = { path };
     } else {
       const { name, git, tag, branch, rev } = dependency;
       value[name] = { name, git };
