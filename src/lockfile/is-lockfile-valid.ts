@@ -1,5 +1,5 @@
 import { satisfies } from 'semver';
-import { loadManifest, Snapshot } from '../manifest';
+import { loadManifest, Manifest, Snapshot } from '../manifest';
 import {
   Dependency,
   isGitDependency,
@@ -27,7 +27,7 @@ export default async function isLockfileValid(
 
   if (lockfile.workspace.members.length !== workspace.members.length) return false;
 
-  const membersByName: { [name: string]: Snapshot } = {};
+  const membersByName: { [name: string]: Manifest } = {};
   workspace.members.forEach(member => (membersByName[member.name] = member));
 
   for (const lockedMember of lockfile.workspace.members) {
@@ -47,18 +47,22 @@ export default async function isLockfileValid(
  * - [ ] Have dependencies been added or removed?
  * - [ ] Are dependencies satisfied by lockfile versions?
  */
-async function hasManifestChanged(current: Snapshot, locked: Snapshot): Promise<boolean> {
+async function hasManifestChanged(current: Manifest, locked: Snapshot): Promise<boolean> {
   if (current.name !== locked.name) return false;
   if (current.version !== locked.version) return false;
 
   return await haveDependenciesChanged(current, locked);
 }
 
-async function haveDependenciesChanged(current: Snapshot, locked: Snapshot): Promise<boolean> {
-  if (current.dependencies.length !== locked.dependencies.length) return false;
+async function haveDependenciesChanged(current: Manifest, locked: Snapshot): Promise<boolean> {
+  const dependencies = current.dependencies.concat(current.devDependencies);
+
+  if (dependencies.length !== locked.dependencies.length) return false;
 
   const dependenciesByName: { [name: string]: Dependency } = {};
-  current.dependencies.forEach(dependency => (dependenciesByName[dependency.name] = dependency));
+  dependencies.forEach(dependency => {
+    dependenciesByName[dependency.name] = dependency;
+  });
 
   for (const lockedDependency of locked.dependencies) {
     const currentDependency = dependenciesByName[lockedDependency.name];
