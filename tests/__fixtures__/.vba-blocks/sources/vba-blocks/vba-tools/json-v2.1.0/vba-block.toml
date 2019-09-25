@@ -1,0 +1,11 @@
+[package]
+name = "vba-tools/json"
+version = "2.1.0"
+authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
+license = "MIT"
+
+[src]
+JsonConverter = "JsonConverter.bas"
+
+[dependencies]
+"vba-tools/dictionary" = "^1"

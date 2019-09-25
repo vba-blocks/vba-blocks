@@ -14,4 +14,4 @@ Validation = "src/Validation.bas"
 Class1 = "src/Class1.cls"
 
 [dependencies]
-web = "^4"
+"vba-tools/web" = "^4"

@@ -64,7 +64,6 @@ export default class RegistrySource implements Source {
       .split(/\r?\n/)
       .filter((line: string) => !!line)
       .map((line: string) => JSON.parse(line))
-      .filter((value: any) => value && !value.yanked)
       .map((value: string) => parseRegistration(this.name, value));
 
     return registrations;
@@ -190,7 +189,9 @@ export function parseRegistration(registry: string, value: any): Registration {
 }
 
 export function sanitizePackageName(name: string): string {
-  return sanitize(name.replace('/', '--'));
+  const [scope, ...parts] = name.split('/');
+
+  return [sanitize(scope), sanitize(parts.join('--'))].filter(Boolean).join('/');
 }
 
 function getPath(index: string, name: string): string {
@@ -204,7 +205,10 @@ export function getRemotePackage(packages: string, registration: Registration): 
 
 export function getLocalPackage(packages: string, registration: Registration): string {
   const { name, version } = registration;
-  return join(packages, `${sanitizePackageName(name)}-v${version}.block`);
+  const sanitized_parts = sanitizePackageName(name).split('/');
+  const pkg_name = sanitized_parts.pop();
+
+  return join(packages, ...sanitized_parts, `${pkg_name}-v${version}.block`);
 }
 
 export function getSource(sources: string, registration: Registration): string {

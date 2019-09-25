@@ -3,4 +3,4 @@ name = "json"
 target = { type = "xlsm", path = "targets/xlsm" }
 
 [dependencies]
-json = "^2"
+"vba-tools/json" = "^2"

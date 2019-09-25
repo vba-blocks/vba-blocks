@@ -4,5 +4,5 @@ version = "0.0.0"
 authors = ["Tim Hall"]
 
 [dependencies]
-web = "^4"
-json = "^1" # web needs json@^2
+"vba-tools/web" = "^4"
+"vba-tools/json" = "^1" # web needs json@^2

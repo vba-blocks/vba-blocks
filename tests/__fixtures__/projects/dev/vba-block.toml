@@ -6,11 +6,11 @@ target = "xlsm"
 Validation = "src/Validation.bas"
 
 [dependencies]
-dictionary = "^1"
+"vba-tools/dictionary" = "^1"
 
 [dev-src]
 TestClass = "src/TestClass.cls"
 TestModule = "src/TestModule.bas"
 
 [dev-dependencies]
-json = "^2"
+"vba-tools/json" = "^2"

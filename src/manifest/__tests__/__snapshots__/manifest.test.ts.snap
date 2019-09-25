@@ -4,7 +4,7 @@ exports[`loads and parses manifest 1`] = `
 Object {
   "dependencies": Array [
     Object {
-      "name": "json",
+      "name": "vba-tools/json",
       "registry": "vba-blocks",
       "version": "^2",
     },
@@ -376,10 +376,10 @@ Object {
 exports[`should format manifest for export 1`] = `
 Object {
   "dependencies": Object {
-    "dictionary": "^1",
+    "vba-tools/dictionary": "^1",
   },
   "dev-dependencies": Object {
-    "json": "^2",
+    "vba-tools/json": "^2",
   },
   "dev-src": Object {
     "TestClass": "projects/dev/src/TestClass.cls",

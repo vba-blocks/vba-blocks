@@ -8,4 +8,4 @@ Validation = "src/Validation.bas"
 Class1 = "src/Class1.cls"
 
 [dependencies]
-json = "^2"
+"vba-tools/json" = "^2"

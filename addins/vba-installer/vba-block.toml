@@ -1,5 +1,5 @@
 [package]
-name = "installer"
+name = "vba-tools/installer"
 version = "0.1.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 
@@ -7,7 +7,7 @@ authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 Installer = "src/Installer.bas"
 
 [dependencies]
-filesystem = { path = "../vba-filesystem" }
+"vba-tools/filesystem" = { path = "../vba-filesystem" }
 
 [references]
 VBIDE = { version = "5.3", guid = "{0002E157-0000-0000-C000-000000000046}" }

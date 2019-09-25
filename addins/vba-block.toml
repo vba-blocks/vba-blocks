@@ -11,8 +11,8 @@ Output = "src/Output.bas"
 ThisWorkbook = "src/ThisWorkbook.cls"
 
 [dependencies]
-installer = { path = "vba-installer" }
-json = "^2"
+"vba-tools/installer" = { path = "vba-installer" }
+"vba-tools/json" = "^2"
 
 [references]
 VBIDE = { version = "5.3", guid = "{0002E157-0000-0000-C000-000000000046}" }

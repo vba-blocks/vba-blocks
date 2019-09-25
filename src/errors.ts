@@ -1,5 +1,5 @@
 import dedent from '@timhall/dedent/macro';
-import * as colors from 'ansi-colors';
+import colors from 'ansi-colors';
 import { ok } from 'assert';
 import has from './utils/has';
 import { isString } from './utils/is';

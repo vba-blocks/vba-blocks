@@ -4,7 +4,7 @@ exports[`should apply changeset for project 1`] = `
 Object {
   "dependencies": Array [
     Object {
-      "name": "web",
+      "name": "vba-tools/web",
       "registry": "vba-blocks",
       "version": "^4",
     },

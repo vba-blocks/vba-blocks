@@ -3,5 +3,5 @@ name = "needs-sat"
 target = { type = "xlsm", path = "targets/xlsm" }
 
 [dependencies]
-web = "^4"
-json = "2.1.0" # pin json to non-latest version
+"vba-tools/web" = "^4"
+"vba-tools/json" = "2.1.0" # pin json to non-latest version

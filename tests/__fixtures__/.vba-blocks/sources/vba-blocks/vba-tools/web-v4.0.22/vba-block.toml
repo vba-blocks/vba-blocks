@@ -1,0 +1,16 @@
+[package]
+name = "vba-tools/web"
+version = "4.0.22"
+authors = ["Tim Hall <tim.hall.engr@gmail.com> (https://github.com/timhall)"]
+license = "MIT"
+
+[src]
+WebClient = "src/WebClient.cls"
+WebRequest = "src/WebRequest.cls"
+WebResponse = "src/WebResponse.cls"
+WebHelpers = "src/WebHelpers.bas"
+IWebAuthenticator = "src/IWebAuthenticator.cls"
+
+[dependencies]
+"vba-tools/dictionary" = "^1"
+"vba-tools/json" = "^2"

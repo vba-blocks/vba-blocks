@@ -15,7 +15,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed ...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/dictionary-v1.4.1/Dictionary.cls",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/dictionary-v1.4.1/Dictionary.cls",
       },
       "filename": "Dictionary.cls",
       "name": "Dictionary",
@@ -35,7 +35,7 @@ Attribute VB_Exposed ...",
   ],
   "from_dependencies": Object {
     "components": Object {
-      "Dictionary": "dictionary",
+      "Dictionary": "vba-tools/dictionary",
     },
     "references": Object {},
   },
@@ -89,7 +89,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed ...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/dictionary-v1.4.1/Dictionary.cls",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/dictionary-v1.4.1/Dictionary.cls",
       },
       "filename": "Dictionary.cls",
       "name": "Dictionary",
@@ -107,7 +107,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_E...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/IWebAuthenticator.cls",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/web-v4.1.5/src/IWebAuthenticator.cls",
       },
       "filename": "IWebAuthenticator.cls",
       "name": "IWebAuthenticator",
@@ -128,7 +128,7 @@ Attribute VB_E...",
 ' @class JsonConverter
 ' @autho...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/json-v2.3.0/JsonConverter.bas",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/json-v2.3.0/JsonConverter.bas",
       },
       "filename": "JsonConverter.bas",
       "name": "JsonConverter",
@@ -251,7 +251,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed =...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebClient.cls",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/web-v4.1.5/src/WebClient.cls",
       },
       "filename": "WebClient.cls",
       "name": "WebClient",
@@ -269,7 +269,7 @@ Attribute VB_Exposed =...",
 ' - Logging
 ' -...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebHelpers.bas",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/web-v4.1.5/src/WebHelpers.bas",
       },
       "filename": "WebHelpers.bas",
       "name": "WebHelpers",
@@ -287,7 +287,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed ...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebRequest.cls",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/web-v4.1.5/src/WebRequest.cls",
       },
       "filename": "WebRequest.cls",
       "name": "WebRequest",
@@ -305,7 +305,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/web-v4.1.5/src/WebResponse.cls",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/web-v4.1.5/src/WebResponse.cls",
       },
       "filename": "WebResponse.cls",
       "name": "WebResponse",
@@ -314,13 +314,13 @@ Attribute VB_Exposed...",
   ],
   "from_dependencies": Object {
     "components": Object {
-      "Dictionary": "dictionary",
-      "IWebAuthenticator": "web",
-      "JsonConverter": "json",
-      "WebClient": "web",
-      "WebHelpers": "web",
-      "WebRequest": "web",
-      "WebResponse": "web",
+      "Dictionary": "vba-tools/dictionary",
+      "IWebAuthenticator": "vba-tools/web",
+      "JsonConverter": "vba-tools/json",
+      "WebClient": "vba-tools/web",
+      "WebHelpers": "vba-tools/web",
+      "WebRequest": "vba-tools/web",
+      "WebResponse": "vba-tools/web",
     },
     "references": Object {},
   },
@@ -344,7 +344,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed ...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/dictionary-v1.4.1/Dictionary.cls",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/dictionary-v1.4.1/Dictionary.cls",
       },
       "filename": "Dictionary.cls",
       "name": "Dictionary",
@@ -365,7 +365,7 @@ Attribute VB_Exposed ...",
 ' @class JsonConverter
 ' @autho...",
       "details": Object {
-        "path": ".vba-blocks/sources/vba-blocks/json-v2.3.0/JsonConverter.bas",
+        "path": ".vba-blocks/sources/vba-blocks/vba-tools/json-v2.3.0/JsonConverter.bas",
       },
       "filename": "JsonConverter.bas",
       "name": "JsonConverter",
@@ -414,8 +414,8 @@ Attribute VB_Exposed =...",
   ],
   "from_dependencies": Object {
     "components": Object {
-      "Dictionary": "dictionary",
-      "JsonConverter": "json",
+      "Dictionary": "vba-tools/dictionary",
+      "JsonConverter": "vba-tools/json",
     },
     "references": Object {},
   },

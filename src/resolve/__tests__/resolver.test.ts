@@ -1,8 +1,7 @@
-import env from '../../env';
-import { loadConfig } from '../../config';
-import { join } from '../../utils/path';
 import { cache } from '../../../tests/__fixtures__';
-
+import { loadConfig } from '../../config';
+import env from '../../env';
+import { join } from '../../utils/path';
 import Resolver from '../resolver';
 
 jest.mock('../../utils/git');
@@ -24,7 +23,7 @@ afterEach(() => {
 });
 
 const dependency = {
-  name: 'json',
+  name: 'vba-tools/json',
   version: '^2',
   registry: 'vba-blocks'
 };
@@ -41,7 +40,7 @@ test('should get dependency with existing', async () => {
   const config = await loadConfig();
   const resolver = new Resolver(config);
 
-  resolver.graph.set('json', { name: 'json', range: [], registered: [] });
+  resolver.graph.set('vba-tools/json', { name: 'vba-tools/json', range: [], registered: [] });
 
   const resolved = await resolver.get(dependency);
   expect(resolved).toMatchSnapshot();
@@ -53,13 +52,13 @@ test('should include preferred with resolved', async () => {
 
   resolver.prefer([
     {
-      name: 'json',
-      id: 'json@2.0.1',
+      name: 'vba-tools/json',
+      id: 'vba-tools/json@2.0.1',
       source: 'registry+vba-blocks#<hash>',
       version: '2.0.1',
       dependencies: [
         {
-          name: 'dictionary',
+          name: 'vba-tools/dictionary',
           version: '^1',
           registry: 'vba-blocks'
         }
@@ -77,7 +76,7 @@ test('should get registration', async () => {
 
   await resolver.get(dependency);
 
-  const registration = resolver.getRegistration('json@2.0.1');
+  const registration = resolver.getRegistration('vba-tools/json@2.0.1');
   expect(registration).toMatchSnapshot();
 });
 

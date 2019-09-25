@@ -1,5 +1,5 @@
 [package]
-name = "filesystem"
+name = "vba-tools/filesystem"
 version = "0.1.0"
 authors = ["Tim Hall <tim.hall.engr@gmail.com>"]
 

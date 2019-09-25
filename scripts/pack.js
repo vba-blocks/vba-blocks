@@ -40,7 +40,7 @@ async function main() {
   }
 
   const { name, version } = manifest.package;
-  const block_name = `${sanitizeName(name)}-v${version}.block`;
+  const block_name = `${sanitizePkgName(name)}-v${version}.block`;
   const block_path = join(dir, 'build', block_name);
   if (await pathExists(block_path)) {
     if (!force) {
@@ -74,4 +74,9 @@ async function main() {
   await zip(files, block_path);
 
   console.log(`Done. Created ${block_path}`);
+}
+
+function sanitizePkgName(name) {
+  const [scope, ...parts] = name.split('/');
+  return sanitizeName(parts.join('--'));
 }
