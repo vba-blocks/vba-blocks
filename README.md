@@ -222,8 +222,6 @@ Scripting = { version = "1.0", guid = "{...}" }
 
 ## Development
 
-[![Build Status](https://dev.azure.com/vba-blocks/vba-blocks/_apis/build/status/vba-blocks.vba-blocks?branchName=master)](https://dev.azure.com/vba-blocks/vba-blocks/_build/latest?definitionId=1&branchName=master)
-
 ### Prerequisites
 
 1. `git clone` this repo
