@@ -1,4 +1,4 @@
-import dedent from 'dedent/macro';
+import dedent from '@timhall/dedent/macro';
 import { CliError, ErrorCode, manifestOk } from '../errors';
 import { pathExists, readFile, writeFile } from '../utils/fs';
 import { join, normalize } from '../utils/path';

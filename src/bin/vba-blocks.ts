@@ -1,5 +1,5 @@
+import dedent from '@timhall/dedent/macro';
 import * as colors from 'ansi-colors';
-import dedent from 'dedent/macro';
 import meant from 'meant';
 import mri, { Args } from 'mri';
 import { version } from '../../package.json';

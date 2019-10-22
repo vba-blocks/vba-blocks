@@ -1,4 +1,4 @@
-import dedent from 'dedent/macro';
+import dedent from '@timhall/dedent/macro';
 import { Args } from 'mri';
 import exportProject from '../actions/export-project';
 

@@ -1,5 +1,5 @@
+import dedent from '@timhall/dedent/macro';
 import { exec as _exec } from 'child_process';
-import dedent from 'dedent/macro';
 import { promisify } from 'util';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';

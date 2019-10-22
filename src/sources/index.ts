@@ -1,5 +1,5 @@
+import dedent from '@timhall/dedent/macro';
 import { ok } from 'assert';
-import dedent from 'dedent/macro';
 import { CliError, ErrorCode } from '../errors';
 import {
   Dependency,

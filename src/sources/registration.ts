@@ -1,4 +1,4 @@
-import dedent from 'dedent/macro';
+import dedent from '@timhall/dedent/macro';
 import { parse as parseQuerystring } from 'querystring';
 import { CliError, ErrorCode } from '../errors';
 import { Snapshot } from '../manifest';

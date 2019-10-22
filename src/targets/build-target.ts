@@ -1,4 +1,4 @@
-import dedent from 'dedent/macro';
+import dedent from '@timhall/dedent/macro';
 import { createDocument, importGraph } from '../addin';
 import { loadFromProject, stageBuildGraph } from '../build';
 import { CliError, ErrorCode } from '../errors';
