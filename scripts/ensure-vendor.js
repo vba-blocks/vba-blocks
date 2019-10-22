@@ -2,12 +2,13 @@ const { promisify } = require('util');
 const { join, dirname, basename } = require('path');
 const { get: httpsGet } = require('https');
 const { createWriteStream } = require('fs');
-const { ensureDir, pathExists, remove } = require('fs-extra');
+const { ensureDir, pathExists, remove, writeFile, readFile } = require('fs-extra');
 const tmpDir = promisify(require('tmp').dir);
 const decompress = require('decompress');
 
-const node_version = 'v10.15.3';
+const node_version = 'v12.13.0';
 const vendor = join(__dirname, '../vendor');
+const version = join(vendor, '.version');
 
 main().catch(err => {
   console.error(err);
@@ -19,7 +20,10 @@ async function main() {
 }
 
 async function downloadNode() {
-  if (await pathExists(join(vendor))) return;
+  const version_exists = await pathExists(version);
+  const previous_version = version_exists && (await readFile(version, 'utf8')).trim();
+
+  if (previous_version === node_version) return;
 
   const base = `https://nodejs.org/dist/${node_version}/`;
   const windows = `node-${node_version}-win-x86.zip`;
@@ -53,6 +57,7 @@ async function downloadNode() {
   ]);
 
   await remove(dir);
+  await writeFile(join(vendor, '.version'), node_version);
 }
 
 async function download(url, dest) {

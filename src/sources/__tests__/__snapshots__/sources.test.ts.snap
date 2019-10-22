@@ -36,6 +36,6 @@ Array [
 ]
 `;
 
-exports[`should throw on unknown type 1`] = `[AssertionError [ERR_ASSERTION]: Error: No matching registry configured for "unknown-registry".]`;
+exports[`should throw on unknown type 1`] = `[AssertionError: Error: No matching registry configured for "unknown-registry".]`;
 
-exports[`should throw on unknown type 2`] = `[AssertionError [ERR_ASSERTION]: Error: No matching registry configured for "unknown-registry".]`;
+exports[`should throw on unknown type 2`] = `[AssertionError: Error: No matching registry configured for "unknown-registry".]`;
