@@ -1,0 +1,25 @@
+name: Test and Build
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install
+        run: yarn install
+        env:
+          CI: true
+      - name: Typecheck
+        run: yarn typecheck
+      - name: Test
+        run: yarn test
+      - name: Build
+        run: yarn build:dev
