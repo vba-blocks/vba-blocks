@@ -1,10 +1,13 @@
 Attribute VB_Name = "Output"
 ''
+' # Output
+'
 ' Standard result stdout
 '
 ' @module Output
-' @author tim.hall.engr@gmail.com
-' @license MIT (http://www.opensource.org/licenses/mit-license.php)
+' @author Tim Hall <tim.hall.engr@gmail.com>
+' @repository https://github.com/vba-blocks/vba-blocks
+' @license MIT
 '' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
 
 Public Messages As New Collection
@@ -20,4 +23,3 @@ Public Property Get Result() As String
 
     Result = JsonConverter.ConvertToJson(Parts)
 End Property
-

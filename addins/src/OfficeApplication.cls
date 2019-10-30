@@ -8,16 +8,20 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 ''
+' # Office Application
+'
 ' Manage Office application and document/workbook instances
 '
-' Errors:
+' ## Errors
+'
 ' 10200 - Unrecognized extension
 ' 10201 - Failed to open document
 ' 10202 - Document already exists
 '
 ' @module OfficeApplication
-' @author tim.hall.engr@gmail.com
-' @license MIT (http://www.opensource.org/licenses/mit-license.php)
+' @author Tim Hall <tim.hall.engr@gmail.com>
+' @repository https://github.com/vba-blocks/vba-blocks
+' @license MIT
 '' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
 
 Private Documents As Dictionary
@@ -25,8 +29,6 @@ Private Documents As Dictionary
 ''
 ' Get or open document, workbook, etc.
 '
-' @method GetDocument
-' @param {String} Path
 ' @returns {Object} Document, Workbook, etc.
 ''
 Public Function GetDocument(Path As String) As Object
@@ -56,7 +58,7 @@ Public Function GetDocument(Path As String) As Object
     End Select
 
     If Doc Is Nothing Then
-        Err.Raise 10201, Description:="Failed to open document (" & Path & ")"
+        Err.Raise 10201, Description:="[10201] Failed to open document  at """ & Path & """"
     End If
 
     Dim Instance As New Dictionary
@@ -71,15 +73,13 @@ End Function
 ''
 ' Create document, workbook, etc.
 '
-' @method CreateDocument
-' @param {String} Path
 ' @returns {Object} Document, Workbook, etc.
 ''
 Public Function CreateDocument(Path As String) As Object
     Path = FileSystem.NormalizePath(Path)
 
     If FileSystem.FileExists(Path) Then
-        Err.Raise 10202, Description:="Document already exists at " & Path
+        Err.Raise 10202, Description:="[10202] Document already exists at """ & Path & """"
     End If
 
     Dim AppType As String
@@ -110,8 +110,6 @@ End Function
 
 ''
 ' Unload all documents and applications
-'
-' @method Unload
 ''
 Public Sub Unload()
     Dim i As Long
@@ -207,7 +205,7 @@ Private Function GetType(Path As String) As String
         GetType = "excel"
     ' TODO Remaining extensions
     Case Default
-        Err.Raise 10200, "OfficeApplication", "Unrecognized extension """ & Extension & """ (""" & Path & """)"
+        Err.Raise 10200, "OfficeApplication", "[10200] Unrecognized extension """ & Extension & """ for path """ & Path & """"
     End Select
 End Function
 

@@ -1,11 +1,11 @@
 Attribute VB_Name = "Installer"
 ''
-' VBA-Installer v0.1.0
-' (c) Tim Hall - https://github.com/vba-blocks/vba-blocks
+' # Installer
 '
-' Installer for VBA
+' Install and export modules, classes, forms, and references for VBA
 '
-' Errors:
+' ## Errors
+'
 ' 10100 - VBA Project access is disabled
 ' 10101 - VBA Project is locked
 ' 10102 - Component file not found
@@ -17,25 +17,30 @@ Attribute VB_Name = "Installer"
 ' 10108 - Failed to remove module
 ' 10109 - Failed to add reference
 ' 10110 - Failed to remove reference
+' 10111 - Component imported with errors
 '
 ' @module Installer
-' @author tim.hall.engr@gmail.com
-' @license MIT (http://www.opensource.org/licenses/mit-license.php)
+' @author Tim Hall <tim.hall.engr@gmail.com>
+' @repository https://github.com/vba-blocks/vba-blocks
+' @license MIT
 '' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
 
 ''
-' @method Import
-' @param {VBProject} Project
-' @param {String} ComponentName
-' @param {String} FullPath
-' @param {Boolean} [Overwrite = False]
+' Import component (class, module, or form) with given name from path into project
+'
+' ```vb
+' Dim ImportPath As String
+' ImportPath = ".../ModuleName.bas"
+'
+' Installer.Import ThisWorkbook.Project, "ModuleName", ImportPath
+' ```
 ''
 Public Sub Import(Project As VBProject, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
     Precheck Project
 
     If Not FileSystem.FileExists(FullPath) Then
-        Err.Raise 10102, "Installer.Import", _
-            "Component file not found. No component file found at path: """ & FullPath & """."
+        Err.Raise 10102 + &H30000 + vbObjectError, "Installer.Import", _
+            "[10102] Component file not found. No component file found at path: """ & FullPath & """."
     End If
 
     Dim ExistingComponent As VBComponent
@@ -43,8 +48,8 @@ Public Sub Import(Project As VBProject, ComponentName As String, FullPath As Str
 
     If Not ExistingComponent Is Nothing Then
         If Not Overwrite Then
-            Err.Raise 10103, "Installer.Import", _
-                "Existing component found. A module with the name """ & ModuleName & """ is already part of the project. " & _
+            Err.Raise 10103 + &H30000 + vbObjectError, "Installer.Import", _
+                "[10103] Existing component found. A module with the name """ & ModuleName & """ is already part of the project. " & _
                 "Use `Installer.Import(Project, ComponentName, FullPath, Overwrite:=True)` to overwrite an existing module."
         Else
             If ExistingComponent.Type = vbext_ComponentType.vbext_ct_Document Then
@@ -73,23 +78,26 @@ Public Sub Import(Project As VBProject, ComponentName As String, FullPath As Str
 
 ErrorHandling:
 
-    Err.Raise 10106, "Installer.Import", _
-        "Failed to import module. " & Err.Number & ": " & Err.Description
+    Err.Raise 10106 + &H30000 + vbObjectError, "Installer.Import", _
+        "[10106] Failed to import module """ & ComponentName & """. " & Err.Number & ": " & Err.Description
 End Sub
 
 ''
-' @method Export
-' @param {VBProject} Project
-' @param {String} ComponentName
-' @param {String} FullPath
-' @param {Boolean} [Overwrite = False]
+' Export named component from project to given path
+'
+' ```vb
+' Dim ExportPath As String
+' ExportPath = ".../ClassName.cls"
+'
+' Installer.Export ThisWorkbook.Project, "ClassName", ExportPath
+' ```
 ''
 Public Sub Export(Project As VBProject, ComponentName As String, FullPath As String, Optional Overwrite As Boolean = False)
     Precheck Project
 
     If Not Overwrite And FileSystem.FileExists(FullPath) Then
-        Err.Raise 10104, "Installer.Export", _
-            "Existing component file found. A file was found at path: """ & FullPath & """. " & _
+        Err.Raise 10104 + &H30000 + vbObjectError, "Installer.Export", _
+            "[10104] Existing component file found. A file was found at path: """ & FullPath & """. " & _
             "Use `Installer.Export(Project, ComponentName, FullPath, Overwrite:=True)` to overwrite an existing file."""
     End If
 
@@ -97,8 +105,8 @@ Public Sub Export(Project As VBProject, ComponentName As String, FullPath As Str
     Set Component = GetComponent(Project, ComponentName)
 
     If Component Is Nothing Then
-        Err.Raise 10105, "Installer.Export", _
-            "No matching component. No component named """ & ComponentName & """ was found in the project."
+        Err.Raise 10105 + &H30000 + vbObjectError, "Installer.Export", _
+            "[10105] No matching component. No component named """ & ComponentName & """ was found in the project."
     End If
 
     On Error GoTo ErrorHandling
@@ -108,14 +116,16 @@ Public Sub Export(Project As VBProject, ComponentName As String, FullPath As Str
 
 ErrorHandling:
 
-    Err.Raise 10107, "Installer.Export", _
-        "Failed to export module. " & Err.Number & ": " & Err.Description
+    Err.Raise 10107 + &H30000 + vbObjectError, "Installer.Export", _
+        "[10107] Failed to export module. " & Err.Number & ": " & Err.Description
 End Sub
 
 ''
-' @method Remove
-' @param {VBProject} Project
-' @param {String} ComponentName
+' Remove named component from project
+'
+' ```vb
+' Installer.Remove ThisWorkbook.Project, "FormName"
+' ```
 ''
 Public Sub Remove(Project As VBProject, ComponentName As String)
     Precheck Project
@@ -134,16 +144,17 @@ Public Sub Remove(Project As VBProject, ComponentName As String)
 
 ErrorHandling:
 
-    Err.Raise 10108, "Installer.Remove", _
-        "Failed to remove module. " & Err.Number & ": " & Err.Description
+    Err.Raise 10108 + &H30000 + vbObjectError, "Installer.Remove", _
+        "[10108] Failed to remove module. " & Err.Number & ": " & Err.Description
 End Sub
 
 ''
-' @method AddRefererence
-' @param {VBProject} Project
-' @param {String} Guid
-' @param {Long} MajorVersion
-' @param {Long} MinorVersion
+' Add reference to project from guid, major version, and minor version
+'
+' ```vb
+' ' Add VBIDE
+' Installer.AddReference ThisWorkbook.Project, "{0002E157-0000-0000-C000-000000000046}", 5, 3
+' ```
 ''
 Public Sub AddReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long)
     Precheck Project
@@ -159,16 +170,17 @@ Public Sub AddReference(Project As VBProject, Guid As String, MajorVersion As Lo
 
 ErrorHandling:
 
-    Err.Raise 10109, "Installer.AddReference", _
-        "Failed to add reference. " & Err.Number & ": " & Err.Description
+    Err.Raise 10109 + &H30000 + vbObjectError, "Installer.AddReference", _
+        "[10109] Failed to add reference. " & Err.Number & ": " & Err.Description
 End Sub
 
 ''
-' @method RemoveReference
-' @param {VBProject} Project
-' @param {String} Guid
-' @param {Long} MajorVersion
-' @param {Long} MinorVersion
+' Remove reference from project from guid, major version, and minor version
+'
+' ```vb
+' ' Remove VBIDE
+' Installer.RemoveReference ThisWorkbook.Project, "{0002E157-0000-0000-C000-000000000046}", 5, 3
+' ```
 ''
 Public Sub RemoveReference(Project As VBProject, Guid As String, MajorVersion As Long, MinorVersion As Long)
     Precheck Project
@@ -187,12 +199,10 @@ Public Sub RemoveReference(Project As VBProject, Guid As String, MajorVersion As
 
 ErrorHandling:
 
-    Err.Raise 10110, "Installer.RemoveReference", _
-        "Failed to remove reference. " & Err.Number & ": " & Err.Description
+    Err.Raise 10110 + &H30000 + vbObjectError, "Installer.RemoveReference", _
+        "[10110] Failed to remove reference. " & Err.Number & ": " & Err.Description
 End Sub
 
-' ============================================= '
-' Private Methods
 ' ============================================= '
 
 Private Function GetComponent(Project As VBProject, ComponentName As String) As VBComponent
@@ -213,8 +223,8 @@ End Function
 
 Private Sub Precheck(Project As VBProject)
     If Not VbaIsTrusted(Project) Then
-        Err.Raise 10100, "Installer", _
-            "VBA Project access is disabled. To enable:" & vbNewLine & _
+        Err.Raise 10100 + &H30000 + vbObjectError, "Installer", _
+            "[10100] VBA Project access is disabled. To enable:" & vbNewLine & _
             vbNewLine & _
             "File > Options > Trust Center > Trust Center Settings" & vbNewLine & _
             "Macro Settings > Developer Macro Settings" & vbNewLine & _
@@ -223,7 +233,7 @@ Private Sub Precheck(Project As VBProject)
 
     If Not VbaIsUnlocked(Project) Then
         Err.Raise 10101, "Installer", _
-            "VBA Project is locked. To import in this project, unlock VBA and try again."
+            "[10101] VBA Project is locked. To import in this project, unlock VBA and try again."
     End If
 End Sub
 

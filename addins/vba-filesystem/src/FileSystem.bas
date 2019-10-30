@@ -1,33 +1,24 @@
 Attribute VB_Name = "FileSystem"
 ''
-' VBA-FileSystem v0.1.0
-' (c) Tim Hall - https://github.com/VBA-tools/VBA-FileSystem
+' # FileSystem
 '
 ' FileSystem helpers for VBA
 '
 ' @module FileSystem
-' @author tim.hall.engr@gmail.com
-' @license MIT (http://www.opensource.org/licenses/mit-license.php)
+' @author Tim Hall <tim.hall.engr@gmail.com>
+' @repository https://github.com/vba-blocks/vba-blocks
+' @license MIT
 '' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
 
 Public Property Get Separator()
     Separator = Application.PathSeparator
 End Property
 
-''
-' @method FileExists
-' @param {String} FilePath
-' @returns {Boolean}
-''
 Public Function FileExists(FilePath As String) As Boolean
     ' TODO Handle Mac truncation (without MacScript)
     FileExists = VBA.Dir(FilePath) <> ""
 End Function
 
-''
-' @method DeleteFile
-' @param {String} FilePath
-''
 Public Sub DeleteFile(FilePath As String)
     If FileExists(FilePath) Then
         VBA.SetAttr FilePath, vbNormal
@@ -40,14 +31,12 @@ End Sub
 ' --------------------------------------------- '
 
 ''
-' GetExtension("a\b\c\d.xlsm") -> ".xlsm"
-' GetExtension("a.") -> "."
-' GetExtension("a") -> ""
-' GetExtension(".a") -> ""
-'
-' @method GetExtension
-' @param {String} FilePath
-' @returns {String}
+' ```vb
+' GetExtension("a\b\c\d.xlsm") ' -> ".xlsm"
+' GetExtension("a.") ' -> "."
+' GetExtension("a") ' -> ""
+' GetExtension(".a") ' -> ""
+' ```
 ''
 Public Function GetExtension(FilePath As String) As String
     Dim Parts() As String
@@ -63,11 +52,9 @@ Public Function GetExtension(FilePath As String) As String
 End Function
 
 ''
+' ```vb
 ' GetBase("a\b\c\d.xlsm") -> "d.xlsm"
-'
-' @method GetBase
-' @param {String} FilePath
-' @returns {String}
+' ```
 ''
 Public Function GetBase(FilePath As String) As String
     Dim Parts() As String
@@ -76,11 +63,9 @@ Public Function GetBase(FilePath As String) As String
 End Function
 
 ''
+' ```vb
 ' GetDir("a\b\c\d.xlsm") -> "a\b\c"
-'
-' @method GetDir
-' @param {String} FilePath
-' @returns {String}
+' ```
 ''
 Public Function GetDir(FilePath As String) As String
     Dim Parts() As String
@@ -96,10 +81,6 @@ End Function
 
 ''
 ' Normalize path separators to current OS
-'
-' @method NormalizePath
-' @param {String} FilePath
-' @returns {String}
 ''
 Public Function NormalizePath(FilePath As String) As String
     If FilePath = "" Then
@@ -129,10 +110,7 @@ Public Function NormalizePath(FilePath As String) As String
 End Function
 
 ''
-' Join path parts with separator
-'
-' @method JoinPath
-' @returns {String}
+' Join path parts with OS separator
 ''
 Public Function JoinPath(ParamArray Parts()) As String
     Dim Path As String

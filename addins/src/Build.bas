@@ -1,10 +1,13 @@
 Attribute VB_Name = "Build"
 ''
+' # Build
+'
 ' Primary build tooling for import, export, and create
 '
 ' @module Build
-' @author tim.hall.engr@gmail.com
-' @license MIT (http://www.opensource.org/licenses/mit-license.php)
+' @author Tim Hall <tim.hall.engr@gmail.com>
+' @repository https://github.com/vba-blocks/vba-blocks
+' @license MIT
 '' ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ '
 
 Public Function ImportGraph(Graph As Variant) As String
@@ -43,11 +46,9 @@ End Function
 ''
 ' Export given file to the given staging directory
 '
-' @method ExportTo
 ' @param {String} Info json value for file and staging
 ' @param {String} Info.file absolute file path to document to export
 ' @param {String} Info.staging absolute path to "staging" directory to export to
-' @return {String} json result value
 ''
 Public Function ExportTo(Info As Variant) As String
     On Error GoTo ErrorHandling
@@ -135,10 +136,7 @@ End Function
 ''
 ' Create a blank document at path
 '
-' @method CreateDocument
-' @param {String} Info
 ' @param {String} Info.path
-' @return {String} json result value
 ''
 Public Function CreateDocument(Info As Variant) As String
     On Error GoTo ErrorHandling
@@ -159,8 +157,6 @@ ErrorHandling:
     CreateDocument = Output.Result
 End Function
 
-' ============================================= '
-' Private Methods
 ' ============================================= '
 
 Private Function ComponentIsBlank(Component As VBComponent) As Boolean
