@@ -74,6 +74,15 @@ Public Sub Import(Project As VBProject, ComponentName As String, FullPath As Str
     On Error GoTo ErrorHandling
 
     Project.VBComponents.Import FullPath
+
+    On Error Resume Next
+
+    ' Verify component imported correctly
+    Set ExistingComponent = GetComponent(Project, ComponentName)
+    If ExistingComponent Is Nothing Or ExistingComponent.CodeModule Is Nothing Then
+        Err.Raise 10111 + &H30000 + vbObjectError, "Installer.Import", "[10111] Module """ & ComponentName & """ was imported, but has errors."
+    End If
+
     Exit Sub
 
 ErrorHandling:
