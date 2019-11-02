@@ -1,6 +1,5 @@
 const { resolve } = require('path');
-const { createHash } = require('crypto');
-const { readFile } = require('fs-extra');
+const checksum = require('./lib/checksum');
 
 main().catch(err => {
   console.error(err);
@@ -13,17 +12,4 @@ async function main() {
 
   const full_path = resolve(path);
   console.log(await checksum(full_path));
-}
-
-async function checksum(file, algorithm = 'sha256') {
-  const data = await readFile(file);
-  return hash(data, { algorithm });
-}
-
-function hash(data, options) {
-  const { algorithm = 'sha256', digest = 'hex' } = options;
-
-  return `${algorithm}-${createHash(algorithm)
-    .update(data)
-    .digest(digest)}`;
 }

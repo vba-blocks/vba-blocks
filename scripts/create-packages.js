@@ -1,11 +1,7 @@
-const { join, relative, basename, extname } = require('path');
-const { createWriteStream } = require('fs');
+const { join, relative, extname } = require('path');
 const { ensureDir } = require('fs-extra');
-const { create: createArchive } = require('archiver');
-const walkSync = require('walk-sync');
-const {
-  versions: { node: node_version }
-} = require('./ensure-vendor');
+const ls = require('./lib/ls');
+const zip = require('./lib/zip');
 
 const root = join(__dirname, '../');
 const dist = join(root, 'dist');
@@ -64,31 +60,4 @@ function getInput(platform) {
   }
 
   return input;
-}
-
-async function zip(input, dest, type = 'zip', options = {}) {
-  return new Promise((resolve, reject) => {
-    try {
-      const output = createWriteStream(dest);
-      const archive = createArchive(type, options);
-
-      output.on('close', resolve);
-      output.on('error', reject);
-
-      archive.pipe(output);
-      archive.on('error', reject);
-
-      for (const [path, name] of Object.entries(input)) {
-        archive.file(path, { name });
-      }
-
-      archive.finalize();
-    } catch (err) {
-      reject(err);
-    }
-  });
-}
-
-function ls(dir) {
-  return walkSync(dir, { directories: false }).map(path => join(dir, path));
 }
