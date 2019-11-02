@@ -4,6 +4,7 @@ const mri = require('mri');
 const { parse } = require('toml-patch');
 const ls = require('./lib/ls');
 const zip = require('./lib/zip');
+const sanitizeName = require('./lib/sanitize-name');
 
 const IS_MANIFEST = /vba-block\.toml/;
 const IS_README = /readme/i;
@@ -35,11 +36,11 @@ async function main() {
 
   const manifest = parse(await readFile(manifest_path, 'utf8'));
   if (!manifest.package) {
-    throw new Error(`pack only supports packages (found [package] in vba-block.toml)`);
+    throw new Error(`pack only supports packages ([package] in vba-block.toml)`);
   }
 
   const { name, version } = manifest.package;
-  const block_name = `${name}-v${version}.block`;
+  const block_name = `${sanitizeName(name)}-v${version}.block`;
   const block_path = join(dir, 'build', block_name);
   if (await pathExists(block_path)) {
     if (!force) {
