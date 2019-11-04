@@ -1,9 +1,8 @@
 import { ok } from 'assert';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
-import { Manifest, Snapshot } from '../manifest';
+import { Manifest } from '../manifest';
 import { Dependency } from '../manifest/dependency';
-import { DEFAULT_VERSION } from '../manifest/version';
 import { Project } from '../project.js';
 import { getRegistration } from '../resolve';
 import { DependencyGraph } from '../resolve/dependency-graph';
@@ -18,7 +17,7 @@ import { pathExists, readFile, writeFile } from '../utils/fs';
 import has from '../utils/has';
 import { join, relative, trailing } from '../utils/path';
 import { parse as parseToml, toLockfile as convertToLockfileToml } from '../utils/toml';
-import { Lockfile, LOCKFILE_VERSION } from './lockfile';
+import { Lockfile, LOCKFILE_VERSION, MinimalSnapshot } from './lockfile';
 
 const debug = env.debug('vba-blocks:lockfile');
 
@@ -137,9 +136,9 @@ export async function fromToml(toml: string, dir: string): Promise<Lockfile> {
   });
 
   // Load manifests for workspace
-  const root = toManifest(parsed.root, byName);
-  const members: Snapshot[] = (parsed.members || []).map((member: any) =>
-    toManifest(member, byName)
+  const root = toMinimalSnapshot(parsed.root, byName);
+  const members: MinimalSnapshot[] = (parsed.members || []).map((member: any) =>
+    toMinimalSnapshot(member, byName)
   );
 
   return { metadata, workspace: { root, members }, packages };
@@ -148,23 +147,21 @@ export async function fromToml(toml: string, dir: string): Promise<Lockfile> {
 /**
  * Convert raw toml value to manifest
  */
-function toManifest(value: any, dependencyByName: DependencyByName): Snapshot {
-  const { name, version } = value;
-  ok(name && version && Array.isArray(value.dependencies), 'Invalid manifest in lockfile');
+function toMinimalSnapshot(value: any, dependencyByName: DependencyByName): MinimalSnapshot {
+  const { name } = value;
+  ok(name && Array.isArray(value.dependencies), 'Invalid manifest in lockfile');
 
   // "Hydrate" dependencies from ids
   const dependencies = value.dependencies.map((id: string) => getDependency(id, dependencyByName));
 
   return {
     name,
-    version,
     dependencies
   };
 }
 
 interface LockfileManifest {
   name: string;
-  version?: string;
   dependencies: string[];
 }
 
@@ -184,13 +181,8 @@ function toLockfileManifest(
     toDependencyId(dependency, packages, dir)
   );
 
-  if (version === DEFAULT_VERSION) {
-    return { name, dependencies };
-  }
-
   return {
     name,
-    version,
     dependencies
   };
 }

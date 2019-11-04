@@ -1,5 +1,10 @@
-import { Snapshot } from '../manifest';
+import { Dependency } from '../manifest/dependency';
 import { DependencyGraph } from '../resolve/dependency-graph';
+
+export interface MinimalSnapshot {
+  name: string;
+  dependencies: Dependency[];
+}
 
 export const LOCKFILE_VERSION = '1';
 
@@ -15,8 +20,8 @@ export const LOCKFILE_VERSION = '1';
 export interface Lockfile {
   metadata?: { version: string };
   workspace: {
-    root: Snapshot;
-    members: Snapshot[];
+    root: MinimalSnapshot;
+    members: MinimalSnapshot[];
   };
   packages: DependencyGraph;
 }

@@ -1,5 +1,5 @@
 import { satisfies } from 'semver';
-import { loadManifest, Manifest, Snapshot } from '../manifest';
+import { loadManifest, Manifest } from '../manifest';
 import {
   Dependency,
   isGitDependency,
@@ -8,7 +8,7 @@ import {
 } from '../manifest/dependency';
 import { Workspace } from '../professional/workspace';
 import has from '../utils/has';
-import { Lockfile, LOCKFILE_VERSION } from './lockfile';
+import { Lockfile, LOCKFILE_VERSION, MinimalSnapshot } from './lockfile';
 
 /**
  * ## Is lockfile valid?
@@ -43,18 +43,19 @@ export default async function isLockfileValid(
  * ## Has manifest changed?
  *
  * - [ ] Has name changed?
- * - [ ] Has version changed?
  * - [ ] Have dependencies been added or removed?
  * - [ ] Are dependencies satisfied by lockfile versions?
  */
-async function hasManifestChanged(current: Manifest, locked: Snapshot): Promise<boolean> {
+async function hasManifestChanged(current: Manifest, locked: MinimalSnapshot): Promise<boolean> {
   if (current.name !== locked.name) return false;
-  if (current.version !== locked.version) return false;
 
   return await haveDependenciesChanged(current, locked);
 }
 
-async function haveDependenciesChanged(current: Manifest, locked: Snapshot): Promise<boolean> {
+async function haveDependenciesChanged(
+  current: Manifest,
+  locked: MinimalSnapshot
+): Promise<boolean> {
   const dependencies = current.dependencies.concat(current.devDependencies);
 
   if (dependencies.length !== locked.dependencies.length) return false;
