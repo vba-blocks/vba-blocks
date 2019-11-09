@@ -21,7 +21,8 @@ const commands: { [name: string]: () => Promise<Command> } = {
   build: async () => (await import('./vba-blocks-build')).default,
   test: async () => (await import('./vba-blocks-test')).default,
   export: async () => (await import('./vba-blocks-export')).default,
-  run: async () => (await import('./vba-blocks-run')).default
+  run: async () => (await import('./vba-blocks-run')).default,
+  version: async () => (await import('./vba-blocks-version')).default
 };
 
 const args = mri(process.argv.slice(2), {

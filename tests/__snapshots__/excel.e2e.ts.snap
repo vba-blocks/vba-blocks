@@ -235,3 +235,27 @@ target = \\"xlsm\\"
 ",
 }
 `;
+
+exports[`version should update by increment and preid 1`] = `
+Object {
+  "vba-block.toml": "[package]
+name = \\"blank-package\\"
+version = \\"0.1.0-beta.0\\"
+authors = []
+
+[src]
+",
+}
+`;
+
+exports[`version should update to explicit version 1`] = `
+Object {
+  "vba-block.toml": "[package]
+name = \\"blank-package\\"
+version = \\"2.0.0\\"
+authors = []
+
+[src]
+",
+}
+`;
