@@ -5,9 +5,7 @@ import time from 'pretty-hrtime';
 import build from '../actions/build-project';
 
 const help = dedent`
-  Build project from manifest.
-
-  Create a clean build of the project (after backing up any existing built targets).
+  Build project from manifest (after backing up any existing built targets).
 
   Usage: vba-blocks build [options]
 

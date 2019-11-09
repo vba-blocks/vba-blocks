@@ -5,17 +5,18 @@ import test from '../actions/test-project';
 const help = dedent`
   Run tests for built target.
 
-  Note: Currently, vba-blocks uses the following convention:
+  Usage: vba-blocks test [options]
+
+  Options:
+    --target=TYPE   Run in pre-built target of type TYPE
+
+  Notes:
+  Currently, vba-blocks uses the following convention:
 
   Windows: "vba run Tests.Run CON"
   Mac:     "vba run Tests.Run /dev/stdout"
 
-  For more information, see https://vba-blocks.com/guides/testing
-
-  Usage vba-blocks test [options]
-
-  Options:
-    --target=TYPE   Run in pre-built target of type TYPE`;
+  For more information, see https://vba-blocks.com/guides/testing`;
 
 export default async function(args: Args) {
   if (args.help) {

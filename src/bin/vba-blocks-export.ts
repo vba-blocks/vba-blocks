@@ -3,12 +3,12 @@ import { Args } from 'mri';
 import exportProject from '../actions/export-project';
 
 const help = dedent`
-  Export src from built target.
+  Export built project, including src, references, and target.
 
   Usage: vba-blocks export
 
   Options:
-    --target=TYPE   Export target of type TYPE [default = target]`;
+    --target=TYPE   Export target of type TYPE`;
 
 export default async function(args: Args) {
   if (args.help) {

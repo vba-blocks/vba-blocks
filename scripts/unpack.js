@@ -15,7 +15,7 @@ async function main() {
   } = mri(process.argv.slice(2));
 
   const block = resolve(input);
-  const dest = output ? resolve(output) : join(dirname(block), basename(block, extname(block)));
+  const dest = output ? resolve(output) : removeExtension(block);
 
   if (!(await pathExists(block))) {
     throw new Error(`Input block "${input}" not found`);
@@ -23,4 +23,11 @@ async function main() {
 
   ensureDir(dest);
   await decompress(block, dest);
+}
+
+function removeExtension(path) {
+  const dir = dirname(path);
+  const base = basename(path, extname(path));
+
+  return join(dir, base);
 }
