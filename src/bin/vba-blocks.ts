@@ -114,7 +114,7 @@ async function main() {
       : '.';
     const list = joinCommas(available.map(name => `"${name}"`));
 
-    return new CliError(
+    throw new CliError(
       ErrorCode.UnknownCommand,
       dedent`
         Unknown command "${command}"${did_you_mean}
