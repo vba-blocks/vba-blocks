@@ -94,6 +94,7 @@
     "rollup-plugin-terser": "^4.0.3",
     "rollup-plugin-typescript": "^1.0.0",
     "tslib": "^1.9.3",
-    "typescript": "^3"
+    "typescript": "^3",
+    "url-join": "^4.0.1"
   }
 }

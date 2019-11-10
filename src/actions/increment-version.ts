@@ -7,6 +7,8 @@ interface IncrementVersionOptions {
   preid?: string;
 }
 
+const release_types = ['patch', 'minor', 'major', 'prepatch', 'preminor', 'premajor', 'prerelease'];
+
 export default async function incrementVersion(
   increment: string,
   options: IncrementVersionOptions = {}
@@ -34,5 +36,5 @@ export default async function incrementVersion(
 }
 
 function isReleaseType(value: string): value is ReleaseType {
-  return ['patch', 'minor', 'major', 'prepatch', 'preminor', 'premajor'].includes(value);
+  return release_types.includes(value);
 }

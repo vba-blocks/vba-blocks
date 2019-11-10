@@ -1,11 +1,14 @@
 const { promisify } = require('util');
 const { resolve, join } = require('path');
 const assert = require('assert');
-const execFile = promisify(require('child_process').exec);
-const { readFile, ensureFile, pathExists } = require('fs-extra');
-const { parse } = require('toml-patch');
+const execFile = promisify(require('child_process').execFile);
+const { readFile, ensureFile, pathExists, writeFile } = require('fs-extra');
 const mri = require('mri');
+const tmpDir = promisify(require('tmp').dir);
+const { parse } = require('toml-patch');
+const joinUrl = require('url-join');
 const checksum = require('./lib/checksum');
+const download = require('./lib/download');
 const git = require('./lib/git');
 const s3 = require('./lib/s3');
 const sanitizeName = require('./lib/sanitize-name');
@@ -44,9 +47,9 @@ async function uploadAndValidate(dir, manifest, { dryrun }) {
   const block_path = join(dir, 'build', block_name);
 
   if (!(await pathExists(block_path))) {
-    await act(dryrun, `Packing ${block_name}...`, () =>
-      execFile('node', [join(__dirname, 'pack.js'), input])
-    );
+    await act(dryrun, `Packing ${block_name}...`, async () => {
+      await execFile('node', [join(__dirname, 'pack.js'), dir]);
+    });
   }
 
   await act(dryrun, `Uploading ${block_name}...`, () =>
@@ -55,10 +58,16 @@ async function uploadAndValidate(dir, manifest, { dryrun }) {
 
   const cksum = await checksum(block_path);
   await act(dryrun, 'Validating checksum...', async () => {
-    const downloaded = await s3.download({ block_name });
-    const comparison = await checksum(downloaded);
+    const url = joinUrl('https://packages.vba-blocks.com', block_name);
+    const dest = join(await tmpDir(), block_name);
 
-    assert(comparison === cksum, `Uploaded checksum does not match (${comparison} vs ${cksum})`);
+    await download(url, dest);
+
+    const comparison = await checksum(dest);
+    assert(
+      comparison === cksum,
+      `Uploaded checksum does not match (downloaded: ${comparison} vs expected: ${cksum})`
+    );
   });
 
   return cksum;
@@ -86,7 +95,9 @@ function generateEntry(manifest, cksum) {
 }
 
 async function publishToRegistry(entry, { dryrun }) {
-  console.log(`${dryrun}Publishing ${JSON.stringify(entry)}...`);
+  const { name, vers: version } = entry;
+
+  console.log(`${dryrun ? '[dryrun] ' : ''}Publishing\n\n${JSON.stringify(entry, null, 2)}\n`);
 
   // 1. git pull
   await act(dryrun, `git pull "${registry}"...`, () => git.pull({ dir: registry }));
@@ -111,7 +122,7 @@ async function publishToRegistry(entry, { dryrun }) {
       throw new Error(`${name} v${version} has already been published`);
     }
   }
-  const added = entries.concat(new_entry).map(value => JSON.stringify(value));
+  const added = entries.concat(entry).map(value => JSON.stringify(value));
 
   // 4. Write to registry
   const raw_added = `${added.join('\n')}\n`;
