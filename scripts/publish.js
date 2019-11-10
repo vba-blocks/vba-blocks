@@ -99,43 +99,43 @@ async function publishToRegistry(entry, { dryrun }) {
 
   console.log(`${dryrun ? '[dryrun] ' : ''}Publishing\n\n${JSON.stringify(entry, null, 2)}\n`);
 
-  // // 1. git pull (or git clone if not found)
-  // const registry_exists = await pathExists(join(registry, '.git'));
-  // if (!registry_exists) {
-  //   await act(dryrun, `git clone...`, () => git.clone({ dir: __dirname }));
-  // } else {
-  //   await act(dryrun, `git pull "${registry}"...`, () => git.pull({ dir: registry }));
-  // }
+  // 1. git pull (or git clone if not found)
+  const registry_exists = await pathExists(join(registry, '.git'));
+  if (!registry_exists) {
+    await act(dryrun, `git clone...`, () => git.clone({ dir: __dirname }));
+  } else {
+    await act(dryrun, `git pull "${registry}"...`, () => git.pull({ dir: registry }));
+  }
 
-  // // 2. Load existing entries
-  // const entries_path = join(registry, sanitizeName(name));
-  // await act(dryrun, () => ensureFile(entries_path));
+  // 2. Load existing entries
+  const entries_path = join(registry, sanitizeName(name));
+  await act(dryrun, () => ensureFile(entries_path));
 
-  // let raw_entries = '';
-  // try {
-  //   raw_entries = await readFile(entries_path, 'utf8');
-  // } catch (error) {}
+  let raw_entries = '';
+  try {
+    raw_entries = await readFile(entries_path, 'utf8');
+  } catch (error) {}
 
-  // const entries = raw_entries
-  //   .split('\n')
-  //   .filter(Boolean)
-  //   .map(entry => JSON.parse(entry));
+  const entries = raw_entries
+    .split('\n')
+    .filter(Boolean)
+    .map(entry => JSON.parse(entry));
 
-  // // 3. Add to entries
-  // for (const existing of entries) {
-  //   if (existing.vers === version) {
-  //     throw new Error(`${name} v${version} has already been published`);
-  //   }
-  // }
-  // const added = entries.concat(entry).map(value => JSON.stringify(value));
+  // 3. Add to entries
+  for (const existing of entries) {
+    if (existing.vers === version) {
+      throw new Error(`${name} v${version} has already been published`);
+    }
+  }
+  const added = entries.concat(entry).map(value => JSON.stringify(value));
 
-  // // 4. Write to registry
-  // const raw_added = `${added.join('\n')}\n`;
-  // await act(dryrun, `Writing to ${entries_path}...`, () => writeFile(entries_path, raw_added));
+  // 4. Write to registry
+  const raw_added = `${added.join('\n')}\n`;
+  await act(dryrun, `Writing to ${entries_path}...`, () => writeFile(entries_path, raw_added));
 
-  // // 5. Commit
-  // const message = `Publish ${name} v${version}`;
-  // await act(dryrun, `git commit -am "${message}"...`, () => git.commit({ dir: registry, message }));
+  // 5. Commit
+  const message = `Publish ${name} v${version}`;
+  await act(dryrun, `git commit -am "${message}"...`, () => git.commit({ dir: registry, message }));
 
   // 6. Push
   await act(dryrun, `git push...`, async () => {
