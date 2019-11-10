@@ -1,3 +1,0 @@
-[submodule "scripts/registry"]
-	path = scripts/registry
-	url = https://github.com/vba-blocks/registry.git
