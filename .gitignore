@@ -2,6 +2,7 @@
 /dist
 /tests/.tmp
 /addins/build
+/addins/**/build
 /vendor
 /scripts/registry
 
