@@ -3,6 +3,7 @@
 /tests/.tmp
 /addins/build
 /vendor
+/scripts/registry
 
 # Ignore temporary Excel files
 **/~$*
