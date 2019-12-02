@@ -1,17 +1,20 @@
 import * as fs from 'fs';
 import env from '../env';
 import { pathExists } from './fs';
+import * as localGit from './local-git';
 import { join } from './path';
 
 const debug = env.debug('vba-blocks:git');
 
-interface Git {
+export interface Git {
   clone(options: { dir: string; url: string; depth?: number }): Promise<void>;
   pull(options: { dir: string }): Promise<void>;
   init(options: { dir: string }): Promise<void>;
 }
 
 async function loadGit(): Promise<Git> {
+  if (await localGit.isAvailable()) return localGit;
+
   const fetch = await import('node-fetch');
   (global as any).fetch = fetch.default;
 
@@ -41,6 +44,21 @@ export async function init(dir: string) {
 
   debug(`init: ${dir}`);
   await git.init({ dir });
+}
+
+export async function addAll(dir: string) {
+  if (!localGit.isAvailable() || !isGitRepository(dir)) return;
+  localGit.addAll({ dir });
+}
+
+export async function commit(dir: string, message: string) {
+  if (!localGit.isAvailable() || !isGitRepository(dir)) return;
+  localGit.commit({ dir, message });
+}
+
+export async function tag(dir: string, ref: string, sign: boolean) {
+  if (!localGit.isAvailable() || !isGitRepository(dir)) return;
+  localGit.tag({ dir, ref, sign });
 }
 
 export async function isGitRepository(dir: string): Promise<boolean> {

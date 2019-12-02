@@ -14,7 +14,7 @@ Error.stackTraceLimit = Infinity;
 
 const debug = env.debug('vba-blocks:main');
 
-type Command = (args: Args) => Promise<void>;
+type Command = (args: Args, argv: string[]) => Promise<void>;
 const commands: { [name: string]: () => Promise<Command> } = {
   new: async () => (await import('./vba-blocks-new')).default,
   init: async () => (await import('./vba-blocks-init')).default,
@@ -128,8 +128,9 @@ async function main() {
 
   // Remove command from args
   args._ = args._.slice(1);
+  const argv = process.argv.slice(3);
 
-  let subcommand: (args: Args) => Promise<void>;
+  let subcommand: (args: Args, argv: string[]) => Promise<void>;
   try {
     debug(`loading "./vba-blocks-${command}.js"`);
     subcommand = await commands[command]();
@@ -138,7 +139,7 @@ async function main() {
   }
 
   debug(`starting "${command}" with args ${JSON.stringify(args)}`);
-  const [has_update_available] = await Promise.all([checkForUpdate(), subcommand(args)]);
+  const [has_update_available] = await Promise.all([checkForUpdate(), subcommand(args, argv)]);
 
   if (has_update_available) {
     env.reporter.log(Message.UpdateAvailable, updateAvailableMessage());

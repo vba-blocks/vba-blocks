@@ -36,6 +36,7 @@
   "dependencies": {
     "ansi-colors": "^3",
     "archiver": "^3",
+    "command-exists": "^1.2.8",
     "conf": "^3",
     "date-fns": "^2",
     "debug": "^4",
