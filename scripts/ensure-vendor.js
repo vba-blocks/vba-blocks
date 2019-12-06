@@ -6,7 +6,7 @@ const { ensureDir, pathExists, remove, writeFile, readFile } = require('fs-extra
 const tmpDir = promisify(require('tmp').dir);
 const decompress = require('decompress');
 
-const node_version = 'v12.13.0';
+const node_version = 'v12.13.1';
 const vendor = join(__dirname, '../vendor');
 const version = join(vendor, '.version');
 
