@@ -2,6 +2,7 @@ import { Config, loadConfig } from './config';
 import env from './env';
 import { isLockfileValid, readLockfile } from './lockfile';
 import { loadManifest, Manifest } from './manifest';
+import { assertValidName } from './manifest/name';
 import { loadWorkspace, Workspace } from './professional/workspace';
 import resolve from './resolve';
 import { DependencyGraph } from './resolve/dependency-graph';
@@ -110,6 +111,7 @@ export async function initProject(
   dir: string,
   options: ProjectOptions = {}
 ): Promise<Project> {
+  assertValidName(name);
   dir = normalize(dir);
   const { type = 'project' } = options;
 

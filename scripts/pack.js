@@ -4,7 +4,7 @@ const mri = require('mri');
 const { parse } = require('toml-patch');
 const ls = require('./lib/ls');
 const zip = require('./lib/zip');
-const sanitizeName = require('./lib/sanitize-name');
+const { parseName } = require('./lib/name');
 
 const IS_MANIFEST = /vba-block\.toml/;
 const IS_README = /readme/i;
@@ -40,7 +40,7 @@ async function main() {
   }
 
   const { name, version } = manifest.package;
-  const block_name = `${sanitizePkgName(name)}-v${version}.block`;
+  const block_name = `${parseName(name).name}-v${version}.block`;
   const block_path = join(dir, 'build', block_name);
   if (await pathExists(block_path)) {
     if (!force) {
@@ -74,9 +74,4 @@ async function main() {
   await zip(files, block_path);
 
   console.log(`Done. Created ${block_path}`);
-}
-
-function sanitizePkgName(name) {
-  const [scope, ...parts] = name.split('/');
-  return sanitizeName(parts.join('--'));
 }

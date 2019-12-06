@@ -1,6 +1,7 @@
 import { formatManifest, loadManifest, parseManifest } from '../';
 import { dev, dir as FIXTURES, invalidManifest, standard } from '../../../tests/__fixtures__';
 import { normalizeManifest } from '../../__helpers__/manifest';
+import { validateName } from '../name';
 
 const BASE_MANIFEST: {
   package: {
@@ -188,4 +189,19 @@ test('should format manifest for export', async () => {
   const converted = formatManifest(manifest, FIXTURES);
 
   expect(converted).toMatchSnapshot();
+});
+
+describe('validates manifest name', () => {
+  it.each(['json', 'vba-tools/json'])('valid "%s"', name => {
+    expect(validateName(name).valid).toBe(true);
+  });
+
+  it.each([
+    'nested/paths/fail',
+    'excited-fail!',
+    ' leading-space:and:weirdchars:fail',
+    'eLaBorAtE-paCkAgE-with-mixed-case-and-more-than-214-characters-----------------------------------------------------------------------------------------------------------------------------------------------------------'
+  ])('invalid "%s"', name => {
+    expect(validateName(name)).toMatchSnapshot();
+  });
 });

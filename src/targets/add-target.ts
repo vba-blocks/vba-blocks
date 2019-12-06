@@ -1,9 +1,10 @@
 import { createDocument, exportTo } from '../addin';
 import { CliError, ErrorCode } from '../errors';
 import { writeManifest } from '../manifest';
+import { parseName } from '../manifest/name';
 import { Target, TargetType } from '../manifest/target';
 import { copy, emptyDir, ensureDir, remove } from '../utils/fs';
-import { basename, extname, join, resolve, sanitize } from '../utils/path';
+import { basename, extname, join, resolve } from '../utils/path';
 import buildTarget from './build-target';
 import exportTarget, { extractTarget } from './export-target';
 import { ProjectInfo } from './project-info';
@@ -47,7 +48,7 @@ export default async function addTarget(
         name,
         type,
         path: join(project.paths.dir, path),
-        filename: `${sanitize(name)}.${type}`
+        filename: `${parseName(name).name}.${type}`
       };
 
       await copy(from, join(project.paths.build, target.filename));
@@ -62,7 +63,7 @@ export default async function addTarget(
         name,
         type,
         path: join(project.paths.dir, path),
-        filename: `${sanitize(name)}.${type}`
+        filename: `${parseName(name).name}.${type}`
       };
 
       await createDocument(project, target);

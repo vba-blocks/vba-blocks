@@ -1,7 +1,8 @@
 import { manifestOk } from '../errors';
+import { parseName } from '../manifest/name';
 import has from '../utils/has';
 import { isString } from '../utils/is';
-import { join, relative, sanitize } from '../utils/path';
+import { join, relative } from '../utils/path';
 
 /*
   # Target
@@ -44,7 +45,7 @@ export function parseTarget(value: any, pkgName: string, dir: string): Target {
   );
 
   const path = join(dir, relativePath);
-  const filename = `${sanitize(name)}.${type}`;
+  const filename = `${parseName(name).name}.${type}`;
 
   return { name, type, path, filename };
 }

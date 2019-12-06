@@ -2,12 +2,13 @@ import dedent from '@timhall/dedent/macro';
 import { exportTo } from '../addin';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
+import { parseName } from '../manifest/name';
 import { Target, TargetType } from '../manifest/target';
 import { Message } from '../messages';
 import { fetchDependencies, loadProject } from '../project';
 import { exportTarget } from '../targets';
 import { emptyDir, ensureDir, remove } from '../utils/fs';
-import { join, sanitize } from '../utils/path';
+import { join } from '../utils/path';
 
 export interface ExportOptions {
   target?: string;
@@ -44,7 +45,7 @@ export default async function exportProject(options: ExportOptions = {}) {
       type,
       name,
       path: `targets/${type}`,
-      filename: `${sanitize(name)}.${type}`
+      filename: `${parseName(name).name}.${type}`
     };
     blank_target = true;
   }

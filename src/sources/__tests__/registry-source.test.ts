@@ -1,9 +1,4 @@
-import {
-  getLocalPackage,
-  getRemotePackage,
-  getSource,
-  sanitizePackageName
-} from '../registry-source';
+import { getLocalPackage, getRemotePackage, getSource } from '../registry-source';
 
 test('should resolve registry dependency', () => {
   // TODO
@@ -21,13 +16,6 @@ describe('utils', () => {
     id: 'dictionary@1.0.0',
     source: ''
   };
-
-  test('should sanitize package name', () => {
-    expect(sanitizePackageName('json')).toEqual('json');
-    expect(sanitizePackageName('vba-tools/json')).toEqual('vba-tools/json');
-    expect(sanitizePackageName('vba-tools/a/b')).toEqual('vba-tools/a--b');
-    expect(sanitizePackageName('a/b.c\\d:e*f"g>h<i|j')).toEqual('a/b.c-d-e-f-g-h-i-j');
-  });
 
   test('should get remote package url', () => {
     expect(getRemotePackage('https://packages.vba-blocks.com', dictionary)).toEqual(

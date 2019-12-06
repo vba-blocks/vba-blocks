@@ -11,7 +11,7 @@ const checksum = require('./lib/checksum');
 const download = require('./lib/download');
 const git = require('./lib/git');
 const s3 = require('./lib/s3');
-const sanitizeName = require('./lib/sanitize-name');
+const { pkgParts, sanitizePkgName } = require('./lib/name');
 
 const registry = join(__dirname, 'registry');
 
@@ -43,8 +43,10 @@ async function main() {
 
 async function uploadAndValidate(dir, manifest, { dryrun }) {
   const { name, version } = manifest.package;
-  const block_name = `${sanitizeName(name)}-v${version}.block`;
+  const { scope } = parseName(name)
+  const block_name = `${parseName(name).name}-v${version}.block`;
   const block_path = join(dir, 'build', block_name);
+  const filename = scope ? join(scope, block_name) : block_name;
 
   if (!(await pathExists(block_path))) {
     await act(dryrun, `Packing ${block_name}...`, async () => {
@@ -53,12 +55,12 @@ async function uploadAndValidate(dir, manifest, { dryrun }) {
   }
 
   await act(dryrun, `Uploading ${block_name}...`, () =>
-    s3.upload({ filename: block_name, path: block_path })
+    s3.upload({ filename, path: block_path })
   );
 
   const cksum = await checksum(block_path);
   await act(dryrun, 'Validating checksum...', async () => {
-    const url = joinUrl('https://packages.vba-blocks.com', block_name);
+    const url = joinUrl('https://packages.vba-blocks.com', filename);
     const dest = join(await tmpDir(), block_name);
 
     await download(url, dest);
@@ -108,7 +110,7 @@ async function publishToRegistry(entry, { dryrun }) {
   }
 
   // 2. Load existing entries
-  const entries_path = join(registry, sanitizeName(name));
+  const entries_path = scope ? join(registry, join(registry, sanitizeName(name));
   await act(dryrun, () => ensureFile(entries_path));
 
   let raw_entries = '';

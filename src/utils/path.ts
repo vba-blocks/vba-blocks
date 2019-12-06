@@ -4,7 +4,6 @@ import {
   relative as _relative,
   resolve as _resolve
 } from 'path';
-import sanitizeFilename from 'sanitize-filename';
 
 export { basename, dirname, extname } from 'path';
 
@@ -28,10 +27,6 @@ export function relative(from: string, to: string): string {
 
 export function resolve(...parts: string[]): string {
   return normalize(_resolve(...parts));
-}
-
-export function sanitize(name: string): string {
-  return sanitizeFilename(name, { replacement: '-' });
 }
 
 export function trailing(value: string): string {

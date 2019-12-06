@@ -1,8 +1,8 @@
 import dedent from '@timhall/dedent/macro';
 import { CliError, ErrorCode } from '../errors';
+import { parseName } from '../manifest/name';
 import { Target, TargetType } from '../manifest/target';
 import { Project } from '../project';
-import { sanitize } from '../utils/path';
 
 export interface TargetInfo {
   target: Target;
@@ -27,7 +27,7 @@ export default function getTarget(project: Project, target_type: string | undefi
         type,
         name,
         path: 'target',
-        filename: `${sanitize(name)}.${type}`
+        filename: `${parseName(name).name}.${type}`
       };
       blank_target = true;
     }

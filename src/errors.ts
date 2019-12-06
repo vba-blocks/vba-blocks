@@ -33,6 +33,7 @@ export enum ErrorCode {
   UnknownCommand = 'unknown-command',
   ManifestNotFound = 'manifest-not-found',
   ManifestInvalid = 'manifest-invalid',
+  ManifestNameInvalid = 'manifest-name-invalid',
   SourceUnsupported = 'source-unsupported',
   SourceMisconfiguredRegistry = 'source-misconfigured-registry',
   SourceNoneMatching = 'source-none-matching',

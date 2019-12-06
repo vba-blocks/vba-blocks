@@ -2,6 +2,7 @@ import dedent from '@timhall/dedent/macro';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';
 import { Dependency, RegistryDependency } from '../manifest/dependency';
+import { parseName } from '../manifest/name';
 import { Message } from '../messages';
 import download from '../utils/download';
 import {
@@ -13,7 +14,7 @@ import {
   tmpFile
 } from '../utils/fs';
 import { clone, isGitRepository, pull } from '../utils/git';
-import { basename, dirname, join, sanitize } from '../utils/path';
+import { basename, dirname, join } from '../utils/path';
 import { unzip } from '../utils/zip';
 import { getRegistrationId, getRegistrationSource, Registration } from './registration';
 import { Source } from './source';
@@ -188,30 +189,27 @@ export function parseRegistration(registry: string, value: any): Registration {
   };
 }
 
-export function sanitizePackageName(name: string): string {
-  const [scope, ...parts] = name.split('/');
-
-  return [sanitize(scope), sanitize(parts.join('--'))].filter(Boolean).join('/');
-}
-
 function getPath(index: string, name: string): string {
-  return join(index, sanitizePackageName(name));
+  return join(index, ...parseName(name).parts);
 }
 
 export function getRemotePackage(packages: string, registration: Registration): string {
   const { name, version } = registration;
-  return `${packages}/${sanitizePackageName(name)}-v${version}.block`;
+  return `${packages}/${parseName(name).parts.join('/')}-v${version}.block`;
 }
 
 export function getLocalPackage(packages: string, registration: Registration): string {
   const { name, version } = registration;
-  const sanitized_parts = sanitizePackageName(name).split('/');
-  const pkg_name = sanitized_parts.pop();
+  const name_parts = parseName(name).parts;
+  const pkg_name = name_parts.pop();
 
-  return join(packages, ...sanitized_parts, `${pkg_name}-v${version}.block`);
+  return join(packages, ...name_parts, `${pkg_name}-v${version}.block`);
 }
 
 export function getSource(sources: string, registration: Registration): string {
   const { name, version } = registration;
-  return join(sources, `${sanitizePackageName(name)}-v${version}`);
+  const name_parts = parseName(name).parts;
+  const pkg_name = name_parts.pop();
+
+  return join(sources, ...name_parts, `${pkg_name}-v${version}`);
 }

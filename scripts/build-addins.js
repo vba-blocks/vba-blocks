@@ -1,3 +1,5 @@
+process.env.DEBUG = 'vba-blocks:*';
+
 const { join } = require('path');
 const vba = require('../lib/index');
 

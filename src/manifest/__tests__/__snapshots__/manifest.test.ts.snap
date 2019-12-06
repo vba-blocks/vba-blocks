@@ -409,3 +409,38 @@ name: Package Name
       ^
 Expected \\"=\\" for key-value, found Package"
 `;
+
+exports[`validates manifest name invalid " leading-space:and:weirdchars:fail" 1`] = `
+Object {
+  "errors": Array [
+    "name must only include the following characters: A-Z a-z 0-9 - _ . /",
+    "name must only start with the following characters: A-Z a-z 0-9",
+  ],
+  "valid": false,
+}
+`;
+
+exports[`validates manifest name invalid "eLaBorAtE-paCkAgE-with-mixed-case-and-more-than-214-characters-----------------------------------------------------------------------------------------------------------------------------------------------------------" 1`] = `
+Object {
+  "errors": Array [],
+  "valid": true,
+}
+`;
+
+exports[`validates manifest name invalid "excited-fail!" 1`] = `
+Object {
+  "errors": Array [
+    "name must only include the following characters: A-Z a-z 0-9 - _ . /",
+  ],
+  "valid": false,
+}
+`;
+
+exports[`validates manifest name invalid "nested/paths/fail" 1`] = `
+Object {
+  "errors": Array [
+    "name must only include a single / for scoped packages",
+  ],
+  "valid": false,
+}
+`;
