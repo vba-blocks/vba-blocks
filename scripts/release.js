@@ -1,17 +1,17 @@
 require('dotenv').config();
 
-const { promisify } = require('util');
-const { join, basename } = require('path');
 const Octokit = require('@octokit/rest');
-const tmpFile = promisify(require('tmp').file);
 const editor = require('editor');
-const { writeFile, readFile, remove } = require('fs-extra');
+const { readFile, remove, writeFile } = require('fs-extra');
 const mri = require('mri');
+const { basename, join } = require('path');
+const tmpFile = promisify(require('tmp').file);
+const { promisify } = require('util');
+const { version } = require('../package.json');
 
 const octokit = new Octokit({
   auth: `token ${process.env.VBA_BLOCKS_GITHUB_TOKEN}`
 });
-const { version } = require('../package.json');
 const args = mri(process.argv.slice(2), {
   alias: { D: 'draft' }
 });

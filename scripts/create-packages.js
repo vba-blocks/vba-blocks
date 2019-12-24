@@ -1,7 +1,9 @@
-const { join, relative, extname } = require('path');
-const { ensureDir } = require('fs-extra');
-const ls = require('./lib/ls');
-const zip = require('./lib/zip');
+const walkSync = require('walk-sync');
+const { fs, path, zip } = require('../lib/utils');
+
+const { ensureDir } = fs;
+const { extname, join, relative } = path;
+const { zip } = require('../src/utils/zip');
 
 const root = join(__dirname, '../');
 const dist = join(root, 'dist');
@@ -49,15 +51,20 @@ function getInput(platform) {
   const run_scripts = ls(join(root, 'run-scripts')).filter(compatibleRunScript);
   const bin = ls(join(root, 'bin')).filter(compatibleBin);
   const vendor = ls(join(root, 'vendor')).filter(compatibleExe);
-
-  const input = {};
-  for (const file of addins
+  const all_files = addins
     .concat(run_scripts)
     .concat(lib)
     .concat(bin)
-    .concat(vendor)) {
+    .concat(vendor);
+
+  const input = {};
+  for (const file of all_files) {
     input[file] = relative(root, file);
   }
 
   return input;
+}
+
+function ls(dir) {
+  return walkSync(dir, { directories: false }).map(path => join(dir, path));
 }

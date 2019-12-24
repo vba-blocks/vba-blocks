@@ -1,10 +1,12 @@
-const { promisify } = require('util');
-const { join, dirname, basename } = require('path');
-const { get: httpsGet } = require('https');
-const { createWriteStream } = require('fs');
-const { ensureDir, pathExists, remove, writeFile, readFile } = require('fs-extra');
-const tmpDir = promisify(require('tmp').dir);
 const decompress = require('decompress');
+const { createWriteStream } = require('fs');
+const { get: httpsGet } = require('https');
+const { promisify } = require('util');
+const tmpDir = promisify(require('tmp').dir);
+const { fs, path } = require('../lib/utils');
+
+const { ensureDir, pathExists, readFile, remove, writeFile } = fs;
+const { basename, dirname, join } = path;
 
 const node_version = 'v12.13.1';
 const vendor = join(__dirname, '../vendor');
@@ -88,8 +90,6 @@ async function download(url, dest) {
   });
 }
 
-module.exports = {
-  versions: {
-    node: node_version
-  }
+exports.versions = {
+  node: node_version
 };

@@ -1,19 +1,21 @@
+require('dotenv').config({ path: join(__dirname, '../.env') });
+
 const { promisify } = require('util');
-const { resolve, join } = require('path');
 const assert = require('assert');
 const execFile = promisify(require('child_process').execFile);
-const { readFile, ensureFile, pathExists, writeFile } = require('fs-extra');
 const mri = require('mri');
 const tmpDir = promisify(require('tmp').dir);
-const { parse } = require('toml-patch');
 const joinUrl = require('url-join');
-const checksum = require('./lib/checksum');
-const download = require('./lib/download');
-const git = require('./lib/git');
-const s3 = require('./lib/s3');
-const { pkgParts, sanitizePkgName } = require('./lib/name');
+const { download, fs, localGit: git, path, toml, s3 } = require('../lib/utils');
+const { parseName } = require('../lib');
+
+const { checksum, ensureFile, pathExists, readFile, writeFile } = fs;
+const { join, resolve } = path;
+const { parse } = toml;
 
 const registry = join(__dirname, 'registry');
+const remote = 'https://github.com/vba-blocks/registry.git';
+const bucket = process.env.VBA_BLOCKS_AWS_S3_BUCKET;
 
 main().catch(error => {
   console.error(error);
@@ -25,7 +27,7 @@ async function main() {
   let {
     _: [input],
     dryrun = false
-  } = mri(process.argv.slice(2));
+  } = mri(process.argv.slice(2), { boolean: ['dryrun'] });
 
   const dir = resolve(input);
   assert(await pathExists(dir), `Input directory "${input}" not found`);
@@ -33,7 +35,7 @@ async function main() {
   const manifest_path = join(dir, 'vba-block.toml');
   assert(await pathExists(manifest_path), `vba-block.toml not found in input directory "${input}"`);
 
-  const manifest = parse(await readFile(manifest_path, 'utf8'));
+  const manifest = await parse(await readFile(manifest_path, 'utf8'));
   assert(manifest.package, `publish only supports packages ([package] in vba-block.toml)`);
 
   const cksum = await uploadAndValidate(dir, manifest, { dryrun });
@@ -43,7 +45,7 @@ async function main() {
 
 async function uploadAndValidate(dir, manifest, { dryrun }) {
   const { name, version } = manifest.package;
-  const { scope } = parseName(name)
+  const { scope } = parseName(name);
   const block_name = `${parseName(name).name}-v${version}.block`;
   const block_path = join(dir, 'build', block_name);
   const filename = scope ? join(scope, block_name) : block_name;
@@ -55,7 +57,7 @@ async function uploadAndValidate(dir, manifest, { dryrun }) {
   }
 
   await act(dryrun, `Uploading ${block_name}...`, () =>
-    s3.upload({ filename, path: block_path })
+    s3.upload({ bucket, filename, path: block_path })
   );
 
   const cksum = await checksum(block_path);
@@ -104,13 +106,14 @@ async function publishToRegistry(entry, { dryrun }) {
   // 1. git pull (or git clone if not found)
   const registry_exists = await pathExists(join(registry, '.git'));
   if (!registry_exists) {
-    await act(dryrun, `git clone...`, () => git.clone({ dir: __dirname }));
+    await act(dryrun, `git clone...`, () => git.clone({ dir: registry, url: remote }));
   } else {
     await act(dryrun, `git pull "${registry}"...`, () => git.pull({ dir: registry }));
   }
 
   // 2. Load existing entries
-  const entries_path = scope ? join(registry, join(registry, sanitizeName(name));
+  const { scope, name: pkg } = parseName(name);
+  const entries_path = scope ? join(registry, scope, pkg) : join(registry, pkg);
   await act(dryrun, () => ensureFile(entries_path));
 
   let raw_entries = '';
@@ -150,7 +153,7 @@ async function publishToRegistry(entry, { dryrun }) {
 async function act(dryrun, message, action) {
   if (typeof message === 'function') {
     action = message;
-    message = null;
+    message = '';
   }
 
   if (message) console.log(`${dryrun ? '[dryrun] ' : ''}${message}`);

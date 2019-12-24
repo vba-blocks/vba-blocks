@@ -11,7 +11,7 @@ const mode = process.env.NODE_ENV || 'production';
 
 export default [
   {
-    input: ['src/index.ts', 'src/bin/vba-blocks.ts', 'src/debug.ts'],
+    input: ['src/index.ts', 'src/bin/vba-blocks.ts', 'src/debug.ts', 'src/utils.ts'],
     output: {
       format: 'cjs',
       dir: 'lib',
@@ -43,6 +43,8 @@ export default [
       // Ignore known errors
       if (warning.code === 'CIRCULAR_DEPENDENCY' && /glob/.test(warning.importer)) return;
       if (warning.code === 'EVAL' && /minisat/.test(warning.id)) return;
+      if (warning.code === 'CIRCULAR_DEPENDENCY' && /aws\-sdk/.test(warning.importer)) return;
+      if (warning.code === 'CIRCULAR_DEPENDENCY' && /xmlbuilder/.test(warning.importer)) return;
 
       warn(warning);
     }

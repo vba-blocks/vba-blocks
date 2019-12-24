@@ -4,7 +4,6 @@
 /addins/build
 /addins/**/build
 /vendor
-/scripts/registry
 
 # Ignore temporary Excel files
 **/~$*

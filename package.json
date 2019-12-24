@@ -7,7 +7,7 @@
   "bin": "lib/vba-blocks.js",
   "main": "lib/index.js",
   "scripts": {
-    "format": "prettier --write \"**/*.{ts,js}\"",
+    "format": "prettier --write \"{scripts,src,tests}/**/*.{ts,js}\"",
     "test": "jest --runInBand",
     "typecheck": "tsc",
     "test:e2e": "jest --config e2e.config.js --runInBand",

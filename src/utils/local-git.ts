@@ -79,6 +79,16 @@ export async function tag({ dir, ref, sign }: TagOptions) {
   await execGit(dir, ['tag', ...signArgs, ref]);
 }
 
+export interface PushOptions {
+  dir: string;
+}
+
+export async function push({ dir }: PushOptions) {
+  debug(`push (${dir})`);
+
+  await execGit(dir, ['push']);
+}
+
 interface ExecResult {
   stdout: string | Buffer;
   stderr: string | Buffer;

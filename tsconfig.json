@@ -13,7 +13,8 @@
     "baseUrl": ".",
     "paths": {
       "vba-blocks": ["./lib"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules", "src/**/__mocks__/*"]

@@ -1,13 +1,35 @@
+import { ArchiverOptions } from 'archiver';
 import { createWriteStream } from 'fs';
 import { __default } from './interop';
 
-export async function zip(dir: string, file: string): Promise<void> {
+export interface FileMapping {
+  [absolute: string]: string;
+}
+
+export async function zip(
+  dir: string,
+  file: string,
+  format?: string,
+  options?: ArchiverOptions
+): Promise<void>;
+export async function zip(
+  files: FileMapping,
+  file: string,
+  format?: string,
+  options?: ArchiverOptions
+): Promise<void>;
+export async function zip(
+  files: string | FileMapping,
+  file: string,
+  format: string = 'zip',
+  options: ArchiverOptions = {}
+): Promise<void> {
   const { create: createArchive } = (await import('archiver')).default;
 
   return new Promise<void>((resolve, reject) => {
     try {
       const output = createWriteStream(file);
-      const archive = createArchive('zip');
+      const archive = createArchive(format, options);
 
       output.on('close', () => resolve());
       output.on('error', reject);
@@ -15,7 +37,14 @@ export async function zip(dir: string, file: string): Promise<void> {
       archive.pipe(output);
       archive.on('error', reject);
 
-      archive.directory(dir, '/');
+      if (typeof files === 'string') {
+        archive.directory(files, '/');
+      } else {
+        for (const [path, name] of Object.entries(files)) {
+          archive.file(path, { name });
+        }
+      }
+
       archive.finalize();
     } catch (err) {
       reject(err);

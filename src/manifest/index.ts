@@ -59,6 +59,43 @@ export interface Manifest extends Snapshot {
   target?: Target;
 }
 
+export interface RawManifest {
+  project?: { name: string; target: string | { type: string; path: string }; [key: string]: any };
+  package?: {
+    name: string;
+    version: string;
+    authors: string[];
+    publish?: boolean;
+    [key: string]: any;
+  };
+  src?: {
+    [name: string]: string | { path: string };
+  };
+  dependencies?: {
+    [name: string]:
+      | string
+      | { version: string }
+      | { path: string }
+      | { git: string; branch?: string; tag?: string; rev?: string };
+  };
+  references?: {
+    [name: string]: { version: string; guid: string };
+  };
+  devSrc?: {
+    [name: string]: string | { path: string };
+  };
+  devDependencies?: {
+    [name: string]:
+      | string
+      | { version: string }
+      | { path: string }
+      | { git: string; branch?: string; tag?: string; rev?: string };
+  };
+  devReferences?: {
+    [name: string]: { version: string; guid: string };
+  };
+}
+
 const EXAMPLE = `Example vba-block.toml for a package (e.g. library to be shared):
 
   [package]

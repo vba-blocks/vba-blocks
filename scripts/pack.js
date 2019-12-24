@@ -1,10 +1,11 @@
-const { dirname, resolve, relative, join } = require('path');
-const { ensureDir, pathExists, readFile, remove } = require('fs-extra');
 const mri = require('mri');
-const { parse } = require('toml-patch');
-const ls = require('./lib/ls');
-const zip = require('./lib/zip');
-const { parseName } = require('./lib/name');
+const walkSync = require('walk-sync');
+const { parseName } = require('../lib');
+const { fs, path, toml, zip } = require('../lib/utils');
+
+const { ensureDir, pathExists, readFile, remove } = fs;
+const { dirname, join, relative, resolve } = path;
+const { parse } = toml;
 
 const IS_MANIFEST = /vba-block\.toml/;
 const IS_README = /readme/i;
@@ -12,17 +13,31 @@ const IS_CHANGELOG = /changes|changelog|history/i;
 const IS_LICENSE = /license|licence/i;
 const IS_NOTICE = /notice/i;
 
+const usage = `
+Pack vba-blocks package for publishing
+
+Usage: node scripts/pack <input>
+
+Options:
+  <input>   Input directory for package
+`;
+
 main().catch(error => {
   console.error(error);
   process.exit(1);
 });
 
-// Usage: node scripts/pack ./input/dir
 async function main() {
   const {
     _: [input],
-    force = false
-  } = mri(process.argv.slice(2));
+    force = false,
+    help
+  } = mri(process.argv.slice(2), { alias: { h: 'help' } });
+
+  if (help) {
+    console.log(usage);
+    return;
+  }
 
   const dir = resolve(input);
   if (!(await pathExists(dir))) {
@@ -34,7 +49,7 @@ async function main() {
     throw new Error(`vba-block.toml not found in input directory "${input}"`);
   }
 
-  const manifest = parse(await readFile(manifest_path, 'utf8'));
+  const manifest = await parse(await readFile(manifest_path, 'utf8'));
   if (!manifest.package) {
     throw new Error(`pack only supports packages ([package] in vba-block.toml)`);
   }
@@ -50,11 +65,14 @@ async function main() {
     }
   }
 
-  const src_files = Object.values(manifest.src).map(src => {
-    return join(dir, typeof src === 'string' ? src : src.path);
-  });
+  const src_files = manifest.src
+    ? Object.values(manifest.src).map(src => {
+        return join(dir, typeof src === 'string' ? src : src.path);
+      })
+    : [];
 
-  const files = ls(dir)
+  const files = walkSync(dir, { directories: false })
+    .map(path => join(dir, path))
     .filter(file => {
       return (
         IS_MANIFEST.test(file) ||

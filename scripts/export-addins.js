@@ -1,5 +1,7 @@
-const { join } = require('path');
-const vba = require('../lib/index');
+const { exportProject } = require('../lib');
+const { path } = require('../lib/utils');
+
+const { join } = path;
 
 main().catch(err => {
   console.error(err);
@@ -7,7 +9,7 @@ main().catch(err => {
 });
 
 async function main() {
-  await vba.exportProject({
+  await exportProject({
     addin: join(__dirname, 'bootstrap/build/bootstrap.xlsm')
   });
 }

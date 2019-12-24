@@ -1,4 +1,6 @@
 declare module 'fs-extra/lib/copy' {
+  interface CopyOptions {}
+
   export function copy(src: string, dest: string, options?: CopyOptions): Promise<void>;
   export function copy(src: string, dest: string, callback: (err: Error) => void): void;
   export function copy(
@@ -21,6 +23,8 @@ declare module 'fs-extra/lib/mkdirs' {
 }
 
 declare module 'fs-extra/lib/move' {
+  interface MoveOptions {}
+
   export function move(src: string, dest: string, options?: MoveOptions): Promise<void>;
   export function move(src: string, dest: string, callback: (err: Error) => void): void;
   export function move(
@@ -37,6 +41,8 @@ declare module 'fs-extra/lib/path-exists' {
 }
 
 declare module 'fs-extra/lib/json/jsonfile' {
+  interface ReadOptions {}
+
   export function readJson(file: string, options?: ReadOptions): Promise<any>;
   export function readJson(file: string, callback: (err: Error, jsonObject: any) => void): void;
   export function readJson(
@@ -56,4 +62,8 @@ declare module 'fs-extra/lib/json/jsonfile' {
 declare module 'fs-extra/lib/remove' {
   export function remove(dir: string): Promise<void>;
   export function remove(dir: string, callback: (err: Error) => void): void;
+}
+
+declare module 'fs-extra/lib/ensure' {
+  export function ensureFile(file: string): Promise<void>;
 }

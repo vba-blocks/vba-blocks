@@ -1,6 +1,7 @@
 import { readFile as _readFile, symlink as _symlink, writeFile as _writeFile } from 'fs';
 import { copy } from 'fs-extra/lib/copy';
 import { emptyDir } from 'fs-extra/lib/empty';
+import { ensureFile } from 'fs-extra/lib/ensure';
 import { readJson } from 'fs-extra/lib/json/jsonfile';
 import { ensureDir, ensureDirSync } from 'fs-extra/lib/mkdirs';
 import { move } from 'fs-extra/lib/move';
@@ -72,5 +73,6 @@ export {
   symlink,
   tmpFile,
   tmpFolder,
-  writeFile
+  writeFile,
+  ensureFile
 };

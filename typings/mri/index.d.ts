@@ -11,5 +11,5 @@ declare module 'mri' {
     [key: string]: undefined | boolean | number | string | string[];
   }
 
-  export default function mri(argv: string[], options: any): Args;
+  export default function mri(argv: string[], options?: any): Args;
 }
