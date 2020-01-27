@@ -6,8 +6,10 @@ import resolve from 'rollup-plugin-node-resolve';
 import replace from 'rollup-plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 import typescript from 'rollup-plugin-typescript';
+import { dependencies } from './package.json';
 
 const mode = process.env.NODE_ENV || 'production';
+const external = [...builtin, ...(mode === 'development' ? Object.keys(dependencies) : [])];
 
 export default [
   {
@@ -17,7 +19,7 @@ export default [
       dir: 'lib',
       sourcemap: true
     },
-    external: [...builtin],
+    external,
     plugins: [
       resolve(),
       replace({

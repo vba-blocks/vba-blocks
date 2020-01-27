@@ -64,6 +64,7 @@ export {
   emptyDir,
   ensureDir,
   ensureDirSync,
+  ensureFile,
   move,
   pathExists,
   readFile,
@@ -73,6 +74,5 @@ export {
   symlink,
   tmpFile,
   tmpFolder,
-  writeFile,
-  ensureFile
+  writeFile
 };

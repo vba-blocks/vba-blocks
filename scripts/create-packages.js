@@ -1,5 +1,5 @@
 const walkSync = require('walk-sync');
-const { fs, path, zip } = require('../lib/utils');
+const { fs, path, zip, tar } = require('../lib/utils');
 
 const { ensureDir } = fs;
 const { extname, join, relative } = path;
@@ -30,7 +30,7 @@ async function mac() {
   const file = join(dist, `vba-blocks-mac.tar.gz`);
   const input = getInput('darwin');
 
-  await zip(input, file, 'tar', { gzip: true });
+  await tar(input, file);
 }
 
 function getInput(platform) {
