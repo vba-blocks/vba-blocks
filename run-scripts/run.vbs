@@ -5,7 +5,7 @@ Dim Args()
 
 If WScript.Arguments.Count < 3 Then
   Fail "ERROR #1: Invalid Input (appname, file, and macro are required"
-Else If WScript.Arguments.Count > 13 Then
+ElseIf WScript.Arguments.Count > 13 Then
   Fail "ERROR #2: Invalid Input (only 10 arguments are supported)"
 End If
 
@@ -13,6 +13,7 @@ App = WScript.Arguments(0)
 File = WScript.Arguments(1)
 Command = WScript.Arguments(2)
 
+ReDim Args(WScript.Arguments.Count - 4)  ' max index can be -1, when no args are provided
 For i = 3 To WScript.Arguments.Count - 1
   Args(i - 3) = Unescape(WScript.Arguments(i))
 Next
@@ -118,27 +119,28 @@ Class Excel
 End Class
 
 Function RunMacro(App, Command, Args)
-  If Args.Count = 0 Then
+  Dim NumArgs: NumArgs = UBound(Args) + 1
+  If NumArgs = 0 Then
     RunMacro = App.Run(Command)
-  Else If WScript.Arguments.Count = 1 Then
+  ElseIf NumArgs = 1 Then
     RunMacro = App.Run(Command, Args(0))
-  Else If WScript.Arguments.Count = 2 Then
+  ElseIf NumArgs = 2 Then
     RunMacro = App.Run(Command, Args(0), Args(1))
-  Else If WScript.Arguments.Count = 3 Then
+  ElseIf NumArgs = 3 Then
     RunMacro = App.Run(Command, Args(0), Args(1), Args(2))
-  Else If WScript.Arguments.Count = 4 Then
+  ElseIf NumArgs = 4 Then
     RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3))
-  Else If WScript.Arguments.Count = 5 Then
+  ElseIf NumArgs = 5 Then
     RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4))
-  Else If WScript.Arguments.Count = 6 Then
+  ElseIf NumArgs = 6 Then
     RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5))
-  Else If WScript.Arguments.Count = 7 Then
+  ElseIf NumArgs = 7 Then
     RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5), Args(6))
-  Else If WScript.Arguments.Count = 8 Then
+  ElseIf NumArgs = 8 Then
     RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5), Args(6), Args(7))
-  Else If WScript.Arguments.Count = 9 Then
+  ElseIf NumArgs = 9 Then
     RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5), Args(6), Args(7), Args(8))
-  Else If WScript.Arguments.Count = 10 Then
+  ElseIf NumArgs = 10 Then
     RunMacro = App.Run(Command, Args(0), Args(1), Args(2), Args(3), Args(4), Args(5), Args(6), Args(7), Args(8), Args(9))
   End If
 End Function
