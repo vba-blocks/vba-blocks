@@ -5,7 +5,7 @@ declare module '@timhall/dedent' {
   ): string;
 }
 
-declare module '@timhall/dedent/macro' {
+declare module '@timhall/dedent' {
   export default function dedent(
     strings: string | string[] | TemplateStringsArray,
     ...values: string[]

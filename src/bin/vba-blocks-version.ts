@@ -1,4 +1,4 @@
-import dedent from '@timhall/dedent/macro';
+import dedent from '@timhall/dedent';
 import { Args } from 'mri';
 import incrementVersion from '../actions/increment-version';
 

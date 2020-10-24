@@ -1,4 +1,4 @@
-import dedent from '@timhall/dedent/macro';
+import dedent from '@timhall/dedent';
 import { exportTo } from '../addin';
 import env from '../env';
 import { CliError, ErrorCode } from '../errors';

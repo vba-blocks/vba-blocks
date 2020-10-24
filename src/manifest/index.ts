@@ -1,4 +1,4 @@
-import dedent from '@timhall/dedent/macro';
+import dedent from '@timhall/dedent';
 import { CliError, ErrorCode, manifestOk } from '../errors';
 import { pathExists, readFile, writeFile } from '../utils/fs';
 import { join, normalize } from '../utils/path';
@@ -155,11 +155,9 @@ export async function loadManifest(dir: string): Promise<Manifest> {
   } catch (err) {
     throw new CliError(
       ErrorCode.ManifestInvalid,
-      dedent`
-        vba-blocks.toml is invalid:
+      `vba-blocks.toml is invalid:
 
-        Syntax Error: ${file} (${err.line}:${err.column})\n\n${err.message}
-      `
+Syntax Error: ${file} (${err.line}:${err.column})\n\n${err.message}`
     );
   }
 

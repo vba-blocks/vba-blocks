@@ -1,4 +1,4 @@
-import dedent from '@timhall/dedent/macro';
+import dedent from '@timhall/dedent';
 import { exec as _exec } from 'child_process';
 import { promisify } from 'util';
 import env from '../env';

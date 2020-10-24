@@ -1,4 +1,4 @@
-import dedent from '@timhall/dedent/macro';
+import dedent from '@timhall/dedent';
 import { CliError, ErrorCode } from '../errors';
 import { Manifest } from '../manifest';
 import { Reference } from '../manifest/reference';

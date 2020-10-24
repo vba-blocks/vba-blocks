@@ -1,20 +1,15 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
     "strict": true,
-    "module": "esnext",
+    "target": "es2019",
+    "lib": ["es2020"],
+    "module": "es2020",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "target": "esnext",
-    "lib": ["es2019"],
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "noEmit": true,
-    "rootDir": "src",
-    "baseUrl": ".",
-    "paths": {
-      "vba-blocks": ["./lib"]
-    }
+    "noEmit": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
-  "exclude": ["node_modules", "src/**/__mocks__/*"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "tests/**/*.ts", "src/**/__mocks__/*"]
 }

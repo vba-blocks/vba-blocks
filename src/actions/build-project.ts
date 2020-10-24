@@ -1,4 +1,4 @@
-import dedent from '@timhall/dedent/macro';
+import dedent from '@timhall/dedent';
 import env from '../env';
 import { writeLockfile } from '../lockfile';
 import { isRegistryDependency } from '../manifest/dependency';

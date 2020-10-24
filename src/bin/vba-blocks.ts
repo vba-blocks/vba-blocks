@@ -1,5 +1,5 @@
-import dedent from '@timhall/dedent/macro';
-import * as colors from 'ansi-colors';
+import dedent from '@timhall/dedent';
+import { greenBright, redBright } from '@timhall/ansi-colors';
 import meant from 'meant';
 import mri, { Args } from 'mri';
 import { version } from '../../package.json';
@@ -65,7 +65,7 @@ const help = dedent`
   Visit https://vba-blocks.com to learn more about vba-blocks.`;
 
 const updateAvailableMessage = () => dedent`
-  \n${colors.greenBright('New Update!')} ${updateVersion()!}
+  \n${greenBright('New Update!')} ${updateVersion()!}
 
   A new version of vba-blocks is available.
   Visit https://vba-blocks.com/update for more information.`;
@@ -148,7 +148,7 @@ async function main() {
 export function handleError(err: Error | CliError | any, _promise?: Promise<any>) {
   const { message } = cleanError(err);
 
-  console.error(`${colors.redBright('ERROR')} ${message}`);
+  console.error(`${redBright('ERROR')} ${message}`);
 
   // TODO
   // if (err.code) {

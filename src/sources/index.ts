@@ -1,4 +1,4 @@
-import dedent from '@timhall/dedent/macro';
+import dedent from '@timhall/dedent';
 import { ok } from 'assert';
 import { CliError, ErrorCode } from '../errors';
 import {

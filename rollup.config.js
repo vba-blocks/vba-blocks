@@ -1,11 +1,10 @@
 import builtin from 'builtin-modules';
-import babel from 'rollup-plugin-babel';
-import commonjs from 'rollup-plugin-commonjs';
-import json from 'rollup-plugin-json';
-import resolve from 'rollup-plugin-node-resolve';
-import replace from 'rollup-plugin-replace';
+import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
+import resolve from '@rollup/plugin-node-resolve';
+import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
-import typescript from 'rollup-plugin-typescript';
+import typescript from '@rollup/plugin-typescript';
 
 const mode = process.env.NODE_ENV || 'production';
 
@@ -15,7 +14,8 @@ export default [
     output: {
       format: 'cjs',
       dir: 'lib',
-      sourcemap: true
+      sourcemap: true,
+      exports: 'auto'
     },
     external: [...builtin],
     plugins: [
@@ -26,13 +26,9 @@ export default [
         'require.cache': '{}'
       }),
       commonjs({
-        include: 'node_modules/**',
-        namedExports: {
-          'ansi-colors': ['redBright', 'greenBright', 'dim']
-        }
+        include: 'node_modules/**'
       }),
       json(),
-      babel({ extensions: ['.mjs', '.js', '.ts'] }),
       typescript(),
       mode === 'production' && terser(),
       readableStream(),

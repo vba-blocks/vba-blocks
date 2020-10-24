@@ -1,5 +1,5 @@
-import dedent from '@timhall/dedent/macro';
-import * as colors from 'ansi-colors';
+import dedent from '@timhall/dedent';
+import { dim } from '@timhall/ansi-colors';
 import { ok } from 'assert';
 import has from './utils/has';
 import { isString } from './utils/is';
@@ -11,7 +11,7 @@ export class CliError extends Error {
   constructor(code: ErrorCode, message: string, underlying?: Error) {
     if (underlying) {
       const { message: underlying_message } = cleanError(underlying);
-      message += `\n\n${colors.dim(underlying_message)}`;
+      message += `\n\n${dim(underlying_message)}`;
     }
 
     // TODO
