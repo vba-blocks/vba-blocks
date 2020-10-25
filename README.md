@@ -225,17 +225,21 @@ Scripting = { version = "1.0", guid = "{...}" }
 ### Prerequisites
 
 1. `git clone` this repo
-2. Install [node](https://nodejs.org/) v12.13.0 or later
-3. Install [yarn](https://www.yarnpkg.com/) v1.19.1 or later
-4. Install node-gyp dependencies for [Mac](https://github.com/nodejs/node-gyp#on-macos) or [Windows](https://github.com/nodejs/node-gyp#on-windows)
+2. Install [node](https://nodejs.org/) v12.19.0 or later
+3. Install node-gyp dependencies for [Mac](https://github.com/nodejs/node-gyp#on-macos) or [Windows](https://github.com/nodejs/node-gyp#on-windows)
 
 ### Build
 
-1. Run `yarn`
-2. Run `yarn build`
-3. Run `yarn build:addins`
+1. Run `npm install`
+2. Run `npm run build`
+3. Run `npm run build:addins`
+
+### Test
+
+1. Run `npm test`
+2. Run `npm run test:e2e`
 
 ### Release
 
-1. Run `yarn version`
-2. Run `yarn release`
+1. Run `npm version`
+2. Run `npm run release`
