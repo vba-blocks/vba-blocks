@@ -1,61 +1,61 @@
-import { loadConfig } from '../../src/config';
-import env from '../../src/env';
-import { loadManifest } from '../../src/manifest';
-import { loadWorkspace } from '../../src/professional/workspace';
-import { fetchDependencies, loadProject } from '../../src/project';
-import { reset as resetFs } from '../../src/utils/fs';
-import { join } from '../../src/utils/path';
-import { cache } from '../__fixtures__';
+import { loadConfig } from "../../src/config";
+import env from "../../src/env";
+import { loadManifest } from "../../src/manifest";
+import { loadWorkspace } from "../../src/professional/workspace";
+import { fetchDependencies, loadProject } from "../../src/project";
+import { reset as resetFs } from "../../src/utils/fs";
+import { join } from "../../src/utils/path";
+import { cache } from "../__fixtures__";
 
-jest.mock('../../src/utils/fs');
-jest.mock('../../src/utils/git');
+jest.mock("../../src/utils/fs");
+jest.mock("../../src/utils/git");
 
 const original_env = { ...env };
 
 interface EnvironmentOptions {
-  silent?: boolean;
+	silent?: boolean;
 }
 
 export function setupEnvironment(cwd: string, options: EnvironmentOptions = {}) {
-  const { silent = true } = options;
+	const { silent = true } = options;
 
-  env.cwd = cwd;
-  env.cache = cache;
-  env.registry = join(cache, 'registry');
-  env.packages = join(cache, 'packages');
-  env.sources = join(cache, 'sources');
-  env.reporter.silent = silent;
+	env.cwd = cwd;
+	env.cache = cache;
+	env.registry = join(cache, "registry");
+	env.packages = join(cache, "packages");
+	env.sources = join(cache, "sources");
+	env.reporter.silent = silent;
 }
 
 export async function setup(cwd: string, options: EnvironmentOptions = {}) {
-  setupEnvironment(cwd, options);
+	setupEnvironment(cwd, options);
 
-  const project = await loadProject();
-  const dependencies = await fetchDependencies(project);
+	const project = await loadProject();
+	const dependencies = await fetchDependencies(project);
 
-  return { project, dependencies };
+	return { project, dependencies };
 }
 
 export async function setupWorkspace(cwd: string) {
-  setupEnvironment(cwd);
+	setupEnvironment(cwd);
 
-  const manifest = await loadManifest(cwd);
-  const config = await loadConfig();
-  const workspace = await loadWorkspace(manifest, cwd);
+	const manifest = await loadManifest(cwd);
+	const config = await loadConfig();
+	const workspace = await loadWorkspace(manifest, cwd);
 
-  return {
-    manifest,
-    workspace,
-    config
-  };
+	return {
+		manifest,
+		workspace,
+		config
+	};
 }
 
 export function reset() {
-  resetFs();
+	resetFs();
 
-  env.cwd = original_env.cwd;
-  env.cache = original_env.cache;
-  env.registry = original_env.registry;
-  env.packages = original_env.packages;
-  env.sources = original_env.sources;
+	env.cwd = original_env.cwd;
+	env.cache = original_env.cache;
+	env.registry = original_env.registry;
+	env.packages = original_env.packages;
+	env.sources = original_env.sources;
 }

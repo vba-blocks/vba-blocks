@@ -1,12 +1,12 @@
-import { Dependency } from '../manifest/dependency';
-import { DependencyGraph } from '../resolve/dependency-graph';
+import { Dependency } from "../manifest/dependency";
+import { DependencyGraph } from "../resolve/dependency-graph";
 
 export interface MinimalSnapshot {
-  name: string;
-  dependencies: Dependency[];
+	name: string;
+	dependencies: Dependency[];
 }
 
-export const LOCKFILE_VERSION = '1';
+export const LOCKFILE_VERSION = "1";
 
 /**
  * ## Lockfile
@@ -18,10 +18,10 @@ export const LOCKFILE_VERSION = '1';
  * while staying isolated from the more-frequent changes to the vba-blocks version.
  */
 export interface Lockfile {
-  metadata?: { version: string };
-  workspace: {
-    root: MinimalSnapshot;
-    members: MinimalSnapshot[];
-  };
-  packages: DependencyGraph;
+	metadata?: { version: string };
+	workspace: {
+		root: MinimalSnapshot;
+		members: MinimalSnapshot[];
+	};
+	packages: DependencyGraph;
 }

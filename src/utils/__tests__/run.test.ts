@@ -1,5 +1,5 @@
-import { escape } from '../run';
+import { escape } from "../run";
 
-test('should escape quotes and spaces', () => {
-  expect(escape(`" '!?a1`)).toEqual(`^q '!?a1`);
+test("should escape quotes and spaces", () => {
+	expect(escape(`" '!?a1`)).toEqual(`^q '!?a1`);
 });

@@ -1,31 +1,31 @@
-import { Config, loadConfig } from './config';
-import env from './env';
-import { isLockfileValid, readLockfile } from './lockfile';
-import { loadManifest, Manifest } from './manifest';
-import { loadWorkspace, Workspace } from './professional/workspace';
-import resolve from './resolve';
-import { DependencyGraph } from './resolve/dependency-graph';
-import { fetch } from './sources';
-import { tmpFolder } from './utils/fs';
-import parallel from './utils/parallel';
-import { join, normalize } from './utils/path';
+import { Config, loadConfig } from "./config";
+import env from "./env";
+import { isLockfileValid, readLockfile } from "./lockfile";
+import { loadManifest, Manifest } from "./manifest";
+import { loadWorkspace, Workspace } from "./professional/workspace";
+import resolve from "./resolve";
+import { DependencyGraph } from "./resolve/dependency-graph";
+import { fetch } from "./sources";
+import { tmpFolder } from "./utils/fs";
+import parallel from "./utils/parallel";
+import { join, normalize } from "./utils/path";
 
-const debug = env.debug('vba-blocks:project');
+const debug = env.debug("vba-blocks:project");
 
 export interface Project {
-  manifest: Manifest;
-  workspace: Workspace;
-  packages: DependencyGraph;
+	manifest: Manifest;
+	workspace: Workspace;
+	packages: DependencyGraph;
 
-  config: Config;
-  paths: {
-    root: string;
-    dir: string;
-    build: string;
-    backup: string;
-    staging: string;
-  };
-  has_dirty_lockfile: boolean;
+	config: Config;
+	paths: {
+		root: string;
+		dir: string;
+		build: string;
+		backup: string;
+		staging: string;
+	};
+	has_dirty_lockfile: boolean;
 }
 
 /**
@@ -37,42 +37,42 @@ export interface Project {
  * 4. Resolve dependencies
  */
 export async function loadProject(dir: string = env.cwd): Promise<Project> {
-  const manifest = await loadManifest(dir);
+	const manifest = await loadManifest(dir);
 
-  const config = await loadConfig();
-  const workspace = await loadWorkspace(manifest, dir);
-  const lockfile = await readLockfile(workspace.paths.root);
+	const config = await loadConfig();
+	const workspace = await loadWorkspace(manifest, dir);
+	const lockfile = await readLockfile(workspace.paths.root);
 
-  // Resolve packages from lockfile or from sources
-  const has_dirty_lockfile = !lockfile || !(await isLockfileValid(lockfile, workspace));
-  debug(!has_dirty_lockfile ? 'Loading packages from lockfile' : 'Resolving packages');
+	// Resolve packages from lockfile or from sources
+	const has_dirty_lockfile = !lockfile || !(await isLockfileValid(lockfile, workspace));
+	debug(!has_dirty_lockfile ? "Loading packages from lockfile" : "Resolving packages");
 
-  const packages = !has_dirty_lockfile
-    ? lockfile!.packages
-    : await resolve(config, workspace, lockfile ? lockfile.packages : []);
+	const packages = !has_dirty_lockfile
+		? lockfile!.packages
+		: await resolve(config, workspace, lockfile ? lockfile.packages : []);
 
-  const paths = {
-    root: workspace.paths.root,
-    dir,
-    build: join(dir, 'build'),
-    backup: join(dir, 'build', '.backup'),
-    staging: await tmpFolder({ dir: env.staging })
-  };
+	const paths = {
+		root: workspace.paths.root,
+		dir,
+		build: join(dir, "build"),
+		backup: join(dir, "build", ".backup"),
+		staging: await tmpFolder({ dir: env.staging })
+	};
 
-  return {
-    manifest,
-    workspace,
-    packages,
-    config,
-    paths,
-    has_dirty_lockfile
-  };
+	return {
+		manifest,
+		workspace,
+		packages,
+		config,
+		paths,
+		has_dirty_lockfile
+	};
 }
 
 export interface FetchProject {
-  manifest: Manifest;
-  packages: DependencyGraph;
-  config: Config;
+	manifest: Manifest;
+	packages: DependencyGraph;
+	config: Config;
 }
 
 /**
@@ -82,22 +82,22 @@ export interface FetchProject {
  * After sources complete fetches, manifests are loaded and returned for each package
  */
 export async function fetchDependencies(project: FetchProject): Promise<Manifest[]> {
-  const manifests = await parallel(
-    project.packages,
-    async registration => {
-      const path = await fetch(project.config.sources, registration);
-      const manifest = await loadManifest(path);
+	const manifests = await parallel(
+		project.packages,
+		async registration => {
+			const path = await fetch(project.config.sources, registration);
+			const manifest = await loadManifest(path);
 
-      return manifest;
-    },
-    { progress: env.reporter.progress('Fetching dependencies') }
-  );
+			return manifest;
+		},
+		{ progress: env.reporter.progress("Fetching dependencies") }
+	);
 
-  return manifests;
+	return manifests;
 }
 
 export interface ProjectOptions {
-  type?: 'project' | 'package';
+	type?: "project" | "package";
 }
 
 /**
@@ -106,54 +106,54 @@ export interface ProjectOptions {
  * Minimum requirements: name and dir
  */
 export async function initProject(
-  name: string,
-  dir: string,
-  options: ProjectOptions = {}
+	name: string,
+	dir: string,
+	options: ProjectOptions = {}
 ): Promise<Project> {
-  dir = normalize(dir);
-  const { type = 'project' } = options;
+	dir = normalize(dir);
+	const { type = "project" } = options;
 
-  const config = await loadConfig();
+	const config = await loadConfig();
 
-  // TODO load defaults from config
-  const version = '0.0.0';
-  const authors: string[] = [];
-  const license = 'UNLICENSED';
+	// TODO load defaults from config
+	const version = "0.0.0";
+	const authors: string[] = [];
+	const license = "UNLICENSED";
 
-  // Manually generate manifest and project
-  // (may be included in project in the future)
-  const manifest: Manifest = {
-    type,
-    name,
-    version,
-    metadata: {
-      authors,
-      license
-    },
-    src: [],
-    dependencies: [],
-    references: [],
-    devSrc: [],
-    devDependencies: [],
-    devReferences: []
-  };
+	// Manually generate manifest and project
+	// (may be included in project in the future)
+	const manifest: Manifest = {
+		type,
+		name,
+		version,
+		metadata: {
+			authors,
+			license
+		},
+		src: [],
+		dependencies: [],
+		references: [],
+		devSrc: [],
+		devDependencies: [],
+		devReferences: []
+	};
 
-  const workspace = await loadWorkspace(manifest, dir);
+	const workspace = await loadWorkspace(manifest, dir);
 
-  const project: Project = {
-    manifest,
-    workspace,
-    packages: [],
-    config,
-    paths: {
-      root: workspace.paths.root,
-      dir,
-      build: join(dir, 'build'),
-      backup: join(dir, 'build', '.backup'),
-      staging: await tmpFolder({ dir: env.staging })
-    },
-    has_dirty_lockfile: true
-  };
+	const project: Project = {
+		manifest,
+		workspace,
+		packages: [],
+		config,
+		paths: {
+			root: workspace.paths.root,
+			dir,
+			build: join(dir, "build"),
+			backup: join(dir, "build", ".backup"),
+			staging: await tmpFolder({ dir: env.staging })
+		},
+		has_dirty_lockfile: true
+	};
 
-  return project;
+	return project;
 }

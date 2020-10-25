@@ -1,37 +1,37 @@
-import { setupWorkspace, reset } from '../../../tests/__helpers__/project';
-import { standard, complex, needsSat, unresolvable } from '../../../tests/__fixtures__';
-import { solve } from '../sat-solver';
-import Resolver from '../resolver';
+import { setupWorkspace, reset } from "../../../tests/__helpers__/project";
+import { standard, complex, needsSat, unresolvable } from "../../../tests/__fixtures__";
+import { solve } from "../sat-solver";
+import Resolver from "../resolver";
 
 afterAll(reset);
 
-test('solves standard tree', async () => {
-  const { config, workspace } = await setupWorkspace(standard);
-  const resolver = new Resolver(config);
+test("solves standard tree", async () => {
+	const { config, workspace } = await setupWorkspace(standard);
+	const resolver = new Resolver(config);
 
-  const solution = await solve(workspace, resolver);
-  expect(solution).toMatchSnapshot();
+	const solution = await solve(workspace, resolver);
+	expect(solution).toMatchSnapshot();
 });
 
-test('solves complex tree', async () => {
-  const { config, workspace } = await setupWorkspace(complex);
-  const resolver = new Resolver(config);
+test("solves complex tree", async () => {
+	const { config, workspace } = await setupWorkspace(complex);
+	const resolver = new Resolver(config);
 
-  const solution = await solve(workspace, resolver);
-  expect(solution).toMatchSnapshot();
+	const solution = await solve(workspace, resolver);
+	expect(solution).toMatchSnapshot();
 });
 
-test('solves needs-sat tree', async () => {
-  const { config, workspace } = await setupWorkspace(needsSat);
-  const resolver = new Resolver(config);
+test("solves needs-sat tree", async () => {
+	const { config, workspace } = await setupWorkspace(needsSat);
+	const resolver = new Resolver(config);
 
-  const solution = await solve(workspace, resolver);
-  expect(solution).toMatchSnapshot();
+	const solution = await solve(workspace, resolver);
+	expect(solution).toMatchSnapshot();
 });
 
-test('fails to solve unresolvable tree', async () => {
-  const { config, workspace } = await setupWorkspace(unresolvable);
-  const resolver = new Resolver(config);
+test("fails to solve unresolvable tree", async () => {
+	const { config, workspace } = await setupWorkspace(unresolvable);
+	const resolver = new Resolver(config);
 
-  await expect(solve(workspace, resolver)).rejects.toMatchSnapshot();
+	await expect(solve(workspace, resolver)).rejects.toMatchSnapshot();
 });

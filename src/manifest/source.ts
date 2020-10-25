@@ -1,6 +1,6 @@
-import { manifestOk } from '../errors';
-import { isString } from '../utils/is';
-import { join, relative } from '../utils/path';
+import { manifestOk } from "../errors";
+import { isString } from "../utils/is";
+import { join, relative } from "../utils/path";
 
 /*
   # Source
@@ -11,9 +11,9 @@ import { join, relative } from '../utils/path';
 */
 
 export interface Source {
-  name: string;
-  path: string;
-  binary?: string;
+	name: string;
+	path: string;
+	binary?: string;
 }
 
 const EXAMPLE = `Example vba-block.toml:
@@ -23,29 +23,29 @@ const EXAMPLE = `Example vba-block.toml:
   B = { path = "src/b.cls" }`;
 
 export function parseSrc(value: any, dir: string): Source[] {
-  return Object.entries(value).map(([name, value]) => parseSource(name, value, dir));
+	return Object.entries(value).map(([name, value]) => parseSource(name, value, dir));
 }
 
 export function parseSource(name: string, value: string | any, dir: string): Source {
-  if (isString(value)) value = { path: value };
-  const { path: relativePath, binary } = value;
+	if (isString(value)) value = { path: value };
+	const { path: relativePath, binary } = value;
 
-  manifestOk(relativePath, `src "${name}" is missing path. \n\n${EXAMPLE}`);
-  const path = join(dir, relativePath);
+	manifestOk(relativePath, `src "${name}" is missing path. \n\n${EXAMPLE}`);
+	const path = join(dir, relativePath);
 
-  const source: Source = { name, path };
-  if (binary) source.binary = join(dir, binary);
+	const source: Source = { name, path };
+	if (binary) source.binary = join(dir, binary);
 
-  return source;
+	return source;
 }
 
 export function formatSrc(src: Source[], dir: string): object {
-  const value: { [name: string]: string } = {};
-  src.forEach(source => {
-    let { name, path } = source;
-    path = relative(dir, path);
-    value[name] = path;
-  });
+	const value: { [name: string]: string } = {};
+	src.forEach(source => {
+		let { name, path } = source;
+		path = relative(dir, path);
+		value[name] = path;
+	});
 
-  return value;
+	return value;
 }

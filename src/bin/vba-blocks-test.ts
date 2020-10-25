@@ -1,6 +1,6 @@
-import dedent from '@timhall/dedent';
-import { Args } from 'mri';
-import test from '../actions/test-project';
+import dedent from "@timhall/dedent";
+import { Args } from "mri";
+import test from "../actions/test-project";
 
 const help = dedent`
   Run tests for built target.
@@ -19,13 +19,13 @@ const help = dedent`
   For more information, see https://vba-blocks.com/guides/testing`;
 
 export default async function(args: Args) {
-  if (args.help) {
-    console.log(help);
-    return;
-  }
+	if (args.help) {
+		console.log(help);
+		return;
+	}
 
-  const test_args = args._;
-  const target = args.target as string | undefined;
+	const test_args = args._;
+	const target = args.target as string | undefined;
 
-  await test({ target, args: test_args });
+	await test({ target, args: test_args });
 }

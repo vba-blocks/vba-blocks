@@ -1,65 +1,65 @@
 import {
-  complex,
-  dev,
-  devExport,
-  dir,
-  standard,
-  standardChangesExport,
-  standardExport
-} from '../../../tests/__fixtures__';
-import { reset, setup } from '../../../tests/__helpers__/project';
-import { Changeset } from '../changeset';
-import compareBuildGraphs from '../compare-build-graphs';
-import loadFromExport from '../load-from-export';
-import loadFromProject from '../load-from-project';
-import { normalizeComponent } from '../__helpers__/component';
+	complex,
+	dev,
+	devExport,
+	dir,
+	standard,
+	standardChangesExport,
+	standardExport
+} from "../../../tests/__fixtures__";
+import { reset, setup } from "../../../tests/__helpers__/project";
+import { Changeset } from "../changeset";
+import compareBuildGraphs from "../compare-build-graphs";
+import loadFromExport from "../load-from-export";
+import loadFromProject from "../load-from-project";
+import { normalizeComponent } from "../__helpers__/component";
 
 afterAll(reset);
 
-test('should find no changes between build graphs', async () => {
-  const { project, dependencies } = await setup(standard);
+test("should find no changes between build graphs", async () => {
+	const { project, dependencies } = await setup(standard);
 
-  const before = await loadFromProject(project, dependencies);
-  const after = await loadFromExport(standardExport);
+	const before = await loadFromProject(project, dependencies);
+	const after = await loadFromExport(standardExport);
 
-  const changeset = compareBuildGraphs(before, after);
+	const changeset = compareBuildGraphs(before, after);
 
-  expect(changeset.components.added.length).toEqual(0);
-  expect(changeset.components.changed.length).toEqual(0);
-  expect(changeset.components.removed.length).toEqual(0);
+	expect(changeset.components.added.length).toEqual(0);
+	expect(changeset.components.changed.length).toEqual(0);
+	expect(changeset.components.removed.length).toEqual(0);
 });
 
-test('should find added, changed, and removed between build graphs', async () => {
-  const { project, dependencies } = await setup(complex);
+test("should find added, changed, and removed between build graphs", async () => {
+	const { project, dependencies } = await setup(complex);
 
-  const before = await loadFromProject(project, dependencies);
-  const after = await loadFromExport(standardChangesExport);
+	const before = await loadFromProject(project, dependencies);
+	const after = await loadFromExport(standardChangesExport);
 
-  const changeset = compareBuildGraphs(before, after);
-  expect(normalizeChangeset(changeset)).toMatchSnapshot();
+	const changeset = compareBuildGraphs(before, after);
+	expect(normalizeChangeset(changeset)).toMatchSnapshot();
 
-  // TODO finds UserForm1 as changed, look into why
+	// TODO finds UserForm1 as changed, look into why
 });
 
-test('should find no changes for dev-src', async () => {
-  const { project, dependencies } = await setup(dev);
+test("should find no changes for dev-src", async () => {
+	const { project, dependencies } = await setup(dev);
 
-  const before = await loadFromProject(project, dependencies);
-  const after = await loadFromExport(devExport);
+	const before = await loadFromProject(project, dependencies);
+	const after = await loadFromExport(devExport);
 
-  const changeset = compareBuildGraphs(before, after);
-  expect(normalizeChangeset(changeset)).toMatchSnapshot();
+	const changeset = compareBuildGraphs(before, after);
+	expect(normalizeChangeset(changeset)).toMatchSnapshot();
 });
 
 export function normalizeChangeset(changeset: Changeset): Changeset {
-  const { components, references } = changeset;
+	const { components, references } = changeset;
 
-  const added = components.added.map(component => normalizeComponent(component, dir));
-  const changed = components.changed.map(component => normalizeComponent(component, dir));
-  const removed = components.removed.map(component => normalizeComponent(component, dir));
+	const added = components.added.map(component => normalizeComponent(component, dir));
+	const changed = components.changed.map(component => normalizeComponent(component, dir));
+	const removed = components.removed.map(component => normalizeComponent(component, dir));
 
-  return {
-    components: { added, changed, removed },
-    references
-  };
+	return {
+		components: { added, changed, removed },
+		references
+	};
 }

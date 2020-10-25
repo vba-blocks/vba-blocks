@@ -1,6 +1,6 @@
-import dedent from '@timhall/dedent';
-import { Args } from 'mri';
-import init from '../actions/init-project';
+import dedent from "@timhall/dedent";
+import { Args } from "mri";
+import init from "../actions/init-project";
 
 const help = dedent`
   Initialize a new project in the current directory
@@ -20,16 +20,16 @@ const help = dedent`
   `;
 
 export default async function(args: Args) {
-  if (args.help) {
-    console.log(help);
-    return;
-  }
+	if (args.help) {
+		console.log(help);
+		return;
+	}
 
-  const target = <string | undefined>args.target;
-  const from = <string | undefined>args.from;
-  const name = <string | undefined>args.name;
-  const pkg = !!args.package;
-  const git = 'git' in args ? <boolean>args.git : true;
+	const target = <string | undefined>args.target;
+	const from = <string | undefined>args.from;
+	const name = <string | undefined>args.name;
+	const pkg = !!args.package;
+	const git = "git" in args ? <boolean>args.git : true;
 
-  await init({ target, from, name, pkg, git });
+	await init({ target, from, name, pkg, git });
 }

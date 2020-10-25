@@ -1,6 +1,6 @@
-import dedent from '@timhall/dedent';
-import { Args } from 'mri';
-import create from '../actions/create-project';
+import dedent from "@timhall/dedent";
+import { Args } from "mri";
+import create from "../actions/create-project";
 
 const help = dedent`
   Create a new project / package in a new directory
@@ -21,16 +21,16 @@ const help = dedent`
   `;
 
 export default async function(args: Args) {
-  if (args.help) {
-    console.log(help);
-    return;
-  }
+	if (args.help) {
+		console.log(help);
+		return;
+	}
 
-  const [name] = args._;
-  const target = <string | undefined>args.target;
-  const from = <string | undefined>args.from;
-  const pkg = !!args.package;
-  const git = 'git' in args ? <boolean>args.git : true;
+	const [name] = args._;
+	const target = <string | undefined>args.target;
+	const from = <string | undefined>args.from;
+	const pkg = !!args.package;
+	const git = "git" in args ? <boolean>args.git : true;
 
-  await create({ name, target, from, pkg, git });
+	await create({ name, target, from, pkg, git });
 }

@@ -1,135 +1,135 @@
-import { copy } from 'fs-extra';
-import { join } from 'path';
-import { empty, json, single, standard, targetless } from './__fixtures__';
-import { execute, readdir, run, RunResult, setup, tmp } from './__helpers__/execute';
+import { copy } from "fs-extra";
+import { join } from "path";
+import { empty, json, single, standard, targetless } from "./__fixtures__";
+import { execute, readdir, run, RunResult, setup, tmp } from "./__helpers__/execute";
 
 jest.setTimeout(30000);
 
-describe('build', () => {
-  test('build standard project', async () => {
-    await setup(standard, 'build', async cwd => {
-      await execute(cwd, 'build');
+describe("build", () => {
+	test("build standard project", async () => {
+		await setup(standard, "build", async cwd => {
+			await execute(cwd, "build");
 
-      const result = await validateBuild(cwd, 'standard.xlsm');
-      expect(result).toMatchSnapshot();
-    });
-  });
+			const result = await validateBuild(cwd, "standard.xlsm");
+			expect(result).toMatchSnapshot();
+		});
+	});
 
-  test('build project with single target', async () => {
-    await setup(single, 'build-single', async cwd => {
-      await execute(cwd, 'build');
+	test("build project with single target", async () => {
+		await setup(single, "build-single", async cwd => {
+			await execute(cwd, "build");
 
-      const result = await validateBuild(cwd, 'single.xlsm');
-      expect(result).toMatchSnapshot();
-    });
-  });
+			const result = await validateBuild(cwd, "single.xlsm");
+			expect(result).toMatchSnapshot();
+		});
+	});
 
-  test('build project with no target', async () => {
-    await setup(targetless, 'build-targetless', async cwd => {
-      await execute(cwd, 'build --target xlsm');
+	test("build project with no target", async () => {
+		await setup(targetless, "build-targetless", async cwd => {
+			await execute(cwd, "build --target xlsm");
 
-      const result = await validateBuild(cwd, 'targetless.xlsm');
-      expect(result).toMatchSnapshot();
-    });
-  });
+			const result = await validateBuild(cwd, "targetless.xlsm");
+			expect(result).toMatchSnapshot();
+		});
+	});
 });
 
-describe('export', () => {
-  test('export to empty project', async () => {
-    await setup(empty, 'export-empty', async cwd => {
-      await setup(standard, 'export-standard', async built => {
-        // 1. Build standard project
-        await execute(built, 'build');
+describe("export", () => {
+	test("export to empty project", async () => {
+		await setup(empty, "export-empty", async cwd => {
+			await setup(standard, "export-standard", async built => {
+				// 1. Build standard project
+				await execute(built, "build");
 
-        // 2. Copy standard built into empty
-        await copy(join(built, 'build/standard.xlsm'), join(cwd, 'build/empty.xlsm'));
+				// 2. Copy standard built into empty
+				await copy(join(built, "build/standard.xlsm"), join(cwd, "build/empty.xlsm"));
 
-        // 3. Export "empty" project
-        const { stdout } = await execute(cwd, 'export --target xlsm');
+				// 3. Export "empty" project
+				const { stdout } = await execute(cwd, "export --target xlsm");
 
-        const result = await readdir(cwd);
-        expect(result).toMatchSnapshot();
-        expect(stdout).toMatchSnapshot();
-      });
-    });
-  });
+				const result = await readdir(cwd);
+				expect(result).toMatchSnapshot();
+				expect(stdout).toMatchSnapshot();
+			});
+		});
+	});
 
-  test('export to project with dependency', async () => {
-    await setup(json, 'export-json', async cwd => {
-      await setup(standard, 'export-standard-to-json', async built => {
-        await execute(built, 'build');
+	test("export to project with dependency", async () => {
+		await setup(json, "export-json", async cwd => {
+			await setup(standard, "export-standard-to-json", async built => {
+				await execute(built, "build");
 
-        await copy(join(built, 'build/standard.xlsm'), join(cwd, 'build/json.xlsm'));
+				await copy(join(built, "build/standard.xlsm"), join(cwd, "build/json.xlsm"));
 
-        const { stdout } = await execute(cwd, 'export --target xlsm');
+				const { stdout } = await execute(cwd, "export --target xlsm");
 
-        const result = await readdir(cwd);
-        expect(result).toMatchSnapshot();
-        expect(stdout).toMatchSnapshot();
-      });
-    });
-  });
+				const result = await readdir(cwd);
+				expect(result).toMatchSnapshot();
+				expect(stdout).toMatchSnapshot();
+			});
+		});
+	});
 });
 
-describe('new', () => {
-  test('should create blank package', async () => {
-    await tmp('new-blank-package', async cwd => {
-      await execute(cwd, 'new blank-package --package --no-git');
+describe("new", () => {
+	test("should create blank package", async () => {
+		await tmp("new-blank-package", async cwd => {
+			await execute(cwd, "new blank-package --package --no-git");
 
-      const result = await readdir(join(cwd, 'blank-package'));
-      expect(result).toMatchSnapshot();
-    });
-  });
+			const result = await readdir(join(cwd, "blank-package"));
+			expect(result).toMatchSnapshot();
+		});
+	});
 
-  test('should create with blank target', async () => {
-    await tmp('new-blank-target', async cwd => {
-      await execute(cwd, 'new blank-target.xlsm');
+	test("should create with blank target", async () => {
+		await tmp("new-blank-target", async cwd => {
+			await execute(cwd, "new blank-target.xlsm");
 
-      const result = await readdir(join(cwd, 'blank-target'));
-      expect(result).toMatchSnapshot();
-    });
-  });
+			const result = await readdir(join(cwd, "blank-target"));
+			expect(result).toMatchSnapshot();
+		});
+	});
 
-  test('should create from existing', async () => {
-    await tmp('new-existing-target', async cwd => {
-      await setup(standard, 'new-existing-target-build', async built => {
-        await execute(built, 'build');
-        await execute(cwd, `new existing-target --from ${join(built, 'build/standard.xlsm')}`);
+	test("should create from existing", async () => {
+		await tmp("new-existing-target", async cwd => {
+			await setup(standard, "new-existing-target-build", async built => {
+				await execute(built, "build");
+				await execute(cwd, `new existing-target --from ${join(built, "build/standard.xlsm")}`);
 
-        const result = await readdir(join(cwd, 'existing-target'));
-        expect(result).toMatchSnapshot();
-      });
-    });
-  });
+				const result = await readdir(join(cwd, "existing-target"));
+				expect(result).toMatchSnapshot();
+			});
+		});
+	});
 });
 
-describe('version', () => {
-  test('should update to explicit version', async () => {
-    await tmp('new-blank-package', async cwd => {
-      await execute(cwd, 'new blank-package --package --no-git');
+describe("version", () => {
+	test("should update to explicit version", async () => {
+		await tmp("new-blank-package", async cwd => {
+			await execute(cwd, "new blank-package --package --no-git");
 
-      const dir = join(cwd, 'blank-package');
-      await execute(dir, 'version v2.0.0');
+			const dir = join(cwd, "blank-package");
+			await execute(dir, "version v2.0.0");
 
-      const result = await readdir(dir);
-      expect(result).toMatchSnapshot();
-    });
-  });
+			const result = await readdir(dir);
+			expect(result).toMatchSnapshot();
+		});
+	});
 
-  test('should update by increment and preid', async () => {
-    await tmp('new-blank-package', async cwd => {
-      await execute(cwd, 'new blank-package --package --no-git');
+	test("should update by increment and preid", async () => {
+		await tmp("new-blank-package", async cwd => {
+			await execute(cwd, "new blank-package --package --no-git");
 
-      const dir = join(cwd, 'blank-package');
-      await execute(dir, 'version preminor --preid beta');
+			const dir = join(cwd, "blank-package");
+			await execute(dir, "version preminor --preid beta");
 
-      const result = await readdir(dir);
-      expect(result).toMatchSnapshot();
-    });
-  });
+			const result = await readdir(dir);
+			expect(result).toMatchSnapshot();
+		});
+	});
 });
 
 async function validateBuild(cwd: string, target: string): Promise<RunResult> {
-  const file = join(cwd, 'build', target);
-  return await run('excel', file, 'Validation.Validate');
+	const file = join(cwd, "build", target);
+	return await run("excel", file, "Validation.Validate");
 }

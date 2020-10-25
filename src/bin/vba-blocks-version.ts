@@ -1,6 +1,6 @@
-import dedent from '@timhall/dedent';
-import { Args } from 'mri';
-import incrementVersion from '../actions/increment-version';
+import dedent from "@timhall/dedent";
+import { Args } from "mri";
+import incrementVersion from "../actions/increment-version";
 
 const help = dedent`
   Increment this project's version.
@@ -12,14 +12,14 @@ const help = dedent`
     --preid=TYPE   Use TYPE for prerelease (e.g. "beta")`;
 
 export default async function(args: Args) {
-  if (args.help) {
-    console.log(help);
-    return;
-  }
+	if (args.help) {
+		console.log(help);
+		return;
+	}
 
-  const increment = args._[0] || 'patch';
-  const preid = args.preid as string | undefined;
+	const increment = args._[0] || "patch";
+	const preid = args.preid as string | undefined;
 
-  const version = await incrementVersion(increment, { preid });
-  console.log(version);
+	const version = await incrementVersion(increment, { preid });
+	console.log(version);
 }

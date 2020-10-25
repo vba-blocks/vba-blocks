@@ -1,11 +1,11 @@
-import { pipeFilter, pipeMap } from '../utils/pipe';
-import { UnzipFile } from '../utils/zip';
-import transformCoreXml from './transforms/core-xml';
-import transformWorkbookXml from './transforms/workbook-xml';
+import { pipeFilter, pipeMap } from "../utils/pipe";
+import { UnzipFile } from "../utils/zip";
+import transformCoreXml from "./transforms/core-xml";
+import transformWorkbookXml from "./transforms/workbook-xml";
 
 const VBA_BIN = /vba.*\.bin/i;
 function filterVbaBin(file: UnzipFile): boolean {
-  return !VBA_BIN.test(file.path);
+	return !VBA_BIN.test(file.path);
 }
 
 export const filterTarget = pipeFilter(filterVbaBin);

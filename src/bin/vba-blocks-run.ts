@@ -1,6 +1,6 @@
-import dedent from '@timhall/dedent';
-import { Args } from 'mri';
-import run from '../actions/run-macro';
+import dedent from "@timhall/dedent";
+import { Args } from "mri";
+import run from "../actions/run-macro";
 
 const help = dedent`
   Run macro in given workbook or add-in.
@@ -14,14 +14,14 @@ const help = dedent`
     --file=PATH     Full path to workbook or name of add-in`;
 
 export default async function(args: Args) {
-  if (args.help) {
-    console.log(help);
-    return;
-  }
+	if (args.help) {
+		console.log(help);
+		return;
+	}
 
-  const [macro, ...macro_args] = args._;
-  const target = args.target as string | undefined;
-  let file = args.file as string | undefined;
+	const [macro, ...macro_args] = args._;
+	const target = args.target as string | undefined;
+	let file = args.file as string | undefined;
 
-  await run({ target, file, macro, args: macro_args });
+	await run({ target, file, macro, args: macro_args });
 }

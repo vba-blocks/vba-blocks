@@ -1,8 +1,8 @@
-import { manifestOk } from '../errors';
-import has from '../utils/has';
-import { isString } from '../utils/is';
-import { extname, join, relative, trailing } from '../utils/path';
-import { Version } from './version';
+import { manifestOk } from "../errors";
+import has from "../utils/has";
+import { isString } from "../utils/is";
+import { extname, join, relative, trailing } from "../utils/path";
+import { Version } from "./version";
 
 /*
   # Dependency
@@ -22,24 +22,24 @@ import { Version } from './version';
 */
 
 export interface DependencyDetails {
-  name: string;
-  version?: Version;
+	name: string;
+	version?: Version;
 }
 
 export interface RegistryDependency extends DependencyDetails {
-  registry: string;
-  version: Version;
+	registry: string;
+	version: Version;
 }
 
 export interface PathDependency extends DependencyDetails {
-  path: string;
+	path: string;
 }
 
 export interface GitDependency extends DependencyDetails {
-  git: string;
-  tag?: string;
-  branch?: string;
-  rev?: string;
+	git: string;
+	tag?: string;
+	branch?: string;
+	rev?: string;
 }
 
 export type Dependency = RegistryDependency | PathDependency | GitDependency;
@@ -59,85 +59,85 @@ const EXAMPLE = `Example vba-block.toml:
   version = "^2.0.0"`;
 
 export function parseDependencies(value: any, dir: string): Dependency[] {
-  return Object.entries(value).map(([name, value]) => parseDependency(name, value, dir));
+	return Object.entries(value).map(([name, value]) => parseDependency(name, value, dir));
 }
 
 export function parseDependency(name: string, value: Version | any, dir: string): Dependency {
-  if (isString(value)) value = { version: value };
+	if (isString(value)) value = { version: value };
 
-  let {
-    registry = 'vba-blocks',
-    version,
-    path,
-    git,
-    tag,
-    branch = 'master',
-    rev
-  }: {
-    registry?: string;
-    version?: string;
-    path?: string;
-    git?: string;
-    tag?: string;
-    branch?: string;
-    rev?: string;
-  } = value;
+	let {
+		registry = "vba-blocks",
+		version,
+		path,
+		git,
+		tag,
+		branch = "master",
+		rev
+	}: {
+		registry?: string;
+		version?: string;
+		path?: string;
+		git?: string;
+		tag?: string;
+		branch?: string;
+		rev?: string;
+	} = value;
 
-  manifestOk(
-    version || path || git,
-    `Invalid dependency "${name}", no version, path, or git specified. \n\n${EXAMPLE}`
-  );
+	manifestOk(
+		version || path || git,
+		`Invalid dependency "${name}", no version, path, or git specified. \n\n${EXAMPLE}`
+	);
 
-  if (version) {
-    return { name, registry, version };
-  } else if (path) {
-    return { name, path: trailing(join(dir, path)) };
-  } else {
-    git = ensureGitUrl(git!);
+	if (version) {
+		return { name, registry, version };
+	} else if (path) {
+		return { name, path: trailing(join(dir, path)) };
+	} else {
+		git = ensureGitUrl(git!);
 
-    if (rev) return { name, git, rev };
-    else if (tag) return { name, git, tag };
-    else return { name, git, branch };
-  }
+		if (rev) return { name, git, rev };
+		else if (tag) return { name, git, tag };
+		else return { name, git, branch };
+	}
 }
 
 export function isRegistryDependency(dependency: Dependency): dependency is RegistryDependency {
-  return has(dependency, 'registry');
+	return has(dependency, "registry");
 }
 
 export function isPathDependency(dependency: Dependency): dependency is PathDependency {
-  return has(dependency, 'path');
+	return has(dependency, "path");
 }
 
 export function isGitDependency(dependency: Dependency): dependency is GitDependency {
-  return has(dependency, 'git');
+	return has(dependency, "git");
 }
 
 export function formatDependencies(dependencies: Dependency[], dir: string): object {
-  const value: { [name: string]: any } = {};
-  dependencies.forEach(dependency => {
-    if (isRegistryDependency(dependency)) {
-      const { name, registry, version } = dependency;
-      value[name] = registry !== 'vba-blocks' ? { version, registry } : version;
-    } else if (isPathDependency(dependency)) {
-      let { name, path } = dependency;
-      path = relative(dir, path);
+	const value: { [name: string]: any } = {};
+	dependencies.forEach(dependency => {
+		if (isRegistryDependency(dependency)) {
+			const { name, registry, version } = dependency;
+			value[name] = registry !== "vba-blocks" ? { version, registry } : version;
+		} else if (isPathDependency(dependency)) {
+			let { name, path } = dependency;
+			path = relative(dir, path);
 
-      value[name] = { path };
-    } else {
-      const { name, git, tag, branch, rev } = dependency;
-      value[name] = { name, git };
-      if (tag) value[name].tag = tag;
-      if (branch) value[name].branch = branch;
-      if (rev) value[name].rev = rev;
-    }
-  });
+			value[name] = { path };
+		} else {
+			const { name, git, tag, branch, rev } = dependency;
+			value[name] = { name, git };
+			if (tag) value[name].tag = tag;
+			if (branch) value[name].branch = branch;
+			if (rev) value[name].rev = rev;
+		}
+	});
 
-  return value;
+	return value;
 }
 
 function ensureGitUrl(value: string): string {
-  if (extname(value!) === '.git') return value;
+	if (extname(value!) === ".git") return value;
 
-  return `${value}.git`;
+	return `${value}.git`;
 }

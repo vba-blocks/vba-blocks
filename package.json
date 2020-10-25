@@ -20,10 +20,6 @@
     "release": "node scripts/release",
     "clean": "rimraf lib && rimraf dist && rimraf addins/build"
   },
-  "prettier": {
-    "singleQuote": true,
-    "printWidth": 100
-  },
   "jest": {
     "preset": "ts-jest"
   },

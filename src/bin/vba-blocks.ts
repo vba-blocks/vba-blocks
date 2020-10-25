@@ -1,46 +1,46 @@
-import dedent from '@timhall/dedent';
-import { greenBright, redBright } from '@timhall/ansi-colors';
-import meant from 'meant';
-import mri, { Args } from 'mri';
-import { version } from '../../package.json';
-import env from '../env';
-import { cleanError, CliError, ErrorCode, isCliError } from '../errors';
-import { checkForUpdate, updateAvailable, updateVersion } from '../installer';
-import { Message } from '../messages';
-import { isRunError } from '../utils/run';
-import { joinCommas } from '../utils/text';
+import dedent from "@timhall/dedent";
+import { greenBright, redBright } from "@timhall/ansi-colors";
+import meant from "meant";
+import mri, { Args } from "mri";
+import { version } from "../../package.json";
+import env from "../env";
+import { cleanError, CliError, ErrorCode, isCliError } from "../errors";
+import { checkForUpdate, updateAvailable, updateVersion } from "../installer";
+import { Message } from "../messages";
+import { isRunError } from "../utils/run";
+import { joinCommas } from "../utils/text";
 
 Error.stackTraceLimit = Infinity;
 
-const debug = env.debug('vba-blocks:main');
+const debug = env.debug("vba-blocks:main");
 
 type Command = (args: Args) => Promise<void>;
 const commands: { [name: string]: () => Promise<Command> } = {
-  new: async () => (await import('./vba-blocks-new')).default,
-  init: async () => (await import('./vba-blocks-init')).default,
-  build: async () => (await import('./vba-blocks-build')).default,
-  test: async () => (await import('./vba-blocks-test')).default,
-  export: async () => (await import('./vba-blocks-export')).default,
-  run: async () => (await import('./vba-blocks-run')).default,
-  version: async () => (await import('./vba-blocks-version')).default
+	new: async () => (await import("./vba-blocks-new")).default,
+	init: async () => (await import("./vba-blocks-init")).default,
+	build: async () => (await import("./vba-blocks-build")).default,
+	test: async () => (await import("./vba-blocks-test")).default,
+	export: async () => (await import("./vba-blocks-export")).default,
+	run: async () => (await import("./vba-blocks-run")).default,
+	version: async () => (await import("./vba-blocks-version")).default
 };
 
 const args = mri(process.argv.slice(2), {
-  alias: {
-    v: 'version',
-    h: 'help'
-  }
+	alias: {
+		v: "version",
+		h: "help"
+	}
 });
 
 if (args.debug) {
-  let debug = args.debug;
-  if (debug === true) debug = '*';
-  else if (Array.isArray(debug)) debug = debug.join(',');
+	let debug = args.debug;
+	if (debug === true) debug = "*";
+	else if (Array.isArray(debug)) debug = debug.join(",");
 
-  const filters = (<string>debug).split(',').map(filter => `vba-blocks:${filter}`);
-  const existing = process.env.DEBUG ? process.env.DEBUG.split(',') : [];
+	const filters = (<string>debug).split(",").map(filter => `vba-blocks:${filter}`);
+	const existing = process.env.DEBUG ? process.env.DEBUG.split(",") : [];
 
-  process.env.DEBUG = existing.concat(filters).join(',');
+	process.env.DEBUG = existing.concat(filters).join(",");
 }
 
 const help = dedent`
@@ -65,111 +65,111 @@ const help = dedent`
   Visit https://vba-blocks.com to learn more about vba-blocks.`;
 
 const updateAvailableMessage = () => dedent`
-  \n${greenBright('New Update!')} ${updateVersion()!}
+  \n${greenBright("New Update!")} ${updateVersion()!}
 
   A new version of vba-blocks is available.
   Visit https://vba-blocks.com/update for more information.`;
 
-process.title = 'vba-blocks';
-process.on('unhandledRejection', handleError);
-process.on('uncaughtException', handleError);
+process.title = "vba-blocks";
+process.on("unhandledRejection", handleError);
+process.on("uncaughtException", handleError);
 
 main()
-  .then(() => process.exit(0))
-  .catch(handleError);
+	.then(() => process.exit(0))
+	.catch(handleError);
 
 async function main() {
-  let [command] = args._;
+	let [command] = args._;
 
-  if (!command) {
-    if (args.version) console.log(version);
-    else {
-      console.log(help);
+	if (!command) {
+		if (args.version) console.log(version);
+		else {
+			console.log(help);
 
-      if (updateAvailable()) {
-        env.reporter.log(Message.UpdateAvailable, updateAvailableMessage());
-      }
-    }
+			if (updateAvailable()) {
+				env.reporter.log(Message.UpdateAvailable, updateAvailableMessage());
+			}
+		}
 
-    return;
-  }
+		return;
+	}
 
-  if (command === 'help') {
-    command = args._[1];
+	if (command === "help") {
+		command = args._[1];
 
-    if (!command) {
-      console.log(help);
-      return;
-    }
+		if (!command) {
+			console.log(help);
+			return;
+		}
 
-    args._ = [command];
-    args.help = true;
-  }
-  command = command.toLowerCase();
+		args._ = [command];
+		args.help = true;
+	}
+	command = command.toLowerCase();
 
-  const available = Object.keys(commands);
-  if (!available.includes(command)) {
-    const approximate = meant(command, available);
-    const did_you_mean = approximate.length
-      ? `, did you mean "${meant(command, available)}"?`
-      : '.';
-    const list = joinCommas(available.map(name => `"${name}"`));
+	const available = Object.keys(commands);
+	if (!available.includes(command)) {
+		const approximate = meant(command, available);
+		const did_you_mean = approximate.length
+			? `, did you mean "${meant(command, available)}"?`
+			: ".";
+		const list = joinCommas(available.map(name => `"${name}"`));
 
-    throw new CliError(
-      ErrorCode.UnknownCommand,
-      dedent`
+		throw new CliError(
+			ErrorCode.UnknownCommand,
+			dedent`
         Unknown command "${command}"${did_you_mean}
 
         Available commands are ${list}.
         Try "vba-blocks help" for more information.
       `
-    );
-  }
+		);
+	}
 
-  // Remove command from args
-  args._ = args._.slice(1);
+	// Remove command from args
+	args._ = args._.slice(1);
 
-  let subcommand: (args: Args) => Promise<void>;
-  try {
-    debug(`loading "./vba-blocks-${command}.js"`);
-    subcommand = await commands[command]();
-  } catch (err) {
-    throw new Error(`Failed to load command "${command}".\n${err.stack}`);
-  }
+	let subcommand: (args: Args) => Promise<void>;
+	try {
+		debug(`loading "./vba-blocks-${command}.js"`);
+		subcommand = await commands[command]();
+	} catch (err) {
+		throw new Error(`Failed to load command "${command}".\n${err.stack}`);
+	}
 
-  debug(`starting "${command}" with args ${JSON.stringify(args)}`);
-  const [has_update_available] = await Promise.all([checkForUpdate(), subcommand(args)]);
+	debug(`starting "${command}" with args ${JSON.stringify(args)}`);
+	const [has_update_available] = await Promise.all([checkForUpdate(), subcommand(args)]);
 
-  if (has_update_available) {
-    env.reporter.log(Message.UpdateAvailable, updateAvailableMessage());
-  }
+	if (has_update_available) {
+		env.reporter.log(Message.UpdateAvailable, updateAvailableMessage());
+	}
 }
 
 export function handleError(err: Error | CliError | any, _promise?: Promise<any>) {
-  const { message } = cleanError(err);
+	const { message } = cleanError(err);
 
-  console.error(`${redBright('ERROR')} ${message}`);
+	console.error(`${redBright("ERROR")} ${message}`);
 
-  // TODO
-  // if (err.code) {
-  //   console.log(
-  //     chalk`\n{dim Visit https://vba-blocks.com/errors/${
-  //       err.code
-  //     } for more information}`
-  //   );
-  // }
+	// TODO
+	// if (err.code) {
+	//   console.log(
+	//     chalk`\n{dim Visit https://vba-blocks.com/errors/${
+	//       err.code
+	//     } for more information}`
+	//   );
+	// }
 
-  // Couldn't import debug, so log directly if debugging anything
-  if (process.env.DEBUG) {
-    console.error(err);
+	// Couldn't import debug, so log directly if debugging anything
+	if (process.env.DEBUG) {
+		console.error(err);
 
-    if (isCliError(err) && err.underlying) {
-      console.error('underlying', err.underlying);
-    }
-    if (isRunError(err)) {
-      console.error('result', err.result);
-    }
-  }
+		if (isCliError(err) && err.underlying) {
+			console.error("underlying", err.underlying);
+		}
+		if (isRunError(err)) {
+			console.error("result", err.result);
+		}
+	}
 
-  process.exit(1);
+	process.exit(1);
 }

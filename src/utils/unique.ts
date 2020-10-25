@@ -1,3 +1,3 @@
 export default function unique<T>(values: Iterable<T>): T[] {
-  return Array.from(new Set(values));
+	return Array.from(new Set(values));
 }
