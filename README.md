@@ -225,7 +225,7 @@ Scripting = { version = "1.0", guid = "{...}" }
 ### Prerequisites
 
 1. `git clone` this repo
-2. Install [node](https://www.nodejs.com/) v12.13.0 or later
+2. Install [node](https://nodejs.org/) v12.13.0 or later
 3. Install [yarn](https://www.yarnpkg.com/) v1.19.1 or later
 4. Install node-gyp dependencies for [Mac](https://github.com/nodejs/node-gyp#on-macos) or [Windows](https://github.com/nodejs/node-gyp#on-windows)
 
