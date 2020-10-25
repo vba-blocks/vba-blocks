@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const { promisify } = require("util");
 const { join, basename } = require("path");
-const Octokit = require("@octokit/rest");
+const { Octokit } = require("@octokit/rest");
 const tmpFile = promisify(require("tmp").file);
 const editor = require("editor");
 const { writeFile, readFile, remove } = require("fs-extra");
@@ -67,7 +67,7 @@ async function editText(initial = "") {
 
 async function uploadAsset(path, release) {
 	const url = release.data.upload_url;
-	const file = await readFile(path);
+	const data = await readFile(path);
 	const headers = {
 		"content-length": file.length,
 		"content-type": "application/zip"
@@ -78,6 +78,6 @@ async function uploadAsset(path, release) {
 		headers,
 		url,
 		name,
-		file
+		data
 	});
 }
