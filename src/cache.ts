@@ -1,5 +1,5 @@
 import Conf from "conf";
-import env from "./env";
+import { env } from "./env";
 
 export class Cache extends Conf {
 	constructor(cwd = env.data) {
@@ -21,4 +21,4 @@ export class Cache extends Conf {
 	}
 }
 
-export default new Cache();
+export const cache = new Cache();

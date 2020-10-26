@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 import { ensureDir } from "./fs";
 import { dirname } from "./path";
 
-export default async function download(url: string, dest: string): Promise<void> {
+export async function download(url: string, dest: string): Promise<void> {
 	await ensureDir(dirname(dest));
 
 	return fetch(url).then(response => {

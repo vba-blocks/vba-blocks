@@ -3,7 +3,7 @@ import { parse as parseQuerystring } from "querystring";
 import { CliError, ErrorCode } from "../errors";
 import { Snapshot } from "../manifest";
 import { Dependency } from "../manifest/dependency";
-import has from "../utils/has";
+import { has } from "../utils/has";
 import { isString } from "../utils/is";
 
 export interface Registration extends Snapshot {

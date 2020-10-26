@@ -1,8 +1,8 @@
 import { differenceInCalendarDays } from "date-fns";
 import { gt as semverGreaterThan } from "semver";
-import { version as current_version } from "../package.json";
-import cache from "./cache";
-import env from "./env";
+import { version as currentVersion } from "../package.json";
+import { cache } from "./cache";
+import { env } from "./env";
 import { getLatestRelease } from "./utils/github";
 
 const debug = env.debug("vba-blocks:installer");
@@ -13,14 +13,14 @@ export function updateVersion(): string | undefined {
 
 export function updateAvailable(): boolean {
 	// Previously checked version is greater
-	const latest_known_version = cache.latest_version;
-	return !!latest_known_version && semverGreaterThan(latest_known_version, current_version);
+	const latestKnownVersion = cache.latest_version;
+	return !!latestKnownVersion && semverGreaterThan(latestKnownVersion, currentVersion);
 }
 
 export async function checkForUpdate(): Promise<boolean> {
 	// Only check for new version once per day
-	const last_checked = cache.latest_version_checked;
-	if (last_checked && differenceInCalendarDays(new Date(last_checked), Date.now()) < 1)
+	const lastChecked = cache.latest_version_checked;
+	if (lastChecked && differenceInCalendarDays(new Date(lastChecked), Date.now()) < 1)
 		return updateAvailable();
 
 	// Allow skipping from the outside
@@ -32,13 +32,13 @@ export async function checkForUpdate(): Promise<boolean> {
 	cache.latest_version_checked = Date.now();
 
 	try {
-		const { tag_name: latest_version } = await getLatestRelease({
+		const { tag_name: latestVersion } = await getLatestRelease({
 			owner: "vba-blocks",
 			repo: "vba-blocks"
 		});
-		cache.latest_version = latest_version;
+		cache.latest_version = latestVersion;
 
-		return semverGreaterThan(latest_version, current_version);
+		return semverGreaterThan(latestVersion, currentVersion);
 	} catch (error) {
 		debug("Error loading latest release");
 		debug(error);

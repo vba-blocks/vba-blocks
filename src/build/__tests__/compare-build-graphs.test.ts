@@ -9,9 +9,9 @@ import {
 } from "../../../tests/__fixtures__";
 import { reset, setup } from "../../../tests/__helpers__/project";
 import { Changeset } from "../changeset";
-import compareBuildGraphs from "../compare-build-graphs";
-import loadFromExport from "../load-from-export";
-import loadFromProject from "../load-from-project";
+import { compareBuildGraphs } from "../compare-build-graphs";
+import { loadFromExport } from "../load-from-export";
+import { loadFromProject } from "../load-from-project";
 import { normalizeComponent } from "../__helpers__/component";
 
 afterAll(reset);

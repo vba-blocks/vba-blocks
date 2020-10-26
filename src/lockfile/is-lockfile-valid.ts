@@ -7,7 +7,7 @@ import {
 	isRegistryDependency
 } from "../manifest/dependency";
 import { Workspace } from "../professional/workspace";
-import has from "../utils/has";
+import { has } from "../utils/has";
 import { Lockfile, LOCKFILE_VERSION, MinimalSnapshot } from "./lockfile";
 
 /**

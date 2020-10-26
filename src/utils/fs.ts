@@ -7,7 +7,7 @@ import { move } from "fs-extra/lib/move";
 import { pathExists } from "fs-extra/lib/path-exists";
 import { remove } from "fs-extra/lib/remove";
 import { promisify } from "util";
-import hash from "./hash";
+import { hash } from "./hash";
 
 const readFile = promisify(_readFile);
 const symlink = promisify(_symlink);
@@ -25,7 +25,7 @@ export interface TmpOptions {
 }
 
 async function tmpFile(options: TmpOptions = {}): Promise<string> {
-	const env = (await import("../env")).default;
+	const { env } = await import("../env");
 	const { file: tmpFile } = await import("tmp");
 	const { dir = env.temp, prefix, template } = options;
 
@@ -40,7 +40,7 @@ async function tmpFile(options: TmpOptions = {}): Promise<string> {
 }
 
 async function tmpFolder(options: TmpOptions = {}): Promise<string> {
-	const env = (await import("../env")).default;
+	const { env } = await import("../env");
 	const { dir: tmpDir } = await import("tmp");
 	const { dir = env.temp, prefix, template } = options;
 

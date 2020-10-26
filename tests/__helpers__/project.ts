@@ -1,5 +1,5 @@
 import { loadConfig } from "../../src/config";
-import env from "../../src/env";
+import { env } from "../../src/env";
 import { loadManifest } from "../../src/manifest";
 import { loadWorkspace } from "../../src/professional/workspace";
 import { fetchDependencies, loadProject } from "../../src/project";

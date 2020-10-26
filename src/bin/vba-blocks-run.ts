@@ -1,6 +1,6 @@
 import dedent from "@timhall/dedent";
 import { Args } from "mri";
-import run from "../actions/run-macro";
+import { runMacro } from "../actions/run-macro";
 
 const help = dedent`
   Run macro in given workbook or add-in.
@@ -23,5 +23,5 @@ export default async function(args: Args) {
 	const target = args.target as string | undefined;
 	let file = args.file as string | undefined;
 
-	await run({ target, file, macro, args: macro_args });
+	await runMacro({ target, file, macro, args: macro_args });
 }

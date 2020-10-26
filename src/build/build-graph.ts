@@ -11,7 +11,7 @@ export interface BuildGraph {
 	name: string;
 	components: Component[];
 	references: Reference[];
-	from_dependencies: FromDependences;
+	fromDependencies: FromDependences;
 }
 
 export interface ImportGraph {

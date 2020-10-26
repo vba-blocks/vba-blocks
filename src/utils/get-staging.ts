@@ -2,7 +2,7 @@ import { homedir } from "os";
 import { ensureDirSync } from "./fs";
 import { join } from "./path";
 
-export default function getStaging(cache: string): string {
+export function getStaging(cache: string): string {
 	const staging =
 		process.platform === "win32"
 			? join(cache, "staging")

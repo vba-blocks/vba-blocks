@@ -1,5 +1,5 @@
 import { ok } from "assert";
-import env from "../env";
+import { env } from "../env";
 import { CliError, ErrorCode } from "../errors";
 import { Manifest } from "../manifest";
 import { Dependency } from "../manifest/dependency";
@@ -14,7 +14,7 @@ import {
 	toDependency
 } from "../sources/registration";
 import { pathExists, readFile, writeFile } from "../utils/fs";
-import has from "../utils/has";
+import { has } from "../utils/has";
 import { join, relative, trailing } from "../utils/path";
 import { parse as parseToml, toLockfile as convertToLockfileToml } from "../utils/toml";
 import { Lockfile, LOCKFILE_VERSION, MinimalSnapshot } from "./lockfile";

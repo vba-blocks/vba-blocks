@@ -6,7 +6,7 @@ import {
 	loadFromProject,
 	toSrc
 } from "../build";
-import env from "../env";
+import { env } from "../env";
 import { CliError, ErrorCode } from "../errors";
 import { Target } from "../manifest/target";
 import { Project } from "../project";
@@ -26,12 +26,12 @@ export interface ExportOptions {}
  * 3. Export build graph to src
  * 4. Move extracted to target to src
  */
-export default async function exportTarget(target: Target, info: ProjectInfo, staging: string) {
-	const { project, dependencies, blank_target } = info;
+export async function exportTarget(target: Target, info: ProjectInfo, staging: string) {
+	const { project, dependencies, blankTarget } = info;
 
 	// Extract target to staging
 	let extracted: string;
-	if (!blank_target) {
+	if (!blankTarget) {
 		extracted = await extractTarget(project, target, staging);
 	}
 
@@ -44,7 +44,7 @@ export default async function exportTarget(target: Target, info: ProjectInfo, st
 	await applyChangeset(project, changeset);
 
 	// Move target to dest
-	if (!blank_target) {
+	if (!blankTarget) {
 		await remove(target.path);
 		await copy(extracted!, target.path);
 	}

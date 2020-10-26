@@ -1,5 +1,5 @@
 import { manifestOk } from "../errors";
-import has from "../utils/has";
+import { has } from "../utils/has";
 import { isString } from "../utils/is";
 import { extname, join, relative, trailing } from "../utils/path";
 import { Version } from "./version";

@@ -3,7 +3,7 @@ import { CliError, ErrorCode } from "../errors";
 import { loadProject } from "../project";
 import { getTarget } from "../targets";
 import { extname, join, resolve } from "../utils/path";
-import runMacro, { RunResult } from "../utils/run";
+import { run, RunResult } from "../utils/run";
 
 export interface RunOptions {
 	target?: string;
@@ -12,12 +12,12 @@ export interface RunOptions {
 	args: string[];
 }
 
-export default async function run(options: RunOptions): Promise<RunResult> {
-	let { target: target_type, file, macro, args = [""] } = options;
+export async function runMacro(options: RunOptions): Promise<RunResult> {
+	let { target: targetType, file, macro, args = [""] } = options;
 
 	if (!file) {
 		const project = await loadProject();
-		const { target } = getTarget(project, target_type);
+		const { target } = getTarget(project, targetType);
 
 		file = join(project.paths.dir, "build", target.filename);
 	}
@@ -36,7 +36,7 @@ export default async function run(options: RunOptions): Promise<RunResult> {
 	}
 
 	const application = extensionToApplication(extname(file));
-	const result = await runMacro(application, resolve(file), macro, args);
+	const result = await run(application, resolve(file), macro, args);
 	const { stdout } = result;
 
 	if (stdout && stdout.trim().length) console.log(stdout);

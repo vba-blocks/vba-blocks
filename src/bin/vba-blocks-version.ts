@@ -1,6 +1,6 @@
 import dedent from "@timhall/dedent";
 import { Args } from "mri";
-import incrementVersion from "../actions/increment-version";
+import { incrementVersion } from "../actions/increment-version";
 
 const help = dedent`
   Increment this project's version.

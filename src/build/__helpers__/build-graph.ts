@@ -3,7 +3,7 @@ import { BuildGraph } from "../build-graph";
 import { normalizeComponent } from "./component";
 
 export function normalizeBuildGraph(graph: BuildGraph) {
-	const { name, components, references, from_dependencies } = graph;
+	const { name, components, references, fromDependencies: from_dependencies } = graph;
 
 	const from_components: { [name: string]: string } = {};
 	for (const [component, dependency] of from_dependencies.components.entries()) {

@@ -1,6 +1,6 @@
 import dedent from "@timhall/dedent";
 import { Args } from "mri";
-import create from "../actions/create-project";
+import { createProject } from "../actions/create-project";
 
 const help = dedent`
   Create a new project / package in a new directory
@@ -32,5 +32,5 @@ export default async function(args: Args) {
 	const pkg = !!args.package;
 	const git = "git" in args ? <boolean>args.git : true;
 
-	await create({ name, target, from, pkg, git });
+	await createProject({ name, target, from, pkg, git });
 }

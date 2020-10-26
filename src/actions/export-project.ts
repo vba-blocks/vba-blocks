@@ -1,6 +1,6 @@
 import dedent from "@timhall/dedent";
 import { exportTo } from "../addin";
-import env from "../env";
+import { env } from "../env";
 import { CliError, ErrorCode } from "../errors";
 import { Target, TargetType } from "../manifest/target";
 import { Message } from "../messages";
@@ -15,7 +15,7 @@ export interface ExportOptions {
 	addin?: string;
 }
 
-export default async function exportProject(options: ExportOptions = {}) {
+export async function exportProject(options: ExportOptions = {}) {
 	env.reporter.log(Message.ExportProjectLoading, `[1/3] Loading project...`);
 
 	const project = await loadProject();
@@ -31,7 +31,7 @@ export default async function exportProject(options: ExportOptions = {}) {
 	}
 
 	let target: Target | undefined;
-	let blank_target = false;
+	let blankTarget = false;
 	if (project.manifest.target) {
 		if (!options.target || options.target === project.manifest.target.type) {
 			target = project.manifest.target;
@@ -46,7 +46,7 @@ export default async function exportProject(options: ExportOptions = {}) {
 			path: `targets/${type}`,
 			filename: `${sanitize(name)}.${type}`
 		};
-		blank_target = true;
+		blankTarget = true;
 	}
 
 	if (!target) {
@@ -73,7 +73,7 @@ export default async function exportProject(options: ExportOptions = {}) {
 		}
 
 		env.reporter.log(Message.ExportToProject, `\n[3/3] Updating project`);
-		await exportTarget(target, { project, dependencies, blank_target }, staging);
+		await exportTarget(target, { project, dependencies, blankTarget }, staging);
 	} catch (err) {
 		throw err;
 	} finally {

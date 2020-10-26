@@ -1,6 +1,6 @@
 import dedent from "@timhall/dedent";
 import { Args } from "mri";
-import test from "../actions/test-project";
+import { testProject } from "../actions/test-project";
 
 const help = dedent`
   Run tests for built target.
@@ -27,5 +27,5 @@ export default async function(args: Args) {
 	const test_args = args._;
 	const target = args.target as string | undefined;
 
-	await test({ target, args: test_args });
+	await testProject({ target, args: test_args });
 }

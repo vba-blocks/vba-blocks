@@ -34,7 +34,7 @@ export class Component {
 		return JSON.parse(value);
 	}
 
-	get binary_path(): string | undefined {
+	get binaryPath(): string | undefined {
 		const line = findLine(this.code, "OleObjectBlob");
 		if (!line) return;
 
@@ -44,14 +44,14 @@ export class Component {
 	}
 
 	get filename(): string {
-		const extension = type_to_extension[this.type];
+		const extension = typeToExtension[this.type];
 		return `${this.name}${extension}`;
 	}
 
 	static async load(path: string, details: { binary_path?: string } = {}): Promise<Component> {
 		const { binary_path } = details;
 
-		const type = extension_to_type[extname(path)];
+		const type = extensionToType[extname(path)];
 		if (!type) {
 			throw new CliError(
 				ErrorCode.ComponentUnrecognized,
@@ -66,12 +66,12 @@ export class Component {
 	}
 }
 
-export const extension_to_type: { [extension: string]: ComponentType } = {
+export const extensionToType: { [extension: string]: ComponentType } = {
 	".bas": "module",
 	".cls": "class",
 	".frm": "form"
 };
-export const type_to_extension: { [type: string]: string } = {
+export const typeToExtension: { [type: string]: string } = {
 	module: ".bas",
 	class: ".cls",
 	form: ".frm"

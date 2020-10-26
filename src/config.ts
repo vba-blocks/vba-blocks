@@ -1,4 +1,4 @@
-import env from "./env";
+import { env } from "./env";
 import { GitSource, PathSource, RegistrySource, Sources } from "./sources";
 import { pathExists, readFile } from "./utils/fs";
 import { join } from "./utils/path";

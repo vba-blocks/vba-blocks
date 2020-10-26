@@ -1,4 +1,4 @@
-import PathSource from "../path-source";
+import { PathSource } from "../path-source";
 
 test("should resolve path dependency", () => {
 	// TODO

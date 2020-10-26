@@ -1,22 +1,22 @@
 import walk from "walk-sync";
-import env from "../env";
+import { env } from "../env";
 import { CliError, ErrorCode } from "../errors";
 import { Reference } from "../manifest/reference";
 import { pathExists, readFile, readJson } from "../utils/fs";
-import parallel from "../utils/parallel";
+import { parallel } from "../utils/parallel";
 import { basename, extname, join } from "../utils/path";
 import { BuildGraph } from "./build-graph";
-import { byComponentName, Component, extension_to_type } from "./component";
+import { byComponentName, Component, extensionToType } from "./component";
 
 const binary_extensions = [".frx"];
 const ignoreFile = (file: string) => {
 	// Ignore hidden files (e.g. .DS_Store)
-	const has_extension = extname(file) !== "";
+	const hasExtension = extname(file) !== "";
 
-	return !has_extension;
+	return !hasExtension;
 };
 
-export default async function loadFromExport(staging: string): Promise<BuildGraph> {
+export async function loadFromExport(staging: string): Promise<BuildGraph> {
 	const files = walk(staging, { directories: false })
 		.filter(file => {
 			return (
@@ -30,7 +30,7 @@ export default async function loadFromExport(staging: string): Promise<BuildGrap
 	const { name, references } = await readInfo(staging);
 
 	const binaries: { [name: string]: string } = {};
-	const to_components = files.filter(file => {
+	const toComponents = files.filter(file => {
 		// Binaries are part of a component
 		// Remove from files to be converted and add to component
 		if (!isBinary(file)) return true;
@@ -42,10 +42,10 @@ export default async function loadFromExport(staging: string): Promise<BuildGrap
 	});
 
 	const components = await parallel(
-		to_components,
+		toComponents,
 		async file => {
 			const name = getName(file);
-			const type = extension_to_type[extname(file)];
+			const type = extensionToType[extname(file)];
 			const code = await readFile(file);
 			const binary = <Buffer | undefined>(binaries[name] && (await readFile(binaries[name])));
 
@@ -66,7 +66,7 @@ export default async function loadFromExport(staging: string): Promise<BuildGrap
 		name,
 		components,
 		references,
-		from_dependencies: {
+		fromDependencies: {
 			components: new Map(),
 			references: new Map()
 		}

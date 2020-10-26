@@ -1,9 +1,9 @@
 import dedent from "@timhall/dedent";
-import env from "../env";
+import { env } from "../env";
 import { CliError, ErrorCode } from "../errors";
 import { ensureDir, pathExists } from "../utils/fs";
 import { join } from "../utils/path";
-import init from "./init-project";
+import { initProject } from "./init-project";
 
 export interface CreateOptions {
 	name: string;
@@ -13,7 +13,7 @@ export interface CreateOptions {
 	git: boolean;
 }
 
-export default async function create(options: CreateOptions) {
+export async function createProject(options: CreateOptions) {
 	if (!options || !options.name) {
 		throw new CliError(
 			ErrorCode.NewNameRequired,
@@ -55,5 +55,5 @@ export default async function create(options: CreateOptions) {
 	}
 
 	await ensureDir(dir);
-	await init({ name, dir, target, from, pkg, git });
+	await initProject({ name, dir, target, from, pkg, git });
 }

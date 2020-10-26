@@ -1,4 +1,4 @@
-import RegistrySource, {
+import {
 	sanitizePackageName,
 	getRemotePackage,
 	getLocalPackage,

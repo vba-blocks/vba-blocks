@@ -4,13 +4,13 @@ import { satisfies } from "semver";
 import { Dependency, isRegistryDependency } from "../manifest/dependency";
 import { Workspace } from "../professional/workspace";
 import { Registration } from "../sources/registration";
-import unique from "../utils/unique";
+import { unique } from "../utils/unique";
 import { DependencyGraph } from "./dependency-graph";
-import Resolver, { Resolution, ResolutionGraph } from "./resolver";
+import { Resolver, Resolution, ResolutionGraph } from "./resolver";
 
 const { Solver, exactlyOne, atMostOne, implies, or } = logicSolver;
 
-export async function solve(workspace: Workspace, resolver: Resolver): Promise<DependencyGraph> {
+export async function solveSat(workspace: Workspace, resolver: Resolver): Promise<DependencyGraph> {
 	const dependencies = workspace.root.dependencies.concat(workspace.root.devDependencies);
 
 	await resolveDependencies(dependencies, resolver);

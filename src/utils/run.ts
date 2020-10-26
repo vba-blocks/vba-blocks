@@ -1,13 +1,13 @@
 import dedent from "@timhall/dedent";
 import { exec as _exec } from "child_process";
 import { promisify } from "util";
-import env from "../env";
+import { env } from "../env";
 import { CliError, ErrorCode } from "../errors";
 import { pathExists } from "./fs";
-import has from "./has";
-import parallel from "./parallel";
+import { has } from "./has";
+import { parallel } from "./parallel";
 import { join } from "./path";
-import stdoutFile from "./stdout-file";
+import { createStdoutFile } from "./stdout-file";
 
 const exec = promisify(_exec);
 
@@ -38,7 +38,7 @@ export function isRunError(error: Error | RunError): error is RunError {
 	return has(error, "result");
 }
 
-export default async function run(
+export async function run(
 	application: string,
 	file: string,
 	macro: string,
@@ -59,7 +59,7 @@ export default async function run(
 
 	const formatted_args = await parallel(args, async arg => {
 		if (arg === SPECIAL_FILE_STDOUT) {
-			return await stdoutFile();
+			return await createStdoutFile();
 		}
 
 		return env.isWindows ? escape(arg) : arg;

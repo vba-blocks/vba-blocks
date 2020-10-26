@@ -1,5 +1,5 @@
 import { Config, loadConfig } from "./config";
-import env from "./env";
+import { env } from "./env";
 import { isLockfileValid, readLockfile } from "./lockfile";
 import { loadManifest, Manifest } from "./manifest";
 import { loadWorkspace, Workspace } from "./professional/workspace";
@@ -7,7 +7,7 @@ import resolve from "./resolve";
 import { DependencyGraph } from "./resolve/dependency-graph";
 import { fetch } from "./sources";
 import { tmpFolder } from "./utils/fs";
-import parallel from "./utils/parallel";
+import { parallel } from "./utils/parallel";
 import { join, normalize } from "./utils/path";
 
 const debug = env.debug("vba-blocks:project");
@@ -25,7 +25,7 @@ export interface Project {
 		backup: string;
 		staging: string;
 	};
-	has_dirty_lockfile: boolean;
+	hasDirtyLockfile: boolean;
 }
 
 /**
@@ -44,10 +44,10 @@ export async function loadProject(dir: string = env.cwd): Promise<Project> {
 	const lockfile = await readLockfile(workspace.paths.root);
 
 	// Resolve packages from lockfile or from sources
-	const has_dirty_lockfile = !lockfile || !(await isLockfileValid(lockfile, workspace));
-	debug(!has_dirty_lockfile ? "Loading packages from lockfile" : "Resolving packages");
+	const hasDirtyLockfile = !lockfile || !(await isLockfileValid(lockfile, workspace));
+	debug(!hasDirtyLockfile ? "Loading packages from lockfile" : "Resolving packages");
 
-	const packages = !has_dirty_lockfile
+	const packages = !hasDirtyLockfile
 		? lockfile!.packages
 		: await resolve(config, workspace, lockfile ? lockfile.packages : []);
 
@@ -65,7 +65,7 @@ export async function loadProject(dir: string = env.cwd): Promise<Project> {
 		packages,
 		config,
 		paths,
-		has_dirty_lockfile
+		hasDirtyLockfile: hasDirtyLockfile
 	};
 }
 
@@ -152,7 +152,7 @@ export async function initProject(
 			backup: join(dir, "build", ".backup"),
 			staging: await tmpFolder({ dir: env.staging })
 		},
-		has_dirty_lockfile: true
+		hasDirtyLockfile: true
 	};
 
 	return project;

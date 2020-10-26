@@ -1,12 +1,12 @@
 import dedent from "@timhall/dedent";
 import { Config } from "../config";
-import env from "../env";
+import { env } from "../env";
 import { CliError, ErrorCode } from "../errors";
 import { Message } from "../messages";
 import { Workspace } from "../professional/workspace";
 import { DependencyGraph, getRegistration } from "./dependency-graph";
-import solveLatest from "./latest-solver";
-import Resolver from "./resolver";
+import { solveLatest } from "./latest-solver";
+import { Resolver } from "./resolver";
 
 const debug = env.debug("vba-blocks:resolve");
 
@@ -33,7 +33,7 @@ export default async function resolve(
 
 	// Fallback to SAT solver
 	try {
-		const { solve: solveSat } = await import("./sat-solver");
+		const { solveSat } = await import("./sat-solver");
 		return await solveSat(workspace, resolver);
 	} catch (err) {
 		debug(`solveSat failed with ${err}`);

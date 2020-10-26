@@ -6,21 +6,21 @@ import { sanitize } from "../utils/path";
 
 export interface TargetInfo {
 	target: Target;
-	blank_target: boolean;
+	blankTarget: boolean;
 }
 
-export default function getTarget(project: Project, target_type: string | undefined): TargetInfo {
+export function getTarget(project: Project, targetType: string | undefined): TargetInfo {
 	let target: Target | undefined;
-	let blank_target = false;
-	if (target_type) {
+	let blankTarget = false;
+	if (targetType) {
 		if (project.manifest.target) {
 			// For defined target, --target TYPE must match target.type
-			if (project.manifest.target.type === target_type) {
+			if (project.manifest.target.type === targetType) {
 				target = project.manifest.target;
 			}
 		} else {
 			// Create blank target for --target TYPE
-			const type = <TargetType>target_type;
+			const type = <TargetType>targetType;
 			const name = project.manifest.name;
 
 			target = {
@@ -29,13 +29,13 @@ export default function getTarget(project: Project, target_type: string | undefi
 				path: "target",
 				filename: `${sanitize(name)}.${type}`
 			};
-			blank_target = true;
+			blankTarget = true;
 		}
 
 		if (!target) {
 			throw new CliError(
 				ErrorCode.TargetNoMatching,
-				`No matching target found for type "${target_type}" in project.`
+				`No matching target found for type "${targetType}" in project.`
 			);
 		}
 	} else if (project.manifest.target) {
@@ -60,5 +60,5 @@ export default function getTarget(project: Project, target_type: string | undefi
 		);
 	}
 
-	return { target, blank_target };
+	return { target, blankTarget };
 }

@@ -4,8 +4,8 @@ import { writeManifest } from "../manifest";
 import { Target, TargetType } from "../manifest/target";
 import { copy, emptyDir, ensureDir, remove } from "../utils/fs";
 import { basename, extname, join, resolve, sanitize } from "../utils/path";
-import buildTarget from "./build-target";
-import exportTarget, { extractTarget } from "./export-target";
+import { buildTarget } from "./build-target";
+import { exportTarget, extractTarget } from "./export-target";
 import { ProjectInfo } from "./project-info";
 
 export interface AddOptions {
@@ -14,11 +14,7 @@ export interface AddOptions {
 	path?: string;
 }
 
-export default async function addTarget(
-	type: TargetType,
-	info: ProjectInfo,
-	options: AddOptions = {}
-) {
+export async function addTarget(type: TargetType, info: ProjectInfo, options: AddOptions = {}) {
 	const { project } = info;
 	let { from, name = project.manifest.name, path = "target" } = options;
 

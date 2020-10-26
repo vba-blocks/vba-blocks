@@ -1,10 +1,10 @@
 import dedent from "@timhall/dedent";
-import env from "../env";
+import { env } from "../env";
 import { CliError, ErrorCode } from "../errors";
 import { Manifest, writeManifest } from "../manifest";
 import { TargetType } from "../manifest/target";
-import { initProject } from "../project";
-import addTarget from "../targets/add-target";
+import { initProject as init } from "../project";
+import { addTarget } from "../targets/add-target";
 import { ensureDir, pathExists, writeFile } from "../utils/fs";
 import { init as git_init } from "../utils/git";
 import { basename, extname, join } from "../utils/path";
@@ -18,8 +18,8 @@ export interface InitOptions {
 	git: boolean;
 }
 
-export default async function init(options: InitOptions) {
-	let { name, dir = env.cwd, target: target_type, from, pkg: as_package, git } = options;
+export async function initProject(options: InitOptions) {
+	let { name, dir = env.cwd, target: targetType, from, pkg: asPackage, git } = options;
 
 	if (await pathExists(join(dir, "vba-block.toml"))) {
 		throw new CliError(
@@ -43,13 +43,13 @@ export default async function init(options: InitOptions) {
       `
 		);
 	}
-	if (!target_type && !from && name.includes(".")) {
+	if (!targetType && !from && name.includes(".")) {
 		const parts = name.split(".");
-		target_type = parts.pop();
+		targetType = parts.pop();
 		name = parts.join(".");
 	}
 
-	if (!as_package && !target_type && !from) {
+	if (!asPackage && !targetType && !from) {
 		throw new CliError(
 			ErrorCode.InitTargetRequired,
 			dedent`
@@ -82,16 +82,16 @@ export default async function init(options: InitOptions) {
 		);
 	}
 
-	const project = await initProject(name, dir, {
-		type: as_package ? "package" : "project"
+	const project = await init(name, dir, {
+		type: asPackage ? "package" : "project"
 	});
 
 	if (from) {
-		target_type = extname(from).replace(".", "");
+		targetType = extname(from).replace(".", "");
 	}
-	if (target_type) {
+	if (targetType) {
 		const dependencies: Manifest[] = [];
-		await addTarget(<TargetType>target_type, { project, dependencies }, { from });
+		await addTarget(<TargetType>targetType, { project, dependencies }, { from });
 	}
 
 	await writeManifest(project.manifest, project.paths.dir);

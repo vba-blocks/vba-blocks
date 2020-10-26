@@ -10,7 +10,7 @@ import {
 } from "./registration";
 import { Source } from "./source";
 
-export default class PathSource implements Source {
+export class PathSource implements Source {
 	async resolve(dependency: Dependency): Promise<Registration[]> {
 		const { name, path } = <PathDependency>dependency;
 		if (!pathExists(path)) {

@@ -1,4 +1,4 @@
-export default function without<T>(array: T[], ...values: T[]): T[] {
+export default function without<TValue>(array: TValue[], ...values: TValue[]): TValue[] {
 	array = array.slice();
 	for (const value of values) {
 		const index = array.indexOf(value);

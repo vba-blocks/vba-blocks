@@ -7,10 +7,10 @@ import {
 	isPathDependency,
 	isRegistryDependency
 } from "../manifest/dependency";
-import GitSource from "../professional/sources/git-source";
-import PathSource from "./path-source";
+import { GitSource } from "../professional/sources/git-source";
+import { PathSource } from "./path-source";
 import { getSourceParts, Registration } from "./registration";
-import RegistrySource from "./registry-source";
+import { RegistrySource } from "./registry-source";
 import { Source } from "./source";
 
 export { RegistrySource, PathSource, GitSource };

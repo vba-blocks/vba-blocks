@@ -31,18 +31,14 @@ const targetIsOpen = (target: Target, file: string) => dedent`
  * 3. Backup previously built target
  * 4. Move built target to build
  */
-export default async function buildTarget(
-	target: Target,
-	info: ProjectInfo,
-	options: BuildOptions = {}
-) {
+export async function buildTarget(target: Target, info: ProjectInfo, options: BuildOptions = {}) {
 	const { project } = info;
 
 	// Build fresh target in staging directory
 	// (for no target path, create blank target)
 	let staged;
 	try {
-		staged = !info.blank_target
+		staged = !info.blankTarget
 			? await createTarget(project, target)
 			: await createDocument(project, target, { staging: true });
 	} catch (error) {

@@ -1,9 +1,9 @@
-import env from "../../env";
+import { env } from "../../env";
 import { loadConfig } from "../../config";
 import { join } from "../../utils/path";
 import { cache } from "../../../tests/__fixtures__";
 
-import Resolver from "../resolver";
+import { Resolver } from "../resolver";
 
 jest.mock("../../utils/git");
 

@@ -1,6 +1,6 @@
 import { parseXml, convertXml, findElementByName } from "../../utils/xml";
 import without from "../../utils/without";
-import env from "../../env";
+import { env } from "../../env";
 
 import { UnzipFile } from "../../utils/zip";
 

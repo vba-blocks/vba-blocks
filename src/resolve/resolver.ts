@@ -13,7 +13,7 @@ export interface Resolution {
 export type ResolutionGraph = Map<string, Resolution>;
 export type ResolutionGraphEntry = [string, Resolution];
 
-export default class Resolver implements Iterable<ResolutionGraphEntry> {
+export class Resolver implements Iterable<ResolutionGraphEntry> {
 	config: Config;
 	graph: ResolutionGraph;
 	loading: Map<string, Promise<Registration[]>>;

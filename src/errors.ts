@@ -1,7 +1,7 @@
 import dedent from "@timhall/dedent";
 import { dim } from "@timhall/ansi-colors";
 import { ok } from "assert";
-import has from "./utils/has";
+import { has } from "./utils/has";
 import { isString } from "./utils/is";
 
 export class CliError extends Error {
@@ -94,10 +94,10 @@ const ERROR_TEXT = "Error: ";
 
 export function cleanError(error: string | Error): { message: string; stack: string } {
 	const content = (isString(error) ? error : error.stack) || "EMPTY ERROR";
-	const message_match = content.match(MESSAGE_REGEXP);
+	const messageMatch = content.match(MESSAGE_REGEXP);
 
-	let message = message_match ? message_match[0] : content;
-	const stack = message_match ? content.slice(message.length) : "";
+	let message = messageMatch ? messageMatch[0] : content;
+	const stack = messageMatch ? content.slice(message.length) : "";
 
 	if (message.startsWith(ERROR_TEXT)) {
 		message = message.substr(ERROR_TEXT.length);

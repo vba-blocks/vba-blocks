@@ -1,6 +1,6 @@
 import envPaths from "env-paths";
 import { Reporter, reporter } from "./reporter";
-import getStaging from "./utils/get-staging";
+import { getStaging } from "./utils/get-staging";
 import { join } from "./utils/path";
 
 export interface Env {
@@ -32,7 +32,7 @@ const paths = envPaths("vba-blocks", { suffix: "" });
 const cache = paths.cache;
 const root = join(__dirname, "../");
 
-const env: Env = {
+export const env: Env = {
 	isWindows: process.platform === "win32",
 	cwd: process.cwd(),
 	values: process.env,
@@ -62,5 +62,3 @@ const env: Env = {
 	},
 	silent: false
 };
-
-export default env;

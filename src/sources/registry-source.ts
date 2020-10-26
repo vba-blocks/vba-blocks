@@ -1,9 +1,9 @@
 import dedent from "@timhall/dedent";
-import env from "../env";
+import { env } from "../env";
 import { CliError, ErrorCode } from "../errors";
 import { Dependency, RegistryDependency } from "../manifest/dependency";
 import { Message } from "../messages";
-import download from "../utils/download";
+import { download } from "../utils/download";
 import {
 	checksum as getChecksum,
 	ensureDir,
@@ -26,13 +26,13 @@ export interface RegistryOptions {
 	packages: string;
 }
 
-export default class RegistrySource implements Source {
+export class RegistrySource implements Source {
 	name: string;
 	local: { index: string; packages: string };
 	remote: { index: string; packages: string };
 	private sources: string;
 	private pulling?: Promise<void>;
-	private up_to_date: boolean;
+	private upToDate: boolean;
 
 	constructor({ name, index, packages }: RegistryOptions) {
 		this.name = name;
@@ -43,11 +43,11 @@ export default class RegistrySource implements Source {
 		this.remote = { index, packages };
 
 		this.sources = join(env.sources, name);
-		this.up_to_date = false;
+		this.upToDate = false;
 	}
 
 	async resolve(dependency: Dependency): Promise<Registration[]> {
-		if (!this.up_to_date) await this.pull();
+		if (!this.upToDate) await this.pull();
 
 		const { name } = <RegistryDependency>dependency;
 		const path = getPath(this.local.index, name);
@@ -121,14 +121,14 @@ export default class RegistrySource implements Source {
 		this.pulling = pullIndex(this.local.index, this.remote.index);
 		await this.pulling;
 
-		this.up_to_date = true;
+		this.upToDate = true;
 		this.pulling = undefined;
 	}
 }
 
 export async function pullIndex(local: string, remote: string) {
-	const has_local_directory = await pathExists(local);
-	if (has_local_directory && !isGitRepository(local)) {
+	const hasLocalDirectory = await pathExists(local);
+	if (hasLocalDirectory && !isGitRepository(local)) {
 		// For local registry, skip clone + pull
 		// if directory exists without git repository
 		env.reporter.log(
@@ -138,7 +138,7 @@ export async function pullIndex(local: string, remote: string) {
 		return;
 	}
 
-	if (!has_local_directory) {
+	if (!hasLocalDirectory) {
 		await ensureDir(dirname(local));
 
 		try {

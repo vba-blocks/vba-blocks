@@ -1,6 +1,6 @@
 import { devExport, standardExport } from "../../../tests/__fixtures__";
 import { reset, setupEnvironment } from "../../../tests/__helpers__/project";
-import loadFromExport from "../load-from-export";
+import { loadFromExport } from "../load-from-export";
 import { normalizeBuildGraph } from "../__helpers__/build-graph";
 
 afterAll(reset);

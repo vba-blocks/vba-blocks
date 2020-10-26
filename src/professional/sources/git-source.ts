@@ -10,7 +10,7 @@ const message = dedent`
   Upgrade to Professional Edition (coming soon) for git dependencies and more.
 `;
 
-export default class GitSource implements Source {
+export class GitSource implements Source {
 	resolve(_dependency: Dependency): Registration[] {
 		throw new CliError(ErrorCode.SourceUnsupported, message);
 	}

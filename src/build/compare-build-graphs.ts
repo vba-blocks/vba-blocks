@@ -3,7 +3,7 @@ import { BuildGraph } from "./build-graph";
 import { Changeset } from "./changeset";
 import { byComponentName, Component } from "./component";
 
-export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph): Changeset {
+export function compareBuildGraphs(before: BuildGraph, after: BuildGraph): Changeset {
 	const changeset: Changeset = {
 		components: {
 			added: [],
@@ -18,36 +18,36 @@ export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph
 	};
 
 	// First, cache _before_ BuildGraph by name
-	const by_name = {
+	const byName = {
 		components: new Map<string, Component>(),
 		references: new Map<string, Reference>()
 	};
 	for (const component of before.components) {
-		by_name.components.set(component.name, component);
+		byName.components.set(component.name, component);
 	}
 	for (const reference of before.references) {
-		by_name.references.set(reference.name, reference);
+		byName.references.set(reference.name, reference);
 	}
 
 	// Determine component changes
 	for (const component of after.components) {
 		const name = component.name;
 
-		const before_component = by_name.components.get(name);
-		by_name.components.delete(name);
+		const beforeComponent = byName.components.get(name);
+		byName.components.delete(name);
 
-		if (before_component && before.from_dependencies.components.has(before_component)) {
+		if (beforeComponent && before.fromDependencies.components.has(beforeComponent)) {
 			// Ignore dependencies
 			continue;
-		} else if (!before_component) {
+		} else if (!beforeComponent) {
 			changeset.components.added.push(component);
-		} else if (component.code !== before_component.code) {
-			component.details.path = before_component.details.path;
+		} else if (component.code !== beforeComponent.code) {
+			component.details.path = beforeComponent.details.path;
 
 			changeset.components.changed.push(component);
 		}
 	}
-	for (const component of by_name.components.values()) {
+	for (const component of byName.components.values()) {
 		changeset.components.removed.push(component);
 	}
 
@@ -59,10 +59,10 @@ export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph
 	for (const reference of after.references) {
 		const name = reference.name;
 
-		const before_reference = by_name.references.get(name);
-		by_name.references.delete(name);
+		const before_reference = byName.references.get(name);
+		byName.references.delete(name);
 
-		if (before_reference && before.from_dependencies.references.has(before_reference)) {
+		if (before_reference && before.fromDependencies.references.has(before_reference)) {
 			// Ignore dependencies
 			continue;
 		} else if (!before_reference) {
@@ -75,7 +75,7 @@ export default function compareBuildGraphs(before: BuildGraph, after: BuildGraph
 			changeset.references.changed.push(reference);
 		}
 	}
-	for (const reference of by_name.references.values()) {
+	for (const reference of byName.references.values()) {
 		changeset.references.removed.push(reference);
 	}
 

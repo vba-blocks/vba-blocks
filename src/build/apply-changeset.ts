@@ -1,15 +1,15 @@
-import env from "../env";
+import { env } from "../env";
 import { writeManifest } from "../manifest";
 import { Reference } from "../manifest/reference";
 import { Source } from "../manifest/source";
 import { Project } from "../project";
 import { ensureDir, remove, writeFile } from "../utils/fs";
-import parallel from "../utils/parallel";
+import { parallel } from "../utils/parallel";
 import { dirname, join } from "../utils/path";
 import { Changeset } from "./changeset";
 import { Component } from "./component";
 
-export default async function applyChangeset(project: Project, changeset: Changeset) {
+export async function applyChangeset(project: Project, changeset: Changeset) {
 	const progress = env.reporter.progress("Updating src files");
 	const start = progress.start;
 	const done = progress.done;
@@ -83,7 +83,7 @@ async function writeComponent(path: string, component: Component) {
 	await ensureDir(dir);
 	await writeFile(path, component.code);
 
-	if (component.binary_path) {
-		await writeFile(join(dir, component.binary_path), component.details.binary);
+	if (component.binaryPath) {
+		await writeFile(join(dir, component.binaryPath), component.details.binary);
 	}
 }

@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import env from "../env";
+import { env } from "../env";
 import { pathExists } from "./fs";
 import { join } from "./path";
 

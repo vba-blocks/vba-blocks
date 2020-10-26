@@ -7,21 +7,21 @@ interface IncrementVersionOptions {
 	preid?: string;
 }
 
-const release_types = ["patch", "minor", "major", "prepatch", "preminor", "premajor", "prerelease"];
+const RELEASE_TYPES = ["patch", "minor", "major", "prepatch", "preminor", "premajor", "prerelease"];
 
-export default async function incrementVersion(
+export async function incrementVersion(
 	increment: string,
 	options: IncrementVersionOptions = {}
 ): Promise<string> {
 	const project = await loadProject();
 
-	const current_version = project.manifest.version;
-	const is_increment = isReleaseType(increment);
+	const currentVersion = project.manifest.version;
+	const isIncrement = isReleaseType(increment);
 
 	let version;
 	try {
-		version = is_increment
-			? inc(current_version, increment as ReleaseType, undefined, options.preid)
+		version = isIncrement
+			? inc(currentVersion, increment as ReleaseType, undefined, options.preid)
 			: valid(increment);
 	} catch (_error) {}
 
@@ -36,5 +36,5 @@ export default async function incrementVersion(
 }
 
 function isReleaseType(value: string): value is ReleaseType {
-	return release_types.includes(value);
+	return RELEASE_TYPES.includes(value);
 }

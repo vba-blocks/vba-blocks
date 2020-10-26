@@ -1,3 +1,3 @@
-export function __default(exports: any) {
+export function getDefault(exports: any) {
 	return "default" in exports ? exports.default : exports;
 }

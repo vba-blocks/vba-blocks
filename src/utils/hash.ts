@@ -8,7 +8,7 @@ export interface HashOptions {
 	digest?: Digest;
 }
 
-export default function hash(data: Buffer, options: HashOptions = {}): string {
+export function hash(data: Buffer, options: HashOptions = {}): string {
 	const { algorithm = "sha256", digest = "hex" } = options;
 
 	return createHash(algorithm)

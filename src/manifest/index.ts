@@ -155,9 +155,11 @@ export async function loadManifest(dir: string): Promise<Manifest> {
 	} catch (err) {
 		throw new CliError(
 			ErrorCode.ManifestInvalid,
-			`vba-blocks.toml is invalid:
+			dedent`
+				vba-blocks.toml is invalid:
 
-Syntax Error: ${file} (${err.line}:${err.column})\n\n${err.message}`
+				Syntax Error: ${file} (${err.line}:${err.column})\n\n${err.message}
+			`
 		);
 	}
 

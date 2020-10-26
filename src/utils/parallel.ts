@@ -8,7 +8,7 @@ export interface ParallelOptions {
 
 const DEFAULT_CONCURRENCY = 4;
 
-export default async function parallel<T, U>(
+export async function parallel<T, U>(
 	values: T[],
 	fn: (value: T) => U | Promise<U>,
 	options: ParallelOptions = {}

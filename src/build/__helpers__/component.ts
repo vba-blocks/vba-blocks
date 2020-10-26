@@ -10,7 +10,7 @@ export function normalizeComponent(component: Component, dir: string): Component
 		details: {
 			path: component.details.path && relative(dir, component.details.path)
 		},
-		binary_path: component.binary_path,
+		binaryPath: component.binaryPath,
 		filename: component.filename
 	};
 }

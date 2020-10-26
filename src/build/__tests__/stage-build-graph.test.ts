@@ -3,8 +3,8 @@ import { reset, setup } from "../../../tests/__helpers__/project";
 import { pathExists } from "../../utils/fs";
 import { relative } from "../../utils/path";
 import { ImportGraph } from "../build-graph";
-import loadFromProject from "../load-from-project";
-import stageBuildGraph from "../stage-build-graph";
+import { loadFromProject } from "../load-from-project";
+import { stageBuildGraph } from "../stage-build-graph";
 
 afterEach(reset);
 

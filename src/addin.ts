@@ -1,11 +1,11 @@
 import { ImportGraph } from "./build/build-graph";
-import env from "./env";
+import { env } from "./env";
 import { CliError, ErrorCode } from "./errors";
 import { Target } from "./manifest/target";
 import { Project } from "./project";
 import { copy, ensureDir, pathExists } from "./utils/fs";
 import { dirname, join } from "./utils/path";
-import run from "./utils/run";
+import { run } from "./utils/run";
 
 export type Application = "excel";
 export type Addin = string;
@@ -93,8 +93,8 @@ export async function createDocument(
 	const { application, addin, file } = getTargetInfo(project, target, options);
 
 	// For Mac, stage target to avoid permission prompts and then copy to build directory
-	const use_staging = !env.isWindows && !options.staging;
-	let path = !use_staging ? file : join(project.paths.staging, target.filename);
+	const useStaging = !env.isWindows && !options.staging;
+	let path = !useStaging ? file : join(project.paths.staging, target.filename);
 
 	await ensureDir(dirname(path));
 	await run(application, options.addin || addin, "Build.CreateDocument", [
@@ -104,7 +104,7 @@ export async function createDocument(
 	]);
 
 	// For Mac, then copy staged to build directory
-	if (use_staging) {
+	if (useStaging) {
 		await ensureDir(dirname(file));
 		await copy(path, file);
 	}
@@ -137,5 +137,5 @@ export function extensionToApplication(extension: string): Application {
 		);
 	}
 
-	return <Application>application;
+	return application as Application;
 }

@@ -1,6 +1,6 @@
 import dedent from "@timhall/dedent";
 import { Args } from "mri";
-import init from "../actions/init-project";
+import { initProject } from "../actions/init-project";
 
 const help = dedent`
   Initialize a new project in the current directory
@@ -31,5 +31,5 @@ export default async function(args: Args) {
 	const pkg = !!args.package;
 	const git = "git" in args ? <boolean>args.git : true;
 
-	await init({ target, from, name, pkg, git });
+	await initProject({ target, from, name, pkg, git });
 }

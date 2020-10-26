@@ -1,5 +1,5 @@
 import dedent from "@timhall/dedent";
-import env from "../env";
+import { env } from "../env";
 import { writeLockfile } from "../lockfile";
 import { isRegistryDependency } from "../manifest/dependency";
 import { Message } from "../messages";
@@ -9,17 +9,17 @@ import { buildTarget, getTarget } from "../targets";
 import { BuildOptions } from "../targets/build-target";
 import { join } from "../utils/path";
 
-export default async function build(options: BuildOptions = {}): Promise<string> {
+export async function buildProject(options: BuildOptions = {}): Promise<string> {
 	env.reporter.log(Message.BuildProjectLoading, `[1/3] Loading project...`);
 
 	const project = await loadProject();
-	const { target, blank_target } = getTarget(project, options.target);
+	const { target, blankTarget } = getTarget(project, options.target);
 
 	// Fetch relevant dependencies
 	const dependencies = await fetchDependencies(project);
 
 	// Build target
-	const display_dependencies = project.packages.map(registration => {
+	const displayDependencies = project.packages.map(registration => {
 		const dependency = toDependency(registration);
 
 		if (isRegistryDependency(dependency))
@@ -30,13 +30,13 @@ export default async function build(options: BuildOptions = {}): Promise<string>
 		Message.BuildTargetBuilding,
 		dedent`
       \n[2/3] Building target "${target.type}" for "${project.manifest.name}"...
-      ${display_dependencies.length ? `\nDependencies:\n${display_dependencies.join("\n")}` : ""}`
+      ${displayDependencies.length ? `\nDependencies:\n${displayDependencies.join("\n")}` : ""}`
 	);
 
-	await buildTarget(target, { project, dependencies, blank_target }, options);
+	await buildTarget(target, { project, dependencies, blankTarget }, options);
 
 	// Update lockfile (if necessary)
-	const skip = !project.has_dirty_lockfile;
+	const skip = !project.hasDirtyLockfile;
 	env.reporter.log(
 		Message.BuildLockfileWriting,
 		`\n[3/3] Writing lockfile...${skip ? " (skipped, no changes)" : ""}`

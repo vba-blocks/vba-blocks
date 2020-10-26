@@ -2,11 +2,11 @@ import { satisfies } from "semver";
 import { Dependency } from "../manifest/dependency";
 import { Workspace } from "../professional/workspace";
 import { Registration } from "../sources/registration";
-import unique from "../utils/unique";
+import { unique } from "../utils/unique";
 import { DependencyGraph } from "./dependency-graph";
-import Resolver, { Resolution } from "./resolver";
+import { Resolver, Resolution } from "./resolver";
 
-export default async function solve(
+export async function solveLatest(
 	workspace: Workspace,
 	resolver: Resolver
 ): Promise<DependencyGraph> {

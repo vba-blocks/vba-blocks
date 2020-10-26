@@ -1,6 +1,6 @@
 import { complex, dev, empty } from "../../../tests/__fixtures__";
 import { reset, setup } from "../../../tests/__helpers__/project";
-import loadFromProject from "../load-from-project";
+import { loadFromProject } from "../load-from-project";
 import { normalizeBuildGraph } from "../__helpers__/build-graph";
 
 afterAll(reset);

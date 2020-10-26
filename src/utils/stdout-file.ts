@@ -1,11 +1,11 @@
-import env from "../env";
+import { env } from "../env";
 import { readFileSync, tmpFile, watch } from "./fs";
-import Observable from "./observable";
+import { Observable } from "./observable";
 import { basename } from "./path";
 
 const debug = env.debug("vba-blocks:stdout-file");
 
-export default async function stdoutFile(): Promise<string> {
+export async function createStdoutFile(): Promise<string> {
 	const file = await tmpFile({ dir: env.staging });
 	debug("file:", file);
 

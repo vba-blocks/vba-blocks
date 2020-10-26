@@ -1,7 +1,7 @@
 import noop from "./noop";
 
 // Naive implementation of https://github.com/tc39/proposal-observable
-export default class Observable<TValue> {
+export class Observable<TValue> {
 	constructor(private subscriber: Subscriber<TValue>) {}
 
 	subscribe(observer: ObserverFunction<TValue> | Partial<Observer<TValue>>): Subscription {
