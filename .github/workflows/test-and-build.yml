@@ -14,12 +14,12 @@ jobs:
         with:
           node-version: 12.x
       - name: Install
-        run: yarn install
+        run: npm install
         env:
           CI: true
       - name: Typecheck
-        run: yarn typecheck
+        run: npm run typecheck
       - name: Test
-        run: yarn test
+        run: npm test
       - name: Build
-        run: yarn build:dev
+        run: npm run build:dev
