@@ -5,7 +5,7 @@ Object {
   "components": Object {
     "added": Array [
       Object {
-        "binary_path": undefined,
+        "binaryPath": undefined,
         "code": "Attribute VB_Name = \\"Added\\"
 ' (added)
 ",
@@ -19,7 +19,7 @@ Object {
     ],
     "changed": Array [
       Object {
-        "binary_path": undefined,
+        "binaryPath": undefined,
         "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -39,7 +39,7 @@ Attribute VB_Exposed...",
     ],
     "removed": Array [
       Object {
-        "binary_path": undefined,
+        "binaryPath": undefined,
         "code": "Attribute VB_Name = \\"Validation\\"
 Public Function Validate() As String
     On Error GoTo ErrorHandling

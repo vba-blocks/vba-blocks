@@ -26,6 +26,7 @@
 	},
 	"dependencies": {
 		"@timhall/ansi-colors": "^5.0.0",
+		"@timhall/dedent": "^0.9.1",
 		"archiver": "^3",
 		"conf": "^3",
 		"date-fns": "^2",
@@ -56,7 +57,6 @@
 		"@rollup/plugin-node-resolve": "^9.0.0",
 		"@rollup/plugin-replace": "^2.3.3",
 		"@rollup/plugin-typescript": "^6.0.0",
-		"@timhall/dedent": "^0.9.0",
 		"@types/archiver": "^2",
 		"@types/fs-extra": "^5",
 		"@types/jest": "^23",
