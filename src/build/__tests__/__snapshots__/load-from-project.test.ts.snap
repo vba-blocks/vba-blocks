@@ -4,7 +4,7 @@ exports[`should ignore dev-* for --release 1`] = `
 Object {
   "components": Array [
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -22,7 +22,7 @@ Attribute VB_Exposed ...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "Attribute VB_Name = \\"Validation\\"
 ",
       "details": Object {
@@ -60,7 +60,7 @@ exports[`should load BuildGraph from standard project 1`] = `
 Object {
   "components": Array [
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -78,7 +78,7 @@ Attribute VB_Exposed = Fa...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -96,7 +96,7 @@ Attribute VB_Exposed ...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -114,7 +114,7 @@ Attribute VB_E...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "Attribute VB_Name = \\"JsonConverter\\"
 ''
 ' VBA-JSON v2.3.0
@@ -135,7 +135,7 @@ Attribute VB_E...",
       "type": "module",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -153,7 +153,7 @@ Attribute VB_Exposed = Tru...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -171,7 +171,7 @@ Attribute VB_Exposed = Tru...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -189,7 +189,7 @@ Attribute VB_Exposed = Tru...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -207,7 +207,7 @@ Attribute VB_Exposed...",
       "type": "class",
     },
     Object {
-      "binary_path": "UserForm1.frx",
+      "binaryPath": "UserForm1.frx",
       "code": "VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1 
    Caption         =   \\"UserForm1\\"
@@ -223,7 +223,7 @@ Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} UserForm1
       "type": "form",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "Attribute VB_Name = \\"Validation\\"
 Public Function Validate() As String
     On Error GoTo ErrorHandling
@@ -240,7 +240,7 @@ Public Function Validate() As String
       "type": "module",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -258,7 +258,7 @@ Attribute VB_Exposed =...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "Attribute VB_Name = \\"WebHelpers\\"
 ''
 ' WebHelpers v4.1.5
@@ -276,7 +276,7 @@ Attribute VB_Exposed =...",
       "type": "module",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -294,7 +294,7 @@ Attribute VB_Exposed ...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -333,7 +333,7 @@ exports[`should load BuildGraph with devDependencies 1`] = `
 Object {
   "components": Array [
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -351,7 +351,7 @@ Attribute VB_Exposed ...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "Attribute VB_Name = \\"JsonConverter\\"
 ''
 ' VBA-JSON v2.3.0
@@ -372,7 +372,7 @@ Attribute VB_Exposed ...",
       "type": "module",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
@@ -390,7 +390,7 @@ Attribute VB_Exposed =...",
       "type": "class",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "Attribute VB_Name = \\"TestModule\\"
 ",
       "details": Object {
@@ -401,7 +401,7 @@ Attribute VB_Exposed =...",
       "type": "module",
     },
     Object {
-      "binary_path": undefined,
+      "binaryPath": undefined,
       "code": "Attribute VB_Name = \\"Validation\\"
 ",
       "details": Object {
