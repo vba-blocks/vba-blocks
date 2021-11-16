@@ -64,7 +64,7 @@
 		"@types/node-fetch": "^2.1.7",
 		"@types/semver": "^5",
 		"@types/tmp": "^0.0",
-		"aws-sdk": "^2.562.0",
+		"aws-sdk": "^2.814.0",
 		"builtin-modules": "^3.0.0",
 		"cross-env": "^5",
 		"dotenv": "^7.0.0",
