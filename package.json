@@ -39,7 +39,7 @@
 		"logic-solver": "^2",
 		"meant": "^1.0",
 		"mri": "^1",
-		"node-fetch": "^2",
+		"node-fetch": "^3",
 		"open": "^6",
 		"pretty-hrtime": "^1",
 		"sanitize-filename": "^1",
